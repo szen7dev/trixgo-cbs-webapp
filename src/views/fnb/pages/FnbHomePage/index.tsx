@@ -22,7 +22,7 @@ import gojekChannelIcon from "assets/images/fnb/gojek.svg";
 import baemineChannelIcon from "assets/images/fnb/baemin.svg";
 import loshipChannelIcon from "assets/images/fnb/loship.svg";
 import beeChannelIcon from "assets/images/fnb/bee.svg";
-import businessBuiding from "assets/images/icons8-business-building-48.svg";
+// import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import { IconImage } from 'views/media/shareComponents/common';
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconRefresh from "assets/images/icons8-refresh.png";
@@ -439,7 +439,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Cơ sở"}
             showTriangle={true}
             isMultiple={true}
@@ -450,9 +450,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             countBadge={queryFnb.fundasID.length}
             data={listFunda.map((item: any) => ({
               label: `${item?.sign}.${item?.name}`,
@@ -508,7 +508,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Ca"}
             showTriangle={true}
             isMultiple={true}
@@ -520,9 +520,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             countBadge={queryFnb.shiftTypes.length}
             data={FNB_SHIFT.map((item: any) => ({
               label: `${item.text}`,
@@ -573,7 +573,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Kênh"}
             showTriangle={true}
             isMultiple={true}
@@ -585,9 +585,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             countBadge={queryFnb.salesChannels.length}
             data={FNB_CHANNEL.map((item: any) => ({
               label: `${item.text}`,
@@ -637,11 +637,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
           <TimeRangeDropdown
               className={
-                "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                "mr-1 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
               placeholder={"Khoảng"}
               iconBack={<TriangleDown />}
-              iconFront={<img src={businessBuiding} alt={"----"} />}
+              // iconFront={<img src={businessBuiding} alt={"----"} />}
               onValueChange={(val) => {
                 dispatch(
                   setQueryFnb({
@@ -678,7 +678,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Trạng thái"}
             showTriangle={true}
             isMultiple={true}
@@ -690,9 +690,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             countBadge={queryFnb.statuss.length}
             data={FNB_ORDER_STATUS.map((item: any) => ({
               label: `${item.text}`,
@@ -743,7 +743,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Chiết khấu"}
             showTriangle={true}
             isMultiple={false}
@@ -755,9 +755,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             data={[{
               value: 0, text: 'Không',
             },
@@ -790,7 +790,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Giảm giá"}
             showTriangle={true}
             isMultiple={false}
@@ -802,9 +802,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             data={[{
               value: 0, text: 'Không',
             },
@@ -837,7 +837,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Tích điểm"}
             showTriangle={true}
             isMultiple={false}
@@ -849,9 +849,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             data={[{
               value: 0, text: 'Không',
             },
@@ -884,7 +884,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Voucher"}
             showTriangle={true}
             isMultiple={false}
@@ -896,9 +896,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             data={[{
               value: 0, text: 'Không',
             },
@@ -931,7 +931,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Đơn"}
             showTriangle={true}
             isMultiple={false}
@@ -943,9 +943,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             data={[{
               value: 1, text: 'Nhân viên',
             },
@@ -978,7 +978,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Khách"}
             showTriangle={true}
             isMultiple={false}
@@ -990,9 +990,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             data={[{
               value: 0, text: 'Biết thông tin',
             },
@@ -1025,7 +1025,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Lỗi"}
             showTriangle={true}
             isMultiple={false}
@@ -1037,9 +1037,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            prefixIcon={
-              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            }
+            // prefixIcon={
+            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            // }
             data={[{
               value: 0, text: 'Không lỗi',
             },

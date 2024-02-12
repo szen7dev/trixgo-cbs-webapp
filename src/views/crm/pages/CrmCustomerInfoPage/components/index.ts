@@ -4,3 +4,4 @@ export * from './OrderInfo';
 export * from './BookingInfo';
 export * from './AffiliateInfo';
 export * from './PaymentInfo';
+export * from './SupportInfo';

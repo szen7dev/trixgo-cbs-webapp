@@ -12,7 +12,7 @@ import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { GeneralInfo, AffiliateInfo, BookingInfo, JourneyInfo, OrderInfo, PaymentInfo } from "./components";
+import { GeneralInfo, AffiliateInfo, BookingInfo, JourneyInfo, OrderInfo, PaymentInfo, SupportInfo } from "./components";
 import { Loader } from "shareComponents/common";
 import { NewHumanModal } from "views/human/shareComponents/common";
 
@@ -229,12 +229,17 @@ export const CrmCustomerInfoPage: FC = () => {
             _id: detailHuman?._id,
           }}
         />
+        <BookingInfo
+          info={{
+            _id: detailHuman?._id,
+          }}
+        />
         <OrderInfo
           info={{
             _id: detailHuman?._id,
           }}
         />
-        <BookingInfo
+        <SupportInfo
           info={{
             _id: detailHuman?._id,
           }}
