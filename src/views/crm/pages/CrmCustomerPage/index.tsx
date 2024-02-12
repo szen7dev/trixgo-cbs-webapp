@@ -389,7 +389,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                     </td>
                                     <td className="px-2 py-2.5 border-b border-cbs-border">
                                         <Link to={linkRef}>
-                                            <p>
+                                            <p className="text-cbs-highlight-color text-medium">
                                                 {`${item.name}`}
                                                 - {(item?.gender && item?.gender >= 1) && GENDER_TYPES[item?.gender -1].text}
                                             </p>
