@@ -60,7 +60,7 @@ export const CrmSupportPage: FC = () => {
 	})
 
     const STATUS = [
-        { _id: 1, text: 'Chưa, đang xử lý' },
+        { _id: 1, text: 'Chưa xử lý' },
         { _id: 2, text: 'Hoàn thành'}
     ]
 
@@ -672,11 +672,11 @@ export const CrmSupportPage: FC = () => {
                             <td className="py-1 px-2">
                                 {
                                     item?.status == 1 ?
-                                    <div className="w-[110px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
+                                    <div className="w-[80px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
                                         {STATUS[Number(item?.status) - 1]?.text}
                                     </div>
                                     :
-                                    <div className="w-[85px] rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                                    <div className="w-[80px] rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
                                         {STATUS[Number(item?.status) - 1]?.text}
                                     </div>
                                 }
