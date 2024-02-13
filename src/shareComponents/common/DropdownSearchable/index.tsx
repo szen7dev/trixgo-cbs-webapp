@@ -252,9 +252,9 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
             (v) => readDataValue(v, "id") === readDataValue(option, "id")
           )) ||
           readDataValue(option, "id") === readDataValue(value, "id") ? (
-          <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3 min-w-[15px]"} />
+          <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3 min-w-[15px] hidden"} />
         ) : (
-          <div className={"w-[15px] mr-3 min-w-[15px]"} />
+          <div className={"w-[15px] mr-3 min-w-[15px] hidden"} />
         )}
         {renderItem ? (
           renderItem(modifyItem(option))

@@ -3,19 +3,19 @@ import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
 import { useFnbCustomerBooking } from "services/hooks/fnb/useFnbCustomerBooking";
 import { toast } from "react-toastify";
-import DatePicker from "react-datepicker";
-import { ErrorMessage, Field } from "formik";
-import DayPickerInput from "react-day-picker/DayPickerInput";
-import moment from "moment";
-
+// import DatePicker from "react-datepicker";
+// import { ErrorMessage, Field } from "formik";
+// import DayPickerInput from "react-day-picker/DayPickerInput";
+// import moment from "moment";
+import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchable } from "shareComponents/common";
 import { useQueryListContact } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useQueryListDoctype } from "services/hooks/useHuman";
 import { useFnbOrder } from "services/hooks/fnb/useFnbOrder";
 
 export const ModalCreateOrUpdateCC: FC<any> = ({
-  // formik,
   modalType,
   onConfirm,
   initialValues = {
@@ -28,22 +28,42 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     description: '',
     note: '',
     date: '',
+    business: '',
+    assignee: '',
     rating: 1,
     amount: 0,
     status: 1,
     type: 1,
+    alert: 0,
   }
 }) => {
-  // const { setFieldValue, values } = formik;
+  // User
+  const { user } = useAuth();
+  const [userKeyword, setUserKeyword] = useState("");  
+  const { data: listUser } = useUserSystem({
+      companyID: user?.company?._id,
+      keyword: userKeyword,
+      limit: 10,
+      isFetch: true
+  }, true)
+  
+  // Business
+  const [searchDoctypeKeyword, setSearchDoctypeKeyword] = useState("");
+	const { listDoctypes } = useQueryListDoctype({
+        type: 3,
+        limit: 10,
+        keyword: searchDoctypeKeyword,
+	});
 
+  // Customer
   const [searchCustomerValue, setSearchCustomerValue] = useState("");
 	const { listContact: listCustomer } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCustomerValue,
 	});
 
+  // Order
   const [searchOrderValue, setSearchOrderValue] = useState("");
-
   const { list: listOrder } = useFnbOrder({
     params: {
       limit: 10,
@@ -59,12 +79,12 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
   const [keyword, setKeyword] = useState('');
 
   const {
-    insertAsync, 
-    updateAsync
-} = useFnbCustomerBooking({
-    params: { keyword },
-    isFetchList: true
-})
+      insertAsync, 
+      updateAsync
+  } = useFnbCustomerBooking({
+      params: { keyword },
+      isFetchList: true
+  })
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -72,17 +92,19 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     }
 
     const formDataFormat = {
-      ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status, type: +formData.type
+      ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status, type: +formData.type, alert: +formData.alert
     }
     delete formDataFormat['customer'];
     delete formDataFormat['mistake'];
     delete formDataFormat['order'];
     delete formDataFormat['journey'];
+    delete formDataFormat['business'];
+    delete formDataFormat['assignee'];
 
     try {
-      // Handle api here!
+      // Handle API
       switch (modalType) {
-        // Tạo mẩu tin
+        // Create
         case 'create': {
           delete formDataFormat['customerCareID']; //
           const { error, message } = await insertAsync(formDataFormat);
@@ -95,7 +117,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
           break;
         }
 
-        // Cập nhật mẩu tin
+        // Update
         case 'update': {
           const { error, message } = await updateAsync(formDataFormat);
 
@@ -146,6 +168,49 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </header>
 
       <section className="px-5">
+        <p>Lĩnh vực kinh doanh (*)</p>
+        <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    businessID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    businessID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setSearchDoctypeKeyword(value), 600)}
+            className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Lĩnh vực kinh doanh (*)"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listDoctypes.map((item: any) => ({
+                label: `${item.name}`,
+                value: item._id,
+            }))}
+            initialValue={initialValues.business ? {
+              label: `${initialValues.business?.name}`,
+              value: initialValues.business?._id
+            } : {}}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
         <p>Khách hàng (*)</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -188,7 +253,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
         <p>Nội dung (*)</p>
         <input
           type="text"
@@ -201,10 +266,10 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </section>
 
       <section className="px-5 mt-2">
-        <p>Thời gian (*)</p>
+        <p>Thời hạn thực hiện (*)</p>
         <input
           type="text"
-          placeholder="Thời gian"
+          placeholder="Thời hạn thực hiện"
           name="date"
           className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData.date}
@@ -212,7 +277,62 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
+        <p>Nhắc trước thời hạn (số giờ)</p>
+        <input
+          type="text"
+          placeholder="Số giờ nhắc trước thời hạn"
+          name="alert"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData.alert}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <p>Người thực hiện</p>
+        <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    assigneeID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    assigneeID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setUserKeyword(value), 600)}
+            className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Người thực hiện"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listUser.map((item: any) => ({
+                label: `${item.fullname}`,
+                value: item._id,
+            }))}
+            initialValue={initialValues.assignee ? {
+              label: `${initialValues.assignee?.fullname}`,
+              value: initialValues.assignee?._id
+            } : {}}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
         <p>Ghi chú</p>
         <input
           type="text"
@@ -267,7 +387,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
         <p>Tình trạng (1-Khởi tạo|2-Hoàn thành)</p>
         <input
           type="number"

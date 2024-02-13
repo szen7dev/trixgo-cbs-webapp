@@ -93,6 +93,7 @@ export const CrmBookingPage: FC = () => {
     const [journeyID, setJourneyID] = useState<string | null>();
     const [customerID, setCustomerID] = useState<string | null>();
     const [userID, setUserID] = useState<string | null>();
+    const [assigneeID, setAssigneeID] = useState<string | null>();
     const [managerID, setManagerID] = useState<string | null>();
     const [businessID, setBusinessID] = useState<string | null>();
     const [status, setStatus] = useState<string | null>();
@@ -121,9 +122,10 @@ export const CrmBookingPage: FC = () => {
 	});
   
     const { data: listUser } = useUserSystem({
-      keyword: userKeyword,
-      limit: 10,
-      isFetch: true
+        companyID: user?.company?._id,
+        keyword: userKeyword,
+        limit: 10,
+        isFetch: true
     }, true)
 
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
@@ -137,10 +139,13 @@ export const CrmBookingPage: FC = () => {
         description: '',
         note: '',
         date: '',
+        assignee: '',
+        business: '',
         rating: 1,
         amount: 0,
         status: 1,
         type: 1,
+        alert: 0,
     })
 
     const { listCustomerCareByProperty, refetchListCustomerCareByProperty } = useCustomerCareByProperty({
@@ -162,13 +167,14 @@ export const CrmBookingPage: FC = () => {
             businessID,
             journeyID,
             customerID,
+            assigneeID,
             userCreateID: userID,
             managerID,
             fromDate: inputFilter.fromDate,
             toDate: inputFilter.toDate,
             limit: 20,
             populates: JSON.stringify({
-                path: 'userCreate userUpdate customer mistake journey funda order manager images',
+                path: 'userCreate userUpdate customer mistake journey funda order manager images assignee business',
                 select: '_id image name sign phone taxid address fullname createAt author path',
                 populate: {
 					path: 'author',
@@ -215,8 +221,7 @@ export const CrmBookingPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, mistake, customer, order, journey, name, description, note, date, amount, rating, status, type } = newListIDChecked[0];
-            // console.log({ _id, mistake, customer, order, journey, name, description, note, amount, rating, status, type })
+            const { _id, mistake, customer, order, journey, name, description, note, date, amount, rating, status, type, business, assignee, alert } = newListIDChecked[0];
             setInitialValues({
                 customerCareID: _id,
                 mistake,
@@ -231,6 +236,9 @@ export const CrmBookingPage: FC = () => {
                 amount,
                 status,
                 type,
+                business,
+                assignee,
+                alert,
             });
         } else {
             clearData();
@@ -272,10 +280,13 @@ export const CrmBookingPage: FC = () => {
                 description: '',
                 note: '',
                 date: '',
+                business: '',
+                assignee: '',
                 rating: 1,
                 amount: 0,
                 status: 1,
                 type: 1,
+                alert: 0,
             };
         }
 
@@ -283,7 +294,7 @@ export const CrmBookingPage: FC = () => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "500px",
+                    height: "675px",
                 }}
             >
                 <ModalCreateOrUpdateCC
@@ -477,6 +488,34 @@ export const CrmBookingPage: FC = () => {
                         )}
                         selectOneByOne={true}
                     />
+                    <DropdownSearchableV2
+                        ref={accountRef}
+                        className={"mr-1 border border-primary-border rounded-lg"}
+                        placeholder={"Thực hiện"}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={listUser}
+                        formatItem={{
+                            id: "_id",
+                            text: "fullname",
+                        }}
+                        onSearchInputChange={debounce(
+                            (valueSearch) => setUserKeyword(valueSearch),
+                            500
+                        )}
+                        onClearData={() => {
+                            setAssigneeID("");
+                        }}
+                        onchangeValue={item => {
+                            setAssigneeID(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
                      <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
@@ -534,7 +573,7 @@ export const CrmBookingPage: FC = () => {
                       <button className={"flex items-center justify-center mx-3 ml-3 mr-10"}
                               onClick={handleExportExcel}
                           >
-                              Tải báo cáo Excel
+                              Tải Excel
                       </button>
 
                       {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
@@ -590,9 +629,9 @@ export const CrmBookingPage: FC = () => {
                               />
                           </div>
                       </th>
-                      <th className="py-1 w-[120px]">
+                      <th className="py-1 w-2/6">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                            Thời hạn
+                              Nội dung
                           </div>
                       </th>
                       <th className="py-1">
@@ -600,9 +639,14 @@ export const CrmBookingPage: FC = () => {
                               Khách hàng
                           </div>
                       </th>
-                      <th className="py-1 w-2/6">
+                      <th className="py-1 w-[120px]">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Nội dung
+                            Thời hạn
+                          </div>
+                      </th>
+                      <th className="py-1">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            Thực hiện
                           </div>
                       </th>
                       <th className="py-1">
@@ -636,8 +680,17 @@ export const CrmBookingPage: FC = () => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {moment(item.date).format('DD/MM/YYYY HH:mm')}
-                                <p><i>{moment(item.date).fromNow()}</i></p>
+                                {item?.name}
+                                <p className="text-primary-gray"><i>{item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}</i></p>
+                                <p className="text-primary-gray"><i>
+                                    {item?.userCreate ? `Cre: ${item?.userCreate?.fullname} ${moment(item?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}
+                                </i></p>
+                                <p className="text-primary-gray"><i>
+                                    {item?.userUpdate ? `Mod: ${item?.userUpdate?.fullname} ${moment(item?.modifyAt).format('DD/MM/YYYY HH:mm')}` : ''}
+                                </i></p>
+                                <div>
+                                    <button className="py-1 px-2 rounded-md border border-primary-border text-white bg-cbs-secondary border-none">{item?.business?.name}</button>
+                                </div>
                             </td>
                             <td className="py-1 px-2">
                                 <NavLink to={`/crm/customer/cid=${item?.customer?._id}`}>
@@ -645,14 +698,11 @@ export const CrmBookingPage: FC = () => {
                                 </NavLink>
                             </td>
                             <td className="py-1 px-2">
-                                {item?.name}
-                                <p className="text-primary-gray"><i>{item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}</i></p>
-                                <p className="text-primary-gray"><i>
-                                    {item?.userCreate ? `Cre: ${item?.userCreate?.fullname}` : ''}  {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
-                                </i></p>
-                                <p className="text-primary-gray"><i>
-                                    {item?.userUpdate ? `Mod: ${item?.userUpdate?.fullname}` : ''}  {moment(item?.modifyAt).format('DD/MM/YYYY HH:mm')}
-                                </i></p>
+                                {moment(item.date).format('DD/MM/YYYY HH:mm')}
+                                <p><i>{moment(item.date).fromNow()}</i></p>
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.assignee?.fullname}
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}
