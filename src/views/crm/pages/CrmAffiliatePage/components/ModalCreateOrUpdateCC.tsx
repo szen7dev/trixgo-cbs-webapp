@@ -10,7 +10,6 @@ import { useQueryListDoctype } from "services/hooks/useHuman";
 import { useFnbOrder } from "services/hooks/fnb/useFnbOrder";
 
 export const ModalCreateOrUpdateCC: FC<any> = ({
-  // formik,
   modalType,
   onConfirm,
   initialValues = {
@@ -29,8 +28,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     type: 1,
   }
 }) => {
-  // const { setFieldValue, values } = formik;
-
   const [searchCustomerValue, setSearchCustomerValue] = useState("");
 	const { listContact: listCustomer } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
@@ -187,22 +184,10 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         <p>Nội dung (*)</p>
         <input
           type="text"
-          placeholder="Nội dung"
+          placeholder="Họ và tên, CMT/CCCD, điện thoại, email, kênh social"
           name="name"
           className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData.name}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 mt-2">
-        <p>Thời gian (*)</p>
-        <input
-          type="text"
-          placeholder="Thời gian"
-          name="date"
-          className="h-8 w-full border border-primary-border outline-none px-2"
-          defaultValue={formData.date}
           onChange={onChange}
         />
       </section>
@@ -219,54 +204,11 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 mt-2">
-        <p>Đơn hàng</p>
-        <DropdownSearchable
-            onchangeValue={(value: any) => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    orderID: value?.id
-                }))
-            }}
-            onClearData={() => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    orderID: ""
-                }))
-            }}
-            onSearchInputChange={debounce((value: any) => setSearchOrderValue(value), 600)}
-            className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Đơn hàng"
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            showTriangle={false}
-            maxWidthInput="max-w-full"
-            renderSelectedItem={(item: any) => (
-                <div className="max-w-full">
-                    <p className={"truncate"}>{item.text}</p>
-                </div>
-            )}
-            data={listOrder.map((item: any) => ({
-                label: `${item.name}`,
-                value: item._id,
-            }))}
-            initialValue={initialValues.order ? {
-              label: `${initialValues.order?.name}`,
-              value: initialValues.order?._id
-            } : {}}
-            formatItem={{
-                id: "value",
-                text: "label",
-            }}
-            inlineSearch={true}
-        />
-      </section>
-
       <section className="px-5 py-1">
-        <p>Tình trạng (1-Khởi tạo|2-Hoàn thành)</p>
+        <p>Tình trạng (1-Đăng ký | 2-Hoàn thành)</p>
         <input
           type="number"
-          placeholder="1-Khởi tạo | 2-Hoàn thành"
+          placeholder="1-Đăng ký | 2-Hoàn thành"
           name="status"
           className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData?.status}

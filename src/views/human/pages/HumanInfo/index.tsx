@@ -95,6 +95,10 @@ export const HumanInfo: FC = () => {
                 value: defaultValues?.linkUser?._id,
                 label: defaultValues?.linkUser?.fullname
               },
+              dataSource: defaultValues?.dataSource && {
+                value: defaultValues?.dataSource?._id,
+                label: defaultValues?.dataSource?.name
+              },
               contractType: defaultValues?.contractType && {
                 value: defaultValues?.contractType?._id,
                 label: defaultValues?.contractType?.name
@@ -257,6 +261,7 @@ export const HumanInfo: FC = () => {
             contractDate: detailHuman.contractDate,
             workingStatus: detailHuman.workingStatus,
             linkUser: detailHuman.linkUser,
+            dataSource: detailHuman.dataSource,
             userCreate: detailHuman.userCreate,
             userUpdate: detailHuman.userUpdate,
             contractValid: detailHuman.contractValid,

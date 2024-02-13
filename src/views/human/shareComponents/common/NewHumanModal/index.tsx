@@ -11,10 +11,8 @@ import { Formik, Form, Field } from "formik";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import debounce from "lodash/debounce";
-
 import { useModal } from "services/hooks/useModal";
 import { DropdownSearchable } from "shareComponents/common";
-
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import {
   useQueryListDepartments,
@@ -23,7 +21,7 @@ import {
 } from "services/hooks/useHuman";
 import { usePosition } from "services/hooks/items/usePosition";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
-
+import { useContact } from "services/hooks/items/useContact";
 import type { MutationContactPayload } from "typings/human";
 
 enum CLASSIFY {
@@ -108,6 +106,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
     keyword: searchDepartmentValue,
   });
 
+  // User
   const [searchUserStr, setSearchUserStr] = React.useState(
     initialValues.linkUser?.fullname || ""
   );
@@ -115,10 +114,19 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
     data: listUsersSystem,
   } = useUserSystem({ keyword: searchUserStr }, true);
 
+  // Contact
+  const [searchContact, setSearchContact] = React.useState('');
+  const { list: contacts } = useContact({
+    params: { keyword: searchContact },
+    isFetchList: true,
+  })
+
+  // Position
   const {
     data: listPositions,
   } = usePosition({ keyword: searchPositionValue }, true);
 
+  // Status
   const { listDoctypes: listWorkingStatus } = useQueryListDoctype({
     limit: 50,
     type: 9,
@@ -191,6 +199,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       linkUser: "",
       note: "",
       insuranceFee: "",
+      dataSource: "",
       ...initialValues,
     };
   }, [initialValues]);
@@ -250,6 +259,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         position: values?.position?.value,
         workingStatus: values?.workingStatus?.value,
         linkUser: values?.linkUser?.value,
+        dataSource: values?.dataSource?.value,
         contractType: values?.contractType?.value,
       };
       const isSuccess = await onFinish(formatData);
@@ -1419,7 +1429,58 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         }}
                       />
                     </div>
-                    
+                  </div>
+
+                  <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                    <div className="w-1/5 flex items-center">
+                        <span className="w-6/12 text-primary-gray">
+                          Nguồn dữ liệu
+                        </span>
+                        <DropdownSearchable
+                          onchangeValue={(value) =>
+                            setFieldValue("dataSource", value)
+                          }
+                          onSearchInputChange={debounce(
+                            (value) => setSearchContact(value),
+                            500
+                          )}
+                          placeholder="Nguồn dữ liệu"
+                          className="w-full pl-0 -mb-1 outline-none"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-none"
+                          renderSelectedItem={(item) => (
+                            <div
+                              style={{ width: 100 }}
+                              className="flex items-center"
+                            >
+                              <p
+                                style={{
+                                  textOverflow: "ellipsis",
+                                  maxWidth: "100%",
+                                  minWidth: 0,
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  flex: "1 1 auto",
+                                }}
+                              >
+                                {item.text}
+                              </p>
+                            </div>
+                          )}
+                          initialValue={defaultValues?.dataSource}
+                          data={contacts.map((dataSource) => ({
+                            value: dataSource._id,
+                            label: dataSource.name,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
+                        />
+                    </div>
                   </div>
 
                   <div className="absolute flex justify-end items-center bottom-0 -ml-6 px-6 h-12 w-full border-t border-gray-300 text-primary-light">

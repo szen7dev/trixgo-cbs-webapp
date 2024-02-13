@@ -421,7 +421,6 @@ export const CrmBookingPage: FC = () => {
                         </p>
                     </div>
                 </div>
-
             </div>
 
             <header className="sticky top-0 bg-primary-light z-10">
@@ -629,7 +628,7 @@ export const CrmBookingPage: FC = () => {
                               />
                           </div>
                       </th>
-                      <th className="py-1 w-2/6">
+                      <th className="py-1 w-1/4">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Nội dung
                           </div>
@@ -681,6 +680,7 @@ export const CrmBookingPage: FC = () => {
                             </td>
                             <td className="py-1 px-2">
                                 {item?.name}
+                                <p className="text-cbs-highlight-color"><i>Nhắc hẹn trước: {item.alert} giờ</i></p>
                                 <p className="text-primary-gray"><i>{item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}</i></p>
                                 <p className="text-primary-gray"><i>
                                     {item?.userCreate ? `Cre: ${item?.userCreate?.fullname} ${moment(item?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}
@@ -710,13 +710,13 @@ export const CrmBookingPage: FC = () => {
                             <td className="py-1 px-2">
                                 {
                                     item?.status == 1 ?
-                                    <div className="w-[85px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
+                                    <button className="rounded-md py-1 px-2 bg-cbs-schedule-expired border border-primary-border text-white" style={{ fontSize: "12px" }}>
                                         {STATUS[Number(item?.status) - 1]?.text}
-                                    </div>
+                                    </button>
                                     :
-                                    <div className="w-[85px] rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                                    <button className="rounded-md py-1 px-2 bg-cbs-schedule-after-7days border border-primary-border text-white" style={{ fontSize: "12px" }}>
                                         {STATUS[Number(item?.status) - 1]?.text}
-                                    </div>
+                                    </button>
                                 }
                             </td>
                             <td className="py-1 px-2">

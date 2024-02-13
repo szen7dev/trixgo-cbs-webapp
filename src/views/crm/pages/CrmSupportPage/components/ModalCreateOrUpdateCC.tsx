@@ -285,7 +285,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
         <p>Nội dung sự việc</p>
         <input
           type="text"
@@ -297,7 +297,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
         <p>Diễn giải/cách xử lý</p>
         <input
           type="text"
@@ -309,7 +309,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
         <p>Ghi chú</p>
         <input
           type="text"
@@ -321,7 +321,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
         <p>Đánh giá của khách (1-5*)</p>
         <input
           type="number"
@@ -336,11 +336,11 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
-        <p>Giá trị bồi thường cho khách</p>
+      <section className="px-5 mt-2">
+        <p>Chi phí xử lý/bồi thường</p>
         <input
           type="number"
-          placeholder="Giá trị bồi thường cho khách"
+          placeholder="Chi phí xử lý/bồi thường"
           name="amount"
           className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData?.amount}
@@ -348,7 +348,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
         <p>Tình trạng xử lý (1-Chưa xử lý|2-Hoàn thành)</p>
         <input
           type="number"
@@ -360,7 +360,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
         <p>Phân loại (1-Lỗi của nhân viên|2-Lỗi khách quan)</p>
         <input
           type="number"

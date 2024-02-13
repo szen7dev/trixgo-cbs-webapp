@@ -289,7 +289,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
         <p>Nội dung (*)</p>
         <input
           type="text"
@@ -301,7 +301,19 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      <section className="px-5 mt-2">
+        <p>Chi phí/Giá trị</p>
+        <input
+          type="text"
+          placeholder="Chi phí/Giá trị"
+          name="amount"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData.amount}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
         <p>Ghi chú</p>
         <input
           type="text"
