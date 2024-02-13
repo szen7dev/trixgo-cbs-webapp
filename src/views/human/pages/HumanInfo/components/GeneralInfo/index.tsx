@@ -350,6 +350,20 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {info?.userUpdate?.fullname} - {moment(info?.modifyAt).isValid() && moment(info?.modifyAt).format("DD/MM/YYYY hh:mm")}
               </td>
             </tr>
+            <tr className="border h-7 leading-7">
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Nguồn dữ liệu
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.dataSource?.name}
+              </td>
+              <td className="border text-primary-gray w-1/6 pl-4">
+                
+              </td>
+              <td className="border w-2/6 pl-4">
+                
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

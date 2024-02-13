@@ -61,7 +61,7 @@ const BACKGROUND = [
 
 export const CrmJourneyPage: FC = () => {
     const {id: businessID} = useParams<{id: string}>();
-    console.log(businessID)
+    // console.log(businessID)
 
     const { user } = useAuth();
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
@@ -132,9 +132,10 @@ export const CrmJourneyPage: FC = () => {
 	});
   
     const { data: listUser } = useUserSystem({
-      keyword: userKeyword,
-      limit: 10,
-      isFetch: true
+        companyID: user?.company?._id,
+        keyword: userKeyword,
+        limit: 10,
+        isFetch: true
     }, true)
 
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
@@ -180,7 +181,7 @@ export const CrmJourneyPage: FC = () => {
             toDate: inputFilter.toDate,
             limit: 20,
             populates: JSON.stringify({
-                path: 'userCreate userUpdate customer mistake journey funda order manager images',
+                path: 'userCreate userUpdate customer mistake journey funda order manager images business dataSource',
                 select: '_id image name sign phone taxid address fullname createAt author path',
                 populate: {
 					path: 'author',
@@ -596,7 +597,7 @@ export const CrmJourneyPage: FC = () => {
                               />
                           </div>
                       </th>
-                      <th className="py-1 w-[90px]">
+                      <th className="py-1 w-[120px]">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Ngày
                           </div>
@@ -616,9 +617,9 @@ export const CrmJourneyPage: FC = () => {
                               Nội dung
                           </div>
                       </th>
-                      <th className="py-1 w-1/6">
+                      <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Đơn hàng
+                              Chi phí
                           </div>
                       </th>
                       <th className="py-1">
@@ -647,8 +648,7 @@ export const CrmJourneyPage: FC = () => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {moment(item.createAt).format('DD/MM/YYYY')}
-                                <p><i>{moment(item.createAt).format('HH:mm')}</i></p>
+                                {moment(item.createAt).format('DD/MM/YYYY HH:mm')}
                             </td>
                             <td className="py-1 px-2">
                                 <NavLink to={`/crm/customer/cid=${item?.customer?._id}`}>
@@ -657,23 +657,21 @@ export const CrmJourneyPage: FC = () => {
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color">
                                 <button className="py-1 px-2 rounded-md border border-primary-border text-white bg-cbs-secondary text-left">{item?.journey?.name}</button>
+                                <p className="text-cbs-highlight-color"><i>{item?.business?.name}</i></p>
+                                <p className="text-cbs-highlight-color"><i>{item?.dataSource ? `Source: ${item?.dataSource?.name}` :''}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.name}
-                                <p className="text-primary-gray"><i>{item?.userCreate ? `Tạo: ${item?.userCreate?.fullname}` : ''}</i></p>
-                                <p className="text-primary-gray"><i>{item?.userUpdate ? `Cập nhật: ${item?.userUpdate?.fullname}` : ''}</i></p>
+                                <p className="text-primary-gray"><i>{item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}</i></p>
+                                <p className="text-primary-gray"><i>
+                                    {item?.userCreate ? `Cre: ${item?.userCreate?.fullname} ${moment(item?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}
+                                </i></p>
+                                <p className="text-primary-gray"><i>
+                                    {item?.userUpdate ? `Mod: ${item?.userUpdate?.fullname} ${moment(item?.modifyAt).format('DD/MM/YYYY HH:mm')}` : ''}
+                                </i></p>
                             </td>
-                            <td className="py-1 px-2">
-                                {item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}
-                                {
-                                    (item?.channel && Number(item?.channel ) >= 1) ?
-                                    <div className="py-1 px-1 text-cbs-primary">
-                                        Kênh: {CHANNEL[Number(item?.channel) - 1]?.text}
-                                    </div>
-                                    : <></>
-                                }
-                                <p><i>{item?.funda?.name}</i></p>
-                                <p className="text-cbs-highlight-color"><i>{item?.manager ? `Quản lý: ${item?.manager?.fullname}` : ''}</i></p>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.amount)}
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}

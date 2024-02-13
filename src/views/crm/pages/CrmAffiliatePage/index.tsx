@@ -77,7 +77,7 @@ export const CrmAffiliatePage: FC = () => {
 	})
 
     const STATUS = [
-        { _id: 1, text: 'Chưa xử lý' },
+        { _id: 1, text: 'Đăng ký' },
         { _id: 2, text: 'Hoàn thành'}
     ]
 
@@ -135,9 +135,10 @@ export const CrmAffiliatePage: FC = () => {
 	});
   
     const { data: listUser } = useUserSystem({
-      keyword: userKeyword,
-      limit: 10,
-      isFetch: true
+        companyID: user?.company?._id,
+        keyword: userKeyword,
+        limit: 10,
+        isFetch: true
     }, true)
 
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
@@ -229,7 +230,6 @@ export const CrmAffiliatePage: FC = () => {
 
         if (newListIDChecked.length === 1) {
             const { _id, mistake, customer, order, journey, name, description, note, date, amount, rating, status, type } = newListIDChecked[0];
-            // console.log({ _id, mistake, customer, order, journey, name, description, note, date, amount, rating, status, type })
             setInitialValues({
                 customerCareID: _id,
                 mistake,
@@ -412,34 +412,6 @@ export const CrmAffiliatePage: FC = () => {
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Lĩnh vực"}
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        data={listDoctypes}
-                        formatItem={{
-                            id: "_id",
-                            text: "name",
-                        }}
-                        onSearchInputChange={debounce(
-                            (valueSearch) => setSearchDoctypeKeyword(valueSearch),
-                            500
-                        )}
-                        onClearData={() => {
-                            setBusinessID("");
-                        }}
-                        onchangeValue={item => {
-                            setBusinessID(item._id);
-                            setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
-                        }}
-                        renderItem={(item) => (
-                            <p className={"min-w-[300px]"}>{item.text}</p>
-                        )}
-                        selectOneByOne={true}
-                    />
-                    <DropdownSearchableV2
-                        ref={accountRef}
-                        className={"mr-1 border border-primary-border rounded-lg"}
                         placeholder={"Khách"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -578,19 +550,24 @@ export const CrmAffiliatePage: FC = () => {
                               />
                           </div>
                       </th>
+                      <th className="py-1">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                              Mã khách
+                          </div>
+                      </th>
+                      <th className="py-1 w-1/4">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                              Nội dung đăng ký
+                          </div>
+                      </th>
                       <th className="py-1 w-[120px]">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                            Thời hạn
+                            Thời gian
                           </div>
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Khách hàng
-                          </div>
-                      </th>
-                      <th className="py-1 w-2/6">
-                          <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Nội dung
+                            Người đăng ký
                           </div>
                       </th>
                       <th className="py-1">
@@ -624,23 +601,22 @@ export const CrmAffiliatePage: FC = () => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {moment(item.date).format('DD/MM/YYYY HH:mm')}
-                                <p><i>{moment(item.date).fromNow()}</i></p>
-                            </td>
-                            <td className="py-1 px-2">
                                 <NavLink to={`/crm/customer/cid=${item?.customer?._id}`}>
                                     {item?.customer?.name} - {item?.customer?.phone}
                                 </NavLink>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.name}
-                                <p className="text-primary-gray"><i>{item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}</i></p>
                                 <p className="text-primary-gray"><i>
-                                    {item?.userCreate ? `Cre: ${item?.userCreate?.fullname}` : ''}  {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+                                    {item?.userUpdate ? `Mod: ${item?.userUpdate?.fullname} ${moment(item?.modifyAt).format('DD/MM/YYYY HH:mm')}` : ''}
                                 </i></p>
-                                <p className="text-primary-gray"><i>
-                                    {item?.userUpdate ? `Mod: ${item?.userUpdate?.fullname}` : ''}  {moment(item?.modifyAt).format('DD/MM/YYYY HH:mm')}
-                                </i></p>
+                            </td>
+                            <td className="py-1 px-2">
+                                {moment(item.date).format('DD/MM/YYYY HH:mm')}
+                                <p><i>{moment(item.date).fromNow()}</i></p>
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.userCreate?.fullname}
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}

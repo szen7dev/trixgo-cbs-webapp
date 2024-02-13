@@ -114,9 +114,10 @@ export const CrmSupportPage: FC = () => {
     })
   
     const { data: listUser } = useUserSystem({
-      keyword: userKeyword,
-      limit: 10,
-      isFetch: true
+        companyID: user?.company?._id,
+        keyword: userKeyword,
+        limit: 10,
+        isFetch: true
     }, true)
 
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
@@ -255,7 +256,7 @@ export const CrmSupportPage: FC = () => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "800px",
+                    height: "750px",
                 }}
             >
                 <ModalCreateOrUpdateCC
@@ -665,6 +666,7 @@ export const CrmSupportPage: FC = () => {
                             </td>
                             <td className="py-1 px-2">
                                 {item.description}
+                                <p className="text-right"><i>{formatNumberMoney(item?.amount)}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}
