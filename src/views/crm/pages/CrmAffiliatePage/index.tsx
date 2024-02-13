@@ -399,6 +399,30 @@ export const CrmAffiliatePage: FC = () => {
                         ) 
                     })
                 } */}
+                 <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-expired">
+                    <div className="px-2 py-1">
+                        <div className="font-bold text-sm mb-1 text-white">Cấp 1 (4)</div>
+                        <p className="text-white text-x-small">
+                           Affiliate cấp 1
+                        </p>
+                    </div>
+                </div>
+                <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-nextweek">
+                    <div className="px-2 py-1">
+                        <div className="font-bold text-sm mb-1 text-white">Cấp 2 (240)</div>
+                        <p className="text-white text-x-small">
+                            Affiliate cấp 2
+                        </p>
+                    </div>
+                </div>
+                <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-after-7days">
+                    <div className="px-2 py-1">
+                        <div className="font-bold text-sm mb-1 text-white">Cấp 3 (1000)</div>
+                        <p className="text-white text-x-small">
+                            Affiliate cấp 3
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <header className="sticky top-0 bg-primary-light z-10">

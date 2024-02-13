@@ -421,7 +421,6 @@ export const CrmBookingPage: FC = () => {
                         </p>
                     </div>
                 </div>
-
             </div>
 
             <header className="sticky top-0 bg-primary-light z-10">
