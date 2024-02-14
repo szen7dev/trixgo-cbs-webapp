@@ -313,10 +313,11 @@ export const CrmJourneyPage: FC = () => {
     });
     const { importExcelAsync, exportExcelAsync } = useFnbCustomerCare({});
 
-    const handleExportExcel = async () => {
+    const handleExportExcel = async (param: any) => {
 		try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportExcelAsync({
+                option: param.option,
                 customerID,
                 userCreateID: userID,
             });
@@ -532,11 +533,11 @@ export const CrmJourneyPage: FC = () => {
                     />
                     <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 
-                      <button className={"flex items-center justify-center mr-3"}
-                              onClick={handleExportExcel}
+                        <button className={"flex items-center justify-center mx-3 ml-3"}
+                              onClick={() => handleExportExcel({option: 2})}
                           >
                               Tải Excel
-                      </button>
+                        </button>
 
                       <button className={"flex items-center justify-center mr-3"}>
                             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
