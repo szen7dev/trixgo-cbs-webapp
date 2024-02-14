@@ -267,30 +267,31 @@ export const FnbContactPage: FC = () => {
     }
 
     //_____Import, export excel
-    // const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-    //     isExporting: false,
-    // });
-    // const { exportExcelAsync } = useFnbCustomerCare({});
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+        isExporting: false,
+    });
+    const { exportExcelAsync } = useFnbCustomerCare({});
 
-    // const handleExportExcel = async () => {
-	// 	try {
-    //         setStateExport({ isExporting: true });
-    //         const { error, data } = await exportExcelAsync({
-    //             customerID,
-    //             userCreateID: userID,
-    //         });
+    const handleExportExcel = async (param: any) => {
+		try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportExcelAsync({
+                option: param.option,
+                customerID,
+                userCreateID: userID,
+            });
 
-    //         if(error) {
-    //             return toast.warn(data?.message);
-    //         }
+            if(error) {
+                return toast.warn(data?.message);
+            }
 
-    //         data && createLinkAndClick(data, '_self');
-    //     } catch (error: any) {
-    //         toast.error(error.message)
-    //     } finally {
-    //         setStateExport({ isExporting: false });
-    //     }
-	// }
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+	}
 
     const handleOnChangeDate = useCallback((date, input) => {
         if (input) {
@@ -506,11 +507,11 @@ export const FnbContactPage: FC = () => {
                     />
                     <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 
-                      {/* <button className={"flex items-center justify-center mx-3 ml-3"}
-                              onClick={handleExportExcel}
+                      <button className={"flex items-center justify-center mx-3 ml-3"}
+                              onClick={() => handleExportExcel({option: 1})}
                           >
                               Tải Excel
-                      </button> */}
+                      </button>
 
                       {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
                       {itemsChecked.length === 1 ? (
