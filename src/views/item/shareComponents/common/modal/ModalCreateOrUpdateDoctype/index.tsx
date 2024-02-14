@@ -24,6 +24,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
     type: 1,
     salesChannel: 1,
     amount: 0,
+    alert: 0,
   }
 }) => {
   const { closeModal } = useModal();
@@ -64,7 +65,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
       // Handle api here!
       switch (modalType) {
         case 'create': {
-          const { error, data } = await insertAsync({...formData, salesChannel: +formData?.salesChannel});
+          const { error, data } = await insertAsync({...formData, salesChannel: +formData?.salesChannel, amount: +formData?.amount, alert: +formData?.alert});
 
           if (error) {
             return toast.warning(data.message);
@@ -74,7 +75,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
           break;
         }
         case 'update': {
-          const { error, data } = await updateAsync({...formData, salesChannel: +formData?.salesChannel});
+          const { error, data } = await updateAsync({...formData, salesChannel: +formData?.salesChannel, amount: +formData?.amount, alert: +formData?.alert});
 
           if (error) {
             return toast.warning(data.message);
@@ -108,7 +109,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
 
   return (
     <main className="relative h-full">
-      <header className="px-10 py-2 flex items-center justify-between">
+      <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
           {modalType === 'create' ? 'Tạo mới' : 'Cập nhật'}
         </p>
@@ -120,8 +121,8 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
         />
       </header>
 
-      <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtName">
+      <section className="px-5 mt-1">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtName">
           Tên (*)
         </label>
         <input
@@ -134,8 +135,8 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
         />
       </section>
       
-      <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtSign">
+      <section className="px-5 mt-1">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtSign">
           Mã hiệu
         </label>
         <input
@@ -148,8 +149,8 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtSign">
+      <section className="px-5 mt-1">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtSign">
           Đơn vị tính
         </label>
         <input
@@ -162,8 +163,8 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtSign">
+      <section className="px-5 mt-1">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtSign">
           Giá trị
         </label>
         <input
@@ -176,8 +177,22 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
+      <section className="px-5 mt-1">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtSign">
+          Thời hạn (giờ)
+        </label>
+        <input
+          type="number"
+          placeholder="Thời hạn (giờ)"
+          name="alert"
+          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.alert}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
+        />
+      </section>
+
+      <section className="px-5 mt-1">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Mô tả, ghi chú
         </label>
         <input
@@ -361,7 +376,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
         </section>
       )}
 
-      <footer className="absolute right-0 bottom-0 px-10 py-5">
+      <footer className="absolute right-0 bottom-0 px-5 py-5">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded" onClick={handleSubmit}>
           Xác nhận
         </button>

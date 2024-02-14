@@ -40,6 +40,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         type: +type,
         salesChannel: 1,
         amount: 0,
+        alert: 0,
     });
 
     const {
@@ -91,7 +92,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, linkItem, name, sign, unit, description, type, salesChannel, amount } = newListIDChecked[0];
+            const { _id, linkItem, name, sign, unit, description, type, salesChannel, amount, alert } = newListIDChecked[0];
             setInitialValues({
                 doctypeID: _id,
                 linkItem,
@@ -102,6 +103,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 type,
                 salesChannel,
                 amount,
+                alert,
             });
         } else {
             clearData();
@@ -142,6 +144,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 type,
                 salesChannel: 1,
                 amount: 0,
+                alert: 0,
             };
         }
 
@@ -269,6 +272,11 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1" style={{width: "20px"}}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Danh mục cha
+                            </div>
+                        </th>
+                        <th className="py-1" style={{width: "20px"}}>
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Link danh mục
                             </div>
                         </th>
@@ -289,12 +297,12 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Mô tả, ghi chú
+                                Thời hạn (giờ)
                             </div>
                         </th>
-                        <th className="w-2/12 py-1 font-normal">
+                        <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Cập nhật
+                                Mô tả, ghi chú
                             </div>
                         </th>
                     </tr>
@@ -316,16 +324,15 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                     {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                <p className="text-primary-gray text-[12px]"><i>{item?.userUpdate?.fullname} {moment(item.modifyAt).format('DD/MM/YYYY - HH:mm')}</i></p>
                             </td>
+                            <td className="py-1 px-2">{item?.parent?.name}</td>
                             <td className="py-1 px-2">{item?.linkItem?.name}</td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.unit}</td>
-                            <td className="py-1 px-2">{item?.amount}</td>
+                            <td className="py-1 px-2 text-right">{item?.amount}</td>
+                            <td className="py-1 px-2 text-right">{item?.alert}</td>
                             <td className="py-1 px-2">{item?.description}</td>
-                            <td className="py-1 px-2">
-                                {item?.userUpdate?.fullname}
-                                <p className="text-primary-gray text-[12px]"><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}</i></p>
-                            </td>
                         </tr>
                     )) : <></>}
                 </tbody>
