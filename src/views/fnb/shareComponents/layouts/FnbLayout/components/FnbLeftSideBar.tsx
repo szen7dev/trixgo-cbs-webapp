@@ -135,7 +135,7 @@ export const FnbLeftSideBar: FC = () => {
                                     className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-6 align-top inline-block"
                                     style={{ maxWidth: " calc(100vw - 50px)" }}
                                 >
-                                   {user?.email == 'kiemthuvien.dcop.trx@gmail.com' ? <ModalAddNewOrder2 /> : <ModalAddNewOrder />}  
+                                   {(user?.email == 'kiemthuvien.dcop.trx@gmail.com' || user?.email == 'hiepnh.winggo@gmail.com') ? <ModalAddNewOrder2 /> : <ModalAddNewOrder />}  
                                 </div>
                             )
                         }
