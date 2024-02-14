@@ -2,6 +2,7 @@ import type { QueryParam, Company, APIResponse } from './commons';
 
 export type Doctype = {
     _id: string;
+    parent: string;
     linkItem: string;
     name: string;
     sign: string;
@@ -9,6 +10,7 @@ export type Doctype = {
     unit: string;
     type: number;
     amount: number;
+    alert: number;
     company?: Company
     modifyAt?: string;
     createAt?: string;
@@ -74,6 +76,7 @@ interface ModalProps {
         description: string;
         type: number;
         amount: number;
+        alert: number;
         salesChannel: number;
     }
     onConfirm?(): void
