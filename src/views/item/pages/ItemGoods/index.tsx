@@ -1,10 +1,11 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState, useCallback, useEffect } from "react";
+import { FC, useRef, useState, useCallback, useEffect, ChangeEvent } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
+import { validateFiles } from 'validation/file';
 import { read, utils } from 'xlsx';
 import { formatNumberMoney } from "utils/cmcs";
 
@@ -13,6 +14,7 @@ import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
+import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
@@ -22,11 +24,18 @@ import { ModalCreateOrUpdateGoods } from '../../shareComponents/common';
 import { Storage } from "typings/items";
 
 /*=====6.HOOKS/APIS=====*/
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useModal } from "services/hooks/useModal";
 import { useGoods } from "services/hooks/items/useGoods";
 
 /*=====7.OTHER=====*/
+import { ImageProps } from "typings/common";
 import { createLinkAndClick } from "utils";
+import { ModalZoomView } from "shareComponents/common";
+import { useUpload } from "services/hooks/useUpload";
+import { APP_ID } from "apis/localdb";
+import API from "apis/repository";
+
 const TYPE = [
 	{ value: 1, text: "Thông thường" },
 	{ value: 2, text: "Topping" },
@@ -43,6 +52,23 @@ const USAGE = [
 ]
 
 export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
+    const { user } = useAuth();
+    const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+
+	const [defaultState, setDefaultState] = useState({
+	    mediaID: '',
+	    images: [] as ImageProps[],
+	    index: 0,
+	    createAt: ""
+  	});
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const { addFileToUpload } = useUpload({
+        appID: APP_ID.ITEM.id,
+        companyID: user?.company?._id,
+    });
+
 	const history = useHistory();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
@@ -202,6 +228,42 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             </div>
         )
     }
+
+    const handleUploadAttach = async (filesSelected: FileList | null, goodsID: string) => {
+		if (!filesSelected || !filesSelected.length) return;
+
+		const validation = await validateFiles(filesSelected);
+		if (validation.error) return toast.warn(validation.message);
+
+		// Clear input file
+		if (fileInputRef.current) {
+		  fileInputRef.current.value = '';
+		}
+
+		const imagesID: any = [];
+
+		// Upload images
+		for (const [_, file] of Object.entries(filesSelected)) {
+			const { _id } = await addFileToUpload({
+				files: file as any,
+				fileType: 1,
+				progress: percentCompleted => {
+					console.info(`${percentCompleted}%`)
+				}
+			})
+			_id && imagesID.push(_id);
+		}
+
+		// Update image to products
+		await API.put(
+			`/api/item/goods`,
+			{
+				goodsID,
+				imagesID,
+			}
+		);
+		refetch();
+	}
 
      /**
      * LÀM VIỆC VỚI EXCEL
@@ -466,12 +528,54 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 {item.note}
                             </td>
                             <td className="py-1 px-2">
-                               
+                            <div style={{display: "flex"}}>
+									{item?.images?.map((image: any, i: number) => {
+										return (
+											<div
+												key={image._id}
+												className="mt-2 cursor-pointer relative w-[75px] h-[75px]"
+												onClick={() => {
+													setDefaultState({
+														mediaID: image._id,
+														images: item?.images,
+														index: i,
+														createAt: image.createAt
+													});
+													setIsShowImageFullScreen(true);
+												}}
+											>
+												<img src={`${process.env.REACT_APP_URL_S3}${image?.path}`} />
+											</div>
+										)
+									})}
+
+									<label className="ml-2">
+										<div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
+											<img
+											src={CameraIcon}
+											alt="Camera"
+											className="w-[15px] h-[13px]"
+											/>
+											<input 
+												type="file" 
+												className="hidden" 
+												accept="image/*"
+												onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
+											/>
+										</div>
+									</label>
+								</div>
                             </td>
                         </tr>
                     )) : <></>}
                 </tbody>
             </table>
+
+            <ModalZoomView
+		        isShow={isShowImageFullScreen}
+		        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
+		        initialData={defaultState}
+		    />
 
             {hasNextPage && (
                 <div className="w-full flex justify-center my-5">

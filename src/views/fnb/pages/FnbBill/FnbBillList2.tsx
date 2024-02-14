@@ -40,6 +40,7 @@ export const FnbBillList: FC = () => {
             isFetchInfo: true
         }
     )
+    console.log(info)
 
     useEffect(() => {
         const fetchOrderProducts = async () => {

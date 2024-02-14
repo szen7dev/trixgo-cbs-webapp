@@ -34,6 +34,7 @@ export const FnbBillOrder2: FC = () => {
             isFetchInfo:  true  
         }
     )
+    console.log(info)
 
     useEffect(() => {
         const fetchOrderProducts = async () => {
@@ -50,7 +51,7 @@ export const FnbBillOrder2: FC = () => {
             );
             const { data, status } = response?.data;
 
-            console.log(data)
+            // console.log(data)
 
             if (status !== 200) return;
 
@@ -126,22 +127,22 @@ export const FnbBillOrder2: FC = () => {
                                         for (const subProduct of item?.subGoods) {
                                             // str = str + subProduct.name + ", ";
 
-                                            if(item.size == 1 && info.salesChannel == 1){
+                                            if(item.size == 1 && info?.salesChannel == 1){
                                                 toppingPrice = Number(toppingPrice) + Number(subProduct.unitPrice)
                                                 str = str + subProduct.name + "-" + formatNumberMoney(subProduct.unitPrice) + ", "
                                             }
 
-                                            if(item.size == 1 && info.salesChannel != 1){
+                                            if(item.size == 1 && info?.salesChannel != 1){
                                                 toppingPrice = Number(toppingPrice) + Number(subProduct.unitPrice2)
                                                 str = str + subProduct.name + "-" + formatNumberMoney(subProduct.unitPrice2) + ", "
                                             }
 
-                                            if(item.size == 2 && info.salesChannel == 1){
+                                            if(item.size == 2 && info?.salesChannel == 1){
                                                 toppingPrice = Number(toppingPrice) + Number(subProduct.unitPrice3)
                                                 str = str + subProduct.name + "-" + formatNumberMoney(subProduct.unitPrice3) + ", "
                                             }
 
-                                            if(item.size == 2 && info.salesChannel != 1){
+                                            if(item.size == 2 && info?.salesChannel != 1){
                                                 toppingPrice = Number(toppingPrice) + Number(subProduct.unitPrice4)
                                                 str = str + subProduct.name + "-" + formatNumberMoney(subProduct.unitPrice4) + ", "
                                             }

@@ -39,8 +39,12 @@ async function fetchListGoods(params: any) {
         params: {
             // select: 'name description modifyAt userUpdate amountChilds',
             populates: {
-                path: 'parent userUpdate convert',
-                select: 'name unit description fullname'
+                path: 'parent userUpdate convert images',
+                // select: 'name unit description fullname author createAt path',
+                populate: {
+					path: 'author',
+					select: 'fullname bizfullname image'
+				}
             },
             ...params
         }
