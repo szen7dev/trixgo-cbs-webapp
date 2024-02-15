@@ -196,3 +196,20 @@ export const useQueryDetailContact = (contactID?: string, params?: Contact.Conta
         onFetchDetailContactAsync: onFetchDetailContact,
     }
 }
+
+export const useByProperty = ({ params = {},  isFetchList = false }: any): any => {
+
+    const { data: detailData, isLoading: listByPropertyIsLoading, refetch: refetchListByProperty } =
+    useQuery([`contact_by_property`,{...params, isFetchList }],() => ContactRepository.fetchListByProperty(params), {
+        refetchOnWindowFocus: false,
+        enabled: isFetchList,
+    });
+    
+    const listByProperty = detailData?.data;
+
+    return {
+        listByProperty,
+        listByPropertyIsLoading,
+        refetchListByProperty
+    }
+}

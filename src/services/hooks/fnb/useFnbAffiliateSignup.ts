@@ -142,19 +142,19 @@ export const useFnbAffiliateSignup = ({
     }
 }
 
-export const useCustomerCareByProperty = ({ params = {},  isFetchList = false }: any): any => {
+export const useByProperty = ({ params = {},  isFetchList = false }: any): any => {
 
-    const { data: detailData, isLoading: listCustomerCareByPropertyIsLoading, refetch: refetchListCustomerCareByProperty } =
-    useQuery([`CustomerBooking_by_property`,{...params, isFetchList }],() => AffiliateSignupRepository.fetchListByProperty(params), {
+    const { data: detailData, isLoading: listByPropertyIsLoading, refetch: refetchListByProperty } =
+    useQuery([`Affiliate_signup_by_property`,{...params, isFetchList }],() => AffiliateSignupRepository.fetchListByProperty(params), {
         refetchOnWindowFocus: false,
         enabled: isFetchList,
     });
     
-    const listCustomerCareByProperty = detailData?.data;
+    const listByProperty = detailData?.data;
 
     return {
-        listCustomerCareByProperty,
-        listCustomerCareByPropertyIsLoading,
-        refetchListCustomerCareByProperty
+        listByProperty,
+        listByPropertyIsLoading,
+        refetchListByProperty
     }
 }

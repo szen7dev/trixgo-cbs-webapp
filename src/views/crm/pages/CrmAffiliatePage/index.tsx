@@ -39,7 +39,8 @@ import { useQueryListDoctype } from "services/hooks/useHuman";
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
 import { validateFiles } from 'validation/file';
-import { useFnbAffiliateSignup, useCustomerCareByProperty } from "services/hooks/fnb/useFnbAffiliateSignup";
+import { useFnbAffiliateSignup } from "services/hooks/fnb/useFnbAffiliateSignup";
+import { useByProperty } from "services/hooks/items/useContact";
 
 const BACKGROUND = [
 	{ value: 1, color: "bg-red-400", color2: "F11F20" },
@@ -127,12 +128,12 @@ export const CrmAffiliatePage: FC = () => {
       isFetchList: true
     })
 
-    const [searchDoctypeKeyword, setSearchDoctypeKeyword] = useState("");
-	const { listDoctypes } = useQueryListDoctype({
-		limit: 10,
-		type: 11,
-		keyword: searchDoctypeKeyword,
-	});
+    // const [searchDoctypeKeyword, setSearchDoctypeKeyword] = useState("");
+	// const { listDoctypes } = useQueryListDoctype({
+	// 	limit: 10,
+	// 	type: 11,
+	// 	keyword: searchDoctypeKeyword,
+	// });
   
     const { data: listUser } = useUserSystem({
         companyID: user?.company?._id,
@@ -158,11 +159,11 @@ export const CrmAffiliatePage: FC = () => {
         type: 1,
     })
 
-    const { listCustomerCareByProperty, refetchListCustomerCareByProperty } = useCustomerCareByProperty({
+    const { listByProperty, refetchListByProperty } = useByProperty({
         params: {
-            option: 5,
-            fromDate: inputFilter.fromDate,
-            toDate: inputFilter.toDate,
+            option: 7,
+            // fromDate: inputFilter.fromDate,
+            // toDate: inputFilter.toDate,
         },
         isFetchList: true
     })
@@ -207,7 +208,7 @@ export const CrmAffiliatePage: FC = () => {
     // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
     const handleConfirmCreateOrUpdate = () => {
         refetch()
-        refetchListCustomerCareByProperty()
+        refetchListByProperty()
     }
 
     // Xử lý sự kiện tìm kiếm
@@ -366,7 +367,6 @@ export const CrmAffiliatePage: FC = () => {
             })
             _id && imagesID.push(_id);
         }
-        // console.log(imagesID)
 
         // Update image to customer_cares
         await API.put(
@@ -382,47 +382,23 @@ export const CrmAffiliatePage: FC = () => {
     return (
         <main className="relative h-full">
             <div className="flex flex-wrap mb-1">
-                {/* { 
-                    listCustomerCareByProperty?.map((item: any, index: any) => {
-                        const color = `cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1`
-                        const color2 = `#${BACKGROUND[index].color2}`
+                { 
+                    listByProperty?.map((item: any, index: any) => {
+                        const color = `cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-secondary`
+                        // const color2 = `#${BACKGROUND[index].color2}`
 
                         return (
-                            <div key={index} className={color} style={{background: color2}}>
+                            <div key={index} className={color}>
                                 <div className="px-2 py-1">
-                                    <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
+                                    <div className="font-bold text-sm mb-1 text-white">Cấp {item._id.level} ({item.quantity})</div>
                                     <p className="text-white text-x-small">
-                                    {item._id.journey.name}
+                                        Cấp {item._id.level}
                                     </p>
                                 </div>
                             </div>
                         ) 
                     })
-                } */}
-                 <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-expired">
-                    <div className="px-2 py-1">
-                        <div className="font-bold text-sm mb-1 text-white">Cấp 1 (4)</div>
-                        <p className="text-white text-x-small">
-                           Affiliate cấp 1
-                        </p>
-                    </div>
-                </div>
-                <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-nextweek">
-                    <div className="px-2 py-1">
-                        <div className="font-bold text-sm mb-1 text-white">Cấp 2 (240)</div>
-                        <p className="text-white text-x-small">
-                            Affiliate cấp 2
-                        </p>
-                    </div>
-                </div>
-                <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-after-7days">
-                    <div className="px-2 py-1">
-                        <div className="font-bold text-sm mb-1 text-white">Cấp 3 (1000)</div>
-                        <p className="text-white text-x-small">
-                            Affiliate cấp 3
-                        </p>
-                    </div>
-                </div>
+                }
             </div>
 
             <header className="sticky top-0 bg-primary-light z-10">

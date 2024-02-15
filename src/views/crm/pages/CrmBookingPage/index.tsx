@@ -39,7 +39,7 @@ import { useQueryListDoctype } from "services/hooks/useHuman";
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
 import { validateFiles } from 'validation/file';
-import { useFnbCustomerBooking, useCustomerCareByProperty } from "services/hooks/fnb/useFnbCustomerBooking";
+import { useFnbCustomerBooking, useByProperty } from "services/hooks/fnb/useFnbCustomerBooking";
 
 const BACKGROUND = [
 	{ value: 1, color: "bg-red-400", color2: "F11F20" },
@@ -148,14 +148,15 @@ export const CrmBookingPage: FC = () => {
         alert: 0,
     })
 
-    const { listCustomerCareByProperty, refetchListCustomerCareByProperty } = useCustomerCareByProperty({
+    const { listByProperty, refetchListByProperty } = useByProperty({
         params: {
             option: 5,
-            fromDate: inputFilter.fromDate,
-            toDate: inputFilter.toDate,
+            // fromDate: inputFilter.fromDate,
+            // toDate: inputFilter.toDate,
         },
         isFetchList: true
     })
+    // console.log(listByProperty)
 
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerBooking({
         params: { 
@@ -199,7 +200,7 @@ export const CrmBookingPage: FC = () => {
     // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
     const handleConfirmCreateOrUpdate = () => {
         refetch()
-        refetchListCustomerCareByProperty()
+        refetchListByProperty()
     }
 
     // Xử lý sự kiện tìm kiếm
@@ -380,26 +381,9 @@ export const CrmBookingPage: FC = () => {
     return (
         <main className="relative h-full">
             <div className="flex flex-wrap mb-1">
-                {/* { 
-                    listCustomerCareByProperty?.map((item: any, index: any) => {
-                        const color = `cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1`
-                        const color2 = `#${BACKGROUND[index].color2}`
-
-                        return (
-                            <div key={index} className={color} style={{background: color2}}>
-                                <div className="px-2 py-1">
-                                    <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
-                                    <p className="text-white text-x-small">
-                                    {item._id.journey.name}
-                                    </p>
-                                </div>
-                            </div>
-                        ) 
-                    })
-                } */}
                 <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-expired">
                     <div className="px-2 py-1">
-                        <div className="font-bold text-sm mb-1 text-white">Quá hạn</div>
+                        <div className="font-bold text-sm mb-1 text-white">Quá hạn ({listByProperty?.amount1})</div>
                         <p className="text-white text-x-small">
                             Lịch quá hạn
                         </p>
@@ -407,7 +391,7 @@ export const CrmBookingPage: FC = () => {
                 </div>
                 <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-nextweek">
                     <div className="px-2 py-1">
-                        <div className="font-bold text-sm mb-1 text-white">Tuần tới</div>
+                        <div className="font-bold text-sm mb-1 text-white">Tuần tới ({listByProperty?.amount2})</div>
                         <p className="text-white text-x-small">
                             Trong vòng 7 ngày tới
                         </p>
@@ -415,7 +399,7 @@ export const CrmBookingPage: FC = () => {
                 </div>
                 <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-after-7days">
                     <div className="px-2 py-1">
-                        <div className="font-bold text-sm mb-1 text-white">Sau tuần tới</div>
+                        <div className="font-bold text-sm mb-1 text-white">Sau tuần tới ({listByProperty?.amount3})</div>
                         <p className="text-white text-x-small">
                             7 ngày tiếp theo
                         </p>
