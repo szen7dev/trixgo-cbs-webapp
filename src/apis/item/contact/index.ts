@@ -6,7 +6,8 @@ import { Contact } from 'typings/items';
 export const contactRepository = {
     fetchList: (params: Contact.ContactListParams): Promise<Contact.ContactListResponse> => fetchListAndInfo(params),
     fetchInfo: (params: Contact.ContactInfoParams) => fetchListAndInfo(params),
-    insert: (payload: any) => insert(payload)
+    insert: (payload: any) => insert(payload),
+    fetchListByProperty: (params: any): Promise<any> => fetchListByProperty(params),
 }
 
 async function fetchListAndInfo(params: any) {
@@ -31,4 +32,13 @@ async function insert(payload: any): Promise<any> {
     );
 
     return data;
+}
+
+async function fetchListByProperty(params : any) {
+    const { data } = await API.get(`${ITEM_URL}/contacts/get-list-by-property`, {
+        params: {
+            ...params,
+        }
+    })
+    return data
 }

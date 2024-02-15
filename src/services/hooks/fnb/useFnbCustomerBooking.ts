@@ -142,19 +142,19 @@ export const useFnbCustomerBooking = ({
     }
 }
 
-export const useCustomerCareByProperty = ({ params = {},  isFetchList = false }: any): any => {
+export const useByProperty = ({ params = {},  isFetchList = false }: any): any => {
 
-    const { data: detailData, isLoading: listCustomerCareByPropertyIsLoading, refetch: refetchListCustomerCareByProperty } =
+    const { data: detailData, isLoading: listByPropertyIsLoading, refetch: refetchListByProperty } =
     useQuery([`CustomerBooking_by_property`,{...params, isFetchList }],() => CustomerBookingRepository.fetchListByProperty(params), {
         refetchOnWindowFocus: false,
         enabled: isFetchList,
     });
     
-    const listCustomerCareByProperty = detailData?.data;
+    const listByProperty = detailData?.data;
 
     return {
-        listCustomerCareByProperty,
-        listCustomerCareByPropertyIsLoading,
-        refetchListCustomerCareByProperty
+        listByProperty,
+        listByPropertyIsLoading,
+        refetchListByProperty
     }
 }
