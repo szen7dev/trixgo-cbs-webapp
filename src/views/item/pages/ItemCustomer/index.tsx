@@ -402,7 +402,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="py-1">
+                        <th className="py-1 w-1/6">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Phân loại
                             </div>
