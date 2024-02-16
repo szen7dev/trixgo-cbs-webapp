@@ -44,6 +44,8 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
     place: any;
     fromDate: any;
     toDate: any;
+    joinedDate: any;
+    dataSource: any;
 }
 
 interface HumanInsertPayload {
