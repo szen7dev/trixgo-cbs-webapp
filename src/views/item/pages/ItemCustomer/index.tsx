@@ -473,7 +473,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/contact/${item._id}`}>
-                                    {item.amountChilds>0? <b>{item.name}({item.amountChilds})</b>: item.name }
+                                    {item?.childs.length > 0? <b>{item.name}({item?.childs.length})</b>: item.name }
                                 </Link>
                                 <p className="text-primary">Sale: {item?.sale?.fullname || ''}</p>
                             </td>
