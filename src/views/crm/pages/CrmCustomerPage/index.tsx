@@ -12,8 +12,8 @@ import {
 import { GENDER_TYPES } from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-import TriangleDown from "assets/icons/TriangleDown";
-import downloadIcon from "assets/images/icons8-download-64.svg";
+// import TriangleDown from "assets/icons/TriangleDown";
+// import downloadIcon from "assets/images/icons8-download-64.svg";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
@@ -36,19 +36,9 @@ type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
 
 export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
     const [keyword, setKeyword] = useState('');
-
     const dispatch = useDispatch();
-    const { keywordInput } = useAppSelector(
-        (state) => state.documentProject.data
-    );
-
     const { current: socket }: any = useSocket();
     const { user } = useAuth();
-
-    useEffect(() => {
-        setPageIndex(0);
-        ref.current&&ref.current.resetPaginate();
-    }, [keywordInput]);
 
     const ref = useRef<PaginateHandle>(null);
     const datahubRef = useRef<DropdownHandle>(null);
@@ -58,7 +48,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
     const [pageIndex, setPageIndex] = useState(0);
 
     useEffect(() => {
-        document.title = `Trixgo | Quản lý nhân sự`;
+        document.title = `Trixgo | CRM`;
     });
 
     const location = useLocation()
@@ -266,49 +256,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                             )}
                             selectOneByOne={true}
                         />
-
-                        <TimeRangeDropdown
-                            ref={fromToRef}
-                            className={
-                                "mr-1 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
-                            }
-                            placeholder={"Thâm niên"}
-                            iconBack={<TriangleDown />}
-                            onValueChange={(val) => {
-                                setFromToDate(val)
-                                dispatch(setFilterDropdown({keyFilter: "fromDate", dataFilter: val.fromDate}))
-                                dispatch(setFilterDropdown({keyFilter: "toDate", dataFilter: val.toDate}))
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            options={[
-                                {
-                                    text: "Tất cả",
-                                    fromDate: "",
-                                    toDate: "",
-                                },
-                                {
-                                    text: "Trong vòng 5 năm",
-                                    fromDate: moment().subtract(5, "years").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
-                                },
-                                {
-                                    text: "Từ 5-10 năm",
-                                    fromDate: moment().subtract(10, "years").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().subtract(5, "years").format("YYYY-MM-DD h:mm"),
-                                },
-                                {
-                                    text: "Từ 10-15 năm",
-                                    fromDate: moment().subtract(15, "years").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().subtract(10, "years").format("YYYY-MM-DD h:mm"),
-                                },
-                                {
-                                    text: "Từ 15 năm trở lên",
-                                    fromDate: moment().subtract(100, "years").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().subtract(15, "years").format("YYYY-MM-DD h:mm"),
-                                },
-                            ]}
-                        />
+                        
                     </div>
 
                     <PaginateV2
@@ -346,25 +294,25 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                 TT
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Khách hàng/Affiliate
+                                Khách hàng
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Điện thoại/Email
+                                Ngày tham gia
                             </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" >
-                                Nơi ở hiện tại
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                Điện thoại
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                Email
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Mã số thuế
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Phòng ban
+                                Tuyến trên
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Hợp đồng
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Tình trạng
+                                Nguồn dữ liệu
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Ghi chú
@@ -373,12 +321,18 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                         </thead>
                         <tbody className="">
                         {listHumanWithPager[pageIndex].map((item, index) => {
-                            let linkRef;
+                            let linkRef, str
                             if(location.pathname.includes("/crm/customer/")){
                                 linkRef = `/crm/customer/cid=${item._id}`
                             }else{
                                 linkRef = `/crm/customer/cid=${item._id}`
                             }
+                            if(item?.dataSource){
+                                str = 'py-1 px-2 rounded-md border border-primary-border text-white bg-cbs-secondary text-left'
+                            }else{
+                                str = 'hidden'
+                            }
+
                             return (
                                 <tr
                                     key={index}
@@ -397,36 +351,31 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                             <p className="text-primary-gray mt-1">Ngày sinh: { item?.birthday != null && moment(item?.birthday).format("DD/MM/YYYY")}</p>
                                         </Link>
                                         <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                        <button className={str}>Affiliate</button>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        <p>{`${item?.phone}`}</p>
-                                        <p className="text-primary-gray">{item?.email != null && item?.email }</p>
+                                        {moment(item?.joinedDate).format('DD/MM/YYYY HH:mm')}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {item.address},
-                                        {item?.area?.name}, {item?.area?.parent?.name}, {item?.area?.parent?.parent?.name}
+                                        {item?.phone}
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2">
+                                        {item?.email != null && item?.email }
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         <p>{item?.taxid}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2 w-24">
-                                        <p>{item?.department?.name}</p>
-                                        <p>{item?.position?.name}</p>
+                                        <p>{item?.parent?.name}</p>
                                     </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {item?.contractType?.name}
-                                        <p><i>
-                                            {moment(item.contractDate).isValid() && moment(item.contractDate).format("DD/MM/YYYY")}
-                                            </i></p>
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {item?.workingStatus?.name}
+                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24">
+                                        <p>{item?.dataSource?.name}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {item.note}
                                     </td>
                                 </tr>
-                            );
+                            )
                         })}
                         </tbody>
                     </table>

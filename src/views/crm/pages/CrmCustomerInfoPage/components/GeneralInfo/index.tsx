@@ -25,9 +25,7 @@ export enum INSURANCE_STATUS {
 
 export const GeneralInfo: FC<Props> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
-
   const { info } = props;
-  // console.log(info)
 
   return (
     <div className="px-4 mt-5">
@@ -97,242 +95,18 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {info?.position?.name}
               </td>
             </tr>
-
-            {/* <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("identity")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.identity}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("address")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.address}
-              </td>
-            </tr>
-
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("dateProvice")}
+                Danh mục cha
               </td>
               <td className="border w-2/6 pl-4">
-                {moment(info?.dateProvice).isValid() && moment(info?.dateProvice).format(DATE_FORMAT)}
+                {info?.parent?.name}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("description")}
+                Nguồn dữ liệu
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.description}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("place")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.place}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("area2")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.area2?.name}, {info?.area2?.parent?.name}, {info?.area2?.parent?.parent?.name}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("area1")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.area1?.name}, {info?.area1?.parent?.name}, {info?.area1?.parent?.parent?.name}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("workplace")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.workplace?.map(elm => elm.name)}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("taxid")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.taxid}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("major")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.documents?.map((elm: any) => elm?.field2?.name ? elm?.field2?.name +",": "")}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("educationalBackground")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.documents?.map((elm: any) => elm?.educationalBackground2?.name ?  elm?.educationalBackground2?.name +"," : "" )}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("insuranceDate")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.insuranceDate && moment(info?.insuranceDate).isValid() && moment(info?.insuranceDate).format(DATE_FORMAT)}
-              </td>
-            </tr>
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("insuranceStatus")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {`${info?.insuranceNumber + "- "} ${INSURANCE_STATUS[info?.insuranceStatus || 1]}`}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("sallarySubFactor")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.sallarySubFactor}/{info?.sallaryBasic}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("sallaryFactor")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.sallaryFactor}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("contractType")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.contractType?.name}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("workStartDate")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {moment(info?.workStartDate).isValid() && moment(info?.workStartDate).format(DATE_FORMAT)}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("contractSign")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.contractSign}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("dayOff")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {moment(info?.dayOff).isValid() && moment(info?.dayOff).format(DATE_FORMAT)}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("contractDate")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {moment(info?.contractDate).isValid() && moment(info?.contractDate).format(DATE_FORMAT)}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("workingStatus")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.workingStatus?.name}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("contractValid")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {moment(info?.contractValid).isValid() && moment(info?.contractValid).format(DATE_FORMAT)}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("other")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.other?.name}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("contractExpire")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {moment(info?.contractExpire).isValid() && moment(info?.contractExpire).format(DATE_FORMAT)}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("appointDate")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {moment(info?.appointDate).isValid() && moment(info?.appointDate).format(DATE_FORMAT)}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("changeSallaryDate")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {moment(info?.changeSallaryDate).isValid() && moment(info?.changeSallaryDate).format(DATE_FORMAT)}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("familyPolicy")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.familyPolicy && CONTACT_POLICY[info?.familyPolicy || 0]}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("family")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.family}
-              </td>
-            </tr>
-
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("signerIn")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.signerIn}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("signerOut")}
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.signerOut}
-              </td>
-            </tr>
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                Tài khoản ngân hàng
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.bankAccount}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                Mức đóng bảo hiểm
-              </td>
-              <td className="border w-2/6 pl-4">
-                {formatNumberMoney(info?.insuranceFee)}
+                {info?.dataSource?.name}
               </td>
             </tr>
             <tr className="border h-7 leading-7">
@@ -348,7 +122,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
               <td className="border w-2/6 pl-4">
                 {info?.userUpdate?.fullname} - {moment(info?.modifyAt).isValid() && moment(info?.modifyAt).format("DD/MM/YYYY hh:mm")}
               </td>
-            </tr> */}
+            </tr>
           </tbody>
         </table>
       </div>

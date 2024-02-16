@@ -25,9 +25,7 @@ export enum INSURANCE_STATUS {
 
 export const GeneralInfo: FC<Props> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
-
   const { info } = props;
-  // console.log(info)
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
@@ -338,6 +336,20 @@ export const GeneralInfo: FC<Props> = memo((props) => {
             </tr>
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
+                Danh mục cha
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.parent?.name}
+              </td>
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Nguồn dữ liệu
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.dataSource?.name}
+              </td>
+            </tr>
+            <tr className="border h-7 leading-7">
+              <td className="border text-primary-gray w-1/6 pl-4">
                 Link tài khoản
               </td>
               <td className="border w-2/6 pl-4">
@@ -348,20 +360,6 @@ export const GeneralInfo: FC<Props> = memo((props) => {
               </td>
               <td className="border w-2/6 pl-4">
                 {info?.userUpdate?.fullname} - {moment(info?.modifyAt).isValid() && moment(info?.modifyAt).format("DD/MM/YYYY hh:mm")}
-              </td>
-            </tr>
-            <tr className="border h-7 leading-7">
-              <td className="border text-primary-gray w-1/6 pl-4">
-                Nguồn dữ liệu
-              </td>
-              <td className="border w-2/6 pl-4">
-                {info?.dataSource?.name}
-              </td>
-              <td className="border text-primary-gray w-1/6 pl-4">
-                
-              </td>
-              <td className="border w-2/6 pl-4">
-                
               </td>
             </tr>
           </tbody>

@@ -202,7 +202,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "820px",
+                    height: "720px",
                 }}
             >
                 <ModalCreateOrUpdateCustomer

@@ -95,6 +95,14 @@ export const CrmCustomerInfoPage: FC = () => {
                 value: defaultValues?.linkUser?._id,
                 label: defaultValues?.linkUser?.fullname
               },
+              dataSource: defaultValues?.dataSource && {
+                value: defaultValues?.dataSource?._id,
+                label: defaultValues?.dataSource?.name
+              },
+              parent: defaultValues?.parent && {
+                value: defaultValues?.parent?._id,
+                label: defaultValues?.parent?.name
+              },
               contractType: defaultValues?.contractType && {
                 value: defaultValues?.contractType?._id,
                 label: defaultValues?.contractType?.name
@@ -156,6 +164,13 @@ export const CrmCustomerInfoPage: FC = () => {
     return <Loader className="border-primary" />;
   }
 
+  let str
+  if(detailHuman?.dataSource){
+      str = 'py-1 px-2 rounded-md border border-primary-border text-white bg-cbs-secondary text-left inline'
+  }else{
+      str = 'hidden'
+  }
+
   return (
     <main className="mb-4">
       <div className="flex items-center px-4 h-12 border border-gray-200">
@@ -170,7 +185,8 @@ export const CrmCustomerInfoPage: FC = () => {
           alt="Avartar"
           className="rounded-full w-8 h-8 mr-5"
         />
-        <p className="text-lg">{detailHuman.name}</p>
+        <p className="text-lg mr-5">{detailHuman.name}</p>
+        <button className={str}>Affiliate | Level = {detailHuman?.level}</button>
       </div>
       <section>
         <GeneralInfo
@@ -206,6 +222,8 @@ export const CrmCustomerInfoPage: FC = () => {
             contractDate: detailHuman.contractDate,
             workingStatus: detailHuman.workingStatus,
             linkUser: detailHuman.linkUser,
+            dataSource: detailHuman.dataSource,
+            parent: detailHuman.parent,
             userCreate: detailHuman.userCreate,
             userUpdate: detailHuman.userUpdate,
             contractValid: detailHuman.contractValid,
