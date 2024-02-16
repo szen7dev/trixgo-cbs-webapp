@@ -321,12 +321,18 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                         </thead>
                         <tbody className="">
                         {listHumanWithPager[pageIndex].map((item, index) => {
-                            let linkRef;
+                            let linkRef, str
                             if(location.pathname.includes("/crm/customer/")){
                                 linkRef = `/crm/customer/cid=${item._id}`
                             }else{
                                 linkRef = `/crm/customer/cid=${item._id}`
                             }
+                            if(item?.dataSource){
+                                str = 'py-1 px-2 rounded-md border border-primary-border text-white bg-cbs-secondary text-left'
+                            }else{
+                                str = 'hidden'
+                            }
+
                             return (
                                 <tr
                                     key={index}
@@ -345,6 +351,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                             <p className="text-primary-gray mt-1">Ngày sinh: { item?.birthday != null && moment(item?.birthday).format("DD/MM/YYYY")}</p>
                                         </Link>
                                         <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                        <button className={str}>Affiliate</button>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {moment(item?.joinedDate).format('DD/MM/YYYY HH:mm')}
