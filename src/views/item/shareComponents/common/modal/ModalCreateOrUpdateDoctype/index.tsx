@@ -29,6 +29,8 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
+  const [keyword, setKeyword] = useState();
+
   const { 
     list,
     hasNextPage,
@@ -40,8 +42,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
    } = useDoctype({
       params: {
         type: 3,
-        // keyword: keywordDoctype,
-        // isShowParentAndChild: 1,
+        keyword,
     },
     isFetchList: true
    });
@@ -53,8 +54,6 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
 
       fetchNextPage();
   }
-
-  const [keyword, setKeyword] = useState('');
 
   const handleSubmit = async () => {
     if(!formData.name) {
