@@ -39,15 +39,8 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     email: '',
     nonResident: '',
     funda: {},
-    sale: {},
   }
 }) => {
-	const { user } = useAuth();
-  const [keywordUser, setKeywordUser] = useState("");
-  
-	const companyID = `${user?.company._id}`;
-  const { listMembers } = useGetUsersByCompany(companyID, keywordUser);
-
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
   const { refetch: refetchCustomer, insertAsync, updateAsync } = useCustomer({});
@@ -121,12 +114,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
   }
   const [keywordFunda, setKeywordFunda] = useState('');
   const {
-    deleteAsync,
     list: listFunda,
-    hasNextPage,
-    refetch,
-    fetchNextPage,
-    totalRecord
   } = useFunda({
     params: { 
         keyword: keywordFunda, 
@@ -137,10 +125,12 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         }, 
     },
     isFetchList: true
-  });
+  })
 
   return (
-    <main className="relative h-[800px]">
+    <main className="relative"  style={{
+        height: "720px",
+    }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
           {modalType === 'create' ? 'Tạo danh bạ' : 'Cập nhật danh bạ'}
@@ -153,7 +143,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </header>
 
-      <section className="px-10">
+      <section className="px-5 mt-2">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay" title="Bắt buộc nhập thông tin">
             Khu vực  (*)
           </label>
@@ -199,7 +189,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           />
       </section>
 
-      <section className="px-10 py-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
           Tên danh bạ (*)
         </label>
@@ -213,7 +203,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 py-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
           Điện thoại (*)
         </label>
@@ -227,7 +217,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 py-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtEmail">
           Email
         </label>
@@ -241,7 +231,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 py-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
           Giới tính (*)
         </label>
@@ -285,7 +275,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           </div>
       </section>
 
-      <section className="px-10 py-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Ngày sinh
         </label>
@@ -299,53 +289,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10">
-          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
-            Nhân viên Sale
-          </label>
-          <DropdownSearchable
-            onchangeValue={(value: any) => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    saleID: value?.id
-                }))
-            }}
-            onClearData={() => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    saleID: ""
-                }))
-            }}
-            onSearchInputChange={debounce((value: any) => setKeywordUser(value), 600)}
-            onScroll={handleScroll}
-            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Tìm kiếm tài khoản"
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            showTriangle={false}
-            maxWidthInput="max-w-full"
-            renderSelectedItem={(item: any) => (
-                <div className="max-w-full">
-                    <p className={"truncate"}>{item.text}</p>
-                </div>
-            )}
-            data={listMembers.map((member:any) => ({
-                label: member.fullname,
-                value: member._id,
-            }))}
-            initialValue={{
-              value: formData?.sale?._id || "", 
-              label: formData?.sale?.fullname || "Chọn tài khoản"
-            }}
-            formatItem={{
-                id: "value",
-                text: "label",
-            }}
-            inlineSearch={true}
-          />
-      </section>
-
-      <section className="px-10 py-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
           Phân loại (*)
         </label>
@@ -377,7 +321,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           </div>
       </section>
 
-      <section className="px-10 py-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Địa chỉ
         </label>
@@ -391,7 +335,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 py-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtTaxid">
           Mã số thuế
         </label>
@@ -405,7 +349,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Ghi chú
         </label>
@@ -419,12 +363,12 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      <footer className="absolute right-0 bottom-0 px-10 py-5">
+      <footer className="absolute right-0 bottom-0 px-5 py-5">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
           onClick={handleSubmit}>
           Xác nhận
         </button>
       </footer>
     </main>
-  );
-};
+  )
+}

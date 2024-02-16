@@ -95,6 +95,14 @@ export const CrmCustomerInfoPage: FC = () => {
                 value: defaultValues?.linkUser?._id,
                 label: defaultValues?.linkUser?.fullname
               },
+              dataSource: defaultValues?.dataSource && {
+                value: defaultValues?.dataSource?._id,
+                label: defaultValues?.dataSource?.name
+              },
+              parent: defaultValues?.parent && {
+                value: defaultValues?.parent?._id,
+                label: defaultValues?.parent?.name
+              },
               contractType: defaultValues?.contractType && {
                 value: defaultValues?.contractType?._id,
                 label: defaultValues?.contractType?.name
@@ -206,6 +214,8 @@ export const CrmCustomerInfoPage: FC = () => {
             contractDate: detailHuman.contractDate,
             workingStatus: detailHuman.workingStatus,
             linkUser: detailHuman.linkUser,
+            dataSource: detailHuman.dataSource,
+            parent: detailHuman.parent,
             userCreate: detailHuman.userCreate,
             userUpdate: detailHuman.userUpdate,
             contractValid: detailHuman.contractValid,

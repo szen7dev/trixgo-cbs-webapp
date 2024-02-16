@@ -199,6 +199,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       linkUser: "",
       note: "",
       insuranceFee: "",
+      parent: "",
       dataSource: "",
       ...initialValues,
     };
@@ -259,6 +260,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         position: values?.position?.value,
         workingStatus: values?.workingStatus?.value,
         linkUser: values?.linkUser?.value,
+        parent: values?.parent?.value,
         dataSource: values?.dataSource?.value,
         contractType: values?.contractType?.value,
       };
@@ -1432,6 +1434,56 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                   </div>
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                    <div className="w-1/5 flex items-center">
+                        <span className="w-6/12 text-primary-gray">
+                          Danh mục cha
+                        </span>
+                        <DropdownSearchable
+                          onchangeValue={(value) =>
+                            setFieldValue("parent", value)
+                          }
+                          onSearchInputChange={debounce(
+                            (value) => setSearchContact(value),
+                            500
+                          )}
+                          placeholder="Danh mục cha"
+                          className="w-full pl-0 -mb-1 outline-none"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-none"
+                          renderSelectedItem={(item) => (
+                            <div
+                              style={{ width: 100 }}
+                              className="flex items-center"
+                            >
+                              <p
+                                style={{
+                                  textOverflow: "ellipsis",
+                                  maxWidth: "100%",
+                                  minWidth: 0,
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  flex: "1 1 auto",
+                                }}
+                              >
+                                {item.text}
+                              </p>
+                            </div>
+                          )}
+                          initialValue={defaultValues?.parent}
+                          data={contacts.map((parent) => ({
+                            value: parent._id,
+                            label: parent.name,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
+                        />
+                    </div>
+
                     <div className="w-1/5 flex items-center">
                         <span className="w-6/12 text-primary-gray">
                           Nguồn dữ liệu

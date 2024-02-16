@@ -209,6 +209,7 @@ export type Human = {
     bankAccount?: any;
     insuranceFee?: any;
     dataSource?: any;
+    parent?: any;
 }
 
 export interface HumanPayload extends QueryParam {
