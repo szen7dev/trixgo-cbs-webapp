@@ -1340,7 +1340,71 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                   </div>
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                    
                     <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Tiền đóng bảo hiểm
+                      </span>
+                      <Field
+                        type="number"
+                        name="insuranceFee"
+                        placeholder="Tiền đóng bảo hiểm"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div>
+
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                          Tài khoản ngân hàng
+                        </span>
+                        <Field
+                          type="text"
+                          name="bankAccount"
+                          placeholder="Tài khoản ngân hàng"
+                          className="w-full h-6 outline-none pl-3"
+                          onBlur={(e: FormEvent<HTMLInputElement>) => {
+                            handleBlur(e);
+                          }}
+                        />
+                    </div>
+
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Mô tả
+                      </span>
+                      <Field
+                        type="text"
+                        name="description"
+                        placeholder="Mô tả..."
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div>
+
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Ghi chú
+                      </span>
+                      <Field
+                        type="text"
+                        name="note"
+                        placeholder="Ghi chú..."
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div>
+
+                  </div>
+
+                  <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                  <div className="w-1/5 flex items-center">
                         <span className="w-6/12 text-primary-gray">
                           Link với tài khoản
                         </span>
@@ -1389,51 +1453,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           inlineSearch={true}
                         />
                     </div>
-                    <div className="w-1/5 flex items-center">
-                      <span className="w-4/12 text-primary-gray">
-                        Tài khoản ngân hàng
-                      </span>
-                      <Field
-                        type="text"
-                        name="bankAccount"
-                        placeholder="Tài khoản ngân hàng"
-                        className="w-full h-6 outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
-                    </div>
-                    <div className="w-1/5 flex items-center">
-                      <span className="w-4/12 text-primary-gray">
-                        Tiền đóng bảo hiểm
-                      </span>
-                      <Field
-                        type="number"
-                        name="insuranceFee"
-                        placeholder="Tiền đóng bảo hiểm"
-                        className="w-full h-6 outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
-                    </div>
-                    <div className="w-1/5 flex items-center">
-                      <span className="w-4/12 text-primary-gray">
-                        Ghi chú
-                      </span>
-                      <Field
-                        type="text"
-                        name="note"
-                        placeholder="Ghi chú..."
-                        className="w-full h-6 outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                    
                     <div className="w-1/5 flex items-center">
                         <span className="w-6/12 text-primary-gray">
                           Danh mục cha
@@ -1532,6 +1552,9 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           }}
                           inlineSearch={true}
                         />
+                    </div>
+                    <div className="w-1/5 flex items-center">
+
                     </div>
                   </div>
 
