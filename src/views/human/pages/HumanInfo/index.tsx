@@ -246,6 +246,7 @@ export const HumanInfo: FC = () => {
             address: detailHuman.address,
             dateProvice: detailHuman.dateProvice,
             description: detailHuman.description,
+            note: detailHuman.note,
             place: detailHuman.place,
             area2: detailHuman.area2,
             area1: detailHuman.area1,
