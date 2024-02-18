@@ -385,7 +385,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
       })
 
       queryClient.refetchQueries('fnb-order-list');
-      history.push(`/fnb/home/${data?.data?._id}/print/3`);
+      // history.push(`/fnb/home/${data?.data?._id}/print/3`);
 
       // return toast.success('Tạo đơn thành công',{
       //   position: toast.POSITION.BOTTOM_RIGHT,
@@ -762,7 +762,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
       {(loading) && <Loader className="border-primary" />}
       <div className={"flex flex-col"}>
         <div className={"flex w-full py-3 px-3 border-b"}>
-          <h4 className={"flex-1 text-lg font-bold text-left"}>Đơn hàng mới New 2024--------------------</h4>
+          <h4 className={"flex-1 text-lg font-bold text-left"}>Đơn hàng</h4>
           <div className={"flex items-center justify-center cursor-pointer"}>
             <Close onClick={closeModal} />
           </div>

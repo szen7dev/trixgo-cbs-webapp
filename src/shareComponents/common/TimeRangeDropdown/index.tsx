@@ -88,7 +88,7 @@ const TimeRangeDropdown = forwardRef<TimeRangeHandle, Props>(
                         options.map(option => (
                             <div
                                 onClick={() => handleSelectOption(option)}
-                                key={option.text} className={" select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "}>
+                                key={option.text} className={" select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-2 px-2 "}>
                                 {
                                     (option.fromDate === fromToDate.fromDate && option.toDate === fromToDate.toDate) ?
                                         <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3"} /> :
@@ -104,7 +104,7 @@ const TimeRangeDropdown = forwardRef<TimeRangeHandle, Props>(
                         onClick={() => {
                             setUseCustomDate(true);
                         }}
-                        className={"border-t-0.5 border-primary-border select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "}>
+                        className={"border-t-0.5 border-primary-border select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-2 px-2 "}>
                         <div className={"w-[15px] mr-3"} />
                         <div className={"flex align-items-center text-left"}>
                             Tuỳ chỉnh

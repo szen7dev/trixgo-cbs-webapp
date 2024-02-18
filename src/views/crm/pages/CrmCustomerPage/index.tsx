@@ -309,7 +309,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
 
                         <div className="flex justify-between text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200 mb-2">
                             <div>
-                                <span className="ml-2 mr-2 text-[14px] align-middle">Tạo mới</span>
+                                <span className="ml-2 mr-4 text-[14px] align-middle">Tạo mới</span>
                             </div>
                             <button
                                 onClick={() => handleOpenModalCreateOrUpdate('create')}

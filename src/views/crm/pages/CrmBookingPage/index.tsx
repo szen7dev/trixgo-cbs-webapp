@@ -41,24 +41,6 @@ import { createLinkAndClick } from "utils";
 import { validateFiles } from 'validation/file';
 import { useFnbCustomerBooking, useByProperty } from "services/hooks/fnb/useFnbCustomerBooking";
 
-const BACKGROUND = [
-	{ value: 1, color: "bg-red-400", color2: "F11F20" },
-	{ value: 2, color: "bg-yellow-300", color2: "fa6b07" },
-	{ value: 3, color: "bg-green-400", color2: "C55B11" },
-	{ value: 4, color: "bg-blue-400", color2: "00AF50" },
-	{ value: 5, color: "bg-purple-400", color2: "169150" },
-	{ value: 6, color: "bg-pink-600", color2: "1F4E78" },
-	{ value: 7, color: "bg-gray-600", color2: "262626" },
-	{ value: 8, color: "bg-teal-400", color2: "262626" },
-	{ value: 9, color: "bg-teal-400", color2: "262626" },
-	{ value: 10, color: "bg-teal-400", color2: "262626" },
-	{ value: 11, color: "bg-teal-400", color2: "262626" },
-	{ value: 12, color: "bg-teal-400", color2: "262626" },
-	{ value: 13, color: "bg-teal-400", color2: "262626" },
-	{ value: 14, color: "bg-teal-400", color2: "262626" },
-	{ value: 15, color: "bg-teal-400", color2: "262626" },
-]
-
 export const CrmBookingPage: FC = () => {
     const { user } = useAuth();
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);

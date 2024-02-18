@@ -1,12 +1,9 @@
 import React, { FC, memo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { formatNumberMoney } from "utils/cmcs";
 import type { Human } from 'typings/human';
 import PaginateV2 from "shareComponents/common/PaginateV2";
-
-import { useFnbCustomerBooking } from "services/hooks/fnb/useFnbCustomerBooking";
-import { useFnbCustomerCare, useCustomerJourneyByProperty } from "services/hooks/fnb/useFnbCustomerCare";
+import { useFnbCustomerCare } from "services/hooks/fnb/useFnbCustomerCare";
 
 type Props = {
   info: Human
@@ -14,7 +11,11 @@ type Props = {
 
 export const SupportInfo: FC<Props> = memo((props) => {
   const { info } = props;
-  // console.log(info)
+
+  const STATUS = [
+      { _id: 1, text: 'Chưa xử lý' },
+      { _id: 2, text: 'Hoàn thành'}
+  ]
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -22,17 +23,7 @@ export const SupportInfo: FC<Props> = memo((props) => {
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
       params: { 
-          // option: 1,
-          // keyword, 
-          // status,
-          // type,
-          // channel,
-          // journeyID,
           customerID: info._id,
-          // userCreateID: userID,
-          // managerID,
-          // fromDate: inputFilter.fromDate,
-          // toDate: inputFilter.toDate,
           limit: 20,
           populates: JSON.stringify({
               path: 'userCreate userUpdate customer mistake journey funda order manager images',
@@ -45,13 +36,12 @@ export const SupportInfo: FC<Props> = memo((props) => {
       },
       isFetchList: true
   })
-console.log(listDataWithPager)
 
   return (
     <div className="px-4">
       {/* Đặt lịch, lịch hẹn */}
       <div className={"flex-1 flex items-center justify-end"}>
-        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Chăm sóc khách hàng ({totalRecord})</p>
+        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">A5. Chăm sóc khách hàng ({totalRecord})</p>
             <PaginateV2
               ref={ref}
               totalRecord={totalRecord}
@@ -71,9 +61,22 @@ console.log(listDataWithPager)
       <div className="">
         {
           (listDataWithPager[pageIndex] ?? []).map((item: any, i: any) => (
-            <p className="mb-2" key={item._id}>{item.name}</p>
+            <p className="mb-2 text-cbs-highlight-color text-[14px]" key={item._id}>
+              {item.name} | {moment(item.createAt).format('DD/MM/YYY HH:mm')} - Quản lý: {item?.manager?.fullname} | {item?.description} | {item?.note}
+              {
+                  item?.status == 1 ?
+                  <div className="w-[80px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white inline ml-4" style={{ fontSize: "12px" }}>
+                      {STATUS[Number(item?.status) - 1]?.text}
+                  </div>
+                  :
+                  <div className="w-[80px] rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white inline ml-4" style={{ fontSize: "12px" }}>
+                      {STATUS[Number(item?.status) - 1]?.text}
+                  </div>
+              }
+            </p>
           ))}
       </div>
+      <div className="border-b-8 border-accent-light px-4 mt-2"></div>
     </div>
   );
 });

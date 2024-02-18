@@ -26,12 +26,8 @@ export const OrderInfo: FC<Props> = memo((props) => {
       // keyword,
       customerID: info._id,
       populates: JSON.stringify({
-        path: 'funda shift customer userCreate files assignee',
+        path: 'funda shift customer files',
         select: "name path nameOrg author sign address fullname phone numberOfOrders",
-        populate: {
-          path: 'author',
-          select: 'fullname image',
-        }
       })
     }, isFetchList: true, isFetchInfo: false
   })
@@ -42,7 +38,7 @@ export const OrderInfo: FC<Props> = memo((props) => {
     <div className="px-4">
       {/* Đơn hàng */}
       <div className={"flex-1 flex items-center justify-end"}>
-        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Đơn hàng ({totalRecord}) - Khách mua/sử dụng</p>
+        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">A4. Đơn hàng khách mua ({totalRecord})</p>
             <PaginateV2
               ref={ref}
               totalRecord={totalRecord}
@@ -62,9 +58,12 @@ export const OrderInfo: FC<Props> = memo((props) => {
       <div className="">
         {
           (listWithPager[pageIndex] ?? []).map((item: any, i: any) => (
-            <p className="mb-2" key={item._id}>{item.name} | {formatNumberMoney(item?.amount)}</p>
+            <p className="mb-2 text-cbs-highlight-color text-[14px]" key={item._id}>
+              {item.name} | {moment(item.createAt).format('DD/MM/YYYY HH:mm')} | {formatNumberMoney(item?.amount)}
+            </p>
           ))}
       </div>
+      <div className="border-b-8 border-accent-light px-4 mt-2"></div>
     </div>
   );
 });

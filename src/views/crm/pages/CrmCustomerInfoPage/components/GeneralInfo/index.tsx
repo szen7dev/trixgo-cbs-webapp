@@ -30,7 +30,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
   return (
     <div className="px-4 mt-5">
       {/* Thông tin khách hàng */}
-      <p className="text-bold text-primary-gray text-lg mb-2">Thông tin khách hàng</p>
+      <p className="text-bold text-primary-gray text-lg mb-2">A1. Thông tin khách hàng</p>
       <div className="text-[13px]">
         <table className="table-fixed border w-full">
           <tbody>

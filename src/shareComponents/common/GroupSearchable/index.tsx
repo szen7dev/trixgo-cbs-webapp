@@ -98,7 +98,7 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
                                 key={option.value}
                                 type='button'
                                 className={
-                                    `select-option w-full transition duration-150 flex cursor-pointer py-3 px-4
+                                    `select-option w-full transition duration-150 flex cursor-pointer py-2 px-2
                                     ${option.value === groupCurrentPicker.value ? '' : 'hover:bg-gray-100'}
                                     ${option.value === groupCurrentPicker.value ? 'bg-gray-300' : ''}
                                 `

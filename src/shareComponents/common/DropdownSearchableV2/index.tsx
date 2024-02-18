@@ -265,7 +265,7 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
             key={readDataValue(option, "id")}
             className={
                 (classNameItem ?? "") +
-                " select-option max-w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
+                " select-option max-w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-2 px-2 "
             }
             onClick={() => handleSetValue(option)}
             data-option-value={option.id}
@@ -438,7 +438,7 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
             className={
                 (classNameInput ?? "") +
                 " flex w-full p-1 pl-2 " +
-                (showTriangle ? "pr-7" : "pl-2") +
+                (showTriangle ? "pr-4" : "pl-2") +
                 " cursor-pointer align-items-center flex-wrap overflow-y-scroll"
             }
         >

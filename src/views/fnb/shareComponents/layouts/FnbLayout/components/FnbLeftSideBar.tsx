@@ -16,9 +16,9 @@ import contactIcon from 'assets/images/icons8-contacts-96.svg';
 import riskIcon from 'assets/images/icons8-high-risk-100.svg';
 import menuIcon from 'assets/images/icons8-order.svg';
 import shiftcon from 'assets/images/icons-shift.svg';
-import { ModalCreateOrUpdateCustomer } from 'views/item/shareComponents/common';
 
 /*=====4.PAGES/COMPONENTS=====*/
+import { ModalCreateOrUpdateCustomer } from 'views/item/shareComponents/common';
 
 /*=====5.TYPINGS=====*/
 
@@ -42,7 +42,6 @@ export const FnbLeftSideBar: FC = () => {
     const { user } = useAuth();
     const { openModal } = useModal();
     const dispath = useDispatch();
-    const [menuShowList, setMenuState] = useState(false);
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
     const initialValues = {
