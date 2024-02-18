@@ -26,12 +26,8 @@ export const OrderInfo: FC<Props> = memo((props) => {
       // keyword,
       customerID: info._id,
       populates: JSON.stringify({
-        path: 'funda shift customer userCreate files assignee',
+        path: 'funda shift customer files',
         select: "name path nameOrg author sign address fullname phone numberOfOrders",
-        populate: {
-          path: 'author',
-          select: 'fullname image',
-        }
       })
     }, isFetchList: true, isFetchInfo: false
   })
