@@ -549,30 +549,30 @@ export const CrmJourneyPage: FC = () => {
                               Tải Excel
                         </button>
 
-                      <button className={"flex items-center justify-center mr-3"}>
+                        {/*<button className={"flex items-center justify-center mr-3"}>
                             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
                             accept=".xlsx, .xlsm, .xls, .csv"/>
                             <label className="custom-file-label" htmlFor="inputGroupFile">Import excel</label>
-                        </button>
+                        </button>*/}
 
-                      {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
-                      {itemsChecked.length === 1 ? (
-                          <button
-                              className="mr-3"
-                              onClick={() => handleOpenModalCreateOrUpdate('update')}
-                          >
-                              <img src={iconPencil} alt="icon pencil" />
-                          </button>
-                      ) : ''}
+                        {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
+                        {itemsChecked.length === 1 ? (
+                            <button
+                                className="mr-3"
+                                onClick={() => handleOpenModalCreateOrUpdate('update')}
+                            >
+                                <img src={iconPencil} alt="icon pencil" />
+                            </button>
+                        ) : ''}
 
-                      <div className="flex items-center">
-                          <button
-                              className="flex items-center justify-center text-primary-light bg-cbs-green w-[70px] h-8 rounded font-bold"
-                              onClick={() => handleOpenModalCreateOrUpdate('create')}
-                              >
-                              Tạo mới
-                          </button>
-                      </div>
+                        <div className="flex items-center">
+                            <button
+                                className="flex items-center justify-center text-primary-light bg-cbs-green w-[70px] h-8 rounded font-bold"
+                                onClick={() => handleOpenModalCreateOrUpdate('create')}
+                                >
+                                Tạo mới
+                            </button>
+                        </div>
 
                       <div className="absolute right-0">
                         <PaginateV2
