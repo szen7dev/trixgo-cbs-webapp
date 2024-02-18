@@ -39,6 +39,9 @@ export type UserSystemPayload = {
     status: number,
     phone?: string,
     storageUse?: number,
+    newPass?: string,
+    currentPass?: string,
+    resetPass?: string,
 }
 
 export type UserSystemProps = {

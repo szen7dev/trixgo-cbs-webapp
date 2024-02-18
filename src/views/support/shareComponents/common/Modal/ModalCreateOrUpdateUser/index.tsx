@@ -37,6 +37,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
     positionName: "",
     status: 1,
     phone: "",
+    resetPass: "",
     storageUse: 0
   }
 }) => {
@@ -74,7 +75,8 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
       level: +values.level,
       status: +values.status,
       phone: values.phone,
-      storageUse: values.storageUse
+      storageUse: values.storageUse,
+      resetPass: values.resetPass,
     }
 
     try {
@@ -148,7 +150,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
           const { getFieldProps, setFieldValue, values } = formik;
           return (
             <Form autoComplete="off">
-              <div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
+              <div className="flex items-center px-6 py-2 justify-between border-b border-secondary-gray border-opacity-30">
                 <Dialog.Title
                   as="h3"
                   className="text-lg leading-6 font-bold"
@@ -162,7 +164,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                 </button>
               </div>
               <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
-                <div className="mb-4">
+                <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullname">
                     Họ và tên
                   </label>
@@ -173,7 +175,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                     className="font-normal leading-7 text-sm text-negative"
                   />
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                     Email
                   </label>
@@ -185,7 +187,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
                     Điện thoại
                   </label>
@@ -196,8 +198,20 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                     className="font-normal leading-7 text-sm text-negative"
                   />
                 </div>
+
+                <div className="mb-2">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="resetPass">
+                    Reset mật khẩu
+                  </label>
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="resetPass" placeholder="Reset mật khẩu" {...getFieldProps('resetPass')} />
+                  <ErrorMessage
+                    name="resetPass"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
                 
-                <div className="mb-4">
+                <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="storageUse">
                     Dung lượng đã dùng
                   </label>
@@ -209,7 +223,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="startTime">
                     Phòng ban
                   </label>
@@ -255,7 +269,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                     className="font-normal leading-7 text-sm text-negative"
                   />
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Chức danh
                   </label>
@@ -303,7 +317,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
 
-                <div className='mb-4'>
+                <div className='mb-1'>
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Phân quyền
                   </label>
@@ -336,7 +350,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
 
-                <div className='mb-4'>
+                <div className='mb-1'>
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Trạng thái
                   </label>
@@ -369,7 +383,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
 
-                <div className="flex justify-end pt-5 px-6 pb-6 mb-0.5">
+                <div className="flex justify-end pt-2 px-6 pb-2 mb-0.5">
                   <div>
                     <button type="submit" className="px-7 py-3.5 rounded-md bg-primary text-white font-bold text-sm leading-4">Xác nhận</button>
                   </div>
