@@ -39,8 +39,8 @@ import { useQueryListDoctype } from "services/hooks/useHuman";
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
 import { validateFiles } from 'validation/file';
-import { useFnbAffiliateSignup } from "services/hooks/fnb/useFnbAffiliateSignup";
-import { useByProperty } from "services/hooks/items/useContact";
+import { useFnbAffiliateSignup, useByProperty } from "services/hooks/fnb/useFnbAffiliateSignup";
+import { useContactByProperty } from "services/hooks/items/useContact";
 
 const BACKGROUND = [
 	{ value: 1, color: "bg-red-400", color2: "F11F20" },
@@ -127,13 +127,6 @@ export const CrmAffiliatePage: FC = () => {
       params: { keyword: contactKeyword, limit: 10 },
       isFetchList: true
     })
-
-    // const [searchDoctypeKeyword, setSearchDoctypeKeyword] = useState("");
-	// const { listDoctypes } = useQueryListDoctype({
-	// 	limit: 10,
-	// 	type: 11,
-	// 	keyword: searchDoctypeKeyword,
-	// });
   
     const { data: listUser } = useUserSystem({
         companyID: user?.company?._id,
@@ -159,9 +152,18 @@ export const CrmAffiliatePage: FC = () => {
         type: 1,
     })
 
-    const { listByProperty, refetchListByProperty } = useByProperty({
+    const { listByProperty, refetchListByProperty } = useContactByProperty({
         params: {
             option: 7,
+            // fromDate: inputFilter.fromDate,
+            // toDate: inputFilter.toDate,
+        },
+        isFetchList: true
+    })
+
+    const { listByProperty: listSaleAdmin, refetchListByProperty: refetchListSaleAdmin } = useByProperty({
+        params: {
+            option: 10,
             // fromDate: inputFilter.fromDate,
             // toDate: inputFilter.toDate,
         },
@@ -209,6 +211,7 @@ export const CrmAffiliatePage: FC = () => {
     const handleConfirmCreateOrUpdate = () => {
         refetch()
         refetchListByProperty()
+        refetchListSaleAdmin()
     }
 
     // Xử lý sự kiện tìm kiếm
@@ -467,7 +470,7 @@ export const CrmAffiliatePage: FC = () => {
                         placeholder={"Tạo"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        data={listUser}
+                        data={listSaleAdmin}
                         formatItem={{
                             id: "_id",
                             text: "fullname",
