@@ -197,7 +197,7 @@ export const useQueryDetailContact = (contactID?: string, params?: Contact.Conta
     }
 }
 
-export const useByProperty = ({ params = {},  isFetchList = false }: any): any => {
+export const useContactByProperty = ({ params = {},  isFetchList = false }: any): any => {
 
     const { data: detailData, isLoading: listByPropertyIsLoading, refetch: refetchListByProperty } =
     useQuery([`contact_by_property`,{...params, isFetchList }],() => ContactRepository.fetchListByProperty(params), {

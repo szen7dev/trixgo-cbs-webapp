@@ -156,7 +156,15 @@ export const CrmBookingPage: FC = () => {
         },
         isFetchList: true
     })
-    // console.log(listByProperty)
+
+    const { listByProperty: listSaleAdmin, refetchListByProperty: refetchListSaleAdmin } = useByProperty({
+        params: {
+            option: 10,
+            // fromDate: inputFilter.fromDate,
+            // toDate: inputFilter.toDate,
+        },
+        isFetchList: true
+    })
 
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerBooking({
         params: { 
@@ -201,6 +209,7 @@ export const CrmBookingPage: FC = () => {
     const handleConfirmCreateOrUpdate = () => {
         refetch()
         refetchListByProperty()
+        refetchListSaleAdmin()
     }
 
     // Xử lý sự kiện tìm kiếm
@@ -529,7 +538,7 @@ export const CrmBookingPage: FC = () => {
                         placeholder={"Tạo"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        data={listUser}
+                        data={listSaleAdmin}
                         formatItem={{
                             id: "_id",
                             text: "fullname",

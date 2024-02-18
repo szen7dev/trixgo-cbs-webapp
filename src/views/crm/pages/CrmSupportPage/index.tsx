@@ -28,7 +28,7 @@ import { ImageProps } from "typings/common";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
-import { useFnbCustomerCare } from "services/hooks/fnb/useFnbCustomerCare";
+import { useFnbCustomerCare, useCustomerJourneyByProperty } from "services/hooks/fnb/useFnbCustomerCare";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { FilterDateGroup }  from "views/accounting/shareComponents/common";
@@ -135,6 +135,25 @@ export const CrmSupportPage: FC = () => {
         type: 1,
     })
 
+    const { listCustomerJourneyByProperty: listSaleAdmin, refetchListCustomerJourneyByProperty: refetchListSaleAdmin } = useCustomerJourneyByProperty({
+        params: {
+            option: 10,
+            fromDate: inputFilter.fromDate,
+            toDate: inputFilter.toDate,
+        },
+        isFetchList: true
+    })
+    
+    const { listCustomerJourneyByProperty: listManager, refetchListCustomerJourneyByProperty: refetchListManager } = useCustomerJourneyByProperty({
+        params: {
+            option: 10,
+            optionGroup: 1,
+            fromDate: inputFilter.fromDate,
+            toDate: inputFilter.toDate,
+        },
+        isFetchList: true
+    })
+
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
             keyword, 
@@ -171,7 +190,11 @@ export const CrmSupportPage: FC = () => {
     }
 
     // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
-    const handleConfirmCreateOrUpdate = () => refetch();
+    const handleConfirmCreateOrUpdate = () => {
+        refetch()
+        refetchListManager()
+        refetchListSaleAdmin()
+    }
 
     // Xử lý sự kiện tìm kiếm
     const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -433,7 +456,7 @@ export const CrmSupportPage: FC = () => {
                         placeholder={"Tạo"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        data={listUser}
+                        data={listSaleAdmin}
                         formatItem={{
                             id: "_id",
                             text: "fullname",
@@ -461,7 +484,7 @@ export const CrmSupportPage: FC = () => {
                         placeholder={"Quản lý"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        data={listUser}
+                        data={listManager}
                         formatItem={{
                             id: "_id",
                             text: "fullname",

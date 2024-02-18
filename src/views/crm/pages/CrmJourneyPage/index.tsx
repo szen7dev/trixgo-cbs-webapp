@@ -163,7 +163,16 @@ export const CrmJourneyPage: FC = () => {
         },
         isFetchList: true
     })
-    // console.log(listCustomerJourneyByProperty)
+
+    const { listCustomerJourneyByProperty: listSaleAdmin, refetchListCustomerJourneyByProperty: refetchListSaleAdmin } = useCustomerJourneyByProperty({
+        params: {
+            businessID,
+            option: 10,
+            fromDate: inputFilter.fromDate,
+            toDate: inputFilter.toDate,
+        },
+        isFetchList: true
+    })
 
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
@@ -207,6 +216,7 @@ export const CrmJourneyPage: FC = () => {
     const handleConfirmCreateOrUpdate = () => {
         refetch()
         refetchListCustomerJourneyByProperty()
+        refetchListSaleAdmin()
     }
 
     // Xử lý sự kiện tìm kiếm
@@ -509,7 +519,7 @@ export const CrmJourneyPage: FC = () => {
                         placeholder={"Tạo"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        data={listUser}
+                        data={listSaleAdmin}
                         formatItem={{
                             id: "_id",
                             text: "fullname",
@@ -650,6 +660,7 @@ export const CrmJourneyPage: FC = () => {
                             </td>
                             <td className="py-1 px-2">
                                 {moment(item.createAt).format('DD/MM/YYYY HH:mm')}
+                                <p><i>{moment(item.createAt).fromNow()}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 <NavLink to={`/crm/customer/cid=${item?.customer?._id}`}>
