@@ -41,7 +41,7 @@ export const SupportInfo: FC<Props> = memo((props) => {
     <div className="px-4">
       {/* Đặt lịch, lịch hẹn */}
       <div className={"flex-1 flex items-center justify-end"}>
-        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Chăm sóc khách hàng ({totalRecord})</p>
+        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">A5. Chăm sóc khách hàng ({totalRecord})</p>
             <PaginateV2
               ref={ref}
               totalRecord={totalRecord}

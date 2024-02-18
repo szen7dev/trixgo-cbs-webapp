@@ -37,9 +37,9 @@ export const BookingInfo: FC<Props> = memo((props) => {
 
   return (
     <div className="px-4">
-      {/* Đặt lịch, lịch hẹn */}
+      {/* Đặt lịch, nhắc hẹn */}
       <div className={"flex-1 flex items-center justify-end"}>
-        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Đặt lịch, lịch hẹn - Nhắc trước thời hạn ({totalRecord})</p>
+        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">A3. Đặt lịch, nhắc hẹn ({totalRecord})</p>
         <PaginateV2
           ref={ref}
           totalRecord={totalRecord}

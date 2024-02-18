@@ -77,7 +77,7 @@ export const JourneyInfo: FC<Props> = memo((props) => {
     <div className="px-4">
       {/* Hành trình trải nghiệm */}
       <div className={"flex-1 flex items-center justify-end"}>
-        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Hành trình trải nghiệm - Thông tin, hồ sơ/hình ảnh đính kèm</p>
+        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">A2. Hành trình trải nghiệm ({totalRecord})</p>
         <PaginateV2
             ref={ref}
             totalRecord={totalRecord}

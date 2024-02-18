@@ -31,7 +31,7 @@ export const PaymentInfo: FC<Props> = memo((props) => {
     <div className="px-4">
       {/* Gói mua trả trước */}
       <div className={"flex-1 flex items-center justify-end"}>
-        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Gói mua trả trước ({totalRecord})</p>
+        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">A7. Gói mua trả trước ({totalRecord})</p>
             <PaginateV2
               ref={ref}
               totalRecord={totalRecord}
@@ -59,7 +59,7 @@ export const PaymentInfo: FC<Props> = memo((props) => {
       <div className="border-b-8 border-accent-light px-4 mt-2"></div>
 
       {/* Thanh toán và công nợ */}
-      <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Thanh toán và công nợ - Dữ liệu từ kế toán</p>
+      <p className="text-bold text-primary-gray text-lg mb-2 mt-5">A8. Thanh toán và công nợ</p>
       <div className="text-[13px]">
 
       </div>
