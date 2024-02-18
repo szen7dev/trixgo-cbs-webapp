@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 
 /*=====3.ICONS=====*/
 import BackIcon from "assets/images/icon-back.svg";
-import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -187,6 +186,16 @@ export const CrmCustomerInfoPage: FC = () => {
         />
         <p className="text-lg mr-5">{detailHuman.name}</p>
         <button className={str}>Affiliate | Level = {detailHuman?.level}</button>
+        <div
+          className="py-2 h-1/4 flex items-center gap-5 pl-8 cursor-pointer"
+          onClick={handleClickUpdateButton(detailHuman)}
+        >
+          <img
+            src={PencilIcon}
+            alt="Pencil"
+            className="w-[22px] select-none"
+          />
+        </div>
       </div>
       <section>
         <GeneralInfo

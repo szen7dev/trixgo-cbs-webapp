@@ -46,7 +46,6 @@ export const FnbLeftSideBar: FC = () => {
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
     const initialValues = {
-        // parent: parentID,
         contactID: '',
         type: '',
         name: '',
@@ -80,6 +79,7 @@ export const FnbLeftSideBar: FC = () => {
     const handleSearch = debounce(
         (e: any) => setKeyword(e.target.value),
         200)
+        
     const handleConfirmCreateOrUpdate = () => refetch();
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
