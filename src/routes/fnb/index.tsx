@@ -7,7 +7,6 @@ import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbVoucherPage } from "views/fnb/pages/FnbVoucherPage/index";
 import { FnbVoucherDetailPage } from "views/fnb/pages/FnbVoucherDetailPage/index";
 import { FnbShiftPage } from "views/fnb/pages/FnbShiftPage/index";
-import { FnbContactPage } from "views/fnb/pages/FnbContactPage/index";
 import { FnbRiskReportPage } from "views/fnb/pages/FnbRiskReportPage/index";
 import { FnbShiftDetailPage } from "views/fnb/pages/FnbShiftDetailPage/index";
 import { FnbRiskReportDetailPage } from "views/fnb/pages/FnbRiskReportDetailPage/index";
@@ -107,15 +106,6 @@ const FnbRouter: FC = () => {
                 component={() =>
                     <FnbLayout>
                         <FnbRiskReportDetailPage />
-                    </FnbLayout>
-                }
-            />
-            <Route
-                exact
-                path="/fnb/contacts"
-                component={() =>
-                    <FnbLayout>
-                        <FnbContactPage />
                     </FnbLayout>
                 }
             />

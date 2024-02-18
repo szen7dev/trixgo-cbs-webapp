@@ -43,6 +43,8 @@ export const JourneyInfo: FC<Props> = memo((props) => {
       isFetchList: true
   })
 
+  console.log(listCustomerJourneyByProperty)
+
   return (
     <div className="px-4">
       {/* Hành trình trải nghiệm */}

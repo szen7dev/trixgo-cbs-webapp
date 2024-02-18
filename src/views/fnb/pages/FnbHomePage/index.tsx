@@ -40,6 +40,7 @@ import { APP_ID } from "apis/localdb";
 import { validateFiles } from 'validation/file';
 import { ImageProps } from "typings/common";
 import { ModalZoomView } from "shareComponents/common";
+import { SearchInput } from "shareComponents/common";
 
 /*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -95,6 +96,10 @@ export const getIconApp = (salesChannel: any) => {
 export const fnbAccessData = ['kiemthuvien4.fnb@gmail.com', 'adwgo.winggo@gmail.com', 'hiepnh.winggo@gmail.com', 'chinhnv.winggo@gmail.com','huongnt.winggo@gmail.com','hoangnh.winggo@gmail.com', 'hienpd.winggo@gmail.com','toannd.winggo@gmail.com', 'kiemsoat1.winggo@gmail.com','kiemsoat2.winggo@gmail.com','kiemsoat3.winggo@gmail.com','kiemsoat4.winggo@gmail.com','kiemsoat5.winggo@gmail.com','vund.winggo@gmail.com','quynhntd.winggo@gmail.com','nhungvth.winggo@gmail.com','tuyetnt.winggo@gmail.com']
 
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
+  const [keyword, setKeyword] = useState('');
+  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+      setKeyword(event.target.value);
+  }, 500);
 
   const queryClient = useQueryClient();
 
@@ -127,10 +132,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     companyID: user?.company?._id,
   });
 
-  const keyword = useAppSelector(
-    (state) => state.fnbSlice.data.keywordHomeFnb
-  );
-
   const queryFnb = useAppSelector(
     (state) => state.fnbSlice.data.queryFnb
   );
@@ -151,8 +152,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       })
     }, isFetchList: true, isFetchInfo: false
   })
-
-  // console.log(queryFnb)
 
   // popover
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -435,11 +434,15 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         <div className={"filter-bar flex flex-wrap px-4 py-1"}>
           {(isLoading ||
             isFetching) && <Loader className="border-primary" />}
-
+          <SearchInput
+              classNameWrapper="mr-2"
+              classNameInput="outline-none w-[100px]"
+              onChange={onChangeSearch}
+          />
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Cơ sở"}
             showTriangle={true}
             isMultiple={true}
@@ -450,9 +453,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             countBadge={queryFnb.fundasID.length}
             data={listFunda.map((item: any) => ({
               label: `${item?.sign}.${item?.name}`,
@@ -508,7 +508,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Ca"}
             showTriangle={true}
             isMultiple={true}
@@ -520,9 +520,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             countBadge={queryFnb.shiftTypes.length}
             data={FNB_SHIFT.map((item: any) => ({
               label: `${item.text}`,
@@ -573,7 +570,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Kênh"}
             showTriangle={true}
             isMultiple={true}
@@ -585,9 +582,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             countBadge={queryFnb.salesChannels.length}
             data={FNB_CHANNEL.map((item: any) => ({
               label: `${item.text}`,
@@ -637,11 +631,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
           <TimeRangeDropdown
               className={
-                "mr-1 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                "mr-1 border border-primary-border rounded-lg p-1 pl-2 "
               }
               placeholder={"Khoảng"}
               iconBack={<TriangleDown />}
-              // iconFront={<img src={businessBuiding} alt={"----"} />}
               onValueChange={(val) => {
                 dispatch(
                   setQueryFnb({
@@ -678,7 +671,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Trạng thái"}
             showTriangle={true}
             isMultiple={true}
@@ -690,9 +683,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             countBadge={queryFnb.statuss.length}
             data={FNB_ORDER_STATUS.map((item: any) => ({
               label: `${item.text}`,
@@ -743,7 +733,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Chiết khấu"}
             showTriangle={true}
             isMultiple={false}
@@ -755,9 +745,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             data={[{
               value: 0, text: 'Không',
             },
@@ -790,7 +777,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Giảm giá"}
             showTriangle={true}
             isMultiple={false}
@@ -802,9 +789,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             data={[{
               value: 0, text: 'Không',
             },
@@ -837,7 +821,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Tích điểm"}
             showTriangle={true}
             isMultiple={false}
@@ -849,9 +833,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             data={[{
               value: 0, text: 'Không',
             },
@@ -884,7 +865,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Voucher"}
             showTriangle={true}
             isMultiple={false}
@@ -896,9 +877,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             data={[{
               value: 0, text: 'Không',
             },
@@ -931,7 +909,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Đơn"}
             showTriangle={true}
             isMultiple={false}
@@ -943,9 +921,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             data={[{
               value: 1, text: 'Nhân viên',
             },
@@ -978,7 +953,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Khách"}
             showTriangle={true}
             isMultiple={false}
@@ -990,9 +965,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             data={[{
               value: 0, text: 'Biết thông tin',
             },
@@ -1022,10 +994,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             }
           />
 
-          <DropdownSearchableV2
+          {/* <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Lỗi"}
             showTriangle={true}
             isMultiple={false}
@@ -1037,9 +1009,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             renderItem={(item) => (
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
-            // prefixIcon={
-            //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-            // }
             data={[{
               value: 0, text: 'Không lỗi',
             },
@@ -1067,7 +1036,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 })
               )
             }
-          />
+          /> */}
         </div>
         
         <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>

@@ -438,7 +438,7 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
             className={
                 (classNameInput ?? "") +
                 " flex w-full p-1 pl-2 " +
-                (showTriangle ? "pr-7" : "pl-2") +
+                (showTriangle ? "pr-4" : "pl-2") +
                 " cursor-pointer align-items-center flex-wrap overflow-y-scroll"
             }
         >

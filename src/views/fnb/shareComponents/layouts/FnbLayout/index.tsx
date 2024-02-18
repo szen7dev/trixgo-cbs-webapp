@@ -11,7 +11,7 @@ import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 
 import { FnbLeftSideBar } from "./components/FnbLeftSideBar";
-import { FnbHeaderContent } from "./FnbHeaderContent";
+// import { FnbHeaderContent } from "./FnbHeaderContent";
 
 /*=====5.TYPINGS=====*/
 
@@ -51,16 +51,10 @@ export const FnbLayout: FC<Props> = ({ children }) => {
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
-          {/*  Main header */}
           <MainHeaderV2 headerTitle={"Seller"}>
-            <FnbHeaderContent />
+            {/* <FnbHeaderContent /> */}
           </MainHeaderV2>
-
-          {/* Left navigation */}
-
           <FnbLeftSideBar />
-
-          {/* Content area */}
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
@@ -69,5 +63,5 @@ export const FnbLayout: FC<Props> = ({ children }) => {
       </div>
 
     </section>
-  );
-};
+  )
+}
