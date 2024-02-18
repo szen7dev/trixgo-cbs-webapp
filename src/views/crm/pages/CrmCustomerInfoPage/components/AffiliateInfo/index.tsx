@@ -34,7 +34,25 @@ export const AffiliateInfo: FC<Props> = memo((props) => {
   return (
     <div className="px-4">
       {/* Tiếp thị liên kết */}
-      <p className="text-bold text-primary-gray text-lg mb-2 mt-5">A6. Tiếp thị liên kết ({totalRecord})</p>
+      <div className={"flex-1 flex items-center justify-end"}>
+        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">A6. Tiếp thị liên kết ({totalRecord})</p>
+        <PaginateV2
+          ref={ref}
+          totalRecord={totalRecord}
+          totalPages={totalPage}
+          limit={10}
+          hasNextPage={hasNextPage}
+          isFetching={isLoading}
+          nextPageAction={() => {
+            fetchNextPage();
+            setPageIndex(oldState => oldState + 1)
+          }}
+          prevPageAction={() => {
+            setPageIndex(oldState => oldState - 1)
+          }}
+        />
+      </div>
+      
       <div className="text-[13px]">
         <p className="text-primary-gray"><i>Các đơn hàng do khách bán hoặc cấp dưới của khách bán | Tuyến dưới của khách hàng xây dựng</i></p>
       </div>
