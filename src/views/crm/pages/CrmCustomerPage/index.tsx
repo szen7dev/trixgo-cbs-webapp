@@ -12,19 +12,19 @@ import {
 import { GENDER_TYPES } from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-// import TriangleDown from "assets/icons/TriangleDown";
-// import downloadIcon from "assets/images/icons8-download-64.svg";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "redux/reducer";
 import { setFilterDropdown } from "redux/reducer/DocumentProjectSlice";
+import iconPlus from "assets/images/icons8-plus-math-96 3.svg";
+import { useModal } from "services/hooks/useModal";
 
 // ========== Hooks ========== //
 import { useHumanCustom, useListFilterHuman } from "services/hooks/human/useHuman";
 import { useProjectCustom } from "services/hooks/items/useProject";
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/auth/useAuth";
+import { ModalCreateOrUpdateCustomer } from 'views/item/shareComponents/common';
 
 interface HumanHomePageProps {
     type?: number
@@ -39,6 +39,21 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
     const dispatch = useDispatch();
     const { current: socket }: any = useSocket();
     const { user } = useAuth();
+    const { openModal } = useModal();
+
+    const initialValues = {
+        contactID: '',
+        type: '',
+        name: '',
+        address: '',
+        note: '',
+        taxid: '',
+        phone: '',
+        description: '',
+        funda: '',
+        gender: 1,
+        birthday: ''
+    }
 
     const ref = useRef<PaginateHandle>(null);
     const datahubRef = useRef<DropdownHandle>(null);
@@ -70,7 +85,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
         isFetchProjectsUserIsMember: true
     });
 
-    const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs } = useListFilterHuman({
+    const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs, refetchListHuman } = useListFilterHuman({
         params: {
             ...fromToDate,
             genders,
@@ -134,6 +149,41 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
         }
     }
 
+    const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
+
+        let initValues: any = { ...initialValues };
+
+        // Mở modal tạo mới
+        if (modalType === 'create') {
+            initValues = {
+                contactID: '',
+                type: '',
+                name: '',
+                address: '',
+                taxid: '',
+                phone: '',
+                description: '',
+            };
+        }
+
+        openModal(
+            <div
+                className={"inline-block w-[521px] h-[620px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                style={{
+                    height: "720px",
+                }}
+            >
+                <ModalCreateOrUpdateCustomer
+                    modalType={modalType}
+                    initialValues={initValues}
+                    onConfirm={handleConfirmCreateOrUpdate}
+                />
+            </div>
+        )
+    }
+
+    const handleConfirmCreateOrUpdate = () => refetchListHuman();
+
     const handleSocketExportAllContacts = ({ data, error }: any) => {
         setStateExport({ isExporting: false });
         if(error) return toast.error("Can't download data");
@@ -143,15 +193,15 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
         link && createLinkAndClick(link, '_self');
     }
 
-  useEffect(() => {
-    if(!socket) return;
+    useEffect(() => {
+        if(!socket) return;
 
-    socket.on("ITEM_SSC_EXPORT_ALL_CONTACTS", handleSocketExportAllContacts);
+        socket.on("ITEM_SSC_EXPORT_ALL_CONTACTS", handleSocketExportAllContacts);
 
-    return () => {
-      socket.off("ITEM_SSC_EXPORT_ALL_CONTACTS", handleSocketExportAllContacts);
-    }
-  }, [socket])
+        return () => {
+        socket.off("ITEM_SSC_EXPORT_ALL_CONTACTS", handleSocketExportAllContacts);
+        }
+    }, [socket])
 
     if(stateExport.isExporting) {
         return <Loader className="border-primary" />
@@ -256,7 +306,17 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                             )}
                             selectOneByOne={true}
                         />
-                        
+
+                        <div className="flex justify-between text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200 mb-2">
+                            <div>
+                                <span className="ml-2 mr-2 text-[14px] align-middle">Tạo mới</span>
+                            </div>
+                            <button
+                                onClick={() => handleOpenModalCreateOrUpdate('create')}
+                            >
+                                <img src={iconPlus} alt="" />
+                            </button>
+                        </div>                        
                     </div>
 
                     <PaginateV2
