@@ -62,9 +62,12 @@ export const OrderInfo: FC<Props> = memo((props) => {
       <div className="">
         {
           (listWithPager[pageIndex] ?? []).map((item: any, i: any) => (
-            <p className="mb-2" key={item._id}>{item.name} | {formatNumberMoney(item?.amount)}</p>
+            <p className="mb-2 text-cbs-highlight-color text-[14px]" key={item._id}>
+              {item.name} | {moment(item.createAt).format('DD/MM/YYYY HH:mm')} | {formatNumberMoney(item?.amount)}
+            </p>
           ))}
       </div>
+      <div className="border-b-8 border-accent-light px-4 mt-2"></div>
     </div>
   );
 });

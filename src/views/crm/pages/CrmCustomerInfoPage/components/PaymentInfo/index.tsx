@@ -13,7 +13,6 @@ type Props = {
 
 export const PaymentInfo: FC<Props> = memo((props) => {
   const { info } = props;
-  // console.log(info)
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -52,15 +51,19 @@ export const PaymentInfo: FC<Props> = memo((props) => {
       <div className="">
         {
           (listDataWithPager[pageIndex] ?? []).map((item: any, i: any) => (
-            <p className="mb-2" key={item._id}>{item.name} | {formatNumberMoney(item?.amount)}</p>
+            <p className="mb-2 text-cbs-highlight-color text-[14px]" key={item._id}>
+              {moment(item.createAt).format('DD/MM/YYY HH:mm')} - {item.name} - {formatNumberMoney(item?.amount)}
+            </p>
           ))}
       </div>
+      <div className="border-b-8 border-accent-light px-4 mt-2"></div>
 
       {/* Thanh toán và công nợ */}
       <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Thanh toán và công nợ - Dữ liệu từ kế toán</p>
       <div className="text-[13px]">
 
       </div>
+      <div className="border-b-8 border-accent-light px-4 mt-2"></div>
     </div>
   );
 });

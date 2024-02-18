@@ -242,7 +242,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
         key={readDataValue(option, "id")}
         className={
           (classNameItem ?? "") +
-          " select-option max-w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
+          " select-option max-w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-2 px-2 "
         }
         onClick={() => handleSetValue(option)}
         data-option-value={option.id}
