@@ -132,8 +132,8 @@ export const JourneyInfo: FC<Props> = memo((props) => {
         {
         (listDataWithPager[pageIndex] ?? []).map((item: any, i: any) => (
             <p className="mb-2 text-cbs-highlight-color text-[14px] border-b" key={item._id}>
-              {moment(item.date).format('DD/MM/YYYY HH:mm')} - {item?.journey?.name} - {item.name} - {item.note}
-              <p className="text-[12px]"><i>{moment(item.date).fromNow()}</i></p>
+              {moment(item.createAt).format('DD/MM/YYYY HH:mm')} - {item?.journey?.name} - {item.name} - {item.note}
+              <p className="text-[12px]"><i>{moment(item.createAt).fromNow()}</i></p>
               {item?.images?.map((image: any, i: number) => {
                 return (
                   <div
