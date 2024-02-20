@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
+import debounce from "lodash/debounce";
 
 /**
  * Components, Assets
@@ -16,6 +17,8 @@ import { CreateRow } from "./components/Form";
 import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
+import { useUserSystem } from 'services/hooks/users/useUserSystem';
+import { DropdownSearchableV2 } from "shareComponents/common";
 
 /**
  * Hooks, Typings
@@ -33,19 +36,37 @@ import { Loader } from "shareComponents/common";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 
 const TimeSheetDetailPage: FC = () => {
-  const history = useHistory();
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+
   const params = useParams<{ id: string }>();
   const [pageIndex, setPageIndex] = useState(0);
 
-  const [inputFilter, setInputFilter] = useState({
-    keyword: '',
-    fromDate: new Date(new Date().getFullYear(), 0, 1),
-    toDate: new Date(new Date().getFullYear(), 11, 31)
-  });
-
-  const ref = useRef<RefPaginateHandle>(null);
-
+  const ref = React.useRef<PaginateHandle>(null);
   const timeSheetParentID = params["id"];
+  const accountRef = React.useRef<DropdownHandle>(null);
+
+  const history = useHistory();
+
+  const [userID, setUserID] = useState<string | null>();
+  const [userKeyword, setUserKeyword] = useState("");  
+  const [keyword, setKeyword] = useState('');
+  // console.log({keyword})
+
+  // const [inputFilter, setInputFilter] = useState({
+  //   keyword,
+  //   fromDate: new Date(new Date().getFullYear(), 0, 1),
+  //   toDate: new Date(new Date().getFullYear(), 11, 31)
+  // });
+
+  const { user } = useAuth();
+
+  const { data: listUser } = useUserSystem({
+    companyID: user?.company?._id,
+    keyword: userKeyword,
+    limit: 10,
+    isFetch: true
+}, true)
 
   const [modalShare, setModalShare] = useState<{
     isShow: boolean;
@@ -69,8 +90,6 @@ const TimeSheetDetailPage: FC = () => {
     hasPermissionShare: false,
   });
 
-  const { user } = useAuth();
-
   const {
     data: timeSheetInfo,
     refetch,
@@ -87,7 +106,11 @@ const TimeSheetDetailPage: FC = () => {
     fetchNextPage,
     fetchPrevPage,
     refetch: onRefreshTimeSheetChild,
-  } = useQueryListTimeSheetChild(timeSheetParentID);
+  } = useQueryListTimeSheetChild(timeSheetParentID,{
+    keyword,
+    assigneeID: userID,
+    limit: 50
+  });
 
   const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } =
     useMutationTimeSheetChild();
@@ -204,8 +227,8 @@ const TimeSheetDetailPage: FC = () => {
       const { error, data } = await exportExcelAsync({
         parentID: timeSheetParentID,
         option: param.option,
-        fromDate: inputFilter.fromDate,
-        toDate: inputFilter.toDate,
+        // fromDate: inputFilter.fromDate,
+        // toDate: inputFilter.toDate,
       });
 
       if (error) {
@@ -220,13 +243,18 @@ const TimeSheetDetailPage: FC = () => {
     }
   };
 
-  const handleOnChangeDate = useCallback((date, input) => {
-    if (input) {
-      setInputFilter((value) => ({ ...value, toDate: date }))
-    } else {
-      setInputFilter((value) => ({ ...value, fromDate: date }))
-    }
-  }, [])
+  // const handleOnChangeDate = useCallback((date, input) => {
+  //   if (input) {
+  //     setInputFilter((value) => ({ ...value, toDate: date }))
+  //   } else {
+  //     setInputFilter((value) => ({ ...value, fromDate: date }))
+  //   }
+  // }, [])
+
+  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value)
+    console.log(event.target.value)
+  }, 500)
 
   if (!timeSheetInfo || loading || !user)
     return <Loader className="border-primary" />;
@@ -254,7 +282,7 @@ const TimeSheetDetailPage: FC = () => {
             bởi {timeSheetInfo.userUpdate?.fullname}
           </p>
         </div>
-        <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+        {/* <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} /> */}
         <div className={"flex-1 flex items-center justify-end"}>
           <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 1})}>
             Tải chấm công
@@ -281,23 +309,61 @@ const TimeSheetDetailPage: FC = () => {
           </button>
         </div>
       </div>
-      
-      <PaginateV2
-        ref={ref}
-        totalRecord={totalRecord}
-        totalPages={totalPages}
-        hasNextPage={hasNextPage}
-        limit={limit}
-        isFetching={isFetchTimeSheetChild}
-        nextPageAction={() => {
-          setPageIndex((oldState) => oldState + 1);
-          fetchNextPage();
-        }}
-        prevPageAction={() => {
-          setPageIndex((oldState) => oldState - 1);
-          fetchPrevPage();
-        }}
-      />
+
+      <div className="flex-1 flex items-center justify-end">
+        <div className="relative flex items-center">
+            <input 
+            placeholder="Tìm kiếm" 
+            className="pl-3 pr-3 mr-1 w-[275px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg"
+            onChange={onChangeSearch}
+            />
+        </div>
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Nhân sự"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listUser}
+            formatItem={{
+                id: "_id",
+                text: "fullname",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setUserKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setUserID("");
+            }}
+            onchangeValue={item => {
+                setUserID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        
+        <PaginateV2
+          ref={ref}
+          totalRecord={totalRecord}
+          totalPages={totalPages}
+          hasNextPage={hasNextPage}
+          limit={limit}
+          isFetching={isFetchTimeSheetChild}
+          nextPageAction={() => {
+            setPageIndex((oldState) => oldState + 1);
+            fetchNextPage();
+          }}
+          prevPageAction={() => {
+            setPageIndex((oldState) => oldState - 1);
+            fetchPrevPage();
+          }}
+        />
+      </div>
 
       <div className={"financial-planning-table mt-2"}>
         <div className={"relative table border-collapse w-full"}>

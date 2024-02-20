@@ -59,6 +59,11 @@ const BACKGROUND = [
 	{ value: 15, color: "bg-teal-400", color2: "262626" },
 ]
 
+const STATUS = [
+    { _id: 1, text: 'Đang triển khai' },
+    { _id: 2, text: 'Hoàn thành'}
+]
+
 export const CrmJourneyPage: FC = () => {
     const {id: businessID} = useParams<{id: string}>();
     // console.log(businessID)
@@ -79,19 +84,19 @@ export const CrmJourneyPage: FC = () => {
 		companyID: user?.company?._id,
 	})
 
-    const CHANNEL = [
-        { _id: 1, text: 'Offline' },
-        { _id: 2, text: 'Grab Food'},
-        { _id: 3, text: 'Shopee Food'},
-        { _id: 4, text: 'Gojek'},
-        { _id: 5, text: 'Baemin'},
-        { _id: 6, text: 'Loship'},
-        { _id: 7, text: 'Bee'},
-        { _id: 8, text: 'TikTok'},
-        { _id: 9, text: 'Shopee'},
-        { _id: 10, text: 'Lazada'},
-        { _id: 11, text: 'Reels'},
-    ]
+    // const CHANNEL = [
+    //     { _id: 1, text: 'Offline' },
+    //     { _id: 2, text: 'Grab Food'},
+    //     { _id: 3, text: 'Shopee Food'},
+    //     { _id: 4, text: 'Gojek'},
+    //     { _id: 5, text: 'Baemin'},
+    //     { _id: 6, text: 'Loship'},
+    //     { _id: 7, text: 'Bee'},
+    //     { _id: 8, text: 'TikTok'},
+    //     { _id: 9, text: 'Shopee'},
+    //     { _id: 10, text: 'Lazada'},
+    //     { _id: 11, text: 'Reels'},
+    // ]
 
     const [pageIndex, setPageIndex] = useState(0)
     const { closeModal, openModal } = useModal();
@@ -304,7 +309,7 @@ export const CrmJourneyPage: FC = () => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "500px",
+                    height: "550px",
                 }}
             >
                 <ModalCreateOrUpdateCC
@@ -477,6 +482,30 @@ export const CrmJourneyPage: FC = () => {
                         }}
                         onchangeValue={item => {
                             setJourneyID(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <DropdownSearchableV2
+                        ref={accountRef}
+                        className={"mr-1 border border-primary-border rounded-lg"}
+                        placeholder={"Trạng thái"}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={STATUS}
+                        formatItem={{
+                            id: "_id",
+                            text: "text",
+                        }}
+                        onClearData={() => {
+                            setStatus("0");
+                        }}
+                        onchangeValue={item => {
+                            setStatus(item._id);
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -687,6 +716,16 @@ export const CrmJourneyPage: FC = () => {
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}
+                                {
+                                    item?.status == 1 ?
+                                    <button className="block rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
+                                        {STATUS[Number(item?.status) - 1]?.text}
+                                    </button>
+                                    :
+                                    <button className="block rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                                        {STATUS[Number(item?.status) - 1]?.text}
+                                    </button>
+                                }
                             </td>
                             <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>

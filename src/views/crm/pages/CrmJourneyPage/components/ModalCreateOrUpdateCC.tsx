@@ -324,6 +324,18 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
           onChange={onChange}
         />
       </section>
+      
+      <section className="px-5 mt-2">
+        <p>Tình trạng (1-Đang triển khai|2-Hoàn thành)</p>
+        <input
+          type="number"
+          placeholder="1-Đang triển khai|2-Hoàn thành"
+          name="status"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData?.status}
+          onChange={onChange}
+        />
+      </section>
 
       <footer className="absolute right-0 bottom-5 px-5 py-1">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"

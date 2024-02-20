@@ -158,6 +158,8 @@ export type Human = {
     area2?: Area;
     area1?: Area;
     area?: Area;
+    nestedParents?: Workplace[];
+    nestedChilds?: Workplace[];
     workplace?: Workplace[];
     educationalBackground?: EducationBackground[];
     major?: Major[];

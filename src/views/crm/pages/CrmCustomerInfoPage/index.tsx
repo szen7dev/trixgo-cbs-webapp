@@ -22,20 +22,13 @@ import { APP_ID } from "apis/localdb";
 /*=====6.HOOKS/APIS=====*/
 import { useFetchDetailHuman, useUpdateContactMutation } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
-import { useAuth } from "services/hooks/auth/useAuth";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 /*=====7.OTHER=====*/
 export const CrmCustomerInfoPage: FC = () => {
-  const [openHumanOption, setOpenHumanOption] = useState(false);
-  const refMenuDropdown = useRef<HTMLDivElement>(null);
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
-  const { t: i18n } = useTranslation(["human"]);
-  const { user } = useAuth();
   const { openModal } = useModal();
   const { updateContactMutateAsync } = useUpdateContactMutation();
-  const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.HUMAN.id });
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
 
   const handleFinishForm = async (values: any) => {
@@ -150,15 +143,6 @@ export const CrmCustomerInfoPage: FC = () => {
     [handleFinishForm, openModal]
   );
 
-  // useEffect(() => {
-  //   if(!user || !Object.keys(detailHuman).length || !dataUserAccess) return;
-
-  //   if(!detailHuman.department?.members?.includes(user._id) && dataUserAccess?.level !== 0) {
-  //     history.push('/human/home');
-  //     toast.error('Bạn không có quyền xem thông tin người dùng này');
-  //   }
-  // }, [detailHuman, dataUserAccess])
-
   if (loading) {
     return <Loader className="border-primary" />;
   }
@@ -185,7 +169,7 @@ export const CrmCustomerInfoPage: FC = () => {
           className="rounded-full w-8 h-8 mr-5"
         />
         <p className="text-lg mr-5">{detailHuman.name}</p>
-        <button className={str}>Affiliate | Level = {detailHuman?.level}</button>
+        <button className={str}>Affiliate | Level {detailHuman?.level}</button>
         <div
           className="py-2 h-1/4 flex items-center gap-5 pl-8 cursor-pointer"
           onClick={handleClickUpdateButton(detailHuman)}
@@ -275,6 +259,8 @@ export const CrmCustomerInfoPage: FC = () => {
         <AffiliateInfo
           info={{
             _id: detailHuman?._id,
+            nestedParents: detailHuman?.nestedParents,
+            nestedChilds: detailHuman?.nestedChilds,
           }}
         />
         <PaymentInfo

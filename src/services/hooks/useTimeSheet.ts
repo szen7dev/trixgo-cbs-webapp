@@ -191,15 +191,15 @@ interface UseQueryListTimeSheetChild {
 }
 export const useQueryListTimeSheetChild = (
   timeSheetParentID: string,
-  limit = 50
+  params: any,
 ): UseQueryListTimeSheetChild => {
   const result = useInfiniteQuery(
-    `list_time-sheet.child`,
+    [`list_time-sheet.child`, params],
     async ({ pageParam }: any) =>
       TimeSheetChildRepository.fetchListTimeSheet({
         parentID: timeSheetParentID,
         lastestID: pageParam,
-        limit,
+        ...params
       }),
     {
       getNextPageParam: ({ data }: any) => {
@@ -236,7 +236,7 @@ export const useQueryListTimeSheetChild = (
     hasNextPage,
     totalPages,
     totalRecord,
-    limit,
+    limit: params.limit || 50,
     refetch,
     fetchNextPage,
     fetchPrevPage,
