@@ -309,7 +309,7 @@ export const CrmJourneyPage: FC = () => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "500px",
+                    height: "550px",
                 }}
             >
                 <ModalCreateOrUpdateCC
