@@ -1,10 +1,10 @@
 import React, { FC, memo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { formatNumberMoney } from "utils/cmcs";
 import type { Human } from 'typings/human';
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useFnbNetworkCom } from "services/hooks/fnb/useFnbNetworkCom";
+import { NavLink, useParams } from 'react-router-dom';
 
 type Props = {
   info: Human
@@ -12,6 +12,7 @@ type Props = {
 
 export const AffiliateInfo: FC<Props> = memo((props) => {
   const { info } = props;
+  console.log(info)
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -64,6 +65,33 @@ export const AffiliateInfo: FC<Props> = memo((props) => {
             </p>
           ))}
       </div>
+
+      <div className="text-[13px]">
+        <p className="text-primary-gray"><i>Tuyến trên ({info?.nestedParents && info?.nestedParents.length})</i></p>
+      </div>
+      <div className="">
+            {(info?.nestedParents && info?.nestedParents.length) ? info?.nestedParents.map((item: any) => (
+            <p className="mb-2 text-cbs-highlight-color" key={item._id}>
+              <NavLink to={`/crm/customer/cid=${item?._id}`}>
+                Level {item?.level} | {item?.name} - {item?.phone} - {item?.note} - {item?.description} - {item?.email}
+              </NavLink>
+            </p>
+          )) : <></>}
+      </div>
+
+      <div className="text-[13px]">
+        <p className="text-primary-gray"><i>Tuyến dưới ({info?.nestedChilds && info?.nestedChilds.length})</i></p>
+      </div>
+      <div className="">
+            {(info?.nestedChilds && info?.nestedChilds.length) ? info?.nestedChilds.map((item: any) => (
+            <p className="mb-2 text-cbs-highlight-color" key={item._id}>
+              <NavLink to={`/crm/customer/cid=${item?._id}`}>
+                Level {item?.level} | {item?.name} - {item?.phone} - {item?.note} - {item?.description} - {item?.email}
+              </NavLink>
+            </p>
+          )) : <></>}
+      </div>
+
       <div className="border-b-8 border-accent-light px-4 mt-2"></div>
     </div>
   );
