@@ -24,8 +24,8 @@ export const AffiliateInfo: FC<Props> = memo((props) => {
           uplineID: info._id,
           limit: 20,
           populates: JSON.stringify({
-              path: 'sale order',
-              select: '_id image name sign phone',
+              path: 'sale order userCreate',
+              select: '_id image name sign phone fullname',
           }),
       },
       isFetchList: true
@@ -60,7 +60,7 @@ export const AffiliateInfo: FC<Props> = memo((props) => {
         {
           (listDataWithPager[pageIndex] ?? []).map((item: any, i: any) => (
             <p className="mb-2 text-cbs-highlight-color text-[14px]" key={item._id}>
-              {item?.order?.name} | {moment(item.createAt).format('DD/MM/YYYY HH:mm')} | {formatNumberMoney(item?.amount)} | Tỷ lệ hoa hồng: {item?.rate} - Hoa hồng: {formatNumberMoney(item?.commission)} | {moment(item.createAt).fromNow()} 
+              {item?.order?.name} | {moment(item.createAt).format('DD/MM/YYYY HH:mm')} | {formatNumberMoney(item?.amount)} | Tỷ lệ hoa hồng: {item?.rate} - Hoa hồng: {formatNumberMoney(item?.commission)} | {moment(item.createAt).fromNow()} | Cre: {item.userCreate.fullname}
             </p>
           ))}
       </div>
