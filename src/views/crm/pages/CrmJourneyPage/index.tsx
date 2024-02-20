@@ -59,6 +59,11 @@ const BACKGROUND = [
 	{ value: 15, color: "bg-teal-400", color2: "262626" },
 ]
 
+const STATUS = [
+    { _id: 1, text: 'Đang triển khai' },
+    { _id: 2, text: 'Hoàn thành'}
+]
+
 export const CrmJourneyPage: FC = () => {
     const {id: businessID} = useParams<{id: string}>();
     // console.log(businessID)
@@ -488,6 +493,30 @@ export const CrmJourneyPage: FC = () => {
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
+                        placeholder={"Trạng thái"}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={STATUS}
+                        formatItem={{
+                            id: "_id",
+                            text: "text",
+                        }}
+                        onClearData={() => {
+                            setStatus("0");
+                        }}
+                        onchangeValue={item => {
+                            setStatus(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <DropdownSearchableV2
+                        ref={accountRef}
+                        className={"mr-1 border border-primary-border rounded-lg"}
                         placeholder={"Khách"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -687,6 +716,16 @@ export const CrmJourneyPage: FC = () => {
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}
+                                {
+                                    item?.status == 1 ?
+                                    <button className="block rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
+                                        {STATUS[Number(item?.status) - 1]?.text}
+                                    </button>
+                                    :
+                                    <button className="block rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                                        {STATUS[Number(item?.status) - 1]?.text}
+                                    </button>
+                                }
                             </td>
                             <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>
