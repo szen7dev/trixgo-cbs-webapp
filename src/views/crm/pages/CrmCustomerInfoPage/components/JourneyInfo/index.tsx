@@ -132,7 +132,7 @@ export const JourneyInfo: FC<Props> = memo((props) => {
         {
         (listDataWithPager[pageIndex] ?? []).map((item: any, i: any) => (
             <p className="mb-2 text-cbs-highlight-color text-[14px] border-b" key={item._id}>
-              {moment(item.createAt).format('DD/MM/YYYY HH:mm')} - {item?.journey?.name} - {item.name} - {item.note}
+              {moment(item.createAt).format('DD/MM/YYYY HH:mm')} - {item?.journey?.name} - {item.name} - {item.note} - {formatNumberMoney(item.amount)}
               <p className="text-[12px] text-primary-gray"><i>{item.userCreate.fullname} | {moment(item.createAt).fromNow()}</i></p>
               {item?.images?.map((image: any, i: number) => {
                 return (
