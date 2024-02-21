@@ -84,20 +84,6 @@ export const CrmJourneyPage: FC = () => {
 		companyID: user?.company?._id,
 	})
 
-    // const CHANNEL = [
-    //     { _id: 1, text: 'Offline' },
-    //     { _id: 2, text: 'Grab Food'},
-    //     { _id: 3, text: 'Shopee Food'},
-    //     { _id: 4, text: 'Gojek'},
-    //     { _id: 5, text: 'Baemin'},
-    //     { _id: 6, text: 'Loship'},
-    //     { _id: 7, text: 'Bee'},
-    //     { _id: 8, text: 'TikTok'},
-    //     { _id: 9, text: 'Shopee'},
-    //     { _id: 10, text: 'Lazada'},
-    //     { _id: 11, text: 'Reels'},
-    // ]
-
     const [pageIndex, setPageIndex] = useState(0)
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
@@ -244,7 +230,6 @@ export const CrmJourneyPage: FC = () => {
 
         if (newListIDChecked.length === 1) {
             const { _id, mistake, customer, order, journey, name, description, note, amount, rating, status, type } = newListIDChecked[0];
-            // console.log({ _id, mistake, customer, order, journey, name, description, note, amount, rating, status, type })
             setInitialValues({
                 customerCareID: _id,
                 mistake,
@@ -351,7 +336,6 @@ export const CrmJourneyPage: FC = () => {
 
     //_____Import excel
     const handleImport = ($event: any) => {
-        // console.log('11111111111111111111111111111')
         const files = $event.target.files;
         if (files.length) {
             const file = files[0];
@@ -418,7 +402,6 @@ export const CrmJourneyPage: FC = () => {
             })
             _id && imagesID.push(_id);
         }
-        // console.log(imagesID)
 
         // Update image to customer_cares
         await API.put(
