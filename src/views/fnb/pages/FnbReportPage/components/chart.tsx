@@ -1,6 +1,4 @@
 import { FC, useMemo } from "react";
-
-// import cn from "classnames";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -14,11 +12,6 @@ import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
 import styles from 'views/cmcs/styles/styles.module.css';
-
-// import ListIcon from "assets/images/icon-bulleted-list.svg";
-// import PolygonIcon from "assets/images/icon-polygon.svg";
-import CircleIcon from "assets/images/icon-circle.svg";
-import { useCmcsDashboard } from 'services/hooks/cmcs/useContractIPC';
 
 ChartJS.register(
     CategoryScale,
