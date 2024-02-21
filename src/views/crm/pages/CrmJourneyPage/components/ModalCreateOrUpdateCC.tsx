@@ -69,13 +69,14 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 })
 
   const handleSubmit = async () => {
-    if(!formData.name) {
-      return toast.warn('Vui lòng nội dung');
+    if(!formData.name || !formData.journeyID || !formData.customerID) {
+      return toast.warn('Vui lòng chọn nội dung | Hành trình | Khách hàng');
     }
 
     const formDataFormat = {
       ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status, type: +formData.type
     }
+
     delete formDataFormat['customer'];
     delete formDataFormat['mistake'];
     delete formDataFormat['order'];

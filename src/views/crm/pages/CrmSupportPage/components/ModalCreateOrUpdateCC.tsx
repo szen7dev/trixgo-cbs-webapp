@@ -64,8 +64,8 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 })
 
   const handleSubmit = async () => {
-    if(!formData.name) {
-      return toast.warn('Vui lòng nội dung');
+    if(!formData.name || !formData.customerID || !formData.mistakeID) {
+      return toast.warn('Vui lòng chọn nội dung | Khách hàng | Phân loại vấn đề');
     }
 
     const formDataFormat = {
