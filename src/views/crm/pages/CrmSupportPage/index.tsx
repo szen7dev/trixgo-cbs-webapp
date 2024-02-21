@@ -656,11 +656,11 @@ export const CrmSupportPage: FC = () => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {moment(item.createAt).format('DD/MM/YYYY')}
-                                <p><i>{moment(item.createAt).format('HH:mm')}</i></p>
+                                {moment(item.createAt).format('DD/MM/YYYY HH:mm')}
                             </td>
                             <td className="py-1 px-2">
                                 {item?.name}
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                                 <p style={{color: cl}}><i>{(item.type == 1 ? "Lỗi của nhân viên" : "Lỗi khách quan")}</i></p>
                                 <p className="text-primary-gray"><i>{item?.userCreate ? `Tạo: ${item?.userCreate?.fullname}` : ''}</i></p>
                                 <p className="text-primary-gray"><i>{item?.userUpdate ? `Cập nhật: ${item?.userUpdate?.fullname}` : ''}</i></p>

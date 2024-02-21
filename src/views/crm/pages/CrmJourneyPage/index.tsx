@@ -672,12 +672,12 @@ export const CrmJourneyPage: FC = () => {
                             </td>
                             <td className="py-1 px-2">
                                 {moment(item.createAt).format('DD/MM/YYYY HH:mm')}
-                                <p><i>{moment(item.createAt).fromNow()}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 <NavLink to={`/crm/customer/cid=${item?.customer?._id}`}>
                                     {item?.customer?.name} - {item?.customer?.phone}
                                 </NavLink>
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color">
                                 <button className="py-1 px-2 rounded-md border border-primary-border text-white bg-cbs-secondary text-left">{item?.journey?.name}</button>
