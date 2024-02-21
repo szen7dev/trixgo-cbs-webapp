@@ -12,6 +12,11 @@ type Props = {
   info: Human
 };
 
+const STATUS = [
+  { _id: 1, text: 'Đang triển khai' },
+  { _id: 2, text: 'Hoàn thành'}
+]
+
 const BACKGROUND = [
 	{ value: 1, color: "bg-red-400", color2: "F11F20" },
 	{ value: 2, color: "bg-yellow-300", color2: "fa6b07" },
@@ -133,6 +138,16 @@ export const JourneyInfo: FC<Props> = memo((props) => {
         (listDataWithPager[pageIndex] ?? []).map((item: any, i: any) => (
             <p className="mb-2 text-cbs-highlight-color text-[14px] border-b" key={item._id}>
               {moment(item.createAt).format('DD/MM/YYYY HH:mm')} - {item?.journey?.name} - {item.name} - {item.note} - {formatNumberMoney(item.amount)}
+              {
+                  item?.status == 1 ?
+                  <button className="rounded-md py-1 px-2 bg-cbs-schedule-expired text-white inline ml-4" style={{ fontSize: "12px" }}>
+                      {STATUS[Number(item?.status) - 1]?.text}
+                  </button>
+                  :
+                  <button className="rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white inline ml-4" style={{ fontSize: "12px" }}>
+                      {STATUS[Number(item?.status) - 1]?.text}
+                  </button>
+              }
               <p className="text-[12px] text-primary-gray"><i>{item.userCreate.fullname} | {moment(item.createAt).fromNow()}</i></p>
               {item?.images?.map((image: any, i: number) => {
                 return (
