@@ -69,9 +69,12 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 })
 
   const handleSubmit = async () => {
-    if(!formData.name || !formData.journeyID || !formData.customerID) {
-      return toast.warn('Vui lòng chọn nội dung | Hành trình | Khách hàng');
-    }
+    // if(!formData.name) {
+    //   return toast.warn('Vui lòng chọn nội dung');
+    // }
+    // if(!formData.name || !formData.journeyID || !formData.customerID) {
+    //   return toast.warn('Vui lòng chọn nội dung | Hành trình | Khách hàng');
+    // }
 
     const formDataFormat = {
       ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status, type: +formData.type
@@ -87,6 +90,10 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       switch (modalType) {
         // Tạo mẩu tin
         case 'create': {
+          if(!formData.name || !formData.journeyID || !formData.customerID) {
+            return toast.warn('Vui lòng chọn nội dung | Hành trình | Khách hàng');
+          }
+
           delete formDataFormat['customerCareID']; //
           const { error, data } = await insertAsync(formDataFormat);
 
@@ -100,6 +107,9 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 
         // Cập nhật mẩu tin
         case 'update': {
+          if(!formData.name) {
+            return toast.warn('Vui lòng chọn nội dung');
+          }
           const { error, data } = await updateAsync(formDataFormat);
 
           if (error) {
