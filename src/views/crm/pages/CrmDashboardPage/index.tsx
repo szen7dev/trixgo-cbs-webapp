@@ -204,12 +204,25 @@ export const CrmDashboardPage: FC = () => {
         isFetchList: true
     })
 	// console.log(listByMonth)
+
+	const { listCustomerJourneyByProperty: listByDay, refetchListCustomerJourneyByProperty: refetchListByDay } = useCustomerJourneyByProperty({
+        params: {
+            // businessID,
+            option: 2,
+            optionTime: 3,
+            optionGroup: 1,
+            // fromDate: inputFilter.fromDate,
+            // toDate: inputFilter.toDate,
+        },
+        isFetchList: true
+    })
+	// console.log(listByDay)
 	
     const { listByProperty, refetchListByProperty } = useContactByProperty({
         params: {
             option: 8,
-            // fromDate: inputFilter.fromDate,
-            // toDate: inputFilter.toDate,
+			// fromDate: from,
+			// toDate: to,
         },
         isFetchList: true
     })
@@ -300,16 +313,28 @@ export const CrmDashboardPage: FC = () => {
 		})
 	})
 
-	// Hành trình trải nghiệm
+	// Hành trình trải nghiệm theo Tháng
 	const array_month_journey: any = [1,2,3,4,5,6,7,8,9,10,11,12];
-	const array_mount_journey: any = [0,0,0,0,0,0,0,0,0,0,0,0];
+	const array_amount_journey: any = [0,0,0,0,0,0,0,0,0,0,0,0];
 	listByMonth?.map((item: any) => {
 		array_month_journey.map((subitem: any) => {
 			if(subitem == item?._id?.month){
-				array_mount_journey[subitem-1] = item?.quantity
+				array_amount_journey[subitem-1] = item?.quantity
 			}
 		})
 	})
+
+	// Hành trình trải nghiệm theo Ngày
+	const array_day_journey: any = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+	const array_amount_day_journey: any = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	listByDay?.map((item: any) => {
+		array_day_journey.map((subitem: any) => {
+			if(Number(subitem) === Number(item?._id?.day)){
+				array_amount_day_journey[subitem-1] = item?.quantity
+			}
+		})
+	})
+	// console.log(array_amount_day_journey)
 
 	// Doanh số
 	const array_hours: any = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
@@ -483,14 +508,21 @@ export const CrmDashboardPage: FC = () => {
 				</div>
 
 				<div className="mx-5">
-					<div className="text-primary-gray mt-3 mb-1">Hành trình trải nghiệm</div>
+					<div className="text-primary-gray mt-3 mb-1">Tổng hợp Hành trình theo ngày tháng này</div>
 					<div className="p-1 bg-white">
-						<ChartGroupBy array_hours={array_month_journey} array_amount={array_mount_journey}/>
+						<ChartGroupBy array_hours={array_day_journey} array_amount={array_amount_day_journey}/>
 					</div>
 				</div>
 
 				<div className="mx-5">
-					<div className="text-primary-gray mt-3 mb-1">Affiliate phát triển thành công</div>
+					<div className="text-primary-gray mt-3 mb-1">Tổng hợp Hành trình theo tháng</div>
+					<div className="p-1 bg-white">
+						<ChartGroupBy array_hours={array_month_journey} array_amount={array_amount_journey}/>
+					</div>
+				</div>
+
+				<div className="mx-5">
+					<div className="text-primary-gray mt-3 mb-1">Tổng hợp Affiliate theo tháng</div>
 					<div className="p-1 bg-white">
 						<ChartGroupBy array_hours={array_month_aff} array_amount={array_amount_aff}/>
 					</div>

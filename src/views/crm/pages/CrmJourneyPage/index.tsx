@@ -182,10 +182,10 @@ export const CrmJourneyPage: FC = () => {
             limit: 20,
             populates: JSON.stringify({
                 path: 'userCreate userUpdate customer mistake journey funda order manager images business dataSource',
-                select: '_id image name sign phone taxid address fullname createAt author path',
+                select: '_id image name sign phone taxid address fullname createAt author path parent',
                 populate: {
-					path: 'author',
-					select: 'fullname bizfullname image'
+					path: 'author parent',
+					select: 'fullname name image'
 				}
             }),
         },
@@ -676,6 +676,7 @@ export const CrmJourneyPage: FC = () => {
                             <td className="py-1 px-2">
                                 <NavLink to={`/crm/customer/cid=${item?.customer?._id}`}>
                                     {item?.customer?.name} - {item?.customer?.phone}
+                                    <p className="text-cbs-highlight-color"><i>{item?.customer?.parent ? `Par: ${item?.customer?.parent?.name}` : ''}</i></p>
                                 </NavLink>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
