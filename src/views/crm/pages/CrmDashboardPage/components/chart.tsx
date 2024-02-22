@@ -1,4 +1,7 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
+import { Bar } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import styles from 'views/cmcs/styles/styles.module.css';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -8,10 +11,6 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-
-import styles from 'views/cmcs/styles/styles.module.css';
 
 ChartJS.register(
     CategoryScale,
@@ -99,11 +98,9 @@ const options = {
             anchor: "end" as const,
         },
     },
-};
+}
 
-const arrMonths = Array.from({ length: 12 }, () => 0);
-
-const ChartRevenueByHour: FC<any> = ({array_hours, array_amount}) => {
+const ChartGroupBy: FC<any> = ({array_hours, array_amount}) => {
     const dataChart = {
         labels: array_hours,
         datasets: [
@@ -117,7 +114,7 @@ const ChartRevenueByHour: FC<any> = ({array_hours, array_amount}) => {
 
     return (
         <div className="bg-primary-light">
-            <div className="bg-primary-light w-full" style={{ height: "400px"}}>
+            <div className="bg-primary-light w-full" style={{ height: "200px"}}>
                 <div className={styles.barChart}>
                     <Bar options={options} data={dataChart} />
                 </div>
@@ -126,4 +123,4 @@ const ChartRevenueByHour: FC<any> = ({array_hours, array_amount}) => {
     );
 };
 
-export default ChartRevenueByHour;
+export default ChartGroupBy;
