@@ -34,31 +34,12 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
 import API from "apis/repository";
-import { useQueryListDoctype } from "services/hooks/useHuman";
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
 import { validateFiles } from 'validation/file';
 import { useFnbAffiliateSignup, useByProperty } from "services/hooks/fnb/useFnbAffiliateSignup";
 import { useContactByProperty } from "services/hooks/items/useContact";
-
-const BACKGROUND = [
-	{ value: 1, color: "bg-red-400", color2: "F11F20" },
-	{ value: 2, color: "bg-yellow-300", color2: "fa6b07" },
-	{ value: 3, color: "bg-green-400", color2: "C55B11" },
-	{ value: 4, color: "bg-blue-400", color2: "00AF50" },
-	{ value: 5, color: "bg-purple-400", color2: "169150" },
-	{ value: 6, color: "bg-pink-600", color2: "1F4E78" },
-	{ value: 7, color: "bg-gray-600", color2: "262626" },
-	{ value: 8, color: "bg-teal-400", color2: "262626" },
-	{ value: 9, color: "bg-teal-400", color2: "262626" },
-	{ value: 10, color: "bg-teal-400", color2: "262626" },
-	{ value: 11, color: "bg-teal-400", color2: "262626" },
-	{ value: 12, color: "bg-teal-400", color2: "262626" },
-	{ value: 13, color: "bg-teal-400", color2: "262626" },
-	{ value: 14, color: "bg-teal-400", color2: "262626" },
-	{ value: 15, color: "bg-teal-400", color2: "262626" },
-]
 
 export const CrmAffiliatePage: FC = () => {
     const { user } = useAuth();
@@ -80,20 +61,6 @@ export const CrmAffiliatePage: FC = () => {
     const STATUS = [
         { _id: 1, text: 'Đăng ký' },
         { _id: 2, text: 'Hoàn thành'}
-    ]
-
-    const CHANNEL = [
-        { _id: 1, text: 'Offline' },
-        { _id: 2, text: 'Grab Food'},
-        { _id: 3, text: 'Shopee Food'},
-        { _id: 4, text: 'Gojek'},
-        { _id: 5, text: 'Baemin'},
-        { _id: 6, text: 'Loship'},
-        { _id: 7, text: 'Bee'},
-        { _id: 8, text: 'TikTok'},
-        { _id: 9, text: 'Shopee'},
-        { _id: 10, text: 'Lazada'},
-        { _id: 11, text: 'Reels'},
     ]
 
     const [pageIndex, setPageIndex] = useState(0)
@@ -127,13 +94,6 @@ export const CrmAffiliatePage: FC = () => {
       params: { keyword: contactKeyword, limit: 10 },
       isFetchList: true
     })
-  
-    const { data: listUser } = useUserSystem({
-        companyID: user?.company?._id,
-        keyword: userKeyword,
-        limit: 10,
-        isFetch: true
-    }, true)
 
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
     const [initialValues, setInitialValues] = useState({

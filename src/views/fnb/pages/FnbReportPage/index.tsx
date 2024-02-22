@@ -24,33 +24,6 @@ export const FnbReportPage: FC = () => {
 	const history = useHistory();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
-	// const CustomSelectBox = () => {
-	// 	const [customItem, setCustomItem] = React.useState('');
-
-	// 	const handleChange = (event: SelectChangeEvent) => {
-	// 		setCustomItem(event.target.value);
-	// 	};
-	// 	return (
-	// 		<div>
-	// 			<FormControl sx={{ minWidth: 250, outline: "none" }} size="small" className="bg-white border-cbs-border border-0.5 p-1 text-[13px]">
-	// 				<Select
-	// 					value={customItem}
-	// 					onChange={handleChange}
-	// 					displayEmpty
-	// 					className="outline-none"
-	// 				>
-	// 					<MenuItem value="" className="text-black">
-	// 						Winggo Thái Thịnh
-	// 					</MenuItem>
-	// 					<MenuItem value={10}>Ten</MenuItem>
-	// 					<MenuItem value={20}>Twenty</MenuItem>
-	// 					<MenuItem value={30}>Thirty</MenuItem>
-	// 				</Select>
-	// 			</FormControl>
-	// 		</div>
-	// 	)
-	// }
-
 	useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
 			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
@@ -320,6 +293,7 @@ export const FnbReportPage: FC = () => {
 			}
 		})
 	})
+	
 	return (
 		<main className="h-full overflow-auto bg-cbs-table-highlight">
 			<div className="my-3">
