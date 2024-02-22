@@ -197,7 +197,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {i18n("sallarySubFactor")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.sallarySubFactor}/{info?.sallaryBasic}
+                {info?.sallarySubFactor}/{formatNumberMoney(info?.sallaryBasic)}
               </td>
             </tr>
 
@@ -328,7 +328,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {info?.bankAccount}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
-                Mức đóng bảo hiểm
+                Tiền đóng bảo hiểm
               </td>
               <td className="border w-2/6 pl-4">
                 {formatNumberMoney(info?.insuranceFee)}
