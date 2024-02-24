@@ -60,15 +60,6 @@ export const DetailMainRow: FC<Props> = memo(({
           {convertCurrency(salaryParentInfo?.salary)}
         </div>
       </div>
-      {/* <div
-        className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
-        }
-      >
-         <div className="flex justify-end">
-          {salaryParentInfo?.convertFactor}
-        </div>
-      </div> */}
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
@@ -124,6 +115,24 @@ export const DetailMainRow: FC<Props> = memo(({
       >
         <div className="flex justify-end">
           {convertCurrency(salaryParentInfo?.pitax)}
+        </div>
+      </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold font-bold"
+        }
+      >
+        <div className="flex justify-end">
+          {convertCurrency(0)}
+        </div>
+      </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold font-bold"
+        }
+      >
+        <div className="flex justify-end">
+          {convertCurrency(0)}
         </div>
       </div>
       <div

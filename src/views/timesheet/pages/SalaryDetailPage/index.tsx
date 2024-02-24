@@ -464,6 +464,20 @@ const SalaryDetailPage: FC = () => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
+              Trừ công đoàn
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Trừ tương thân tương ái
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
               Đã tạm ứng
             </div>
             <div
