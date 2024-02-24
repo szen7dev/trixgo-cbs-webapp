@@ -97,15 +97,6 @@ export const DetailChildRow: FC<Props> = ({
           {`${rowData.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
-      {/* <div
-        className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white"
-        }
-      >
-        <p className="w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end">
-          {rowData.convertFactor}
-        </p>
-      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 bg-white w-1/12"
@@ -214,6 +205,50 @@ export const DetailChildRow: FC<Props> = ({
           }}
         >
           {`${rowData.insurance}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              pitax: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.pitax}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              pitax: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.pitax}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div

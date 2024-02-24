@@ -1,9 +1,9 @@
 import React, { FC, useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import moment from "moment";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { toast } from "react-toastify";
-import { APP_ID } from "apis/localdb";
+// import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+// import { toast } from "react-toastify";
+// import { APP_ID } from "apis/localdb";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { formatNumberMoney } from "utils/converter";
 import ChartGroupBy from "./components/chart";
@@ -23,15 +23,15 @@ export const CrmDashboardPage: FC = () => {
 		document.title = "Seller";
 	}, []);
 
-	const history = useHistory();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
+	// const history = useHistory();
+	// const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CRM.id });
 
-	useEffect(() => {
-		if (isSuccess && !(hasPermission)) {
-			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
-			history.push("/")
-		}
-	}, [hasPermission]);
+	// useEffect(() => {
+	// 	if (isSuccess && !(hasPermission)) {
+	// 		toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
+	// 		history.push("/")
+	// 	}
+	// }, [hasPermission]);
 	
 	const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager: listFunda, totalPage, refetch } = useFunda({ 
 		params: { 

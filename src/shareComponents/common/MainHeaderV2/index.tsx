@@ -16,7 +16,7 @@ export const MainHeaderV2:FC<HeaderProps> = ({children, headerTitle}) => {
         <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light z-30">
             <div className="pr-4">
                 <div className="flex items-center justify-between h-14 -mb-px">
-                    <div className="flex items-center whitespace-nowrap min-w-[256px] max-w-[256px] w-[256px]">
+                    <div className="flex items-center whitespace-nowrap" style={{width: "225px"}}>
                         <div className="t-header-company-name flex items-center pl-4 lg-pl-8">
                             <Link to={`/`}>
                                 <img src={user?.company?.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${user?.company.image}` : fakeThumbnail} alt={user?.company?.name} className="w-10 h-10" />

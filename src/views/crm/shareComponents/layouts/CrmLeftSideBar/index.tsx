@@ -8,6 +8,7 @@ import { useModal } from "services/hooks/useModal";
 // import { ModalAddNewOrder } from "views/fnb/shareComponents/layouts/FnbLayout/components/ModalAddNewOrder";
 import { ModalAddNewOrder2 } from "views/fnb/shareComponents/layouts/FnbLayout/components/ModalAddNewOrder2";
 import iconFolder from "assets/images/bullet.svg";
+import iconJourney from "assets/images/icons8-journey.svg";
 import iconPlusBlue from "assets/images/icons8-plus-math-96 1.svg";
 
 export const CrmLeftSideBar: FC = () => {
@@ -101,10 +102,10 @@ export const CrmLeftSideBar: FC = () => {
                             >
                             <img
                                 width={'7px'}
-                                src={iconFolder}
+                                src={iconJourney}
                                 alt="Menu item"
                             />
-                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hành trình  {item.name}</span>
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>{item.name}</span>
                         </NavLink>
                     )) : <></>}
                 </div>
