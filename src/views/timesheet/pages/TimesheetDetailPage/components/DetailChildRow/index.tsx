@@ -28,10 +28,10 @@ type Props = {
 };
 
 const SUBTYPES = [
-  { _id: 1, name: 'Ngày bình thường' },
-  { _id: 2, name: 'Ngày nghỉ phép'},
-  { _id: 3, name: 'Ngày lễ, tết'},
-  { _id: 4, name: 'Ngày công tác'},
+  { _id: 1, name: 'Bình thường' },
+  { _id: 2, name: 'Nghỉ phép'},
+  { _id: 3, name: 'Lễ, tết'},
+  { _id: 4, name: 'Công tác'},
 ]
 
 export const DetailChildRow: FC<Props> = ({
@@ -168,7 +168,7 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
+          "table-cell relative box-border border border-gray-300 bg-white"
         }
       >
         <p
@@ -190,7 +190,7 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
+          "table-cell relative box-border border border-gray-300 bg-white"
         }
       >
         <p

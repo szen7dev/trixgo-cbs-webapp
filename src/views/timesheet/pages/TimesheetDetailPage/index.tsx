@@ -51,13 +51,15 @@ const TimeSheetDetailPage: FC = () => {
   const [userID, setUserID] = useState<string | null>();
   const [userKeyword, setUserKeyword] = useState("");  
   const [keyword, setKeyword] = useState('');
-  // console.log({keyword})
 
-  // const [inputFilter, setInputFilter] = useState({
-  //   keyword,
-  //   fromDate: new Date(new Date().getFullYear(), 0, 1),
-  //   toDate: new Date(new Date().getFullYear(), 11, 31)
-  // });
+  const today = new Date();
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  const currentMonth = new Date().getMonth()
+
+  const [inputFilter, setInputFilter] = useState({
+    fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+    toDate: lastDayOfMonth
+  });
 
   const { user } = useAuth();
 
@@ -112,8 +114,6 @@ const TimeSheetDetailPage: FC = () => {
     limit: 50
   });
 
-  // console.log(listTimeSheetChild)
-
   const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } =
     useMutationTimeSheetChild();
 
@@ -132,13 +132,7 @@ const TimeSheetDetailPage: FC = () => {
     } else {
       authorID = timeSheetInfo.userCreate?._id;
     }
-
     usersIDShared.push(authorID);
-
-    // if (!usersIDShared.includes(user._id)) {
-    //   toast.warn("Bạn đang không có quyền truy cập");
-    //   history.push("/timesheet/home");
-    // }
 
     const hasPermissionCreateUpdate =
       adminsID.includes(user._id) || authorID === user._id;
@@ -159,7 +153,6 @@ const TimeSheetDetailPage: FC = () => {
   const handleUpdatedTimeSheet = React.useCallback(
     async (values) => {
       try {
-        // console.log(values)
         const isUpdated = await onUpdateTimeSheetAsync({
           ...values,
           expertTimesheetID: values._id,
@@ -228,10 +221,10 @@ const TimeSheetDetailPage: FC = () => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportExcelAsync({
-        parentID: timeSheetParentID,
         option: param.option,
-        // fromDate: inputFilter.fromDate,
-        // toDate: inputFilter.toDate,
+        parentID: timeSheetParentID,
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
       });
 
       if (error) {
@@ -246,17 +239,16 @@ const TimeSheetDetailPage: FC = () => {
     }
   };
 
-  // const handleOnChangeDate = useCallback((date, input) => {
-  //   if (input) {
-  //     setInputFilter((value) => ({ ...value, toDate: date }))
-  //   } else {
-  //     setInputFilter((value) => ({ ...value, fromDate: date }))
-  //   }
-  // }, [])
+  const handleOnChangeDate = useCallback((date, input) => {
+    if (input) {
+      setInputFilter((value) => ({ ...value, toDate: date }))
+    } else {
+      setInputFilter((value) => ({ ...value, fromDate: date }))
+    }
+  }, [])
 
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value)
-    console.log(event.target.value)
   }, 500)
 
   if (!timeSheetInfo || loading || !user)
@@ -285,7 +277,6 @@ const TimeSheetDetailPage: FC = () => {
             bởi {timeSheetInfo.userUpdate?.fullname}
           </p>
         </div>
-        {/* <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} /> */}
         <div className={"flex-1 flex items-center justify-end"}>
           <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 1})}>
             Tải chấm công
@@ -349,7 +340,7 @@ const TimeSheetDetailPage: FC = () => {
             )}
             selectOneByOne={true}
         />
-        
+        <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
         <PaginateV2
           ref={ref}
           totalRecord={totalRecord}

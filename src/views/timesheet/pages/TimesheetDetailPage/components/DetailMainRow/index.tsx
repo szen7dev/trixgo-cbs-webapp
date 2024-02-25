@@ -38,14 +38,14 @@ export const DetailMainRow: FC<Props> = ({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-1/6"
         }
       >
         {timeSheetParentInfo?.name}
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-1/6"
         }
       ></div>
       <div
@@ -90,6 +90,7 @@ export const DetailMainRow: FC<Props> = ({
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
+        style={{width: "100px"}}
       ></div>
       <div
         className={
