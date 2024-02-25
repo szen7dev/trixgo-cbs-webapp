@@ -39,15 +39,13 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
     const { updateTaskAsync } = useTask({});
 	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
     
-    /**
-     * Xử lý download template excel
-     */
-    const handleDownloadTemplateImportExcel = async () => {
+    const handleDownloadTemplateImportExcel = async (param: any) => {
 		try {
 			setStateExport({ isExporting: true })
 			const { error, data } = await downloadTemplateImportExcelTaskAsync({
-                option: 1,
-                projectID: task.project._id
+                option: param.option,
+                projectID: task.project._id,
+                taskID: task._id,
             })
 			if(error) {
 				return toast.warn(data?.message)
@@ -61,28 +59,6 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 		}
 	}
 
-    const handleDownloadTemplateImportExcel2 = async () => {
-		try {
-			setStateExport({ isExporting: true })
-			const { error, data } = await downloadTemplateImportExcelTaskAsync({
-                option: 2,
-                projectID: task.project._id
-            })
-			if(error) {
-				return toast.warn(data?.message)
-			}
-			data && createLinkAndClick(data, '_self')
-		} catch (error) {
-			if(error instanceof Error)
-				toast.error(error.message)
-		} finally {
-			setStateExport({ isExporting: false })
-		}
-	}
-
-    /**
-     * Xử lý import excel (đọc file)
-     */
     const handleImport = ($event: any) => {
         const files = $event.target.files;
         if (files.length) {
@@ -409,7 +385,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
 
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                            onClick={handleDownloadTemplateImportExcel}
+                            onClick={() => handleDownloadTemplateImportExcel({option: 1})}
                         >
                             Tải mẫu import excel
                         </button>
@@ -424,9 +400,15 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
 
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                            onClick={handleDownloadTemplateImportExcel2}
+                            onClick={() => handleDownloadTemplateImportExcel({option: 2})}
                         >
                             Tải Báo cáo hóa đơn
+                        </button>
+
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                            onClick={() => handleDownloadTemplateImportExcel({option: 3})}
+                        >
+                            Tải Báo cáo điểm danh
                         </button>
                     </div>
                 </div>
