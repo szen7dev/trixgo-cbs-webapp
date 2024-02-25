@@ -137,6 +137,15 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold font-bold"
+        }
+      >
+        <div className="flex justify-end">
+          {convertCurrency(salaryParentInfo?.other)}
+        </div>
+      </div>
+      <div
+        className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >

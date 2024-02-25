@@ -288,6 +288,28 @@ export const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateSalary({
               ...rowData,
+              other: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.other}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
               advance: `${value}`,
             });
           }}

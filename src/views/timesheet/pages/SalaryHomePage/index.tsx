@@ -233,33 +233,12 @@ const SalaryHomePage: FC = () => {
             >
               Hệ số chuyển đổi KPI sang giá trị
             </div>
-            {/* <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Dự án/phòng ban
-            </div> */}
             <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Tổng lương
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Đã thanh toán
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Còn lại chưa thanh toán
             </div>
             <div
               className={
@@ -316,35 +295,12 @@ const SalaryHomePage: FC = () => {
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.convertFactor}
               </div>
-              {/* <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {salaryParent?.project?.name}
-              </div> */}
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-               {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance - salaryParent?.punishment - salaryParent?.insurance - salaryParent?.pitax)}`.replace(
-                  /\B(?=(\d{3})+(?!\d))/g,
-                  ","
-                )}
-              </div>
-              <div
-                className={
-                  "px-2 py-2 table-cell box-border border-b text-right"
-                }
-              >
-                {`${Number(salaryParent?.advance + salaryParent?.paid)}`.replace(
-                  /\B(?=(\d{3})+(?!\d))/g,
-                  ","
-                )}
-              </div>
-              <div
-                className={
-                  "px-2 py-2 table-cell box-border border-b text-right"
-                }
-              >
-                {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance - salaryParent?.punishment - salaryParent?.insurance - salaryParent?.pitax - salaryParent?.advance - salaryParent?.paid)}`.replace(
+               {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}

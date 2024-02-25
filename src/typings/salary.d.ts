@@ -35,6 +35,7 @@ export type SalaryParent = {
     convertFactor: number;
     union: number;
     share: number;
+    other: number;
 }
 
 export type ListSalaryPayload = QueryParams & {
@@ -118,6 +119,7 @@ export type SalaryChild = {
     pitax: number;
     union: number;
     share: number;
+    other: number;
     convertFactor: number;
     project: any;
     position: any;
