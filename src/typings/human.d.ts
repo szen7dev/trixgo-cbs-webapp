@@ -213,6 +213,8 @@ export type Human = {
     dataSource?: any;
     parent?: any;
     level?: any;
+    union?: any;
+    share?: any;
 }
 
 export interface HumanPayload extends QueryParam {
