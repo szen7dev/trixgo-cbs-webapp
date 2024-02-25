@@ -34,7 +34,6 @@ export const FnbBillOrder2: FC = () => {
             isFetchInfo:  true  
         }
     )
-    console.log(info)
 
     useEffect(() => {
         const fetchOrderProducts = async () => {
@@ -70,8 +69,6 @@ export const FnbBillOrder2: FC = () => {
         }
     }, [orderProducts]);
 
-    const value = `https://app.winggo.vn/mobile/activity/${info?.customer._id}/w6g9o22`
-
     return (
         <main className="h-screen overflow-auto bg-cbs-border">
             <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between">
@@ -102,6 +99,10 @@ export const FnbBillOrder2: FC = () => {
                         <div className="flex justify-between">
                             <div className="font-bold">{info?.name}</div>
                             <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
+                        </div>
+                        <div className="flex justify-between">
+                            <div>Tích điểm còn lại của khách (chỉ áp dụng khi mua đơn Off):</div>
+                            <div className="font-bold">{formatNumberMoney(info?.customer?.remainLoyaltyPoints)} VND</div>
                         </div>
                         <div>
                             <span>Thu ngân: <span>{info?.userCreate?.fullname}</span></span>
