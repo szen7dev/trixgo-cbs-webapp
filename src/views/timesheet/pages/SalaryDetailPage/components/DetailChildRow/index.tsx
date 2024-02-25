@@ -244,11 +244,11 @@ export const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateSalary({
               ...rowData,
-              pitax: `${value}`,
+              union: `${value}`,
             });
           }}
         >
-          {`${rowData.pitax}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          {`${rowData.union}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div
@@ -266,11 +266,11 @@ export const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateSalary({
               ...rowData,
-              pitax: `${value}`,
+              share: `${value}`,
             });
           }}
         >
-          {`${rowData.pitax}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          {`${rowData.share}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div

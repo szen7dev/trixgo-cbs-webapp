@@ -171,6 +171,8 @@ const SalaryDetailPage: FC = () => {
           mealAllowance: `${values.mealAllowance}`,
           insurance: `${values.insurance}`,
           pitax: `${values.pitax}`,
+          union: `${values.union}`,
+          share: `${values.share}`,
         });
         if (!isUpdated.error) {
           onRefreshSalaryChild();
