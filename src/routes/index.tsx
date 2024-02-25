@@ -118,9 +118,14 @@ const Routes: FC = () => {
                                         <MediaRouter />
                                     </MediaLayout>
                                 </Route>
-                                <Route
+                                {/* <Route
                                     exact
                                     path="/policy"
+                                    component={Policy}
+                                /> */}
+                                <Route
+                                    exact
+                                    path="/privacy-policy"
                                     component={Policy}
                                 />
                                 <Route path="*">

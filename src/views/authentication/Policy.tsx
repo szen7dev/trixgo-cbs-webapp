@@ -3,64 +3,71 @@ import { FC } from "react";
 const Policy: FC = () => {
     return (
         <main className="transition-all duration-500 ease-out overflow-auto relative" style={{height: "calc(100vh)"}}>
-            <div className="">
+            <div className="p-[30px] text-[16px]">
                 <img alt={""} src={'https://dntdurzwr12tp.cloudfront.net/template/trixgo_core/images/logo-mobile.png'} />
-                <h2>Terms of use</h2>
-                <p>Welcome to Trixgo!</p>
-                <p>Trixgo creates technologies and services that support individuals/businesses to connect with each other, to build a comprehensive professional business working environment. These Terms govern your use of Trixgo and the other products, features, applications, services, technology and software we offer (Trixgo Products or Products). These products are provided to you by Trixgo Joint Stock Company.</p>
+                <h2>Privacy Policy</h2>
+                <p className="mb-5">PRIVACY NOTICE</p>
+                <p className="mb-3">Last updated Jan 01, 2024</p>
+                <p className="mb-3">This privacy notice for Trixgo JSC (doing business as Trixgo) (Trixgo, we, us, or our), describes how and why we might collect, store, use, and/or share process your information when you use our services Services, such as when you:</p>
+                <p className="mb-3">Download and use our mobile application (Trixgo), or any other application of ours that links to this privacy notice
+Engage with us in other related ways, including any sales, marketing, or events</p>
+                <p className="mb-3">Questions or concerns? Reading this privacy notice will help you understand your privacy rights and choices. If you do not agree with our policies and practices, please do not use our Services. If you still have any questions or concerns, please contact us at contact.trixgo@gmail.com.</p>
+                <p className="mb-3">What personal information do we process? When you visit, use, or navigate our Services, we may process personal information depending on how you interact with Trixgo and the Services, the choices you make, and the products and features you use.</p>
+                <p className="mb-3">Do we process any sensitive personal information? We do not process sensitive personal information.</p>
+                <p className="mb-3">Do we receive any information from third parties? We do not receive any information from third parties.</p>
+                <p className="mb-3">How do we process your information? We process your information to provide, improve, and administer our Services, communicate with you, for security and fraud prevention, and to comply with law. We may also process your information for other purposes with your consent. We process your information only when we have a valid legal reason to do so.</p>
+                <p className="mb-3">In what situations and with which types of parties do we share personal information? We may share information in specific situations and with specific categories of third parties.</p>
+                <p className="mb-3">How do we keep your information safe? We have organizational and technical processes and procedures in place to protect your personal information. However, no electronic transmission over the internet or information storage technology can be guaranteed to be 100% secure, so we cannot promise or guarantee that hackers, cybercriminals, or other unauthorized third parties will not be able to defeat our security and improperly collect, access, steal, or modify your information.</p>
+                <p className="mb-3">What are your rights? Depending on where you are located geographically, the applicable privacy law may mean you have certain rights regarding your personal information.</p>
+                <p className="mb-3">How do you exercise your rights? The easiest way to exercise your rights is by filling out our data subject request form available here: contact.trixgo@gmail.com, or by contacting us. We will consider and act upon any request in accordance with applicable data protection laws.</p>
+                <p className="mb-3">Want to learn more about what Trixgo does with any information we collect? Contact to contact.trixgo@gmail.com.</p>
 
-                <h3>1. Services we provide</h3>
-                <p>Our mission is to provide businesses with a solid corporate governance foundation, from which they can quickly develop their business activities.</p>
+                <h2 className="mb-5">1. WHAT INFORMATION DO WE COLLECT?</h2>
+                <p className="mb-3">Personal information you disclose to us</p>
+                <p className="mb-3">In Short: We collect personal information that you provide to us.</p>
+                <p className="mb-3">We collect personal information that you voluntarily provide to us when you register on the Services, express an interest in obtaining information about us or our products and Services, when you participate in activities on the Services, or otherwise when you contact us.</p>
+                <p className="mb-3">Personal Information Provided by You. The personal information that we collect depends on the context of your interactions with us and the Services, the choices you make, and the products and features you use. The personal information we collect may include the following:</p>
+                <p className="mb-3">names</p>
+                <p className="mb-3">email addresses</p>
+                <p className="mb-3">Sensitive Information. We do not process sensitive information.</p>
+                
+                <h2 className="mb-5">2. HOW DO WE PROCESS YOUR INFORMATION?</h2>
+                <p className="mb-3">In Short: We process your information to provide, improve, and administer our Services, communicate with you, for security and fraud prevention, and to comply with law. We may also process your information for other purposes with your consent.</p>
+                
+                <h2 className="mb-5">3. WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR INFORMATION?
+</h2>
+                <p className="mb-3">In Short: We only process your personal information when we believe it is necessary and we have a valid legal reason (i.e., legal basis) to do so under applicable law, like with your consent, to comply with laws, to provide you with services to enter into or fulfill our contractual obligations, to protect your rights, or to fulfill our legitimate business interests.
+</p>
+                
+                <h2 className="mb-5">4. WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?</h2>
+                <p className="mb-3">In Short: We do not share information with third parties.</p>
 
-                <h4>For internal businesses</h4>
-                <p>We provide an all-in-one platform for business administration operations, including:</p>
-                <p>a. Project management/work management</p>
-                 <p>b. Manager submits for approval</p>
-                 <p>c. Administrative/personnel management, timekeeping</p>
-                 <p>d. Accounting and corporate finance management</p>
-                 <p>e. Cost management/contract performance evaluation</p>
-                 <p>f. Document document management</p>
-                 <p>g. Share valuable knowledge from the expert community organized by Trixgo</p>
-                 <p>h. Share corporate culture</p>
-                 <p>i. Chatting communication in business</p>
+                <h2 className="mb-5">5. DO WE USE COOKIES AND OTHER TRACKING TECHNOLOGIES?</h2>
+                <p className="mb-3">In Short: We may use cookies and other tracking technologies to collect and store your information.</p>
 
-                 <h4>For collaboration outside the business</h4>
-                 <p>We provide a platform for businesses to connect and work/collaborate together through projects/campaigns, to maximize each others resources, bringing the highest possible efficiency</p>
+                <h2 className="mb-5">6. HOW LONG DO WE KEEP YOUR INFORMATION?</h2>
+                <p className="mb-3">In Short: We keep your information for as long as necessary to fulfill the purposes outlined in this privacy notice unless otherwise required by law.</p>
+                
+                <h2 className="mb-5">7. HOW DO WE KEEP YOUR INFORMATION SAFE?</h2>
+                <p className="mb-3">In Short: We aim to protect your personal information through a system of organizational and technical security measures.</p>
 
-                 <h3>2. How we maintain our services</h3>
-                 <p>Always determine the identity of individuals/organizations/businesses before allowing them to participate in using Trixgos services. This is to ensure a comprehensive professional business environment with real people doing real work.</p>
-                 <p>Always advise and support businesses on how to organize management/operations before using Trixgos services, to ensure we will provide the most suitable solutions/products/services for each individual. business.</p>
-                 <p>Always ensure the principle of compliance with data security of each business on the basis of decentralizing access to each business, which businesss data belongs to that business.</p>
-                 <p>The service we provide always ensures that data is continuously accessible 24/7.</p>
-                 <p>We organize data backups twice a day to ensure the safety of the businesss data. In addition, businesses can manually back up their data to their computers in the form of downloading excel/pdf files or other files that Trixgo provides support in the following methods.</p>
+                <h2 className="mb-5">8. WHAT ARE YOUR PRIVACY RIGHTS?</h2>
+                <p className="mb-3">In Short: In some regions, you have rights that allow you greater access to and control over your personal information. You may review, change, or terminate your account at any time.</p>
 
-                 <h3>3. Your commitment to Trixgo and our community</h3>
-                 <p>We provide these services to you and others to advance our mission. In return, we need you to make the following commitments:</p>
-                 <p>- Use the same name you use in everyday life.</p>
-                 <p>- Provide accurate information about yourself.</p>
-                 <p>- Create only one account (your own).</p>
-                 <p>- Do not share your password, give others access to your Trixgo account, or transfer your account to anyone else (without our permission).</p>
+                <h2 className="mb-5">9. CONTROLS FOR DO-NOT-TRACK FEATURES</h2>
+                <p className="mb-3">Most web browsers and some mobile operating systems and mobile applications include a Do-Not-Track (DNT) feature or setting you can activate to signal your privacy preference not to have data about your online browsing activities monitored and collected. At this stage no uniform technology standard for recognizing and implementing DNT signals has been finalized. As such, we do not currently respond to DNT browser signals or any other mechanism that automatically communicates your choice not to be tracked online. If a standard for online tracking is adopted that we must follow in the future, we will inform you about that practice in a revised version of this privacy notice.</p>
+                
+                <h2 className="mb-5">10. DO WE MAKE UPDATES TO THIS NOTICE?</h2>
+                <p className="mb-3">In Short: Yes, we will update this notice as necessary to stay compliant with relevant laws.</p>
 
-                 <h3>4. Additional regulations</h3>
-                 <h4>4.1. Update our Terms</h4>
-                 <p>We are constantly working to improve our services and develop new features to create better Products for you/your business. Therefore, we may need to update these Terms from time to time to accurately reflect our services and practices. We will only make changes where these regulations are no longer appropriate or incomplete and only if the changes are reasonable and take due account of your interests.</ p>
-                 <p>We will notify you (for example, by email or through our Products) at least 30 days before making changes to these Terms, and give you an opportunity to review before those changes take effect, unless we are required to make the changes by law.</p>
-                 <p>After any updated Terms take effect, if you continue to use our Products you will be bound by those terms.</p>
-                 <p>We hope you will continue to use our Products. However, if you do not agree to the updated Terms and no longer wish to use our services, you have the right to leave the services we provide.</p>
+                <h2 className="mb-5">11. HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</h2>
+                <p className="mb-3">If you have questions or comments about this notice, you may email us at contact.trixgo@gmail.com.</p>
 
-                 <h4>4.2. Suspend or terminate your account</h4>
-                 <p>When you/your business does not need to use our services and vice versa, if you/your business violates the principles we set out, we will suspend or terminate. your account/your business.</p>
+                <h2 className="mb-5">12. HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT FROM YOU?
+</h2>
+                <p className="mb-3">You have the right to request access to the personal information we collect from you, change that information, or delete it</p>
 
-                 <h4>4.3. Limitation of Liability</h4>
-                 <p>We strive to provide the best Products possible and set clear guidelines for all users. However, our Products are provided as is and we do not warrant that the Products will always be safe, secure, error-free or that the Products will operate without interruption, delay or omission.
-                 </p>
-                 <p>We cannot predict when problems with our Products will arise. Therefore, our liability is limited to the maximum extent permitted by applicable law and in no event shall we be liable to you for any loss of profits, revenue, information, data or for consequential, special, indirect, punitive, punitive or incidental damages arising out of or in connection with these Terms or the Trixgo Products, even if We have been advised of the possibility of such damages.
-                 </p>
-
-                 <h4>4.4. Dispute</h4>
-                 <p>We strive to provide clear rules that will limit or hopefully avoid disputes between you and us.</p>
-
-                <h3>5. Some permissions require access before using the feature</h3>
+                <h3 className="mb-5 uppercase">13. Some permissions require access before using the feature</h3>
                 <p>android.permission.CAMERA,</p>
                 <p>android.permission.RECORD_AUDIO,</p>
                 <p>android.permission.READ_PHONE_STATE,</p>

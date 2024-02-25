@@ -540,7 +540,8 @@ export const PCM_PROPOSAL_TASK = [
     { value: 9, text: 'Báo cáo', sign: 'Report', key: 'report' },
     { value: 10, text: 'Tiến độ, kế hoạch', sign: 'Schedule', key: 'schedule' },
     { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
-    { value: 12, text: 'Hóa đơn', sign: 'MOM', key: 'mom' },
+    { value: 12, text: 'Hóa đơn', sign: 'INVOICE', key: 'invoice' },
+    { value: 16, text: 'Ghi danh', sign: 'NOTE', key: 'note' },
 ]
 
 export const PCM_SUBTYPE = [
@@ -556,6 +557,8 @@ export const PCM_SUBTYPE = [
     { value: 9, text: 'Báo cáo', sign: 'Report', key: 'report' },
     { value: 10, text: 'Tiến độ, kế hoạch', sign: 'Schedule', key: 'schedule' },
     { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
+    { value: 12, text: 'Hóa đơn', sign: 'INVOICE', key: 'invoice' },
+    { value: 16, text: 'Ghi danh', sign: 'NOTE', key: 'note' },
 ]
 
 // MỐC TIẾN ĐỘ
