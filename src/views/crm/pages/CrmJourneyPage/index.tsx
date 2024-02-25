@@ -698,7 +698,7 @@ export const CrmJourneyPage: FC = () => {
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.amount)}
                             </td>
-                            <td className="py-1 px-2">
+                            <td className="py-1 px-2 break-words">
                                 {item.note}
                                 {
                                     item?.status == 1 ?

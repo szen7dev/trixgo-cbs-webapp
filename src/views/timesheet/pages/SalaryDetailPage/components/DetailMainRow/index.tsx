@@ -123,7 +123,7 @@ export const DetailMainRow: FC<Props> = memo(({
         }
       >
         <div className="flex justify-end">
-          {convertCurrency(0)}
+          {convertCurrency(salaryParentInfo?.union)}
         </div>
       </div>
       <div
@@ -132,7 +132,7 @@ export const DetailMainRow: FC<Props> = memo(({
         }
       >
         <div className="flex justify-end">
-          {convertCurrency(0)}
+          {convertCurrency(salaryParentInfo?.share)}
         </div>
       </div>
       <div
