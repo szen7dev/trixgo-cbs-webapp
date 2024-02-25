@@ -182,6 +182,8 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       area1: "",
       area2: "",
       taxid: "",
+      union: "",
+      share: "",
       insuranceSign: "",
       insuranceDate: "",
       sallaryFactor: "",
@@ -1399,6 +1401,40 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           handleBlur(e);
                         }}
                       />
+                    </div>
+
+                  </div>
+
+                  <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                    
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Tiền đóng công đoàn
+                      </span>
+                      <Field
+                        type="number"
+                        name="union"
+                        placeholder=" Tiền đóng công đoàn"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div>
+
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                          Quỹ tương thân tương ái
+                        </span>
+                        <Field
+                          type="number"
+                          name="share"
+                          placeholder="Quỹ tương thân tương ái"
+                          className="w-full h-6 outline-none pl-3"
+                          onBlur={(e: FormEvent<HTMLInputElement>) => {
+                            handleBlur(e);
+                          }}
+                        />
                     </div>
 
                   </div>

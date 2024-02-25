@@ -38,6 +38,7 @@ export const HumanInfo: FC = () => {
   const { updateContactMutateAsync } = useUpdateContactMutation();
   const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.HUMAN.id });
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
+  console.log(detailHuman)
 
   const handleFinishForm = async (values: any) => {
     const res = await updateContactMutateAsync({
@@ -284,6 +285,8 @@ export const HumanInfo: FC = () => {
             modifyAt: detailHuman.modifyAt,
             bankAccount: detailHuman.bankAccount,
             insuranceFee: detailHuman.insuranceFee,
+            union: detailHuman.union,
+            share: detailHuman.share,
           }}
         />
         <WorkHistory humanId={id} companyID={detailHuman?.company?._id}/>

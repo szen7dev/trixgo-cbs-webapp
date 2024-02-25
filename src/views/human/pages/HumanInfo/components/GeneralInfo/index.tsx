@@ -336,6 +336,20 @@ export const GeneralInfo: FC<Props> = memo((props) => {
             </tr>
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
+                Tiền đóng công đoàn
+              </td>
+              <td className="border w-2/6 pl-4">
+                {formatNumberMoney(info?.union)}
+              </td>
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Tiền góp quỹ tương thân tương ái
+              </td>
+              <td className="border w-2/6 pl-4">
+                {formatNumberMoney(info?.share)}
+              </td>
+            </tr>
+            <tr className="border h-7 leading-7">
+              <td className="border text-primary-gray w-1/6 pl-4">
                 Ghi chú
               </td>
               <td className="border w-2/6 pl-4">
