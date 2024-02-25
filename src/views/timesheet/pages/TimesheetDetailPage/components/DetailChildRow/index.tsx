@@ -27,6 +27,13 @@ type Props = {
   hasPermission: boolean;
 };
 
+const SUBTYPES = [
+  { _id: 1, name: 'Ngày bình thường' },
+  { _id: 2, name: 'Ngày nghỉ phép'},
+  { _id: 3, name: 'Ngày lễ, tết'},
+  { _id: 4, name: 'Ngày công tác'},
+]
+
 export const DetailChildRow: FC<Props> = ({
   parent,
   rowData,
@@ -135,6 +142,7 @@ export const DetailChildRow: FC<Props> = ({
         />
         <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
         <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
+        <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p>
       </div>
       <div
         className={
@@ -283,6 +291,48 @@ export const DetailChildRow: FC<Props> = ({
             })
           }
         />
+      </div>
+      <div
+        className={
+          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
+        }
+      >
+        <DropdownSearchable
+          id="ticket-creator"
+          className={"w-full pl-0 outline-none text-gray-400"}
+          bordered
+          isMultiple={false}
+          allowClearValueSingleInput
+          showTriangle
+          placeholder="PL"
+          renderSelectedItem={(item) => (
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+                minWidth: 0,
+                width: "100px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+              }}
+            >
+              {item.text}
+            </p>
+          )}
+          data={SUBTYPES}
+          initialValue={rowData?.subtype}
+          formatItem={{
+            id: "_id",
+            text: "name",
+          }}
+          onchangeValue={(value) =>
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              subtype: value.id,
+            })
+          }
+        />
+        <p>{SUBTYPES[Number(rowData?.subtype)-1].name}</p>
       </div>
       <div
         className={

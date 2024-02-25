@@ -92,6 +92,7 @@ export type TimeSheetChild = {
     unitprice: number;
     amount: number;
     status: number;
+    subtype: any | null
     timeApproved: string | null;
     state: 1;
     name: string;

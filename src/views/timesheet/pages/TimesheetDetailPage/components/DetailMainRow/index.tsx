@@ -88,7 +88,12 @@ export const DetailMainRow: FC<Props> = ({
       ></div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-4/12"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+        }
+      ></div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-1/6"
         }
       ></div>
       {_map(listTimeSheetChild[pageIndex] ?? [], (childRow, index) => (

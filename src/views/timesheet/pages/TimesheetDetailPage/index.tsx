@@ -108,9 +108,11 @@ const TimeSheetDetailPage: FC = () => {
     refetch: onRefreshTimeSheetChild,
   } = useQueryListTimeSheetChild(timeSheetParentID,{
     keyword,
-    assigneeID: userID,
+    humanID: userID,
     limit: 50
   });
+
+  // console.log(listTimeSheetChild)
 
   const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } =
     useMutationTimeSheetChild();
@@ -165,6 +167,7 @@ const TimeSheetDetailPage: FC = () => {
           amount: `${values.amount}`,
           state: `${values.state}`,
           unitprice: `${values.unitprice}`,
+          subtype: `${values.subtype}`,
           type: `${values.type}`,
           status: `${values.status}`,
         });
@@ -423,6 +426,13 @@ const TimeSheetDetailPage: FC = () => {
               }
             >
               Công việc/Bill
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Phân loại
             </div>
             <div
               className={
