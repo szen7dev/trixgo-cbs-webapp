@@ -38,9 +38,9 @@ interface InitialValues {
   fundaID: string,
   shiftID: string,
   customerID: string,
-  affiliateID: string, 
-  businessID: string, 
-  channelID: string, 
+  affiliateID: string,
+  businessID: string,
+  channelID: string,
   seasons: number,
   paymentMethod: string,
   salesChannel: number,
@@ -782,7 +782,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                       <div className="px-3">
                         <div className={"flex"}>
                           <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full h-full"}>Cơ sở</div>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Cơ sở</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 ref={dropdownFundaRef}
@@ -830,7 +830,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                             </div>
                           </div>
                           <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm</div>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5"}>Ca làm</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 ref={dropdownShiftsRef}
@@ -871,7 +871,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                             </div>
                           </div>
                           <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Mã khách</div>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Mã khách</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 onchangeValue={(value: any) => {
@@ -922,7 +922,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
 
                         <div className={"flex"}>
                           <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Lĩnh vực</div>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Lĩnh vực</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 onchangeValue={(value: any) => {
@@ -967,7 +967,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                           </div>
 
                           <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Kênh bán</div>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Kênh bán</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 onchangeValue={(value: any) => {
@@ -1012,7 +1012,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                           </div>
 
                           <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Thanh toán</div>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Thanh toán</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 onchangeValue={(value: any) => {
@@ -1233,7 +1233,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                     }
                                     label={<span className="text-[13px]">Shopee S</span>}
                                   />
-                                  
+
                                   <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
                                     title="Sàn Lazada"
@@ -1253,7 +1253,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                     }
                                     label={<span className="text-[13px]">Lazada</span>}
                                   />
-                                  
+
                                   <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
                                     title="Sàn Reels"
@@ -1333,7 +1333,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                       </div>
                       <div className="flex justify-between	gap-2 border-t-0.5 border-b-0.5 px-3">
                         <div className="flex justify-between	gap-2 w-1/2">
-                          
+
                           <div className={"flex w-2/10 py-4 "}>
                             <div className={" flex items-start"}>
                               <div className={"h-full text-left text-gray-500 flex items-center mr-2 "}>Tên (*)</div>
@@ -1417,7 +1417,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                               </div>
                             </div>
                         </div>
-                        
+
                         <div className="">
                           <div className={"flex w-full py-4"}>
                             <div className={" flex items-start"}>
