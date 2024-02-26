@@ -49,17 +49,17 @@ useEffect(() => {
     }
 
     fetchOrderProducts();
-}, [])
+}, [orderID])
 
 useEffect(() => {
-  if (isLoadingInfo) return;
-  document.title = `SellPose`;
-}, [info]);
+  document.title = 'SellPose';
+}, []);
+
 const componentRef = useRef(null);
 usePrintComponent({ ref: componentRef });
 
 let totalProd = 0
-orderProducts.map((item: any, index: number) => {
+orderProducts.map((item: any) => {
   for (let i = 1; i <= Number(item.quantity); i++) {
     totalProd = Number(totalProd) + 1
   }
@@ -82,11 +82,11 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
             <div
                 ref={componentRef}
                 className="print_area border-separate"
-                
+
             >
                 <style type="text/css" media="print">
                   {`
-                      @media print { 
+                      @media print {
                           table { page-break-inside:auto }
                           thead { display:table-header-group; }
                           tfoot { display:table-footer-group; }
@@ -97,9 +97,9 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                       }
                   `}
                 </style>
-                  { 
+                  {
                     orderProducts.map((item: any, index: number) => {
-                        let currentIndex = 0 
+                        let currentIndex = 0
                         currentIndex = Number(currentIndex) + Number(index)
 
                         const amount = Number(item.unitPrice)
@@ -124,9 +124,9 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                               // style={{ height: "30mm", width: "100%" }}
                             >
                                 {
-                                      quantity.map((e, subindex) => {
+                                      quantity.map((e) => {
                                         currentIndex = Number(currentIndex) + Number(1)
-                                        
+
                                           return (
                                             <table key={`${e}.${item._id}`} style={{ height: "30mm", width: "50mm" }}>
                                               <tbody>
@@ -140,7 +140,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                       <Link to={`/fnb/home/${info?._id}/print/3`}>
                                                         <div title="Bấm vào đây để in Bill">
                                                           <p className=""><b>{item.goods?.name}</b> (Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text} - Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note})</p>
-                                                          { str != "" ? <p>+ {str}</p> : <></>}
+                                                          { str !== "" ? <p>+ {str}</p> : <></>}
                                                         </div>
                                                       </Link>
                                                     <div className="flex justify-between">
@@ -157,7 +157,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                             </div>
                         )
                     })
-                  }                            
+                  }
               </div>
         </div>
       </div>
