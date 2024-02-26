@@ -154,7 +154,7 @@ export const APP_INFO = new Map([
         name: "Qrcode",
         icon: qrcodeLogo,
         route: '/qrcode/home'
-    }],    
+    }],
     /* Ứng dụng Quản lý ngân sách */
     ['5fe58c9b95db3c6e1534ec78', {
         key: "5fe58c9b95db3c6e1534ec78",
