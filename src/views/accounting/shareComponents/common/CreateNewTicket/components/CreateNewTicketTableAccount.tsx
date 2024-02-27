@@ -40,13 +40,13 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCustomerDebitValue,
 	});
-	const [searchContractValue, setSearchContractValue] = useState(
-		initialValues?.contract || ""
-	);
-	const { listContract } = useQueryListContract({
-		limit: LIMIT_DROPDOWN,
-		keyword: searchContractValue,
-	});
+	// const [searchContractValue, setSearchContractValue] = useState(
+	// 	initialValues?.contract || ""
+	// );
+	// const { listContract } = useQueryListContract({
+	// 	limit: LIMIT_DROPDOWN,
+	// 	keyword: searchContractValue,
+	// });
 	const [searchBudgetWorkValue, setSearchBudgetWorkValue] = useState(
 		initialValues?.budgetWork || ""
 	);

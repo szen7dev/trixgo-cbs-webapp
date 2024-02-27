@@ -65,7 +65,7 @@ type Props = {
 };
 
 // Hàm trả về icon app
-export const getIconApp = (salesChannel: any) => {
+export const getIconApp = (salesChannel: number) => {
   switch (salesChannel) {
     case 1:
       return offlineChannelIcon
@@ -948,7 +948,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 })
               )
             }
-          />            
+          />
 
           <DropdownSearchableV2
             reset={reset}
@@ -1038,7 +1038,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             }
           /> */}
         </div>
-        
+
         <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
           <div className={"flex gap-7 items-center justify-center mr-2"}>
             <div className="flex gap-2 items-center">
@@ -1136,7 +1136,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   Tải Phân loại doanh số
                 </button>
               )}
-              
+
               {( fnbAccessData.includes(`${user?.email}`)) && (
                 <button onClick={handleExportExcel22} title="Tải dữ liệu Excel">
                   Tải Khách hàng

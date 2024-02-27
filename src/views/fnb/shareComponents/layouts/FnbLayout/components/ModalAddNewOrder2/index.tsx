@@ -2,8 +2,7 @@
  * Libraries
  */
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Formik, Form, ErrorMessage, Field } from "formik";
-import { useHistory } from 'react-router-dom';
+import { Formik, Form, ErrorMessage } from "formik";
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
@@ -11,10 +10,6 @@ import { formatNumberMoney } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
 import { useQueryClient } from 'react-query';
-
-/**
- * Hooks, Typings
- */
 
 /**
  * Components, Assets
@@ -25,7 +20,6 @@ import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import IconSearch from "assets/images/icons8-search-96 1.svg";
 import beverageIcon from "assets/images/icons8-beverage.png";
-import "react-day-picker/lib/style.css";
 import { DropdownSearchable, Loader } from "shareComponents/common";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
@@ -33,6 +27,8 @@ import { convertObToUrl } from "utils";
 import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
 import { ItemInCartMenu } from "./itemInCartDetail";
 import { useDoctype } from "services/hooks/items/useDoctype";
+
+import "react-day-picker/lib/style.css";
 
 interface InitialValues {
   fundaID: string,
@@ -60,8 +56,8 @@ type Props = {
 type DropdownSearchableHandle = React.ElementRef<typeof DropdownSearchable>;
 
 const listPayment = [
-  {_id: 1, name: 'Tiền mặt'},
-  {_id: 2, name: 'Chuyển khoản'},
+  { _id: 1, name: 'Tiền mặt' },
+  { _id: 2, name: 'Chuyển khoản' },
 ]
 
 export const ModalAddNewOrder2: FC<Props> = () => {
@@ -71,6 +67,22 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const { closeModal } = useModal();
   const { current: socket }: any = useSocket(); // Cấu trúc khai báo Socket
   const { user } = useAuth();
+
+  // Lĩnh vực
+  const { list: listDoctypes, isLoading: isListDoctypeLoading } = useDoctype({
+      params: {
+          type: 3,
+      },
+      isFetchList: true
+  });
+
+  // Kênh bán hàng
+  const { list: listChannelDoctype, isLoading: isListChannelLoading } = useDoctype({
+      params: {
+          type: 24,
+      },
+      isFetchList: true
+  });
 
   const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
   const [searchContact, setSearchContact] = useState('');
@@ -110,24 +122,25 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const [affiliateID, setAffiliateID] = useState("");
   const [businessID, setBusinessID] = useState("");
   const [channelID, setChannelID] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("2");
   const setTypingTimeoutVoucherRef: any = useRef(null);
 
-  console.log("Rendering...")
+  const { list: contacts } = useContact({
+    params: { keyword: searchContact },
+    isFetchList: true,
+  })
 
-  const { list: listDoctypes } = useDoctype({
-      params: {
-          type: 3,
-      },
-      isFetchList: true
-  });
+  useEffect(() => {
+    if (channelID || !listChannelDoctype.length) return;
 
-  const { list: listChannelDoctype } = useDoctype({
-      params: {
-          type: 24,
-      },
-      isFetchList: true
-  });
+    setChannelID(listChannelDoctype[0]?._id)
+  }, [channelID, listChannelDoctype])
+
+  useEffect(() => {
+    if (businessID || !listDoctypes.length) return;
+
+    setBusinessID(listDoctypes[0]?._id)
+  }, [businessID, listDoctypes])
 
   useEffect(() => {
     const fetchFundas = async () => {
@@ -292,11 +305,6 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     }
     setProductsInCart(newProducts);
   };
-
-  const { list: contacts } = useContact({
-    params: { keyword: searchContact },
-    isFetchList: true,
-  })
 
   const onSubmitFilterData = async (values: any) => {
     try {
@@ -632,15 +640,12 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     setVoucherStatus("");
   }
 
-  ////
   const [voucherId, setVoucherId] = useState("");
   const [voucherInput, setVoucherInput] = useState("");
   const [voucherName, setVoucherName] = useState("");
   const [voucherStatus, setVoucherStatus] = useState("");
   const [voucherTotalPrice, setVoucherTotalPrice] = useState(0);
   const [voucherErrorStatus, setVoucherErrorStatus] = useState(false);
-
-  ///
 
   const fetchVoucher = async (sign: string, customerID: string, noUpdateTotal = false, totalMoneyTmp?: number) => {
     if (!sign) {
@@ -740,10 +745,10 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     shiftID,
     customerID: "",
     affiliateID: "",
-    businessID: "",
-    channelID: "",
+    businessID,
+    channelID,
+    paymentMethod,
     seasons: 1,
-    paymentMethod: "1",
     sources: 1,
     salesChannel: 1,
     shippingFee: 0,
@@ -754,9 +759,12 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     appOrderSign: "",
   }
 
+  if (loading || isListDoctypeLoading || isListChannelLoading) {
+      return <Loader className="border-primary" />
+  }
+
   return (
     <>
-      {(loading) && <Loader className="border-primary" />}
       <div className={"flex flex-col"}>
         <div className={"flex w-full py-3 px-3 border-b"}>
           <h4 className={"flex-1 text-lg font-bold text-left"}>Đơn hàng</h4>
@@ -972,14 +980,15 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                   setChannelID(id);
                                   setFieldValue("channelID", id);
                                   setService(service);
-                                }}
-                                onClearData={() => {
-                                  setFieldValue("channelID", "")
+
+                                  // Set payment method
+                                  setPaymentMethod(service);
+                                  setFieldValue("paymentMethod", +service);
                                 }}
                                 placeholder={"Kênh bán"}
                                 className={"max-w-full h-full flex-1"}
                                 focusedClass={"border-b border-primary"}
-                                allowClearValueSingleInput={true}
+                                allowClearValueSingleInput={false}
                                 showTriangle={false}
                                 maxWidthInput="max-w-full"
                                 renderSelectedItem={(item: any) => (
@@ -1018,13 +1027,10 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                   setPaymentMethod(value.id);
                                   setFieldValue("paymentMethod", value.id);
                                 }}
-                                onClearData={() => {
-                                  setFieldValue("paymentMethod", "")
-                                }}
                                 placeholder={"Thanh toán"}
                                 className={"max-w-full h-full flex-1"}
                                 focusedClass={"border-b border-primary"}
-                                allowClearValueSingleInput={true}
+                                allowClearValueSingleInput={false}
                                 showTriangle={false}
                                 maxWidthInput="max-w-full"
                                 renderSelectedItem={(item: any) => (
@@ -1040,6 +1046,10 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                   id: "value",
                                   text: "label",
                                 }}
+                                valueControlled={{
+                                  label: listPayment[+paymentMethod - 1].name,
+                                  value: listPayment[+paymentMethod - 1]._id,
+                                }}
                                 initialValue={{
                                   label: listPayment[0].name,
                                   value: listPayment[0]._id,
@@ -1053,280 +1063,6 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                               />
                             </div>
                           </div>
-                        </div>
-
-                        <div className="justify-between pt-1 hidden">
-                          <div>
-                            <span>Phân loại kênh bán hàng</span>
-                            <div>
-                              <FormControl sx={{ marginTop: "-5px" }} >
-                                <RadioGroup
-                                  row
-                                  aria-labelledby="demo-row-radio-buttons-group-label"
-                                  name="salesChannel"
-                                >
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="1"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 1);
-                                          setFieldValue("paymentMethod", "1");
-                                          setService("1");
-                                        }}
-                                        checked={(values.salesChannel === 1) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Offline</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="2"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 2);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 2) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]" title="Grab Food">Grab F</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="3"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 3);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 3) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]" title="Shopee Food">Shopee F</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="4"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 4);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 4) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Gojek</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="5"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 5);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 5) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Baemin</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="6"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 6);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 6) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Loship</span>}
-                                  />
-                                  <FormControlLabel
-                                    className="border-r mr-1.5"
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="7"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 7);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 7) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px] mr-1.5">Bee</span>}
-                                  />
-
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    title="Sàn TikTok Shop"
-                                    value="8"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 8);
-                                          setFieldValue("paymentMethod", "2")
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 8) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">TikTok</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    title="Sàn Shopee (không phải Shopee Food)"
-                                    value="9"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 9);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 9) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Shopee S</span>}
-                                  />
-
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    title="Sàn Lazada"
-                                    value="10"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 10);
-                                          setFieldValue("paymentMethod", "2")
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 10) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Lazada</span>}
-                                  />
-
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    title="Sàn Reels"
-                                    value="11"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 11);
-                                          setFieldValue("paymentMethod", "2")
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 11) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Reels</span>}
-                                  />
-
-                                </RadioGroup>
-                              </FormControl>
-                            </div>
-                            <ErrorMessage
-                              name="salesChannel"
-                              component="div"
-                              className="font-normal text-xs text-negative pl-3"
-                            />
-                          </div>
-                          {/* <div>
-                            <span>Phương thức thanh toán</span>
-                            <div>
-                              <FormControl sx={{ marginTop: "-5px" }} >
-                                <RadioGroup
-                                  row
-                                  aria-labelledby="demo-row-radio-buttons-group-label"
-                                  name="paymentMethod"
-                                >
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", fontSize: "13px" }}
-                                    value="1"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("paymentMethod", "1")}
-                                        checked={(values.paymentMethod === "1") ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Tiền mặt</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
-                                    value="2"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("paymentMethod", "2")}
-                                        checked={(values.paymentMethod === "2") ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Chuyển khoản</span>}
-                                  />
-                                </RadioGroup>
-                              </FormControl>
-                            </div>
-                            <ErrorMessage
-                              name="paymentMethod"
-                              component="div"
-                              className="font-normal text-xs text-negative pl-3"
-                            />
-                          </div> */}
                         </div>
                       </div>
                       <div className="flex justify-between gap-2 border-t-0.5 border-b-0.5 px-3">
