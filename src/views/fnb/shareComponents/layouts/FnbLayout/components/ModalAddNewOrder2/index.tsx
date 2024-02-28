@@ -85,8 +85,8 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   });
 
   const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
-  const [searchContact, setSearchContact] = useState('');
-  const [searchFunda, setSearchFunda] = useState('');
+  const [searchContact, setSearchContact] = useState("");
+  const [searchFunda, setSearchFunda] = useState("");
   const [discountAndSales, setDiscountAndSales] = useState({
     discount: 0,
     discountPercent: 0,
@@ -104,7 +104,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const [productsInCart, setProductsInCart] = useState<any>([]);
 
   const [productIsParent, setProductIsParent] = useState<any>([]);
-  const [indexParentID, setIndexParentID] = useState('');
+  const [indexParentID, setIndexParentID] = useState("");
 
   const [service, setService] = useState("1");
   const [loading, setLoading] = useState(false);
@@ -118,6 +118,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const [credit, setCredit] = useState(0);
   const [creditTemp, setCreditTemp] = useState(0);
   const [creditInput, setCreditInput] = useState(0);
+
   const [customerID, setCustomerID] = useState("");
   const [affiliateID, setAffiliateID] = useState("");
   const [businessID, setBusinessID] = useState("");
@@ -125,7 +126,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const [paymentMethod, setPaymentMethod] = useState("2");
   const setTypingTimeoutVoucherRef: any = useRef(null);
 
-  const { list: contacts } = useContact({
+  const { list: contacts, isLoading: isListContactLoading } = useContact({
     params: { keyword: searchContact },
     isFetchList: true,
   })
@@ -141,6 +142,12 @@ export const ModalAddNewOrder2: FC<Props> = () => {
 
     setBusinessID(listDoctypes[0]?._id)
   }, [businessID, listDoctypes])
+
+  useEffect(() => {
+    if (customerID || !contacts.length) return;
+
+    setCustomerID(contacts[0]?._id)
+  }, [customerID, contacts])
 
   useEffect(() => {
     const fetchFundas = async () => {
@@ -365,23 +372,14 @@ export const ModalAddNewOrder2: FC<Props> = () => {
         offer: voucherTotalPrice.toString(),
         voucherID: voucherId || ""
       }
-      // console.log({ dataAddNewOrder })
 
       const { data, status } = await API.post(
         `/api/fnb/orders?type=2`,
         dataAddNewOrder
       );
-      // console.log({ data, status })
 
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if (data.error) return toast.warning(data.data.message);
-
-      // console.log({
-      //   isConnect: socket.connected,
-      //   companyID: user?.company?._id,
-      //   fundaID: dataAddNewOrder.fundaID,
-      //   orderInfo: data?.data,
-      // });
 
       // Bắn Socket lên Server
       socket?.emit('FNB_CSS_ADD_NEW_ORDER', {
@@ -743,8 +741,8 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const initialValues: InitialValues = {
     fundaID,
     shiftID,
-    customerID: "",
-    affiliateID: "",
+    customerID,
+    affiliateID,
     businessID,
     channelID,
     paymentMethod,
@@ -759,7 +757,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     appOrderSign: "",
   }
 
-  if (loading || isListDoctypeLoading || isListChannelLoading) {
+  if (loading || isListDoctypeLoading || isListChannelLoading || isListContactLoading) {
       return <Loader className="border-primary" />
   }
 
@@ -773,6 +771,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
           </div>
         </div>
         <Formik
+          enableReinitialize={true}
           validationSchema={addOrderSchema}
           initialValues={initialValues}
           onSubmit={onSubmitFilterData}
@@ -825,6 +824,11 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                   id: "value",
                                   text: "label",
                                 }}
+                                initialValue={
+                                  fundas?.length ? {
+                                  label: `${fundas[0]?.sign}.${fundas[0]?.name}`,
+                                  value: fundas[0]?._id
+                                } : {}}
                                 inlineSearch={true}
                               />
                               <ErrorMessage
@@ -862,6 +866,11 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                   label: `${shift.funda.sign}.${shift.name}`,
                                   value: shift._id,
                                 }))}
+                                initialValue={
+                                  shifts?.length ? {
+                                  label: `${shifts[0]?.funda?.sign}-${shifts[0]?.name}`,
+                                  value: shifts[0]?._id
+                                } : {}}
                                 formatItem={{
                                   id: "value",
                                   text: "label",
@@ -910,6 +919,11 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                   label: `${contact.name}-${contact.phone}`,
                                   value: contact._id,
                                 }))}
+                                initialValue={
+                                  contacts?.length ? {
+                                  label: `${contacts[0]?.name}-${contacts[0]?.phone}`,
+                                  value: contacts[0]?._id
+                                } : {}}
                                 formatItem={{
                                   id: "value",
                                   text: "label",
