@@ -815,7 +815,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                     })}
                                 </div> */}
                                 <div className={"flex items-center border-t py-3 px-6"}>
-                                    <label>
+                                    {/* <label>
                                         <img
                                             src={iconAttach}
                                             alt="Icon attach"
@@ -829,7 +829,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                             multiple
                                             onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files)}
                                         />
-                                    </label>
+                                    </label> */}
                                     <div className={"flex items-center ml-4"}>
                                         <input
                                             type="checkbox"
