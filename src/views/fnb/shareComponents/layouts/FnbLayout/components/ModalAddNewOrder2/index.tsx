@@ -1,15 +1,13 @@
 /**
  * Libraries
  */
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState, useMemo } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
-import { formatNumberMoney } from 'utils/converter';
-import { useSocket } from "services/hooks/useSocket";
-import { useAuth } from 'services/hooks/auth/useAuth';
 import { useQueryClient } from 'react-query';
+import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
 
 /**
  * Components, Assets
@@ -23,10 +21,12 @@ import beverageIcon from "assets/images/icons8-beverage.png";
 import { DropdownSearchable, Loader } from "shareComponents/common";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
-import { convertObToUrl } from "utils";
-import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
 import { ItemInCartMenu } from "./itemInCartDetail";
 import { useDoctype } from "services/hooks/items/useDoctype";
+import { convertObToUrl } from "utils";
+import { formatNumberMoney } from "utils/converter";
+import { useSocket } from "services/hooks/useSocket";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 import "react-day-picker/lib/style.css";
 
@@ -65,7 +65,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const dropdownShiftsRef = useRef<DropdownSearchableHandle>(null);
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
-  const { current: socket }: any = useSocket(); // Cấu trúc khai báo Socket
+  const { current: socket }: any = useSocket();
   const { user } = useAuth();
 
   // Lĩnh vực
@@ -76,7 +76,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
       isFetchList: true
   });
 
-  // Kênh bán hàng
+  // Danh sách kênh bán hàng
   const { list: listChannelDoctype, isLoading: isListChannelLoading } = useDoctype({
       params: {
           type: 24,
@@ -106,7 +106,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const [productIsParent, setProductIsParent] = useState<any>([]);
   const [indexParentID, setIndexParentID] = useState("");
 
-  const [service, setService] = useState("1");
+  const [service, setService] = useState("2");
   const [loading, setLoading] = useState(false);
   const [isUseCredit, setIsUseCredit] = useState(false);
   const [isEditCredit, setIsEditCredit] = useState(false);
@@ -131,24 +131,21 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     isFetchList: true,
   })
 
+  // Set default channel
   useEffect(() => {
     if (channelID || !listChannelDoctype.length) return;
 
     setChannelID(listChannelDoctype[0]?._id)
   }, [channelID, listChannelDoctype])
 
+  // Set default business
   useEffect(() => {
     if (businessID || !listDoctypes.length) return;
 
     setBusinessID(listDoctypes[0]?._id)
   }, [businessID, listDoctypes])
 
-  useEffect(() => {
-    if (customerID || !contacts.length) return;
-
-    setCustomerID(contacts[0]?._id)
-  }, [customerID, contacts])
-
+  // Tìm kiếm cơ sở (fundaID) -> reset danh sách ca làm việc
   useEffect(() => {
     const fetchFundas = async () => {
       const response = await API.get(
@@ -174,6 +171,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     fetchFundas();
   }, [searchFunda]);
 
+  // Set ca làm việc và danh mục sản phẩm theo cơ sở (fundaID)
   useEffect(() => {
     if (!fundaID) return;
 
@@ -194,6 +192,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
 
       if (status !== 200) return;
       const shiftsList = data.listRecords || [];
+
       if (shiftsList && shiftsList.length) {
         dropdownShiftsRef?.current?.setValueRef({
           label: shiftsList[0].name,
@@ -225,6 +224,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
 
   }, [fundaID])
 
+  // Set list vouchers khi chọn mã khách hàng
   useEffect(() => {
     if(!customerID) return;
 
@@ -233,14 +233,12 @@ export const ModalAddNewOrder2: FC<Props> = () => {
         const response: any = await API.get(
           `/api/fnb/vouchers?customerID=${customerID}`,
         );
-        // console.log({ response })
         const { data, status } = response?.data;
-        // console.log({ data, status })
         if (status !== 200) return;
 
         setVouchers(data.listRecords);
       } catch(err) {
-        console.error(err)
+        toast.error(err.message);
       }
     }
 
@@ -250,41 +248,41 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   /**
    * Tìm kiếm sản phẩm của Cơ sở/Điểm bán
    */
-  const fetchProducts = async () => {
-    const response: any = await API.get(
-      `/api/item/goods?${convertObToUrl({
-        type: 1,
-        status: 1,
-        limit: 50,
-        keyword: keywordSearchProduct,
-        populates: JSON.stringify({
-          path: 'images',
-        }),
-        parentID: indexParentID,
-        fundaID,
-      })}`,
-    );
-    const { data, status } = response?.data;
-    if (status !== 200) return;
-
-    const response2 = await API.get(
-      `/api/item/goods?type=2&status=1&usage=2&limit=50&fundaID=${fundaID}`,
-    );
-
-    const productsAsync = data.listRecords?.map?.(async (product: any) => {
-      return {
-        ...product,
-        variants: response2?.data?.data?.listRecords,
-      }
-    })
-    const products = await Promise.all(productsAsync);
-
-    setProducts(products);
-  };
-
   useEffect(() => {
+    const fetchProducts = async () => {
+      const response: any = await API.get(
+        `/api/item/goods?${convertObToUrl({
+          type: 1,
+          status: 1,
+          limit: 50,
+          keyword: keywordSearchProduct,
+          populates: JSON.stringify({
+            path: 'images',
+          }),
+          parentID: indexParentID,
+          fundaID,
+        })}`,
+      );
+      const { data, status } = response?.data;
+      if (status !== 200) return;
+
+      const response2 = await API.get(
+        `/api/item/goods?type=2&status=1&usage=2&limit=50&fundaID=${fundaID}`,
+      );
+
+      const productsAsync = data.listRecords?.map?.(async (product: any) => {
+        return {
+          ...product,
+          variants: response2?.data?.data?.listRecords,
+        }
+      })
+      const products = await Promise.all(productsAsync);
+
+      setProducts(products);
+    };
+
     fetchProducts();
-  }, [keywordSearchProduct, indexParentID, fundaID]); // Hiepnh: Bổ sung thêm trường này fundaID
+  }, [keywordSearchProduct, indexParentID, fundaID]);
 
   useEffect(() => {
     calTotalMoney();
@@ -314,12 +312,13 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   };
 
   const onSubmitFilterData = async (values: any) => {
+    if (!productsInCart || !productsInCart.length) {
+      return toast.warning('Vui lòng chọn sản phẩm');
+    };
+
     try {
-      if (!productsInCart || productsInCart.length === 0) {
-        toast.warning('Vui lòng chọn sản phẩm');
-        return;
-      };
       setLoading(true);
+
       for (const value in values) {
         values[value] = values[value].toString();
       }
@@ -342,6 +341,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
           default:
             break;
         }
+
         return {
           // ...p, // Lấy tất cả các field
           productID: p._id,
@@ -358,12 +358,27 @@ export const ModalAddNewOrder2: FC<Props> = () => {
         }
       })
 
-      const realCredit = isEditCredit ? creditInput : (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+      // const realCredit = isEditCredit ? creditInput : (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+
+      let realCredit = 0;
+
+      if (isEditCredit) {
+        realCredit = creditInput;
+      } else if ((totalMoney - discountAndSales.discount - discountAndSales.sales) > credit) {
+        realCredit = credit;
+      } else {
+        realCredit = totalMoney - discountAndSales.discount - discountAndSales.sales
+      }
 
       const dataAddNewOrder: any = {
         ...values,
         fundaID,
         shiftID,
+        customerID,
+        affiliateID,
+        businessID,
+        channelID,
+        paymentMethod,
         products,
         total: `${totalMoney}`,
         discount: `${discountAndSales.discount}`,
@@ -388,12 +403,11 @@ export const ModalAddNewOrder2: FC<Props> = () => {
         orderInfo: data?.data,
       })
 
-      queryClient.refetchQueries('fnb-order-list');
       // history.push(`/fnb/home/${data?.data?._id}/print/3`);
 
-      // return toast.success('Tạo đơn thành công',{
-      //   position: toast.POSITION.BOTTOM_RIGHT,
-      // });
+      toast.success('Tạo đơn thành công, đang làm mới danh sách đơn...',{
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
@@ -403,6 +417,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     } finally {
       setLoading(false);
       closeModal();
+      queryClient.refetchQueries('fnb-order-list');
     }
   };
 
@@ -604,6 +619,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
 
       return prev += (price * product.quantity)
     }, 0)
+
     setTotalMoney(amount);
 
     const totalVoucher = await fetchVoucher(voucherInput, customerID, true, amount);
@@ -757,840 +773,836 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     appOrderSign: "",
   }
 
-  if (loading || isListDoctypeLoading || isListChannelLoading || isListContactLoading) {
+  const isLoading = useMemo(() => {
+    return loading || isListDoctypeLoading || isListChannelLoading || isListContactLoading
+  }, [loading, isListDoctypeLoading, isListChannelLoading, isListContactLoading])
+
+  if (isLoading) {
       return <Loader className="border-primary" />
   }
 
   return (
-    <>
-      <div className={"flex flex-col"}>
-        <div className={"flex w-full py-3 px-3 border-b"}>
-          <h4 className={"flex-1 text-lg font-bold text-left"}>Đơn hàng</h4>
-          <div className={"flex items-center justify-center cursor-pointer"}>
-            <Close onClick={closeModal} />
-          </div>
+    <div className={"flex flex-col"}>
+      <div className={"flex w-full py-3 px-3 border-b"}>
+        <h4 className={"flex-1 text-lg font-bold text-left"}>Đơn hàng</h4>
+        <div className={"flex items-center justify-center cursor-pointer"}>
+          <Close onClick={closeModal} />
         </div>
-        <Formik
-          enableReinitialize={true}
-          validationSchema={addOrderSchema}
-          initialValues={initialValues}
-          onSubmit={onSubmitFilterData}
-        >
-          {(formik) => {
-            const { setFieldValue, values } = formik;
-            return (
-              <Form>
-                <div className={"t-add-new-task-dialog-select"}>
-                  <div className="flex">
-                    <div className="boxlef w-2/3">
-                      <div className="px-3">
-                        <div className={"flex"}>
-                          <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Cơ sở</div>
-                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                              <DropdownSearchable
-                                ref={dropdownFundaRef}
-                                onchangeValue={(value: any) => {
-                                  setFundaID(value?.id)
-                                  setFieldValue("fundaID", value?.id);
-                                }}
-                                onClearData={() => {
-                                  setFundaID("")
-                                  setFieldValue("fundaID", "");
-                                }}
-                                onSearchInputChange={
-                                  debounce(
-                                    (value) => setSearchFunda(value),
-                                    200)
-                                }
-                                className={"max-w-full h-full flex-1"}
-                                placeholder="Cơ sở"
-                                isMultiple={false}
-                                allowClearValueSingleInput={true}
-                                showTriangle={false}
-                                maxWidthInput="max-w-full"
-                                renderSelectedItem={(item: any) => (
-                                  <div
-                                    className="max-w-full"
-                                  >
-                                    <p className={"truncate"}>{item.text}</p>
-                                  </div>
-                                )}
-                                data={fundas.map((funda: any) => ({
-                                  label: `${funda.sign}.${funda.name}`,
-                                  value: funda._id,
-                                }))}
-                                formatItem={{
-                                  id: "value",
-                                  text: "label",
-                                }}
-                                initialValue={
-                                  fundas?.length ? {
-                                  label: `${fundas[0]?.sign}.${fundas[0]?.name}`,
-                                  value: fundas[0]?._id
-                                } : {}}
-                                inlineSearch={true}
+      </div>
+      <Formik
+        enableReinitialize={false}
+        validationSchema={addOrderSchema}
+        initialValues={initialValues}
+        onSubmit={onSubmitFilterData}
+      >
+        {(formik) => {
+          const { setFieldValue, values } = formik;
+          return (
+            <Form>
+              <div className={"t-add-new-task-dialog-select"}>
+                <div className="flex">
+                  {/* left */}
+                  <div className="boxlef w-2/3">
+                    <div className="px-3">
+                      <div className={"flex"}>
+                        <div className={"w-1/3 flex items-start"}>
+                          <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Cơ sở</div>
+                          <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                            <DropdownSearchable
+                              ref={dropdownFundaRef}
+                              onchangeValue={(value: any) => {
+                                setFundaID(value?.id)
+                                setFieldValue("fundaID", value?.id);
+                              }}
+                              onClearData={() => {
+                                setFundaID("")
+                                setFieldValue("fundaID", "");
+                              }}
+                              onSearchInputChange={
+                                debounce(
+                                  (value) => setSearchFunda(value),
+                                  200)
+                              }
+                              className={"max-w-full h-full flex-1"}
+                              placeholder="Cơ sở"
+                              isMultiple={false}
+                              allowClearValueSingleInput={true}
+                              showTriangle={false}
+                              maxWidthInput="max-w-full"
+                              renderSelectedItem={(item: any) => (
+                                <div className="max-w-full">
+                                  <p className={"truncate"}>{item.text}</p>
+                                </div>
+                              )}
+                              data={fundas.map((funda: any) => ({
+                                label: `${funda.sign}.${funda.name}`,
+                                value: funda._id,
+                              }))}
+                              formatItem={{
+                                id: "value",
+                                text: "label",
+                              }}
+                              initialValue={
+                                fundas?.length ? {
+                                label: `${fundas[0]?.sign}.${fundas[0]?.name}`,
+                                value: fundas[0]?._id
+                              } : {}}
+                              inlineSearch={true}
+                            />
+                            <ErrorMessage
+                              name="fundaID"
+                              component="div"
+                              className="font-normal text-xs text-negative pl-3 absolute"
+                            />
+                          </div>
+                        </div>
+                        <div className={"w-1/3 flex items-start"}>
+                          <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5"}>Ca làm</div>
+                          <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                            <DropdownSearchable
+                              ref={dropdownShiftsRef}
+                              onchangeValue={(value: any) => {
+                                setShiftID(value?.id)
+                                setFieldValue("shiftID", value?.id);
+                              }}
+                              onClearData={() => {
+                                setShiftID("")
+                                setFieldValue("shiftID", "");
+                              }}
+                              className={"max-w-full h-full flex-1"}
+                              placeholder="Chọn ca làm"
+                              isMultiple={false}
+                              allowClearValueSingleInput={true}
+                              showTriangle={false}
+                              maxWidthInput="max-w-full"
+                              renderSelectedItem={(item: any) => (
+                                <div className="max-w-full">
+                                  <p className={"truncate"}>{item.text}</p>
+                                </div>
+                              )}
+                              data={shifts?.map((shift: any) => ({
+                                label: `${shift.funda.sign}.${shift.name}`,
+                                value: shift._id,
+                              }))}
+                              initialValue={
+                                shifts?.length ? {
+                                label: `${shifts[0]?.funda?.sign}-${shifts[0]?.name}`,
+                                value: shifts[0]?._id
+                              } : {}}
+                              formatItem={{
+                                id: "value",
+                                text: "label",
+                              }}
+                              inlineSearch={true}
+                            />
+                            <ErrorMessage
+                              name="shiftID"
+                              component="div"
+                              className="font-normal text-xs text-negative pl-3"
+                            />
+                          </div>
+                        </div>
+                        <div className={"w-1/3 flex items-start"}>
+                          <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Mã khách</div>
+                          <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                            <DropdownSearchable
+                              onchangeValue={(value: any) => {
+                                setCustomerID(value.id);
+                                setFieldValue("customerID", value.id);
+                                setFieldValue("name", `Đơn hàng ${value.label}`);
+
+                                resetCredit(value);
+                                fetchCredit(value.id, false);
+                              }}
+                              onClearData={() => {
+                                resetCredit();
+                                setFieldValue("customerID", "")
+                              }}
+                              onSearchInputChange={
+                                debounce(
+                                  (value) => setSearchContact(value),
+                                  200)
+                              }
+                              placeholder={"Mã khách hàng"}
+                              className={"max-w-full h-full flex-1"}
+                              focusedClass={"border-b border-primary"}
+                              allowClearValueSingleInput={true}
+                              showTriangle={false}
+                              maxWidthInput="max-w-full"
+                              renderSelectedItem={(item: any) => (
+                                <div className="max-w-full">
+                                  <p className={"truncate"}>{item.text}</p>
+                                </div>
+                              )}
+                              data={contacts.map(contact => ({
+                                label: `${contact.name}-${contact.phone}`,
+                                value: contact._id,
+                              }))}
+                              formatItem={{
+                                id: "value",
+                                text: "label",
+                              }}
+                              inlineSearch={true}
+                            />
+                            <ErrorMessage
+                              name="customerID"
+                              component="div"
+                              className="font-normal text-xs text-negative pl-3"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={"flex"}>
+                        <div className={"w-1/3 flex items-start"}>
+                          <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Lĩnh vực</div>
+                          <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                            <DropdownSearchable
+                              onchangeValue={(value: any) => {
+                                setBusinessID(value.id);
+                                setFieldValue("businessID", value.id);
+                              }}
+                              onClearData={() => {
+                                setFieldValue("businessID", "")
+                              }}
+                              placeholder={"Lĩnh vực"}
+                              className={"max-w-full h-full flex-1"}
+                              focusedClass={"border-b border-primary"}
+                              allowClearValueSingleInput={true}
+                              showTriangle={false}
+                              maxWidthInput="max-w-full"
+                              renderSelectedItem={(item: any) => (
+                                <div className="max-w-full">
+                                  <p className={"truncate"}>{item.text}</p>
+                                </div>
+                              )}
+                              data={listDoctypes.map(item => ({
+                                label: `${item.name}`,
+                                value: item._id,
+                              }))}
+                              formatItem={{
+                                id: "value",
+                                text: "label",
+                              }}
+                              initialValue={
+                                listDoctypes?.length ? {
+                                label: listDoctypes[0].name,
+                                value: listDoctypes[0]._id
+                              } : {}}
+                              inlineSearch={true}
+                            />
+                            <ErrorMessage
+                              name="businessID"
+                              component="div"
+                              className="font-normal text-xs text-negative pl-3"
+                            />
+                          </div>
+                        </div>
+
+                        <div className={"w-1/3 flex items-start"}>
+                          <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Kênh bán</div>
+                          <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                            <DropdownSearchable
+                              onchangeValue={(value: any) => {
+                                const [id, service] = value.id.split("_");
+                                setChannelID(id);
+                                setFieldValue("channelID", id);
+                                setService(service);
+
+                                // Set payment method
+                                setPaymentMethod(service);
+                                setFieldValue("paymentMethod", +service);
+                              }}
+                              placeholder={"Kênh bán"}
+                              className={"max-w-full h-full flex-1"}
+                              focusedClass={"border-b border-primary"}
+                              allowClearValueSingleInput={false}
+                              showTriangle={false}
+                              maxWidthInput="max-w-full"
+                              renderSelectedItem={(item: any) => (
+                                <div className="max-w-full">
+                                  <p className={"truncate"}>{item.text}</p>
+                                </div>
+                              )}
+                              data={listChannelDoctype.map((item: any) => ({
+                                label: `${item.name}`,
+                                value: `${item._id}_${item.amount}`,
+                              }))}
+                              formatItem={{
+                                id: "value",
+                                text: "label",
+                              }}
+                              initialValue={
+                                listChannelDoctype?.length ? {
+                                label: listChannelDoctype[0].name,
+                                value: `${listChannelDoctype[0]._id}_${listChannelDoctype[0].amount}`
+                              } : {}}
+                              inlineSearch={true}
+                            />
+                            <ErrorMessage
+                              name="channelID"
+                              component="div"
+                              className="font-normal text-xs text-negative pl-3"
+                            />
+                          </div>
+                        </div>
+
+                        <div className={"w-1/3 flex items-start"}>
+                          <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Thanh toán</div>
+                          <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                            <DropdownSearchable
+                              onchangeValue={(value: any) => {
+                                setPaymentMethod(value.id);
+                                setFieldValue("paymentMethod", value.id);
+                              }}
+                              placeholder={"Thanh toán"}
+                              className={"max-w-full h-full flex-1"}
+                              focusedClass={"border-b border-primary"}
+                              allowClearValueSingleInput={false}
+                              showTriangle={false}
+                              maxWidthInput="max-w-full"
+                              renderSelectedItem={(item: any) => (
+                                <div className="max-w-full">
+                                  <p className={"truncate"}>{item.text}</p>
+                                </div>
+                              )}
+                              data={listPayment.map(item => ({
+                                label: item.name,
+                                value: item._id,
+                              }))}
+                              formatItem={{
+                                id: "value",
+                                text: "label",
+                              }}
+                              valueControlled={{
+                                label: listPayment[+paymentMethod - 1].name,
+                                value: listPayment[+paymentMethod - 1]._id,
+                              }}
+                              initialValue={{
+                                label: listPayment[0].name,
+                                value: listPayment[0]._id,
+                              }}
+                              inlineSearch={true}
+                            />
+                            <ErrorMessage
+                              name="paymentMethod"
+                              component="div"
+                              className="font-normal text-xs text-negative pl-3"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-between gap-2 border-t-0.5 border-b-0.5 px-3">
+                      <div className="flex justify-between gap-2 w-1/2">
+                        <div className={"flex w-2/10 py-4"}>
+                          <div className={"flex items-baseline"}>
+                            <div className={"h-full text-left text-gray-500 flex items-center mr-2"}>Tên (*)</div>
+                            <div className={"w-full flex-1"}>
+                              <input
+                                placeholder="Tên"
+                                type="text"
+                                className="border-0 flex-grow outline-none px-3 mt-0.5 w-3/4"
+                                onChange={(event) => setFieldValue("name", event.target.value)}
+                                value={values.name}
                               />
                               <ErrorMessage
-                                name="fundaID"
+                                name="name"
                                 component="div"
                                 className="font-normal text-xs text-negative pl-3 absolute"
                               />
                             </div>
                           </div>
-                          <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5"}>Ca làm</div>
-                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                              <DropdownSearchable
-                                ref={dropdownShiftsRef}
-                                onchangeValue={(value: any) => {
-                                  setShiftID(value?.id)
-                                  setFieldValue("shiftID", value?.id);
-                                }}
-                                onClearData={() => {
-                                  setShiftID("")
-                                  setFieldValue("shiftID", "");
-                                }}
-                                className={"max-w-full h-full flex-1"}
-                                placeholder="Chọn ca làm"
-                                isMultiple={false}
-                                allowClearValueSingleInput={true}
-                                showTriangle={false}
-                                maxWidthInput="max-w-full"
-                                renderSelectedItem={(item: any) => (
-                                  <div className="max-w-full">
-                                    <p className={"truncate"}>{item.text}</p>
-                                  </div>
-                                )}
-                                data={shifts?.map((shift: any) => ({
-                                  label: `${shift.funda.sign}.${shift.name}`,
-                                  value: shift._id,
-                                }))}
-                                initialValue={
-                                  shifts?.length ? {
-                                  label: `${shifts[0]?.funda?.sign}-${shifts[0]?.name}`,
-                                  value: shifts[0]?._id
-                                } : {}}
-                                formatItem={{
-                                  id: "value",
-                                  text: "label",
-                                }}
-                                inlineSearch={true}
-                              />
-                              <ErrorMessage
-                                name="shiftID"
-                                component="div"
-                                className="font-normal text-xs text-negative pl-3"
-                              />
-                            </div>
-                          </div>
-                          <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Mã khách</div>
-                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                              <DropdownSearchable
-                                onchangeValue={(value: any) => {
-                                  setCustomerID(value.id);
-                                  setFieldValue("customerID", value.id);
-                                  setFieldValue("name", `Đơn hàng ${value.label}`);
-                                  resetCredit(value);
-                                  fetchCredit(value.id, false);
-                                }}
-                                onClearData={() => {
-                                  resetCredit();
-                                  setFieldValue("customerID", "")
-                                }}
-                                onSearchInputChange={
-                                  debounce(
-                                    (value) => setSearchContact(value),
-                                    200)
-                                }
-                                placeholder={"Mã khách hàng"}
-                                className={"max-w-full h-full flex-1"}
-                                focusedClass={"border-b border-primary"}
-                                allowClearValueSingleInput={true}
-                                showTriangle={false}
-                                maxWidthInput="max-w-full"
-                                renderSelectedItem={(item: any) => (
-                                  <div className="max-w-full">
-                                    <p className={"truncate"}>{item.text}</p>
-                                  </div>
-                                )}
-                                data={contacts.map(contact => ({
-                                  label: `${contact.name}-${contact.phone}`,
-                                  value: contact._id,
-                                }))}
-                                initialValue={
-                                  contacts?.length ? {
-                                  label: `${contacts[0]?.name}-${contacts[0]?.phone}`,
-                                  value: contacts[0]?._id
-                                } : {}}
-                                formatItem={{
-                                  id: "value",
-                                  text: "label",
-                                }}
-                                inlineSearch={true}
-                              />
-                              <ErrorMessage
-                                name="customerID"
-                                component="div"
-                                className="font-normal text-xs text-negative pl-3"
-                              />
-                            </div>
-                          </div>
                         </div>
 
-                        <div className={"flex"}>
-                          <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Lĩnh vực</div>
-                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                              <DropdownSearchable
-                                onchangeValue={(value: any) => {
-                                  setBusinessID(value.id);
-                                  setFieldValue("businessID", value.id);
-                                }}
-                                onClearData={() => {
-                                  setFieldValue("businessID", "")
-                                }}
-                                placeholder={"Lĩnh vực"}
-                                className={"max-w-full h-full flex-1"}
-                                focusedClass={"border-b border-primary"}
-                                allowClearValueSingleInput={true}
-                                showTriangle={false}
-                                maxWidthInput="max-w-full"
-                                renderSelectedItem={(item: any) => (
-                                  <div className="max-w-full">
-                                    <p className={"truncate"}>{item.text}</p>
-                                  </div>
-                                )}
-                                data={listDoctypes.map(item => ({
-                                  label: `${item.name}`,
-                                  value: item._id,
-                                }))}
-                                formatItem={{
-                                  id: "value",
-                                  text: "label",
-                                }}
-                                initialValue={
-                                  listDoctypes?.length ? {
-                                  label: listDoctypes[0].name,
-                                  value: listDoctypes[0]._id
-                                } : {}}
-                                inlineSearch={true}
-                              />
-                              <ErrorMessage
-                                name="businessID"
-                                component="div"
-                                className="font-normal text-xs text-negative pl-3"
-                              />
-                            </div>
-                          </div>
-
-                          <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Kênh bán</div>
-                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                              <DropdownSearchable
-                                onchangeValue={(value: any) => {
-                                  const [id, service] = value.id.split("_");
-                                  setChannelID(id);
-                                  setFieldValue("channelID", id);
-                                  setService(service);
-
-                                  // Set payment method
-                                  setPaymentMethod(service);
-                                  setFieldValue("paymentMethod", +service);
-                                }}
-                                placeholder={"Kênh bán"}
-                                className={"max-w-full h-full flex-1"}
-                                focusedClass={"border-b border-primary"}
-                                allowClearValueSingleInput={false}
-                                showTriangle={false}
-                                maxWidthInput="max-w-full"
-                                renderSelectedItem={(item: any) => (
-                                  <div className="max-w-full">
-                                    <p className={"truncate"}>{item.text}</p>
-                                  </div>
-                                )}
-                                data={listChannelDoctype.map((item: any) => ({
-                                  label: `${item.name}`,
-                                  value: `${item._id}_${item.amount}`,
-                                }))}
-                                formatItem={{
-                                  id: "value",
-                                  text: "label",
-                                }}
-                                initialValue={
-                                  listChannelDoctype?.length ? {
-                                  label: listChannelDoctype[0].name,
-                                  value: `${listChannelDoctype[0]._id}_${listChannelDoctype[0].amount}`
-                                } : {}}
-                                inlineSearch={true}
-                              />
-                              <ErrorMessage
-                                name="channelID"
-                                component="div"
-                                className="font-normal text-xs text-negative pl-3"
-                              />
-                            </div>
-                          </div>
-
-                          <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Thanh toán</div>
-                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                              <DropdownSearchable
-                                onchangeValue={(value: any) => {
-                                  setPaymentMethod(value.id);
-                                  setFieldValue("paymentMethod", value.id);
-                                }}
-                                placeholder={"Thanh toán"}
-                                className={"max-w-full h-full flex-1"}
-                                focusedClass={"border-b border-primary"}
-                                allowClearValueSingleInput={false}
-                                showTriangle={false}
-                                maxWidthInput="max-w-full"
-                                renderSelectedItem={(item: any) => (
-                                  <div className="max-w-full">
-                                    <p className={"truncate"}>{item.text}</p>
-                                  </div>
-                                )}
-                                data={listPayment.map(item => ({
-                                  label: item.name,
-                                  value: item._id,
-                                }))}
-                                formatItem={{
-                                  id: "value",
-                                  text: "label",
-                                }}
-                                valueControlled={{
-                                  label: listPayment[+paymentMethod - 1].name,
-                                  value: listPayment[+paymentMethod - 1]._id,
-                                }}
-                                initialValue={{
-                                  label: listPayment[0].name,
-                                  value: listPayment[0]._id,
-                                }}
-                                inlineSearch={true}
-                              />
-                              <ErrorMessage
-                                name="paymentMethod"
-                                component="div"
-                                className="font-normal text-xs text-negative pl-3"
+                        <div className={"flex w-2/10 py-4"}>
+                          <div className={" flex items-baseline"}>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Đơn app</div>
+                            <div className={"w-full flex-1"}>
+                              <input
+                                placeholder="Nhập mã..."
+                                type="text"
+                                className="border-0 flex-grow outline-none px-1 mt-0.5 w-3/4"
+                                onChange={(event) => setFieldValue("appOrderSign", event.target.value)}
                               />
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-between gap-2 border-t-0.5 border-b-0.5 px-3">
-                        <div className="flex justify-between gap-2 w-1/2">
 
-                          <div className={"flex w-2/10 py-4"}>
-                            <div className={"flex items-baseline"}>
-                              <div className={"h-full text-left text-gray-500 flex items-center mr-2"}>Tên (*)</div>
-                              <div className={"w-full flex-1"}>
-                                <input
-                                  placeholder="Tên"
-                                  type="text"
-                                  className="border-0 flex-grow outline-none px-3 mt-0.5 w-3/4"
-                                  onChange={(event) => setFieldValue("name", event.target.value)}
-                                  value={values.name}
-                                />
-                                <ErrorMessage
-                                  name="name"
-                                  component="div"
-                                  className="font-normal text-xs text-negative pl-3 absolute"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className={"flex w-2/10 py-4"}>
-                            <div className={" flex items-baseline"}>
-                              <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Đơn app</div>
-                              <div className={"w-full flex-1"}>
-                                <input
-                                  placeholder="Nhập mã..."
-                                  type="text"
-                                  className="border-0 flex-grow outline-none px-1 mt-0.5 w-3/4"
-                                  onChange={(event) => setFieldValue("appOrderSign", event.target.value)}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className={"flex w-4/10 py-4"}>
-                            <div className={"flex items-baseline"}>
-                              <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Affiliate</div>
-                              <div className={"w-full flex-1"}>
-                                  <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                                    <DropdownSearchable
-                                      onchangeValue={(value: any) => {
-                                        setAffiliateID(value.id);
-                                        setFieldValue("affiliateID", value.id);
-                                      }}
-                                      onClearData={() => {
-                                        setFieldValue("affiliateID", "")
-                                      }}
-                                      onSearchInputChange={
-                                        debounce(
-                                          (value) => setSearchContact(value),
-                                          200)
-                                      }
-                                      placeholder={"Nhập Affiliate"}
-                                      className={"max-w-full h-full flex-1"}
-                                      focusedClass={"border-b border-primary"}
-                                      allowClearValueSingleInput={true}
-                                      showTriangle={false}
-                                      maxWidthInput="max-w-full"
-                                      renderSelectedItem={(item: any) => (
-                                        <div className="max-w-full">
-                                          <p className={"truncate"}>{item.text}</p>
-                                        </div>
-                                      )}
-                                      data={contacts.map(contact => ({
-                                        label: `${contact.name}-${contact.phone}`,
-                                        value: contact._id,
-                                      }))}
-                                      formatItem={{
-                                        id: "value",
-                                        text: "label",
-                                      }}
-                                      inlineSearch={true}
-                                    />
-                                    <ErrorMessage
-                                      name="affiliateID"
-                                      component="div"
-                                      className="font-normal text-xs text-negative pl-3"
-                                    />
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-
-                        <div>
-                          <div className={"flex w-full py-4"}>
-                            <div className={"flex items-baseline"}>
-                              <div className={"h-full text-left text-gray-500 flex items-center mr-2 "}>Ghi chú</div>
-                              <div className={"w-full flex-1"}>
-                                <input
-                                  placeholder="Nhập ghi chú..."
-                                  type="text"
-                                  className="border-0 flex-grow outline-none px-3 mt-0.5 w-3/4"
-                                  onChange={(event) => setFieldValue("note", event.target.value)}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-4 bg-cbs-form-input-bg p-3">
-                        <div className="w-1/5 bg-white py-3 px-2 rounded" style={{ maxWidth: "175px" }}>
-                          <div>
-                            <button
-                              type="button"
-                              onClick={() => setIndexParentID('')}
-                              className={`
-                            left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white
-                            ${!indexParentID ? "bg-gray-400 text-white" : ""}
-                            `}>
-                              <span className={"flex-1  text-left text-[14px]"}>TẤT CẢ</span>
-                            </button>
-                            {productIsParent.map((item: any, index: number) => (
-                              <button key={index}
-                                type="button"
-                                onClick={() => setIndexParentID(item._id)}
-                                className={`
-                            left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white
-                            ${indexParentID === item._id ? "bg-gray-400 text-white" : ""}
-                            `}>
-                                <span className={"flex-1  text-left text-[14px]"}>{item?.name}</span>
-                              </button>
-                            ))
-                            }
-                          </div>
-                        </div>
-                        <div className="w-full  bg-white p-3 rounded">
-                          <div>
-                            <Paper
-                              component="form"
-                              sx={{ p: '4px', display: 'flex', alignItems: 'center', boxShadow: 'none' }}
-                              className=" border-0.5 border-cbs-bg-input-search "
-                            >
-                              <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                                <img src={IconSearch} style={{ width: "18px", height: "18px" }} />
-                              </IconButton>
-                              <InputBase
-                                sx={{ ml: 1, flex: 1 }}
-                                placeholder="Tìm kiếm sản phẩm"
-                                onKeyUp={debounce(e => {
-                                  setKeywordSearchProduct(e.target.value);
-                                }, 100)}
-                              />
-                            </Paper>
-                          </div>
-                          <div className="overflow-y-auto	my-2 " style={{ height: "600px" }}>
-                            <div className="flex flex-wrap gap-2">
-                              {!!products.length && products.map((product: any) => (
-                                product?.parent ? (
-                                  <button
-                                    title={product.name}
-                                    key={product._id}
-                                    type="button"
-                                    className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
-                                    style={{ maxWidth: "24%", maxHeight: "200px", flexBasis: "24%" }}
-                                    onClick={() => {
-                                      setProductsInCart((prevProducts: any) => {
-                                        return [...prevProducts, {
-                                          ...product,
-                                          quantity: 1,
-                                          size: "1",
-                                          sugar: "1",
-                                          ice: "1",
-                                          createdAt: new Date()
-                                        }];
-                                      });
+                      <div className={"flex w-4/10 py-4"}>
+                          <div className={"flex items-baseline"}>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Affiliate</div>
+                            <div className={"w-full flex-1"}>
+                                <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                                  <DropdownSearchable
+                                    onchangeValue={(value: any) => {
+                                      setAffiliateID(value.id);
+                                      setFieldValue("affiliateID", value.id);
                                     }}
-                                  >
-                                    <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} className="w-full h-full object-contain" />
-                                    <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1">
-                                      <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}</div>
-                                      <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
-                                    </div>
-                                  </button>
-                                ) : (<></>)
-                              ))}
+                                    onClearData={() => {
+                                      setFieldValue("affiliateID", "")
+                                    }}
+                                    onSearchInputChange={
+                                      debounce(
+                                        (value) => setSearchContact(value),
+                                        200)
+                                    }
+                                    placeholder={"Nhập Affiliate"}
+                                    className={"max-w-full h-full flex-1"}
+                                    focusedClass={"border-b border-primary"}
+                                    allowClearValueSingleInput={true}
+                                    showTriangle={false}
+                                    maxWidthInput="max-w-full"
+                                    renderSelectedItem={(item: any) => (
+                                      <div className="max-w-full">
+                                        <p className={"truncate"}>{item.text}</p>
+                                      </div>
+                                    )}
+                                    data={contacts.map(contact => ({
+                                      label: `${contact.name}-${contact.phone}`,
+                                      value: contact._id,
+                                    }))}
+                                    formatItem={{
+                                      id: "value",
+                                      text: "label",
+                                    }}
+                                    inlineSearch={true}
+                                  />
+                                  <ErrorMessage
+                                    name="affiliateID"
+                                    component="div"
+                                    className="font-normal text-xs text-negative pl-3"
+                                  />
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+
+                      <div>
+                        <div className={"flex w-full py-4"}>
+                          <div className={"flex items-baseline"}>
+                            <div className={"h-full text-left text-gray-500 flex items-center mr-2 "}>Ghi chú</div>
+                            <div className={"w-full flex-1"}>
+                              <input
+                                placeholder="Nhập ghi chú..."
+                                type="text"
+                                className="border-0 flex-grow outline-none px-3 mt-0.5 w-3/4"
+                                onChange={(event) => setFieldValue("note", event.target.value)}
+                              />
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    {/* right */}
-                    <div className="boxright w-1/3 border-l-0.5">
-                      <div className=" overflow-y-auto	mb-2 border-b-0.5 bg-cbs-form-input-bg ">
-                        {/* loop */}
-                        {(productsInCart || []).map((item: any, index: number) =>
-                          <ItemInCartMenu
-                            key={index}
-                            item={item}
-                            service={service}
-                            handleChooseVariant={handleChooseVariant}
-                            handleChangeQuantity={handleChangeQuantity}
-                            increaseCount={increaseCount}
-                            decreaseCount={decreaseCount}
-                            handleChangeNote={handleChangeNote}
-                            handleChangeValue={handleChangeValue}
-                            handleRemoveItem={handleRemoveItem}
-                          />)
-                        }
-                      </div>
-                      <div className="">
-                        <div className="flex justify-between my-2 p-2">
-                          <div className="font-bold">Tổng tiền</div>
-                          <div className="font-bold">{formatNumberMoney(totalMoney)}</div>
+                    <div className="flex gap-4 bg-cbs-form-input-bg p-3">
+                      <div className="w-1/5 bg-white py-3 px-2 rounded" style={{ maxWidth: "175px" }}>
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() => setIndexParentID('')}
+                            className={`
+                          left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white
+                          ${!indexParentID ? "bg-gray-400 text-white" : ""}
+                          `}>
+                            <span className={"flex-1  text-left text-[14px]"}>TẤT CẢ</span>
+                          </button>
+                          {productIsParent.map((item: any, index: number) => (
+                            <button key={index}
+                              type="button"
+                              onClick={() => setIndexParentID(item._id)}
+                              className={`
+                          left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white
+                          ${indexParentID === item._id ? "bg-gray-400 text-white" : ""}
+                          `}>
+                              <span className={"flex-1  text-left text-[14px]"}>{item?.name}</span>
+                            </button>
+                          ))
+                          }
                         </div>
-                        {
-                          service === '2' ?
-                            <div className="flex justify-between items-center mb-1 px-2 py-2">
-                              <div className="">Chiết khấu*** (chỉ áp dụng đơn App)</div>
-                              <div className="flex gap-1">
-                                <div>
-                                  <input placeholder="25%"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    onChange={handleChangeDiscount}
-                                    value={discountAndSales.discountPercent}
-                                    name="discountPercent"
-                                  />
-                                </div>
-                                <div>
-                                  <input placeholder="10.000"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    onChange={handleChangeDiscount}
-                                    value={discountAndSales.discount}
-                                    name="discount"
-                                  />
-                                </div>
-                              </div>
-                            </div> :
-                            <div className="flex justify-between items-center mb-1 px-2 py-2">
-                              <div className="">Giảm giá*** (chỉ áp dụng đơn Off)</div>
-                              <div className="flex gap-1">
-                                <div>
-                                  <input placeholder="25%"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    onChange={handleChangeSales}
-                                    value={discountAndSales.salesPercent}
-                                    name="salesPercent"
-                                  />
-                                </div>
-                                <div>
-                                  <input placeholder="10.000"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    onChange={handleChangeSales}
-                                    value={discountAndSales.sales}
-                                    name="sales"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                        }
-
-                        {values.customerID && service === "1" ?
-                          <div className="flex justify-between items-center mb-1 px-2 py-2">
-                            <div>
-                              <div>Trừ từ tích điểm, gói trả trước-chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
-                              <div>
-                                <FormControl sx={{ marginTop: "-5px" }} >
-                                  <RadioGroup
-                                    row
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="isUseCredit"
-                                  >
-                                    <FormControlLabel
-                                      sx={{ marginLeft: "0", fontSize: "13px" }}
-                                      value="1"
-                                      control={
-                                        <Radio
-                                          style={{}}
-                                          icon={<img src={RadioEmpty} alt="Radio Empty" />}
-                                          checkedIcon={<img src={RadioChecked} alt="" />}
-                                          onChange={() => {
-                                            setCredit(0);
-                                            setIsUseCredit(false);
-                                            setIsEditCredit(false);
-                                            setCreditInput(0);
-                                            setTotalPayTemp(0);
-
-                                            const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
-
-                                            if (totalPay && !isEditCredit) {
-                                              setTotalPay(totalPay + credit);
-                                            } else if (totalPay === 0 && amountPay < credit) {
-                                              setTotalPay(amountPay);
-                                            }
-                                          }}
-                                          checked={!isUseCredit ? true : false}
-                                        />
-                                      }
-                                      label={<span className="text-[13px]">Không sử dụng</span>}
-                                    />
-                                    <FormControlLabel
-                                      sx={{ marginLeft: "0" }}
-                                      value="2"
-                                      control={
-                                        <Radio
-                                          style={{}}
-                                          icon={<img src={RadioEmpty} alt="" />}
-                                          checkedIcon={<img src={RadioChecked} alt="" />}
-                                          onChange={() => {
-                                            setCredit(creditTemp);
-                                            setIsUseCredit(true);
-
-                                            if (totalPay) {
-                                              setTotalPay(creditTemp > (totalPay + voucherTotalPrice) ? 0 : (totalPay + voucherTotalPrice) - creditTemp);
-                                            }
-
-                                            fetchCredit(values.customerID, true);
-
-                                            setVoucherErrorStatus(false);
-                                            setVoucherInput("");
-                                            setVoucherTotalPrice(0);
-                                            setVoucherId("");
-                                            setVoucherName("");
-                                            setVoucherStatus("");
-                                          }}
-                                          checked={isUseCredit ? true : false}
-                                        />
-                                      }
-                                      label={<span className="text-[13px]">Sử dụng</span>}
-                                    />
-                                  </RadioGroup>
-                                </FormControl>
-                              </div>
-                            </div>
-                            <div className="flex gap-1">
-                              <div>
-                                {!isEditCredit ? (
-                                  <input placeholder="25%"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    value={(totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales}
-                                    onPointerUp={() => {
-                                      setIsEditCredit(!isEditCredit);
-
-                                      const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
-
-                                      if (totalPay) {
-                                        setTotalPay(totalPay + credit);
-                                        setTotalPayTemp(totalPay + credit);
-                                      } else if (totalPay === 0 && amountPay < credit) {
-                                        setTotalPay(amountPay);
-                                        setTotalPayTemp(amountPay);
-                                      }
-                                    }}
-                                    disabled
-                                  />
-                                ) : (
-                                  <input placeholder="25%"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    value={creditInput}
-                                    type="number"
-                                    onChange={(e: any) => {
-                                      const value = +e.target.value;
-                                      if (value <= credit) {
-                                        setCreditInput(value);
-                                      }
-                                    }}
-                                    onFocus={() => {
-                                      setCreditInput(0);
-
-                                      const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
-
-                                      if (totalPay) {
-                                        setTotalPayTemp(totalPay);
-                                      } else if (totalPay === 0 && amountPay < credit) {
-                                        setTotalPayTemp(amountPay);
-                                      }
-                                    }}
-                                    onBlur={(e: any) => {
-                                      const value = +e.target.value;
-                                      setTotalPayTemp(totalPayTemp - value);
-                                    }}
-                                  />
-                                )}
-                              </div>
-                            </div>
-                          </div> : <></>
-                        }
-
-                        {values.customerID && service === "1" && !isUseCredit ?
-                          <>
-                          <div className="flex justify-between items-center mb-1 px-2 py-2">
-                            <div>
-                              <div>Voucher</div>
-                              <div>
-                                <input
-                                  placeholder="Nhập mã voucher"
-                                  className="w-[125px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none"
-                                  value={voucherInput}
-                                  onChange={(e: any) => {
-                                    setVoucherInput(e.target.value);
-
-                                    if (setTypingTimeoutVoucherRef.current) {
-                                      clearTimeout(setTypingTimeoutVoucherRef.current);
-                                    }
-
-                                    setTypingTimeoutVoucherRef.current = setTimeout(() => {
-                                      fetchVoucher(e.target.value, values.customerID);
-                                    }, 500);
+                      </div>
+                      <div className="w-full  bg-white p-3 rounded">
+                        <div>
+                          <Paper
+                            component="form"
+                            sx={{ p: '4px', display: 'flex', alignItems: 'center', boxShadow: 'none' }}
+                            className=" border-0.5 border-cbs-bg-input-search "
+                          >
+                            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                              <img src={IconSearch} alt="Search" style={{ width: "18px", height: "18px" }} />
+                            </IconButton>
+                            <InputBase
+                              sx={{ ml: 1, flex: 1 }}
+                              placeholder="Tìm kiếm sản phẩm"
+                              onKeyUp={debounce(e => {
+                                setKeywordSearchProduct(e.target.value);
+                              }, 100)}
+                            />
+                          </Paper>
+                        </div>
+                        <div className="overflow-y-auto	my-2 " style={{ height: "600px" }}>
+                          <div className="flex flex-wrap gap-2">
+                            {!!products.length && products.map((product: any) => (
+                              product?.parent ? (
+                                <button
+                                  title={product.name}
+                                  key={product._id}
+                                  type="button"
+                                  className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
+                                  style={{ maxWidth: "24%", maxHeight: "200px", flexBasis: "24%" }}
+                                  onClick={() => {
+                                    setProductsInCart((prevProducts: any) => {
+                                      return [...prevProducts, {
+                                        ...product,
+                                        quantity: 1,
+                                        size: "1",
+                                        sugar: "1",
+                                        ice: "1",
+                                        createdAt: new Date()
+                                      }];
+                                    });
                                   }}
-                                />
-                              </div>
-                            </div>
-                            <div className="flex gap-1">
-                            <div className="font-bold">{formatNumberMoney(voucherTotalPrice)}</div>
-                            </div>
-                            </div>
-                            {voucherName ?
-                              <div className="text-primary ml-2 mb-2">Tên Voucher: {voucherName}</div> : <></>
-                            }
-
-                            {voucherStatus ?
-                              <div className={`${voucherErrorStatus ? "text-red-500" : "text-primary"} ml-2 mb-5`}>Tình trạng: {voucherStatus}</div> : <></>
-                            }
-
-                            {!!vouchers.length && (
-                              <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="voucher"
-                              >
-                                {vouchers.map((voucher: any) => (
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
-                                    value={voucher.sign}
-                                    key={voucher._id}
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt={voucher.sign} />}
-                                        checkedIcon={<img src={RadioChecked} alt={voucher.sign} />}
-                                        key={voucher._id}
-                                        onChange={() => {
-                                          setVoucherId(voucher._id);
-                                          setVoucherInput(voucher.sign);
-
-                                          if (setTypingTimeoutVoucherRef.current) {
-                                            clearTimeout(setTypingTimeoutVoucherRef.current);
-                                          }
-
-                                          setTypingTimeoutVoucherRef.current = setTimeout(() => {
-                                            fetchVoucher(voucher.sign, values.customerID);
-                                          }, 500);
-                                        }}
-                                        checked={voucherId === voucher._id}
-                                      />
-                                    }
-                                    label={
-                                      <span className="text-[13px]">
-                                        {`${voucher.sign}-Ưu đãi ${formatNumberMoney(voucher.salesoffAmount)} | Giảm giá ${voucher.salesoffRate}% - Đơn hàng từ ${formatNumberMoney(voucher.minOrderAmount)}`}
-                                        <p><i>{voucher?.note}</i></p>
-                                      </span>
-                                    }
-                                  />
-                                ))}
-                              </RadioGroup>
-                            )}
-
-                          </> : <></>
-                        }
-                      </div>
-                      <div className="border-t-0.5 border-b-0.5 px-2 py-2">
-                        <div className="flex justify-between">
-                          <div className="font-bold">Thanh toán</div>
-                          {!isEditCredit ? (
-                            <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPay)}</div>
-                          ) : (
-                            <div className={`font-bold ${totalPayTemp > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPayTemp)}</div>
-                          )}
+                                >
+                                  <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} alt="Product" className="w-full h-full object-contain" />
+                                  <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1">
+                                    <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}</div>
+                                    <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
+                                  </div>
+                                </button>
+                              ) : (<></>)
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                      <div className="border-b-0.5 px-2 py-1">
-                        <div className="flex justify-between">
-                          <div className="font-bold">Phí ship (nếu có)</div>
-                          <div>
-                            <input
-                              type="number"
-                              placeholder="Nhập phí ship"
-                              name="shippingFee"
-                              className="h-8 w-full border border-primary-border outline-none px-2"
-                              onChange={(event) => setFieldValue("shippingFee", event.target.value)}
-                            />
-                            </div>
-                        </div>
-                      </div>
-                      <div className="border-b-0.5 px-2 py-1">
-                        <div className="flex justify-between">
-                          <div className="font-bold">Tiền mặt khách trả (đơn mua tại quán)</div>
-                          <div>
-                            <input
-                              type="number"
-                              placeholder="Nhập tiền mặt khách trả để tính tiền phải trả lại"
-                              name="paid"
-                              className="h-8 w-full border border-primary-border outline-none px-2"
-                              onChange={(event) => setFieldValue("paid", event.target.value)}
-                            />
-                            </div>
-                        </div>
-                      </div>
-                      <div className="text-right mb-5 mx-2" style={{ marginTop: "100px" }}>
-                        <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
                       </div>
                     </div>
                   </div>
+                  {/* right */}
+                  <div className="boxright w-1/3 border-l-0.5">
+                    <div className=" overflow-y-auto	mb-2 border-b-0.5 bg-cbs-form-input-bg ">
+                      {/* loop */}
+                      {(productsInCart || []).map((item: any, index: number) =>
+                        <ItemInCartMenu
+                          key={index}
+                          item={item}
+                          service={service}
+                          handleChooseVariant={handleChooseVariant}
+                          handleChangeQuantity={handleChangeQuantity}
+                          increaseCount={increaseCount}
+                          decreaseCount={decreaseCount}
+                          handleChangeNote={handleChangeNote}
+                          handleChangeValue={handleChangeValue}
+                          handleRemoveItem={handleRemoveItem}
+                        />)
+                      }
+                    </div>
+                    <div>
+                      <div className="flex justify-between my-2 p-2">
+                        <div className="font-bold">Tổng tiền</div>
+                        <div className="font-bold">{formatNumberMoney(totalMoney)}</div>
+                      </div>
+                      {
+                        service === '2' ?
+                          <div className="flex justify-between items-center mb-1 px-2 py-2">
+                            <div className="">Chiết khấu*** (chỉ áp dụng đơn App)</div>
+                            <div className="flex gap-1">
+                              <div>
+                                <input placeholder="25%"
+                                  className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                  onChange={handleChangeDiscount}
+                                  value={discountAndSales.discountPercent}
+                                  name="discountPercent"
+                                />
+                              </div>
+                              <div>
+                                <input placeholder="10.000"
+                                  className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                  onChange={handleChangeDiscount}
+                                  value={discountAndSales.discount}
+                                  name="discount"
+                                />
+                              </div>
+                            </div>
+                          </div> :
+                          <div className="flex justify-between items-center mb-1 px-2 py-2">
+                            <div className="">Giảm giá*** (chỉ áp dụng đơn Off)</div>
+                            <div className="flex gap-1">
+                              <div>
+                                <input placeholder="25%"
+                                  className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                  onChange={handleChangeSales}
+                                  value={discountAndSales.salesPercent}
+                                  name="salesPercent"
+                                />
+                              </div>
+                              <div>
+                                <input placeholder="10.000"
+                                  className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                  onChange={handleChangeSales}
+                                  value={discountAndSales.sales}
+                                  name="sales"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                      }
+
+                      {values.customerID && service === "1" ?
+                        <div className="flex justify-between items-center mb-1 px-2 py-2">
+                          <div>
+                            <div>Trừ từ tích điểm, gói trả trước-chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
+                            <div>
+                              <FormControl sx={{ marginTop: "-5px" }} >
+                                <RadioGroup
+                                  row
+                                  aria-labelledby="demo-row-radio-buttons-group-label"
+                                  name="isUseCredit"
+                                >
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0", fontSize: "13px" }}
+                                    value="1"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="Radio Empty" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setCredit(0);
+                                          setIsUseCredit(false);
+                                          setIsEditCredit(false);
+                                          setCreditInput(0);
+                                          setTotalPayTemp(0);
+
+                                          const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+
+                                          if (totalPay && !isEditCredit) {
+                                            setTotalPay(totalPay + credit);
+                                          } else if (totalPay === 0 && amountPay < credit) {
+                                            setTotalPay(amountPay);
+                                          }
+                                        }}
+                                        checked={!isUseCredit ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]">Không sử dụng</span>}
+                                  />
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0" }}
+                                    value="2"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setCredit(creditTemp);
+                                          setIsUseCredit(true);
+
+                                          if (totalPay) {
+                                            setTotalPay(creditTemp > (totalPay + voucherTotalPrice) ? 0 : (totalPay + voucherTotalPrice) - creditTemp);
+                                          }
+
+                                          fetchCredit(values.customerID, true);
+
+                                          setVoucherErrorStatus(false);
+                                          setVoucherInput("");
+                                          setVoucherTotalPrice(0);
+                                          setVoucherId("");
+                                          setVoucherName("");
+                                          setVoucherStatus("");
+                                        }}
+                                        checked={isUseCredit ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]">Sử dụng</span>}
+                                  />
+                                </RadioGroup>
+                              </FormControl>
+                            </div>
+                          </div>
+                          <div className="flex gap-1">
+                            <div>
+                              {!isEditCredit ? (
+                                <input placeholder="25%"
+                                  className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                  value={(totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales}
+                                  onPointerUp={() => {
+                                    setIsEditCredit(!isEditCredit);
+
+                                    const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+
+                                    if (totalPay) {
+                                      setTotalPay(totalPay + credit);
+                                      setTotalPayTemp(totalPay + credit);
+                                    } else if (totalPay === 0 && amountPay < credit) {
+                                      setTotalPay(amountPay);
+                                      setTotalPayTemp(amountPay);
+                                    }
+                                  }}
+                                  disabled
+                                />
+                              ) : (
+                                <input placeholder="25%"
+                                  className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                  value={creditInput}
+                                  type="number"
+                                  onChange={(e: any) => {
+                                    const value = +e.target.value;
+                                    if (value <= credit) {
+                                      setCreditInput(value);
+                                    }
+                                  }}
+                                  onFocus={() => {
+                                    setCreditInput(0);
+
+                                    const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+
+                                    if (totalPay) {
+                                      setTotalPayTemp(totalPay);
+                                    } else if (totalPay === 0 && amountPay < credit) {
+                                      setTotalPayTemp(amountPay);
+                                    }
+                                  }}
+                                  onBlur={(e: any) => {
+                                    const value = +e.target.value;
+                                    setTotalPayTemp(totalPayTemp - value);
+                                  }}
+                                />
+                              )}
+                            </div>
+                          </div>
+                        </div> : <></>
+                      }
+
+                      {values.customerID && service === "1" && !isUseCredit ?
+                        <>
+                        <div className="flex justify-between items-center mb-1 px-2 py-2">
+                          <div>
+                            <div>Voucher</div>
+                            <div>
+                              <input
+                                placeholder="Nhập mã voucher"
+                                className="w-[125px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none"
+                                value={voucherInput}
+                                onChange={(e: any) => {
+                                  setVoucherInput(e.target.value);
+
+                                  if (setTypingTimeoutVoucherRef.current) {
+                                    clearTimeout(setTypingTimeoutVoucherRef.current);
+                                  }
+
+                                  setTypingTimeoutVoucherRef.current = setTimeout(() => {
+                                    fetchVoucher(e.target.value, values.customerID);
+                                  }, 500);
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex gap-1">
+                          <div className="font-bold">{formatNumberMoney(voucherTotalPrice)}</div>
+                          </div>
+                          </div>
+                          {voucherName ?
+                            <div className="text-primary ml-2 mb-2">Tên Voucher: {voucherName}</div> : <></>
+                          }
+
+                          {voucherStatus ?
+                            <div className={`${voucherErrorStatus ? "text-red-500" : "text-primary"} ml-2 mb-5`}>Tình trạng: {voucherStatus}</div> : <></>
+                          }
+
+                          {!!vouchers.length && (
+                            <RadioGroup
+                              row
+                              aria-labelledby="demo-row-radio-buttons-group-label"
+                              name="voucher"
+                            >
+                              {vouchers.map((voucher: any) => (
+                                <FormControlLabel
+                                  sx={{ marginLeft: "0" }}
+                                  value={voucher.sign}
+                                  key={voucher._id}
+                                  control={
+                                    <Radio
+                                      style={{}}
+                                      icon={<img src={RadioEmpty} alt={voucher.sign} />}
+                                      checkedIcon={<img src={RadioChecked} alt={voucher.sign} />}
+                                      key={voucher._id}
+                                      onChange={() => {
+                                        setVoucherId(voucher._id);
+                                        setVoucherInput(voucher.sign);
+
+                                        if (setTypingTimeoutVoucherRef.current) {
+                                          clearTimeout(setTypingTimeoutVoucherRef.current);
+                                        }
+
+                                        setTypingTimeoutVoucherRef.current = setTimeout(() => {
+                                          fetchVoucher(voucher.sign, values.customerID);
+                                        }, 500);
+                                      }}
+                                      checked={voucherId === voucher._id}
+                                    />
+                                  }
+                                  label={
+                                    <span className="text-[13px]">
+                                      {`${voucher.sign}-Ưu đãi ${formatNumberMoney(voucher.salesoffAmount)} | Giảm giá ${voucher.salesoffRate}% - Đơn hàng từ ${formatNumberMoney(voucher.minOrderAmount)}`}
+                                      <p><i>{voucher?.note}</i></p>
+                                    </span>
+                                  }
+                                />
+                              ))}
+                            </RadioGroup>
+                          )}
+
+                        </> : <></>
+                      }
+                    </div>
+                    <div className="border-t-0.5 border-b-0.5 px-2 py-2">
+                      <div className="flex justify-between">
+                        <div className="font-bold">Thanh toán</div>
+                        {!isEditCredit ? (
+                          <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPay)}</div>
+                        ) : (
+                          <div className={`font-bold ${totalPayTemp > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPayTemp)}</div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="border-b-0.5 px-2 py-1">
+                      <div className="flex justify-between">
+                        <div className="font-bold">Phí ship (nếu có)</div>
+                        <div>
+                          <input
+                            type="number"
+                            placeholder="Nhập phí ship"
+                            name="shippingFee"
+                            className="h-8 w-full border border-primary-border outline-none px-2"
+                            onChange={(event) => setFieldValue("shippingFee", event.target.value)}
+                          />
+                          </div>
+                      </div>
+                    </div>
+                    <div className="border-b-0.5 px-2 py-1">
+                      <div className="flex justify-between">
+                        <div className="font-bold">Tiền mặt khách trả (đơn mua tại quán)</div>
+                        <div>
+                          <input
+                            type="number"
+                            placeholder="Nhập tiền mặt khách trả để tính tiền phải trả lại"
+                            name="paid"
+                            className="h-8 w-full border border-primary-border outline-none px-2"
+                            onChange={(event) => setFieldValue("paid", event.target.value)}
+                          />
+                          </div>
+                      </div>
+                    </div>
+                    <div className="text-right mb-5 mx-2" style={{ marginTop: "100px" }}>
+                      <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
+                    </div>
+                  </div>
                 </div>
-              </Form>
-            );
-          }}
-        </Formik>
-      </div>
-    </>
+              </div>
+            </Form>
+          );
+        }}
+      </Formik>
+    </div>
   )
 }
