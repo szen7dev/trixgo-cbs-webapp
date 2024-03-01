@@ -30,9 +30,16 @@ export const AccountingDebtDetailPage2: FC = () => {
   const [fundaId, setFundaId] = useState<string | null>();
   const [fundaKeyword, setFundaKeyword] = useState("");
 
-  const [showOption, setShowOption] = useState(false)
-  const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
- 
+  const today = new Date();
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  const currentMonth = new Date().getMonth()
+
+  const [inputFilter, setInputFilter] = useState({
+    keyword: '',
+    fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+    toDate: lastDayOfMonth
+  })
+   
   const params: any = useParams();
   const [infoAccount, setInfoAccount] = useState({} as any);
   const [infoContact, setInfoContact] = useState({} as any);

@@ -26,7 +26,7 @@ import { Doctype } from "typings/items";
 import { Link } from "react-router-dom";
 
 export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
-    const { closeModal, openModal } = useModal();
+    const { openModal } = useModal();
     const [keywordDoctype, setKeywordDoctype] = useState('');
     const [doctypesChecked, setDoctypesChecked] = useState<Array<Doctype.Doctype>>([]);
 
@@ -117,11 +117,11 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
 
     const getStateCheckedAll = useMemo(() => {
         if(!doctypesChecked.length && !listDoctypes.length) return false;
-        return doctypesChecked.length == listDoctypes.length;
+        return doctypesChecked.length === listDoctypes.length;
     }, [doctypesChecked.length, listDoctypes.length]);
 
     const onClickCheckAll = () => {
-        if (doctypesChecked.length == listDoctypes.length) {
+        if (doctypesChecked.length === listDoctypes.length) {
             setDoctypesChecked([]);
         } else {
             setDoctypesChecked(listDoctypes);
@@ -163,9 +163,9 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
 
     //_____Import excel
     const [dataImport, setDataImport] = useState([]);
-    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-        isExporting: false,
-    });
+    // const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    //     isExporting: false,
+    // });
     const { importFromExcelAsync } = useDoctype({});
 
     /**
@@ -182,12 +182,12 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
 
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    
+
                     // Set data để Import
                     setDataImport(rows)
                 }
             }
-            
+
             reader.readAsArrayBuffer(file);
         }
 
@@ -209,7 +209,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
             }
             fetchData();
         }
-    }, [dataImport])
+    }, [JSON.stringify(dataImport)])
 
     return (
         <main className="relative h-full">
@@ -245,9 +245,9 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                             >
                             Tạo mới
                         </button>
-                        <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
+                        {/* <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
                             <img src={`${process.env.PUBLIC_URL}/images/common/icon-3dots-vertical-gray.svg`} alt="Three Dot" />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </header>

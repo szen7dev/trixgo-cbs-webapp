@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useRef, useState, UIEvent, useImperativeHandle, forwardRef } from "react";
+import React, { ReactNode, useEffect, useRef, useState, UIEvent, useImperativeHandle, forwardRef } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
 import Close from "assets/icons/Close";

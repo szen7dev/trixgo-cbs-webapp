@@ -73,12 +73,12 @@ export const FnbLeftSideBar: FC = () => {
         isFetchList: true,
         isFetchInfo: false
     });
-    const [pageIndex, setPageIndex] = useState(0);
+    const [pageIndex] = useState(0);
 
     const handleSearch = debounce(
         (e: any) => setKeyword(e.target.value),
         200)
-        
+
     const handleConfirmCreateOrUpdate = () => refetch();
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
@@ -115,7 +115,7 @@ export const FnbLeftSideBar: FC = () => {
     }
 
     const onCheckPerAccessApp = useCallback((appID: string) => {
-        const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == appID);
+        const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu === appID);
         if (roleApp && roleApp.read >= 1) {
             return true;
         }
@@ -132,18 +132,18 @@ export const FnbLeftSideBar: FC = () => {
                             openModal(
                                 <div
                                     className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-6 align-top inline-block"
-                                    style={{ maxWidth: " calc(100vw - 50px)" }}
+                                    style={{ maxWidth: "calc(100vw - 50px)", minHeight: "calc(100vh - 50px)" }}
                                 >
-                                   {(user?.email == 'kiemthuvien.dcop.trx@gmail.com' || user?.email == 'hiepnh.winggo@gmail.com') ? <ModalAddNewOrder2 /> : <ModalAddNewOrder />}  
+                                   {(user?.email === 'kiemthuvien.dcop.trx@gmail.com' || user?.email === 'hiepnh.winggo@gmail.com') ? <ModalAddNewOrder2 /> : <ModalAddNewOrder />}
                                 </div>
                             )
                         }
                     >
-                        <img src={iconPlusBlue} alt="" /> Tạo mới
+                        <img src={iconPlusBlue} alt="Create new" /> Tạo mới
                     </button>
                 </div>
                 <div className="t-link-menu-container">
-                    {hasPermission && dataUserAccess?.level == 0 ?
+                    {hasPermission && dataUserAccess?.level === 0 ?
                         <NavLink
                             to={'/fnb/admin'}
                             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
@@ -239,7 +239,7 @@ export const FnbLeftSideBar: FC = () => {
                                 {
                                     (listWithPager[pageIndex] ?? []).map((item: any, i: any) => (
                                         <div key={item._id} className="flex gap-3 mt-3">
-                                            <div className="w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full flex items-center justify-center text-white text-lg min-w-[28px] min-h-[28px]" style={{ background: "#FCC4A2" }}>{item?.name.charAt(0)}</div>
+                                            <div className="w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full flex items-center justify-center text-white text-lg" style={{ background: "#FCC4A2" }}>{item?.name.charAt(0)}</div>
                                             <div className="w-full">
                                                 <div className="flex justify-between">
                                                     <Link to={`/mobile/activity/${item?._id}/w6g9o22`}>
