@@ -13,6 +13,7 @@ import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { VOUCHER_TYPES } from "apis/localdb/index";
 import { useJournalList, useJournal } from "services/hooks/accounting/useGeneralJournal";
 import { useFunda } from "services/hooks/items/useFunda";
+import { useContact } from "services/hooks/items/useContact";
 import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
 import { createLinkAndClick } from "utils";
@@ -27,7 +28,10 @@ export const AccountingDiaryPage: FC = () => {
   const accountRef = React.useRef<DropdownHandle>(null);
 
   const [fundaId, setFundaId] = useState<string | null>();
+  const [customerID, setCustomerID] = useState<string | null>();
+
   const [fundaKeyword, setFundaKeyword] = useState("");
+  const [contactKeyword, setContactKeyword] = useState("");
 
   const today = new Date();
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
@@ -47,6 +51,11 @@ export const AccountingDiaryPage: FC = () => {
     isFetchList: true
 	})
 
+  const { list: listCustomer } = useContact({
+		params: { keyword: contactKeyword },
+    isFetchList: true
+	})
+
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
     params: {
         fromDate: inputFilter.fromDate,
@@ -55,6 +64,7 @@ export const AccountingDiaryPage: FC = () => {
         forward: 0,
         cancel: 0,
         fundaID: fundaId,
+        contactID: customerID,
     },
     isFetchList: true
   })
@@ -128,7 +138,34 @@ export const AccountingDiaryPage: FC = () => {
             )}
             selectOneByOne={true}
         />
-
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Mã khách"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listCustomer}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setContactKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setCustomerID("");
+            }}
+            onchangeValue={item => {
+                setCustomerID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           <div className={"relative z-5 inline-block"}>
