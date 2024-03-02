@@ -40,13 +40,6 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCustomerDebitValue,
 	});
-	// const [searchContractValue, setSearchContractValue] = useState(
-	// 	initialValues?.contract || ""
-	// );
-	// const { listContract } = useQueryListContract({
-	// 	limit: LIMIT_DROPDOWN,
-	// 	keyword: searchContractValue,
-	// });
 	const [searchBudgetWorkValue, setSearchBudgetWorkValue] = useState(
 		initialValues?.budgetWork || ""
 	);
@@ -132,9 +125,6 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Thành tiền (*)
 								</div>
-								{/* <div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
-									Hợp đồng
-								</div> */}
 								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Khoản mục phí
 								</div>
@@ -370,6 +360,7 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 										</div>
 										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field
+												step="any"
 												name={`selectedJournals.${index}.quantity`}
 												type="number"
 												min={0}
@@ -382,6 +373,7 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 										</div>
 										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field
+												step="any"
 												name={`selectedJournals.${index}.unitprice`}
 												type="number"
 												min={0}
@@ -393,43 +385,8 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 												}} />
 										</div>
 										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
-											<Field readOnly name={`selectedJournals.${index}.amount`} type="number" min={0} className={"focus:outline-none border-b w-[80px] border-gray-300"} placeholder={"Thành tiền"} />
+											<Field step="any" readOnly name={`selectedJournals.${index}.amount`} type="number" min={0} className={"focus:outline-none border-b w-[80px] border-gray-300"} placeholder={"Thành tiền"} />
 										</div>
-										{/* <div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
-											<DropdownSearchable
-												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[125px]"}
-												id="ticket-type" placeholder="Hợp đồng"
-												showTriangle={false}
-												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.contract`, value)}
-												onClearData={() => setFieldValue(`selectedJournals.${index}.contract`, '')}
-												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
-													<p className="text-2-line-clamp">{`${item.text}`}</p>
-												</Popover>}
-												onSearchInputChange={debounce(
-													(value) => setSearchContractValue(value),
-													500
-												)}
-												valueControlled={
-													isEdit ? (
-														(initialValues.contract?._id !== contract.value)
-															? contract
-															: initialValues.selectedJournals?.[index]?.contract
-													) : contract
-												}
-												initialValue={item.contract}
-												data={listContract.map((item: any) => ({
-													label: item.name,
-													value: item._id,
-												}))}
-												formatItem={{
-													id: "value",
-													text: "label",
-												}}
-												inlineSearch={true}
-											/>
-										</div> */}
 										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}

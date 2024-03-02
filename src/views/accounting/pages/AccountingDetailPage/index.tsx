@@ -22,6 +22,8 @@ import {
   useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
 import { toast } from "react-toastify";
+import { useContact } from "services/hooks/items/useContact";
+
 const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingDetailPage: FC = () => {
@@ -40,10 +42,12 @@ export const AccountingDetailPage: FC = () => {
   const [accountId, setAccountId] = useState<string | null>(accountIdParams);
   const [fundaId, setFundaId] = useState<string | null>();
   const [warehouseId, setWarehouseId] = useState<string | null>();
+  const [customerID, setCustomerID] = useState<string | null>();
 
   const [accountKeyword, setAccountKeyword] = useState("");
   const [fundaKeyword, setFundaKeyword] = useState("");
   const [warehouseKeyword, setWarehouseKeyword] = useState("");
+  const [contactKeyword, setContactKeyword] = useState("");
 
   const today = new Date();
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
@@ -60,6 +64,11 @@ export const AccountingDetailPage: FC = () => {
   const { listAccount, isLoading: isLoadingListAccount } = useQueryListAccount({
 		limit: LIMIT_DROPDOWN,
 		keyword: accountKeyword,
+	})
+
+  const { list: listCustomer } = useContact({
+		params: { keyword: contactKeyword },
+    isFetchList: true
 	})
 
   const { list: listFunda } = useFunda({
@@ -82,6 +91,7 @@ export const AccountingDetailPage: FC = () => {
         accountID: accountId,
         fundaID: fundaId,
         warehouseID: warehouseId,
+        contactID: customerID,
     },
     isFetchList: true
   })
@@ -168,7 +178,7 @@ export const AccountingDetailPage: FC = () => {
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
-        <p className="text-lg mr-5">{infoAccount?.name}-{infoAccount?.description}</p>
+        <p className="text-lg mr-5">{infoAccount?.name}-{(infoAccount?.description && infoAccount?.description.length > 25) ? `${infoAccount?.description.substring(0, 25)}...` : infoAccount?.description}</p>
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
@@ -223,7 +233,34 @@ export const AccountingDetailPage: FC = () => {
             )}
             selectOneByOne={true}
         />
-
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Mã khách"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listCustomer}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setContactKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setCustomerID("");
+            }}
+            onchangeValue={item => {
+                setCustomerID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />    
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}

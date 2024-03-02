@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import { useModal } from "services/hooks/useModal";
 import CreateNewTicketForm from "./components/CreateNewTicketForm";
