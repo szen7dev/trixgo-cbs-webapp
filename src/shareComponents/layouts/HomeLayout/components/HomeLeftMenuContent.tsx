@@ -46,6 +46,9 @@ export const HomeLeftMenuContent: FC = () => {
     const { openModal } = useModal(true);
     const { current: socket }: any = useSocket();
     const { data } = usePcmPlanTaskNotification({ enabled: enabled });
+    // console.log(data)
+    // console.log(data?.amountMyTask5)
+
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
     const [badge, setBadge] = useState({
@@ -71,6 +74,7 @@ export const HomeLeftMenuContent: FC = () => {
                     amountMyTask1,
                     amountMyTask2,
                     amountMyTask3,
+                    // amountMyTask5,
                 } = data;
 
                 setBadge({
@@ -115,7 +119,7 @@ export const HomeLeftMenuContent: FC = () => {
         {
             label: t("menu:draft"),
             icon: fileIcon,
-            count: 0,
+            count: data?.data?.amountMyTask5,
             route: '/pcm/draft'
         },
     ]

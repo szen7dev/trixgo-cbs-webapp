@@ -28,6 +28,7 @@ import {
   useListFileFromSearch,
   useListResponseFromSearch,
   usePcmPlanTaskNotification,
+  usePcmPlanTaskGetListByProperty,
 } from "services/hooks/pcm/usePcmDashboardV2";
 import { debounce } from "lodash";
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
@@ -99,6 +100,7 @@ export const DashboardV2: FC<Props> = () => {
   const queryResponse = useAppSelector(
     (state) => state.dashboardV2.data.queryResponse
   );
+  // console.log(queryResponse)
 
   const keywordForSubject = useAppSelector(
     (state) => state.dashboardV2.data.keywordForSubject
@@ -123,6 +125,21 @@ export const DashboardV2: FC<Props> = () => {
     fetchNextPage: fetchNextPageCompany,
   } = useQueryListCompany({ keyword: searchCompanyName });
 
+  const { isLoading: isLoadingCT, dataTotal: dataTotalCT } = usePcmPlanTaskGetListByProperty({
+    option: 6,
+    keyword: searchCompanyName,
+    enabled: true,
+  });
+  const listCT = dataTotalCT?.data
+
+  const { isLoading: isLoadingC, dataTotal: dataTotalC } = usePcmPlanTaskGetListByProperty({
+    option: 8,
+    keyword: searchCompanyName,
+    enabled: true,
+  });
+  const listC = dataTotalC?.data
+  // console.log(listC)
+
   const handleScrollCompany = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
@@ -142,6 +159,21 @@ export const DashboardV2: FC<Props> = () => {
     hasNextPage: hasNextPageUserSystem,
     fetchNextPage: fetchNextPageUserSystem,
   } = useUserSystem({ keyword: searchUserSystem }, true);
+
+  const { isLoading: isLoadingUT, dataTotal: dataTotalUT } = usePcmPlanTaskGetListByProperty({
+    option: 7,
+    keyword: searchUserSystem,
+    enabled: true,
+  });
+  const listUT = dataTotalUT?.data
+
+  const { isLoading: isLoadingU, dataTotal: dataTotalU } = usePcmPlanTaskGetListByProperty({
+    option: 9,
+    keyword: searchUserSystem,
+    enabled: true,
+  });
+  const listU = dataTotalU?.data
+  // console.log(listU)
 
   const handleScrollUserSystem = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -494,9 +526,13 @@ export const DashboardV2: FC<Props> = () => {
                 (value) => setSearchCompanyName(value),
                 500
               )}
-              data={listCompany.map((company) => ({
-                label: company.name,
-                value: company._id,
+              // data={listCompany.map((company) => ({
+              //   label: company.name,
+              //   value: company._id,
+              // }))}
+              data={listCT?.map((item: any) => ({
+                label: `${item?._id?.companyOfAssignee?.name} (${item?.amount})`,
+                value: item?._id?.companyOfAssignee?._id,
               }))}
               formatItem={{
                 id: "value",
@@ -577,11 +613,17 @@ export const DashboardV2: FC<Props> = () => {
                   </p>
                 </div>
               )}
-              data={listUsersSystem.map((item) => ({
-                label: item.bizfullname || item.fullname,
-                value: item._id,
-                imgUrl: item.imgUrl,
-                email: item.email,
+              // data={listUsersSystem.map((item) => ({
+              //   label: item.bizfullname || item.fullname,
+              //   value: item._id,
+              //   imgUrl: item.imgUrl,
+              //   email: item.email,
+              // }))}
+              data={listUT?.map((item: any) => ({
+                label: `${item?._id?.assignee?.fullname} (${item?.amount})`,
+                value: item?._id?.assignee?._id,
+                // imgUrl: item.imgUrl,
+                email: item?._id?.assignee?.email,
               }))}
               formatItem={{
                 id: "value",
@@ -711,7 +753,7 @@ export const DashboardV2: FC<Props> = () => {
             />
           )}
 
-          {(tabIndex === 2 || tabIndex === 3) && (
+          {(tabIndex === 3) && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -874,9 +916,9 @@ export const DashboardV2: FC<Props> = () => {
               )}
               showTriangle={true}
               isMultiple={true}
-              data={listCompany.map((company) => ({
-                label: company.name,
-                value: company._id,
+              data={listC?.map((item: any) => ({
+                label: `${item?._id?.companyOfAuthor?.name} (${item?.amount})`,
+                value: item?._id?.companyOfAuthor?._id,
               }))}
               formatItem={{
                 id: "value",
@@ -957,11 +999,11 @@ export const DashboardV2: FC<Props> = () => {
                   </p>
                 </div>
               )}
-              data={listUsersSystem.map((item) => ({
-                label: item.bizfullname || item.fullname,
-                value: item._id,
-                imgUrl: item.imgUrl,
-                email: item.email,
+              data={listU?.map((item: any) => ({
+                label: `${item?._id?.author?.fullname} (${item?.amount})`,
+                value: item?._id?.author?._id,
+                // imgUrl: item.imgUrl,
+                email: item?._id?.author?.email,
               }))}
               formatItem={{
                 id: "value",
