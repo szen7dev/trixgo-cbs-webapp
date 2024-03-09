@@ -24,6 +24,7 @@ export type TimeSheetParent = {
     note: string;
     createAt: string;
     modifyAt: string;
+    date: string;
     convertFactor: number;
 }
 
@@ -52,6 +53,7 @@ export type InsertTimeSheetParentPayload = {
     type: 1;
     project: Project;
     note: string;
+    date: string;
     convertFactor: number;
 }
 

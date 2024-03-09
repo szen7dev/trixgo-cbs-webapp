@@ -125,7 +125,7 @@ const SalaryHomePage: FC = () => {
           <ModalConfirm
             title="Bạn có muốn xác nhận không?"
             description="Dữ liệu từ Bảng chấm công, KPI sẽ được đồng bộ sang Bảng lương này"
-            onConfirm={() => handleConfirmCopy({option: param.option, salaryID: param.salaryID}) }
+            onConfirm={() => handleConfirmSync({option: param.option, salaryID: param.salaryID}) }
             defaultText={false}
             onCancel={closeModal}
           />
@@ -133,7 +133,7 @@ const SalaryHomePage: FC = () => {
       )
   }
 
-  const handleConfirmCopy = useCallback(async (param: any) => {
+  const handleConfirmSync = useCallback(async (param: any) => {
     const { data, status } = await API.post(
       `/api/timesheet/expert_salary/sync-data`, {
         option: param.option,
@@ -231,6 +231,13 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
+              Ngày
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
               Hệ số chuyển đổi KPI sang giá trị
             </div>
             <div
@@ -253,6 +260,13 @@ const SalaryHomePage: FC = () => {
               }
             >
               Đồng bộ dữ liệu
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Xóa/Reset dữ liệu
             </div>
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((salaryParent) => (
@@ -293,6 +307,9 @@ const SalaryHomePage: FC = () => {
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {moment(salaryParent.date).format('DD/MM/YYYY')}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.convertFactor}
               </div>
               <div
@@ -312,6 +329,11 @@ const SalaryHomePage: FC = () => {
                   <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({option: 1, salaryID: salaryParent._id})}>
                     <img src={iconRefresh} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
                     <span>Đồng bộ dữ liệu</span>
+                </button>
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({option: 2, salaryID: salaryParent._id})}>
+                    <span style={{"color":"red"}}>Xóa dữ liệu</span>
                 </button>
               </div>
             </div>
