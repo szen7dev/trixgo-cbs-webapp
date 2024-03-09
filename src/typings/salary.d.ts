@@ -23,6 +23,7 @@ export type SalaryParent = {
     createAt: string;
     modifyAt: string;
     salary: number;
+    onLeaveSalary: number;
     reward: number;
     punishment: number;
     advance: number;
@@ -108,6 +109,7 @@ export type SalaryChild = {
     work: strinstring | null;
     note?: string;
     salary: number;
+    onLeaveSalary: number;
     reward: number;
     punishment: number;
     advance: number;
