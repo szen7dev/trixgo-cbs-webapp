@@ -38,7 +38,7 @@ export const HumanInfo: FC = () => {
   const { updateContactMutateAsync } = useUpdateContactMutation();
   const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.HUMAN.id });
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
-  console.log(detailHuman)
+  // console.log(detailHuman)
 
   const handleFinishForm = async (values: any) => {
     const res = await updateContactMutateAsync({
@@ -132,6 +132,8 @@ export const HumanInfo: FC = () => {
               sallaryFactor: defaultValues.sallaryFactor?.toString(),
               sallarySubFactor: defaultValues.sallarySubFactor?.toString(),
               sallaryBasic: defaultValues.sallaryBasic?.toString(),
+              union: defaultValues.union?.toString(),
+              share: defaultValues.share?.toString(),
               signerIn: defaultValues.signerIn,
               signerOut: defaultValues.signerOut,
               workStartDate: defaultValues.workStartDate,
