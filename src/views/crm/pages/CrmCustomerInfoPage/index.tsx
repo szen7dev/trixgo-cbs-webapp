@@ -123,6 +123,8 @@ export const CrmCustomerInfoPage: FC = () => {
               sallaryFactor: defaultValues.sallaryFactor?.toString(),
               sallarySubFactor: defaultValues.sallarySubFactor?.toString(),
               sallaryBasic: defaultValues.sallaryBasic?.toString(),
+              union: defaultValues.union?.toString(),
+              share: defaultValues.share?.toString(),
               signerIn: defaultValues.signerIn,
               signerOut: defaultValues.signerOut,
               workStartDate: defaultValues.workStartDate,
