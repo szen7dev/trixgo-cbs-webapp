@@ -30,12 +30,14 @@ export const FnbReportSallary: FC = () => {
 	const history = useHistory();
 	const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
+	const today = new Date();
+	const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+	const currentMonth = new Date().getMonth()
 	const [inputFilter, setInputFilter] = useState({
-		keyword: '',
-		fromDate: new Date(new Date().getFullYear(), 0, 1),
-		toDate: new Date(new Date().getFullYear(), 11, 31)
+	  fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+	  toDate: lastDayOfMonth
 	})
-
+	
 	useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
 			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");

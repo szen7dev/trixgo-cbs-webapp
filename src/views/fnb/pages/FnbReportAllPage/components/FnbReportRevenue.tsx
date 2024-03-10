@@ -31,10 +31,12 @@ export const FnbReportRevenue: FC = () => {
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
 
+	const today = new Date();
+	const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+	const currentMonth = new Date().getMonth()
 	const [inputFilter, setInputFilter] = useState({
-		keyword: '',
-		fromDate: new Date(new Date().getFullYear(), 0, 1),
-		toDate: new Date(new Date().getFullYear(), 11, 31)
+	  fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+	  toDate: lastDayOfMonth
 	})
 
 	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
@@ -45,7 +47,9 @@ export const FnbReportRevenue: FC = () => {
 		try {
 		  setStateExport({ isExporting: true });
 		  const { error, data } = await exportOrderAsync2({
-			option: 1
+			option: 1,
+			fromDate: inputFilter.fromDate,
+			toDate: inputFilter.toDate,
 		  });
 	
 		  if(error) {
