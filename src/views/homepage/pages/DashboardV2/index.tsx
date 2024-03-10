@@ -1295,6 +1295,14 @@ export const DashboardV2: FC<Props> = () => {
                   id: 11,
                   text: "Họp",
                 },
+                {
+                  id: 12,
+                  text: "Hóa đơn",
+                },
+                {
+                  id: 16,
+                  text: "Ghi danh",
+                },
               ]}
             />
           )}
