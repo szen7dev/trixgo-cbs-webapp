@@ -31,9 +31,9 @@ export const FnbReportSallary: FC = () => {
 	const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
 	const [inputFilter, setInputFilter] = useState({
-	keyword: '',
-	fromDate: new Date(new Date().getFullYear(), 0, 1),
-	toDate: new Date(new Date().getFullYear(), 11, 31)
+		keyword: '',
+		fromDate: new Date(new Date().getFullYear(), 0, 1),
+		toDate: new Date(new Date().getFullYear(), 11, 31)
 	})
 
 	useEffect(() => {
