@@ -157,9 +157,7 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                                                     {file.nameOrg} ({humanFileSize(file.size)})
                                                 </a>
                                                 <p className={"text-primary-gray text-xs"}>
-                                                    {file.author?.bizfullname}
-                                                    {moment(file.createAt).format('DD/MM/YYYY HH:mm')}
-                                                    ({moment(file.createAt).fromNow()})
+                                                    {file.author?.bizfullname} - {moment(file.createAt).format('DD/MM/YYYY HH:mm')} ({moment(file.createAt).fromNow()})
                                                 </p>
                                             </div>
                                             <input

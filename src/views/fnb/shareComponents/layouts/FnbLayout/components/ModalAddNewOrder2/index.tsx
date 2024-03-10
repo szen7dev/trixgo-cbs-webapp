@@ -777,9 +777,9 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     return loading || isListDoctypeLoading || isListChannelLoading || isListContactLoading
   }, [loading, isListDoctypeLoading, isListChannelLoading, isListContactLoading])
 
-  if (isLoading) {
-      return <Loader className="border-primary" />
-  }
+  // if (isLoading) {
+  //     return
+  // }
 
   return (
     <div className={"flex flex-col"}>
@@ -789,6 +789,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
           <Close onClick={closeModal} />
         </div>
       </div>
+      {isLoading && <Loader className="border-primary" />}
       <Formik
         enableReinitialize={false}
         validationSchema={addOrderSchema}

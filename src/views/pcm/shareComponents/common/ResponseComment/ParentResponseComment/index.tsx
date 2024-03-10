@@ -455,9 +455,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                                                 {file.nameOrg} ({humanFileSize(file.size)})
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
-                                                {file.author?.bizfullname}
-                                                {moment(file.createAt).format('DD/MM/YYYY HH:mm')}
-                                                ({moment(file.createAt).fromNow()})
+                                                {file.author?.bizfullname} - {moment(file.createAt).format('DD/MM/YYYY HH:mm')} ({moment(file.createAt).fromNow()})
                                             </p>
                                         </div>
                                         <input
