@@ -172,6 +172,13 @@ const TimeSheetHomePage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
             ></div>
             <div
               className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Tháng
+            </div>
+            <div
+              className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500 w-1/3"
               }
             >
@@ -235,13 +242,16 @@ const TimeSheetHomePage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
                   }}
                 />
               </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                Tháng {moment(timeSheetParent.date).format('MM/YYYY')}
+              </div>
               <div
                 className={
                   "px-1 py-2 table-cell box-border border-b align-middle w-2/12"
                 }
               >
                 <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
-                  {timeSheetParent.name} - {moment(timeSheetParent.date).format('MM/YYYY')}
+                  {timeSheetParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
                   Tạo: {timeSheetParent?.userCreate?.fullname} {moment(timeSheetParent.createAt).format(DATE_FORMAT)}
