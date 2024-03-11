@@ -231,7 +231,7 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Ngày
+              Ngày tháng ghi nhận lương
             </div>
             <div
               className={

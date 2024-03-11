@@ -122,7 +122,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
 
                 <div>
-                  <p className="text-primary-gray text-[13px] mb-1">Ngày tháng</p>
+                  <p className="text-primary-gray text-[13px] mb-1">Ngày tháng ghi nhận lương</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
                     <Field
                       type="text"
@@ -136,7 +136,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Dự án, phòng ban
                   </p>
@@ -167,7 +167,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       setFieldValue("projectID", value.id)
                     }
                   />
-                </div>
+                </div> */}
 
                 <div>
                   <p className="text-primary-gray text-[13px] mb-1">Ghi chú</p>
