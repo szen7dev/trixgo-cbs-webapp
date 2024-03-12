@@ -28,10 +28,10 @@ type Props = {
 };
 
 const SUBTYPES = [
-  { _id: 1, name: 'Bình thường' },
+  { _id: 1, name: 'Thông thường' },
   { _id: 2, name: 'Nghỉ phép'},
   { _id: 3, name: 'Lễ, tết'},
-  { _id: 4, name: 'Công tác'},
+  // { _id: 4, name: 'Công tác'},
 ]
 
 export const DetailChildRow: FC<Props> = ({
@@ -304,7 +304,7 @@ export const DetailChildRow: FC<Props> = ({
           isMultiple={false}
           allowClearValueSingleInput
           showTriangle
-          placeholder="PL"
+          placeholder="Loại"
           renderSelectedItem={(item) => (
             <p
               style={{

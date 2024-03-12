@@ -47,6 +47,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 
   const initialValues = {
     name: "",
+    date: "",
     assignee: {},
     type: "",
     project: {},
@@ -121,7 +122,20 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     />
                   </div>
                 </div>
-
+                <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Ngày tháng</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="date"
+                      placeholder="Nhập định dạng YYYY-MM-DD"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Người thực hiện
