@@ -35,6 +35,13 @@ import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 
+const SUBTYPES = [
+  { _id: 1, name: 'Thông thường' },
+  { _id: 2, name: 'Nghỉ phép'},
+  { _id: 3, name: 'Lễ, tết'},
+  // { _id: 4, name: 'Công tác'},
+]
+
 const TimeSheetDetailPage: FC = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
@@ -49,6 +56,7 @@ const TimeSheetDetailPage: FC = () => {
   const history = useHistory();
 
   const [userID, setUserID] = useState<string | null>();
+  const [subtype, setSubtype] = useState<string | null>();
   const [userKeyword, setUserKeyword] = useState("");  
   const [keyword, setKeyword] = useState('');
 
@@ -111,6 +119,7 @@ const TimeSheetDetailPage: FC = () => {
   } = useQueryListTimeSheetChild(timeSheetParentID,{
     keyword,
     humanID: userID,
+    subtype,
     limit: 50
   });
 
@@ -332,6 +341,30 @@ const TimeSheetDetailPage: FC = () => {
             }}
             onchangeValue={item => {
                 setUserID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Phân loại"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={SUBTYPES}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onClearData={() => {
+              setSubtype("");
+            }}
+            onchangeValue={item => {
+                setSubtype(item._id);
                 setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
             }}
