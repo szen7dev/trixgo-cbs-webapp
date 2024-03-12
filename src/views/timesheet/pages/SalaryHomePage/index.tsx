@@ -317,7 +317,7 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-               {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance)}`.replace(
+               {`${Number(salaryParent?.salary + salaryParent?.onLeaveSalary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
