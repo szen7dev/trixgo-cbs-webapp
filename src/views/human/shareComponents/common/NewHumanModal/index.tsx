@@ -1348,7 +1348,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         Tiền đóng bảo hiểm
                       </span>
                       <Field
-                        type="number"
+                        type="text"
                         name="insuranceFee"
                         placeholder="Tiền đóng bảo hiểm"
                         className="w-full h-6 outline-none pl-3"
@@ -1412,7 +1412,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         Tiền đóng công đoàn
                       </span>
                       <Field
-                        type="number"
+                        type="text"
                         name="union"
                         placeholder=" Tiền đóng công đoàn"
                         className="w-full h-6 outline-none pl-3"
@@ -1427,7 +1427,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           Quỹ tương thân tương ái
                         </span>
                         <Field
-                          type="number"
+                          type="text"
                           name="share"
                           placeholder="Quỹ tương thân tương ái"
                           className="w-full h-6 outline-none pl-3"
