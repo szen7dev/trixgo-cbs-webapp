@@ -159,6 +159,7 @@ export type CashBookDownloadPayload = {
 }
 
 export type CashBookImportPayload = {
+    option?: string;
     parentID?: string;
     dataImport: string;
 }
