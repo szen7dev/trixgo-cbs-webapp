@@ -27,9 +27,9 @@ const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 
 const SalaryHomePage: FC = () => {
   const history = useHistory()
-  const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
+  const { hasPermission } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
   useEffect(() => {
-    if (!dataUserAccess || dataUserAccess?.level != 0) {
+    if (!hasPermission) {
       toast.error("Bạn không có quyền truy cập chức năng này");
       history.push("/")
     }
