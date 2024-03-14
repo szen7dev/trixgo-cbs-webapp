@@ -8,6 +8,7 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import {
   DropdownSearchableV2,
 } from "shareComponents/common";
+import { read, utils } from 'xlsx';
 
 /**
  * Components, Assets
@@ -195,7 +196,49 @@ const SalaryDetailPage: FC = () => {
     isExporting: false,
   });
 
-  const { downloadTemplateExcelAsync } = useCashBook({});
+  const { downloadTemplateExcelAsync, importExcelAsync } = useCashBook({});
+
+  const [dataImport, setDataImport] = useState([]);
+
+  const handleImport = ($event: any) => {
+    const files = $event.target.files;
+    if (files.length) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+            const wb = read(event.target.result);
+            const sheets = wb.SheetNames;
+
+            if (sheets.length) {
+                const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+
+                // Set data để Import
+                setDataImport(rows)
+            }
+        }
+
+        reader.readAsArrayBuffer(file);
+    }
+
+    // Đọc xong thì xóa value trong Input đi
+    $event.target.value = null;
+}
+
+// Gọi tới API để đẩy data lên
+useEffect(() => {
+    if(dataImport.length){
+        const fetchData = async () => {
+            const data = await importExcelAsync({ option: "1", parentID: salaryParentID, dataImport: JSON.stringify(dataImport) });
+            setDataImport([]);
+
+            if(!data.error){
+                return toast.success("Import thành công");
+            }
+            return toast.error(data.message);
+        }
+        fetchData();
+    }
+}, [JSON.stringify(dataImport)])
 
   const handleDownloadExcel = async () => {
     try {
@@ -248,6 +291,11 @@ const SalaryDetailPage: FC = () => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
+          <button className={"flex items-center justify-center mx-3 ml-3"}>
+              <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+              accept=".xlsx, .xlsm, .xls, .csv"/>
+              <label className="custom-file-label" htmlFor="inputGroupFile">Import excel cập nhật</label>
+          </button>
           <button className={"mr-2 text-primary"} onClick={handleDownloadExcel}>
             Tải Bảng lương
           </button>
@@ -417,7 +465,7 @@ const SalaryDetailPage: FC = () => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Lương phép
+              Lương lễ, phép
             </div>
             <div
               className={

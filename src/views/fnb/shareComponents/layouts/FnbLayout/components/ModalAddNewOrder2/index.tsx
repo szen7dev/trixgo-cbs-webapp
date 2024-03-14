@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import React, { FC, useEffect, useRef, useState, useMemo } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
@@ -53,36 +53,16 @@ type Props = {
   defaultValues?: any;
 }
 
-type DropdownSearchableHandle = React.ElementRef<typeof DropdownSearchable>;
-
 const listPayment = [
   { _id: 1, name: 'Tiền mặt' },
   { _id: 2, name: 'Chuyển khoản' },
 ]
 
 export const ModalAddNewOrder2: FC<Props> = () => {
-  const dropdownFundaRef = useRef<DropdownSearchableHandle>(null);
-  const dropdownShiftsRef = useRef<DropdownSearchableHandle>(null);
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const { current: socket }: any = useSocket();
   const { user } = useAuth();
-
-  // Lĩnh vực
-  const { list: listDoctypes, isLoading: isListDoctypeLoading } = useDoctype({
-      params: {
-          type: 3,
-      },
-      isFetchList: true
-  });
-
-  // Danh sách kênh bán hàng
-  const { list: listChannelDoctype, isLoading: isListChannelLoading } = useDoctype({
-      params: {
-          type: 24,
-      },
-      isFetchList: true
-  });
 
   const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
   const [searchContact, setSearchContact] = useState("");
@@ -94,8 +74,8 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     salesPercent: 0,
   });
 
-  const [fundaID, setFundaID] = useState("");
-  const [shiftID, setShiftID] = useState("");
+  const [funda, setFunda] = useState({ id: "", label: "" });
+  const [shift, setShift] = useState({ id: "", label: "" });
 
   const [fundas, setFundas] = useState<any>([]);
   const [shifts, setShifts] = useState<any>([]);
@@ -121,29 +101,52 @@ export const ModalAddNewOrder2: FC<Props> = () => {
 
   const [customerID, setCustomerID] = useState("");
   const [affiliateID, setAffiliateID] = useState("");
-  const [businessID, setBusinessID] = useState("");
-  const [channelID, setChannelID] = useState("");
+  const [business, setBusiness] = useState({ id: "", label: "" });
+  const [channel, setChannel] = useState({ id: "", label: "" });
   const [paymentMethod, setPaymentMethod] = useState("2");
   const setTypingTimeoutVoucherRef: any = useRef(null);
 
-  const { list: contacts, isLoading: isListContactLoading } = useContact({
+  // Danh sách lĩnh vực
+  const { list: listDoctypes } = useDoctype({
+      params: {
+          type: 3,
+      },
+      isFetchList: true
+  });
+
+  // Danh sách kênh bán hàng
+  const { list: listChannelDoctype } = useDoctype({
+      params: {
+          type: 24,
+      },
+      isFetchList: true
+  });
+
+  // Danh sách khách hàng
+  const { list: contacts } = useContact({
     params: { keyword: searchContact },
     isFetchList: true,
   })
 
   // Set default channel
   useEffect(() => {
-    if (channelID || !listChannelDoctype.length) return;
+    if (channel.id || !listChannelDoctype.length) return;
 
-    setChannelID(listChannelDoctype[0]?._id)
-  }, [channelID, listChannelDoctype])
+    setChannel({
+        id: `${listChannelDoctype[0]?._id}_${listChannelDoctype[0]?.amount}`,
+        label: listChannelDoctype[0]?.name,
+    })
+  }, [channel.id, listChannelDoctype])
 
   // Set default business
   useEffect(() => {
-    if (businessID || !listDoctypes.length) return;
+    if (business.id || !listDoctypes.length) return;
 
-    setBusinessID(listDoctypes[0]?._id)
-  }, [businessID, listDoctypes])
+    setBusiness({
+        id: listDoctypes[0]?._id,
+        label: listDoctypes[0]?.name,
+    })
+  }, [business.id, listDoctypes])
 
   // Tìm kiếm cơ sở (fundaID) -> reset danh sách ca làm việc
   useEffect(() => {
@@ -158,12 +161,11 @@ export const ModalAddNewOrder2: FC<Props> = () => {
       const fundaList = data.listRecords || [];
 
       if (fundaList && fundaList.length) {
-        dropdownFundaRef?.current?.setValueRef({
-          label: `${fundaList[0].sign}.${fundaList[0].name}`,
-          value: fundaList[0]._id,
-        });
-        setFundaID(fundaList[0]._id)
-        setShiftID("");
+        setFunda({
+            label: `${fundaList[0].sign}.${fundaList[0].name}`,
+            id: fundaList[0]._id,
+        })
+        setShift({ id: "", label: "" });
       }
       setFundas(fundaList);
     }
@@ -173,12 +175,12 @@ export const ModalAddNewOrder2: FC<Props> = () => {
 
   // Set ca làm việc và danh mục sản phẩm theo cơ sở (fundaID)
   useEffect(() => {
-    if (!fundaID) return;
+    if (!funda.id) return;
 
     // Tìm kiếm ca làm việc của Cơ sở/Điểm bán
     const fetchShifts = async () => {
       const response = await API.get(
-        `/api/fnb/shifts?fundaID=${fundaID}`,
+        `/api/fnb/shifts?fundaID=${funda.id}`,
         {
           params: {
             populates: {
@@ -194,14 +196,12 @@ export const ModalAddNewOrder2: FC<Props> = () => {
       const shiftsList = data.listRecords || [];
 
       if (shiftsList && shiftsList.length) {
-        dropdownShiftsRef?.current?.setValueRef({
-          label: shiftsList[0].name,
-          value: shiftsList[0]._id,
+        setShift({
+            id: shiftsList[0]._id,
+            label: shiftsList[0].name,
         });
-        setShiftID(shiftsList[0]._id);
       } else {
-        dropdownShiftsRef?.current?.setValueRef(null);
-        setShiftID("");
+        setShift({ id: "", label: "" });
       }
       setShifts(shiftsList);
     }
@@ -213,7 +213,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
      */
     const fetchCateProduct = async () => {
       const response = await API.get(
-        `/api/item/goods?isParent=1&limit=50&status=1&usage=2&fundaID=${fundaID}`,
+        `/api/item/goods?isParent=1&limit=50&status=1&usage=2&fundaID=${funda.id}`,
       );
       const { data, status } = response?.data;
 
@@ -222,7 +222,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     }
     fetchCateProduct();
 
-  }, [fundaID])
+  }, [funda.id])
 
   // Set list vouchers khi chọn mã khách hàng
   useEffect(() => {
@@ -260,14 +260,14 @@ export const ModalAddNewOrder2: FC<Props> = () => {
             path: 'images',
           }),
           parentID: indexParentID,
-          fundaID,
+          fundaID: funda.id,
         })}`,
       );
       const { data, status } = response?.data;
       if (status !== 200) return;
 
       const response2 = await API.get(
-        `/api/item/goods?type=2&status=1&usage=2&limit=50&fundaID=${fundaID}`,
+        `/api/item/goods?type=2&status=1&usage=2&limit=50&fundaID=${funda.id}`,
       );
 
       const productsAsync = data.listRecords?.map?.(async (product: any) => {
@@ -282,7 +282,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     };
 
     fetchProducts();
-  }, [keywordSearchProduct, indexParentID, fundaID]);
+  }, [keywordSearchProduct, indexParentID, funda.id]);
 
   useEffect(() => {
     calTotalMoney();
@@ -370,14 +370,15 @@ export const ModalAddNewOrder2: FC<Props> = () => {
         realCredit = totalMoney - discountAndSales.discount - discountAndSales.sales
       }
 
+      const [channelID] = channel.id.split("_");
       const dataAddNewOrder: any = {
         ...values,
-        fundaID,
-        shiftID,
+        fundaID: funda.id,
+        shiftID: shift.id,
+        businessID: business.id,
+        channelID,
         customerID,
         affiliateID,
-        businessID,
-        channelID,
         paymentMethod,
         products,
         total: `${totalMoney}`,
@@ -755,12 +756,12 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   });
 
   const initialValues: InitialValues = {
-    fundaID,
-    shiftID,
-    customerID,
+    fundaID: "",
+    shiftID: "",
+    customerID: "",
+    businessID: "",
+    channelID: "",
     affiliateID,
-    businessID,
-    channelID,
     paymentMethod,
     seasons: 1,
     sources: 1,
@@ -773,14 +774,6 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     appOrderSign: "",
   }
 
-  const isLoading = useMemo(() => {
-    return loading || isListDoctypeLoading || isListChannelLoading || isListContactLoading
-  }, [loading, isListDoctypeLoading, isListChannelLoading, isListContactLoading])
-
-  // if (isLoading) {
-  //     return
-  // }
-
   return (
     <div className={"flex flex-col"}>
       <div className={"flex w-full py-3 px-3 border-b"}>
@@ -789,7 +782,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
           <Close onClick={closeModal} />
         </div>
       </div>
-      {isLoading && <Loader className="border-primary" />}
+      {loading && <Loader className="border-primary" />}
       <Formik
         enableReinitialize={false}
         validationSchema={addOrderSchema}
@@ -810,14 +803,12 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                           <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5"}>Cơ sở</div>
                           <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                             <DropdownSearchable
-                              ref={dropdownFundaRef}
                               onchangeValue={(value: any) => {
-                                setFundaID(value?.id)
+                                setFunda({
+                                    id: value?.id,
+                                    label: value?.label
+                                })
                                 setFieldValue("fundaID", value?.id);
-                              }}
-                              onClearData={() => {
-                                setFundaID("")
-                                setFieldValue("fundaID", "");
                               }}
                               onSearchInputChange={
                                 debounce(
@@ -827,7 +818,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                               className={"max-w-full h-full flex-1"}
                               placeholder="Cơ sở"
                               isMultiple={false}
-                              allowClearValueSingleInput={true}
+                              allowClearValueSingleInput={false}
                               showTriangle={false}
                               maxWidthInput="max-w-full"
                               renderSelectedItem={(item: any) => (
@@ -843,11 +834,10 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                 id: "value",
                                 text: "label",
                               }}
-                              initialValue={
-                                fundas?.length ? {
-                                label: `${fundas[0]?.sign}.${fundas[0]?.name}`,
-                                value: fundas[0]?._id
-                              } : {}}
+                              valueControlled={{
+                                label: funda.label,
+                                value: funda.id
+                              }}
                               inlineSearch={true}
                             />
                             <ErrorMessage
@@ -861,19 +851,17 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                           <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5"}>Ca làm</div>
                           <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                             <DropdownSearchable
-                              ref={dropdownShiftsRef}
                               onchangeValue={(value: any) => {
-                                setShiftID(value?.id)
+                                setShift({
+                                    id: value?.id,
+                                    label: value?.label
+                                })
                                 setFieldValue("shiftID", value?.id);
-                              }}
-                              onClearData={() => {
-                                setShiftID("")
-                                setFieldValue("shiftID", "");
                               }}
                               className={"max-w-full h-full flex-1"}
                               placeholder="Chọn ca làm"
                               isMultiple={false}
-                              allowClearValueSingleInput={true}
+                              allowClearValueSingleInput={false}
                               showTriangle={false}
                               maxWidthInput="max-w-full"
                               renderSelectedItem={(item: any) => (
@@ -882,14 +870,13 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                 </div>
                               )}
                               data={shifts?.map((shift: any) => ({
-                                label: `${shift.funda.sign}.${shift.name}`,
+                                label: shift.name,
                                 value: shift._id,
                               }))}
-                              initialValue={
-                                shifts?.length ? {
-                                label: `${shifts[0]?.funda?.sign}-${shifts[0]?.name}`,
-                                value: shifts[0]?._id
-                              } : {}}
+                              valueControlled={{
+                                  label: shift.label,
+                                  value: shift.id
+                              }}
                               formatItem={{
                                 id: "value",
                                 text: "label",
@@ -960,16 +947,16 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                           <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                             <DropdownSearchable
                               onchangeValue={(value: any) => {
-                                setBusinessID(value.id);
+                                setBusiness({
+                                    id: value.id,
+                                    label: value.label,
+                                });
                                 setFieldValue("businessID", value.id);
-                              }}
-                              onClearData={() => {
-                                setFieldValue("businessID", "")
                               }}
                               placeholder={"Lĩnh vực"}
                               className={"max-w-full h-full flex-1"}
                               focusedClass={"border-b border-primary"}
-                              allowClearValueSingleInput={true}
+                              allowClearValueSingleInput={false}
                               showTriangle={false}
                               maxWidthInput="max-w-full"
                               renderSelectedItem={(item: any) => (
@@ -985,11 +972,10 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                 id: "value",
                                 text: "label",
                               }}
-                              initialValue={
-                                listDoctypes?.length ? {
-                                label: listDoctypes[0].name,
-                                value: listDoctypes[0]._id
-                              } : {}}
+                              valueControlled={{
+                                value: business.id,
+                                label: business.label
+                              }}
                               inlineSearch={true}
                             />
                             <ErrorMessage
@@ -1005,9 +991,11 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                           <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                             <DropdownSearchable
                               onchangeValue={(value: any) => {
-                                const [id, service] = value.id.split("_");
-                                setChannelID(id);
-                                setFieldValue("channelID", id);
+                                const [, service] = value.id.split("_");
+                                setChannel({
+                                    id: value.id,
+                                    label: value.label,
+                                });
                                 setService(service);
 
                                 // Set payment method
@@ -1033,11 +1021,10 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                 id: "value",
                                 text: "label",
                               }}
-                              initialValue={
-                                listChannelDoctype?.length ? {
-                                label: listChannelDoctype[0].name,
-                                value: `${listChannelDoctype[0]._id}_${listChannelDoctype[0].amount}`
-                              } : {}}
+                              valueControlled={{
+                                  label: channel.label,
+                                  value: channel.id
+                              }}
                               inlineSearch={true}
                             />
                             <ErrorMessage
@@ -1078,10 +1065,6 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                               valueControlled={{
                                 label: listPayment[+paymentMethod - 1].name,
                                 value: listPayment[+paymentMethod - 1]._id,
-                              }}
-                              initialValue={{
-                                label: listPayment[0].name,
-                                value: listPayment[0]._id,
                               }}
                               inlineSearch={true}
                             />

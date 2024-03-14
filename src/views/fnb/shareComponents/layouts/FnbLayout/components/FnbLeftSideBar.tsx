@@ -82,7 +82,6 @@ export const FnbLeftSideBar: FC = () => {
     const handleConfirmCreateOrUpdate = () => refetch();
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
-
         let initValues: any = { ...initialValues };
 
         // Mở modal tạo mới
