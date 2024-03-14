@@ -93,6 +93,7 @@ export const getIconApp = (salesChannel: number) => {
   }
 }
 
+type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 export const fnbAccessData = ['kiemthuvien4.fnb@gmail.com', 'adwgo.winggo@gmail.com', 'hiepnh.winggo@gmail.com', 'chinhnv.winggo@gmail.com','huongnt.winggo@gmail.com','hoangnh.winggo@gmail.com', 'hienpd.winggo@gmail.com','toannd.winggo@gmail.com', 'kiemsoat1.winggo@gmail.com','kiemsoat2.winggo@gmail.com','kiemsoat3.winggo@gmail.com','kiemsoat4.winggo@gmail.com','kiemsoat5.winggo@gmail.com','vund.winggo@gmail.com','quynhntd.winggo@gmail.com','nhungvth.winggo@gmail.com','tuyetnt.winggo@gmail.com']
 
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
@@ -107,7 +108,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     document.title = "Seller";
   }, []);
 
-  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
   const { user } = useAuth();
   const [pageIndex, setPageIndex] = useState(0);
@@ -432,8 +432,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
         <div className={"filter-bar flex flex-wrap px-4 py-1"}>
-          {(isLoading ||
-            isFetching) && <Loader className="border-primary" />}
+          {/* {(isLoading ||
+            isFetching) && <Loader className="border-primary" />} */}
           <SearchInput
               classNameWrapper="mr-2"
               classNameInput="outline-none w-[100px]"
@@ -1293,7 +1293,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                               }}
                             >
                               <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex overflow-hidden">
-                                <img src={iconPhoto} className="mr-[5px] w-6 h-6" />
+                                <img src={iconPhoto} alt="File name" className="mr-[5px] w-6 h-6" />
                                 <span>{file?.nameOrg.substring(0, 10)}...</span>
                               </div>
                             </button>

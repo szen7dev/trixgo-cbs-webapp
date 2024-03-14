@@ -1,7 +1,5 @@
 import API from "../../repository";
 
-import { convertObToUrl } from "utils";
-
 const URL = "/api/fnb";
 
 const fnbOrderRepository = {
