@@ -210,7 +210,7 @@ const SalaryDetailPage: FC = () => {
             const sheets = wb.SheetNames;
 
             if (sheets.length) {
-                const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                const rows: any = utils.sheet_to_json(wb.Sheets[sheets[2]]); // Index=1 (tức Sheet số 2 từ trái sang)
 
                 // Set data để Import
                 setDataImport(rows)
