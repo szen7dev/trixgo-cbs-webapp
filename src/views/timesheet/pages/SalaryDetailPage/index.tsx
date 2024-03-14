@@ -465,7 +465,7 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Lương phép
+              Lương lễ, phép
             </div>
             <div
               className={
