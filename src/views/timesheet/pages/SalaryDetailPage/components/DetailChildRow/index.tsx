@@ -6,6 +6,7 @@ import type {
   UpdateSalaryChildPayload,
 } from "typings/salary";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 type Props = {
   parent?: SalaryParent;
@@ -74,6 +75,8 @@ export const DetailChildRow: FC<Props> = ({
         {rowData?.human?.fullname}
         <p className="text-gray-400 text-[10px]"><i>{rowData?.project?.name}</i></p>
         <p className="text-gray-400 text-[10px]"><i>{rowData?.position?.name}</i></p>
+        <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
+        <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
       </div>
       <div
         className={
@@ -345,27 +348,6 @@ export const DetailChildRow: FC<Props> = ({
         }
       >
         <p
-          suppressContentEditableWarning={true}
-          className={
-            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
-          }
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-            const value = e.target.innerText;
-            handleClickUpdateSalary({
-              ...rowData,
-              remaining: `${value}`,
-            });
-          }}
-        >
-          {`${rowData.remaining}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-        </p>
-      </div>
-      <div
-        className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white"
-        }
-      >
-        <p
           contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
@@ -380,6 +362,27 @@ export const DetailChildRow: FC<Props> = ({
           }}
         >
           {`${rowData.paid}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              remaining: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.remaining}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div

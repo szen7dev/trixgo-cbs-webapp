@@ -125,6 +125,10 @@ export type SalaryChild = {
     convertFactor: number;
     project: any;
     position: any;
+    userCreate: any;
+    userUpdate: any;
+    createAt: any;
+    modifyAt: any;
 }
 
 export type QueryListSalaryChildPayload = QueryParams & {
