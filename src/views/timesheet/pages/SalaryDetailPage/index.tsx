@@ -542,14 +542,14 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Còn lại phải trả
+              Đã chi trả
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Đã chi trả
+              Còn lại phải trả
             </div>
             <div
               className={
