@@ -69,7 +69,7 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "px-[2px] py-[2px] table-cell relative box-border border border-gray-300 bg-white"
+          "px-[2px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
         {rowData?.human?.fullname}
@@ -124,7 +124,7 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
         <p
@@ -146,7 +146,7 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
         <p
@@ -168,7 +168,7 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
         <p
@@ -387,7 +387,7 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 bg-white"
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
         <p
