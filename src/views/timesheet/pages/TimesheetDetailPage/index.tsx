@@ -3,6 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
 import debounce from "lodash/debounce";
+import { read, utils } from 'xlsx';
 
 /**
  * Components, Assets
@@ -224,7 +225,7 @@ const TimeSheetDetailPage: FC = () => {
     isExporting: false,
   });
 
-  const { exportExcelAsync } = useCashBook({});
+  const { exportExcelAsync, importExcelAsync } = useCashBook({});
 
   const handleDownloadExcel = async (param: any) => {
     try {
@@ -247,6 +248,48 @@ const TimeSheetDetailPage: FC = () => {
       setStateExport({ isExporting: false });
     }
   };
+
+  const [dataImport, setDataImport] = useState([]);
+
+  const handleImport = ($event: any) => {
+    const files = $event.target.files;
+    if (files.length) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+            const wb = read(event.target.result);
+            const sheets = wb.SheetNames;
+
+            if (sheets.length) {
+                const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+
+                // Set data để Import
+                setDataImport(rows)
+            }
+        }
+
+        reader.readAsArrayBuffer(file);
+    }
+
+    // Đọc xong thì xóa value trong Input đi
+    $event.target.value = null;
+}
+
+// Gọi tới API để đẩy data lên
+useEffect(() => {
+    if(dataImport.length){
+        const fetchData = async () => {
+            const data = await importExcelAsync({ option: "2", parentID: timeSheetParentID, dataImport: JSON.stringify(dataImport) });
+            setDataImport([]);
+
+            if(!data.error){
+                return toast.success("Import thành công");
+            }
+            return toast.error(data.message);
+        }
+        fetchData();
+    }
+}, [JSON.stringify(dataImport)])
 
   const handleOnChangeDate = useCallback((date, input) => {
     if (input) {
@@ -292,6 +335,11 @@ const TimeSheetDetailPage: FC = () => {
           </button>
           <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 2})}>
             Tải ngân sách
+          </button>
+          <button className={"flex items-center justify-center mr-3"}>
+              <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+              accept=".xlsx, .xlsm, .xls, .csv"/>
+              <label className="custom-file-label" htmlFor="inputGroupFile">Import excel cập nhật</label>
           </button>
           <button
             className="text-gray-400 mr-2"
