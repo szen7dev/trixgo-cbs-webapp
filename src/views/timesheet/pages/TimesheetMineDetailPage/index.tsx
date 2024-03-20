@@ -138,7 +138,10 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                   "px-1 py-2 table-cell box-border border-b align-middle w-2/12"
                 }
               >
-                {item.name} - {moment(item.date).format('MM/YYYY')}
+                {item.name} - {moment(item.date).format('DD/MM/YYYY')}
+                <NavLink  to={`/timesheet/home/${item?.parent?._id}`}>
+                  <p><i>{item?.parent?.name}</i></p>
+                </NavLink>
                 <p className={"mt-1 text-gray-500"}>
                   Tạo: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
                 </p>
