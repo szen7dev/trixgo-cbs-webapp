@@ -9,6 +9,7 @@ import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2
 import { ModalConfirm } from "shareComponents/common";
 import API from "apis/repository";
 import iconRefresh from "assets/images/icons8-refresh.png";
+import { convertCurrency } from "utils/converter";
 
 import {
   SearchInput,
@@ -317,10 +318,11 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-               {`${Number(salaryParent?.salary + salaryParent?.onLeaveSalary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance)}`.replace(
+                {convertCurrency(Number(salaryParent?.salary + salaryParent?.onLeaveSalary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance))}
+               {/* {`${Number(salaryParent?.salary + salaryParent?.onLeaveSalary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
-                )}
+                )} */}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.note}

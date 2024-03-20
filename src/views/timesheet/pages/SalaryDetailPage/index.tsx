@@ -291,13 +291,13 @@ useEffect(() => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
+          <button className={"mr-2 text-primary"} onClick={handleDownloadExcel}>
+            Tải Bảng lương
+          </button>
           <button className={"flex items-center justify-center mx-3 ml-3"}>
               <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
               accept=".xlsx, .xlsm, .xls, .csv"/>
               <label className="custom-file-label" htmlFor="inputGroupFile">Import excel cập nhật</label>
-          </button>
-          <button className={"mr-2 text-primary"} onClick={handleDownloadExcel}>
-            Tải Bảng lương
           </button>
           <button
             className="text-gray-400 mr-2"

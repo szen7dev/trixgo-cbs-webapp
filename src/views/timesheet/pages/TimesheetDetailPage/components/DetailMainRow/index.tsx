@@ -110,5 +110,5 @@ export const DetailMainRow: FC<Props> = ({
         />
       ))}
     </>
-  );
-};
+  )
+}
