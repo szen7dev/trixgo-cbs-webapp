@@ -102,10 +102,7 @@ export const DetailMainRow: FC<Props> = memo(({
         }
       >
         <div className="flex justify-end">
-          {`${salaryParentInfo?.punishment}`.replace(
-            /\B(?=(\d{3})+(?!\d))/g,
-            ","
-          )}
+           {convertCurrency(salaryParentInfo?.punishment)}
         </div>
       </div>
       <div
@@ -168,7 +165,7 @@ export const DetailMainRow: FC<Props> = memo(({
         }
       >
         <div className="flex justify-end">
-          {`${salaryParentInfo?.paid}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        {convertCurrency(salaryParentInfo?.paid)}
         </div>
       </div>
       <div
@@ -177,10 +174,7 @@ export const DetailMainRow: FC<Props> = memo(({
         }
       >
         <div className="flex justify-end">
-          {`${salaryParentInfo?.remaining}`.replace(
-            /\B(?=(\d{3})+(?!\d))/g,
-            ","
-          )}
+          {convertCurrency(salaryParentInfo?.remaining)}
         </div>
       </div>
       <div

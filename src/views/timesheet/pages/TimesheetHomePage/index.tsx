@@ -4,6 +4,7 @@ import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { TIMESHEET_TYPES } from "apis/localdb";
+import { convertCurrency } from "utils/converter";
 
 import {
   SearchInput,
@@ -271,17 +272,14 @@ const TimeSheetHomePage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {timeSheetParent?.hours}
+                {convertCurrency(timeSheetParent?.hours)}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {`${timeSheetParent?.amount}`.replace(
-                  /\B(?=(\d{3})+(?!\d))/g,
-                  ","
-                )}
+                {convertCurrency(timeSheetParent?.amount)}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {timeSheetParent.note}
