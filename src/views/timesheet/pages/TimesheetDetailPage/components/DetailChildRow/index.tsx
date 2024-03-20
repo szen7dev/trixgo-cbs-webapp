@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import debounce from "lodash/debounce";
+import { convertCurrency } from "utils/converter";
 import moment from "moment";
 
 import {DropdownSearchable} from "shareComponents/common";
@@ -9,6 +10,7 @@ import {
 	useQueryListBudgetWork,
 } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 import type {
   TimeSheetChild,
@@ -42,6 +44,7 @@ export const DetailChildRow: FC<Props> = ({
   hasPermission,
   onUpdatedTimeSheetChild,
 }) => {
+  const { user } = useAuth();
 
   const [searchBudgetWorkValue, setSearchBudgetWorkValue] = React.useState(
     rowData.work?.name || ""
@@ -53,7 +56,10 @@ export const DetailChildRow: FC<Props> = ({
 
   const {
     data: listUsersSystem,
-  } = useUserSystem({ keyword: searchAssigneeStr }, true);
+  } = useUserSystem({ 
+    companyID: user?.company._id,
+    keyword: searchAssigneeStr 
+  }, true);
 
   const { listBudgetWork } = useQueryListBudgetWork({
 		limit: LIMIT_DROPDOWN,
@@ -163,7 +169,8 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {rowData.hours}
+          {/* {rowData.hours} */}
+          {convertCurrency(rowData.hours)}
         </p>
       </div>
       <div
@@ -185,7 +192,8 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {`${rowData.unitprice}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          {convertCurrency(rowData.unitprice)}
+          {/* {`${rowData.unitprice}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
         </p>
       </div>
       <div
@@ -199,7 +207,8 @@ export const DetailChildRow: FC<Props> = ({
             "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
           }
         >
-          {`${rowData.amount}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          {convertCurrency(rowData.amount)}
+          {/* {`${rowData.amount}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
         </p>
       </div>
       <div
@@ -355,5 +364,5 @@ export const DetailChildRow: FC<Props> = ({
         </p>
       </div>
     </div>
-  );
-};
+  )
+}

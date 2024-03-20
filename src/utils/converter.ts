@@ -82,7 +82,8 @@ export const convertCurrency = (number: string | number = 0): string => {
     number = number.replaceAll(',', '')
   }
 
-  const formatter = new Intl.NumberFormat('en-US');
+  // const formatter = new Intl.NumberFormat('en-US');
+  const formatter = new Intl.NumberFormat('vi-VN');
   return formatter.format(+number);
 }
 
