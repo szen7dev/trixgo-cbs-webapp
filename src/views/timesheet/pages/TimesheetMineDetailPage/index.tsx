@@ -1,9 +1,9 @@
 import React, { FC, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { TIMESHEET_TYPES } from "apis/localdb";
+import { NavLink, useParams, useHistory } from "react-router-dom";
 
 import {
   SearchInput,
@@ -24,6 +24,9 @@ interface TimesheetHomePageProps {
 }
 
 const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
+  const params = useParams<{ id: string }>();
+  console.log(params)
+  const humanID = params["id"];
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);
@@ -42,7 +45,7 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
     limit,
     loading,
     hasNextPage,
-  } = useQueryListTimeSheetParent({ keyword, type, sortOption: 2 });
+  } = useQueryListTimeSheetParent({ keyword, type, humanID, sortOption: 2 });
 
   const {
     onCreateTimeSheetParentAsync,

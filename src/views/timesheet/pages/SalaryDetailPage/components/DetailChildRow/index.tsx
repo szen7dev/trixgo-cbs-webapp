@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-
+import { NavLink, useParams, useHistory } from "react-router-dom";
 import type {
   SalaryChild,
   SalaryParent,
@@ -73,7 +73,9 @@ export const DetailChildRow: FC<Props> = ({
           "px-[2px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
-        {rowData?.human?.fullname}
+        <NavLink to={`/timesheet/mine/${rowData?.human?._id}`}>
+          {rowData?.human?.fullname}
+        </NavLink>
         <p className="text-gray-400 text-[10px]"><i>{rowData?.project?.name}</i></p>
         <p className="text-gray-400 text-[10px]"><i>{rowData?.position?.name}</i></p>
         <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
