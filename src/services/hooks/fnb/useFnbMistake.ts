@@ -63,7 +63,12 @@ export const useFnbMistake = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
-    // Export excel
+    // Excel
+    const { mutateAsync: importExcelAsync } =
+        useMutation((payload: any) =>
+        fnbRepository.importOrder(payload)
+    );
+
     const { mutateAsync: exportMistakeAsync } =
         useMutation((payload: any) =>
         fnbRepository.exportMistake(payload)
@@ -84,6 +89,7 @@ export const useFnbMistake = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        importExcelAsync,
         exportMistakeAsync
     }
 }

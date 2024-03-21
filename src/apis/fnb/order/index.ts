@@ -33,6 +33,13 @@ const fnbOrderRepository = {
         return data;
     },
 
+    async importOrder(payload: any): Promise<any> {
+        const { data } = await API.post<any>(
+            `${URL}/orders/import-from-excel`, payload
+        );
+        return data;
+    },
+
     async exportOrder(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `${URL}/orders/export-excel`, {
