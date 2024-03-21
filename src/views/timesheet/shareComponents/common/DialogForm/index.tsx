@@ -79,7 +79,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full h-[540px] overflow-scroll">
+    <div className="w-full overflow-scroll" style={{height: "600px"}}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center mb-3 border-b bg-cbs-table-header p-2"}
