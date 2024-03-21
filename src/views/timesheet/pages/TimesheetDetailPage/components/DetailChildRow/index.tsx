@@ -36,6 +36,16 @@ const SUBTYPES = [
   // { _id: 4, name: 'Công tác'},
 ]
 
+const DAYOFWEEKS = [
+  { _id: 0, name: 'Chủ nhật' },
+  { _id: 1, name: 'Thứ 2' },
+  { _id: 2, name: 'Thứ 3'},
+  { _id: 3, name: 'Thứ 4'},
+  { _id: 4, name: 'Thứ 5'},
+  { _id: 5, name: 'Thứ 6'},
+  { _id: 6, name: 'Thứ 7'},
+]
+
 export const DetailChildRow: FC<Props> = ({
   parent,
   rowData,
@@ -148,7 +158,9 @@ export const DetailChildRow: FC<Props> = ({
         />
         <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
         <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
-        <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p>
+        {/* <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p> */}
+        <p className="text-gray-400 text-[10px] text-cbs-highlight-color"><i>{DAYOFWEEKS[Number(new Date(rowData?.date).getDay())]?.name}</i></p>
+        {/* <p className="text-gray-400 text-[10px]"><i>{Number(new Date(rowData?.date).getDay() + 1)}</i></p> */}
       </div>
       <div
         className={

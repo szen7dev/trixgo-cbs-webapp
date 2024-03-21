@@ -65,7 +65,12 @@ export const useFnbOrder = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
-    // Export excel
+    // Excel
+    const { mutateAsync: importExcelAsync } =
+        useMutation((payload: any) =>
+        fnbRepository.importOrder(payload)
+    );
+
     const { mutateAsync: exportOrderAsync } =
         useMutation((payload: any) =>
         fnbRepository.exportOrder(payload)
@@ -97,6 +102,7 @@ export const useFnbOrder = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        importExcelAsync,
         exportOrderAsync,
         exportOrderAsync2,
         exportOrderAsync3,

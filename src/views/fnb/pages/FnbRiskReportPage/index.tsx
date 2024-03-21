@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
+import { read, utils } from 'xlsx';
 
 /*=====2.CSS=====*/
 
@@ -21,6 +22,7 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
@@ -62,6 +64,8 @@ export const FnbRiskReportPage: FC = () => {
 		isExporting: false,
 	});
 	const { exportOrderAsync } = useFnbOrder({});
+	const { importExcelAsync } = useFnbMistake({});
+
 	const handleExportExcel = async () => {
 		try {
 		  setStateExport({ isExporting: true });
@@ -82,6 +86,48 @@ export const FnbRiskReportPage: FC = () => {
 		}
 	}
 
+	const [dataImport, setDataImport] = useState([]);
+
+	const handleImport = ($event: any) => {
+	  const files = $event.target.files;
+	  if (files.length) {
+		  const file = files[0];
+		  const reader = new FileReader();
+		  reader.onload = (event: any) => {
+			  const wb = read(event.target.result);
+			  const sheets = wb.SheetNames;
+  
+			  if (sheets.length) {
+				  const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+  
+				  // Set data để Import
+				  setDataImport(rows)
+			  }
+		  }
+  
+		  reader.readAsArrayBuffer(file);
+	  }
+  
+	  // Đọc xong thì xóa value trong Input đi
+	  $event.target.value = null;
+  }
+  
+  // Gọi tới API để đẩy data lên
+  useEffect(() => {
+	  if(dataImport.length){
+		  const fetchData = async () => {
+			  const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
+			  setDataImport([]);
+  
+			  if(!data.error){
+				  return toast.success("Import thành công");
+			  }
+			  return toast.error(data.message);
+		  }
+		  fetchData();
+	  }
+  }, [JSON.stringify(dataImport)])
+
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -97,6 +143,12 @@ export const FnbRiskReportPage: FC = () => {
 					/>
 					<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
 						Tải báo cáo KPI
+					</button>
+
+					<button className={"flex items-center justify-center ml-3"}>
+						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+						accept=".xlsx, .xlsm, .xls, .csv"/>
+						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel</label>
 					</button>
 
 					{(idsChecked && idsChecked.length) ? (
