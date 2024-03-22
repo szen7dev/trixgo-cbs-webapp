@@ -432,8 +432,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
         <div className={"filter-bar flex flex-wrap px-4 py-1"}>
-          {/* {(isLoading ||
-            isFetching) && <Loader className="border-primary" />} */}
+          {(isLoading ||
+            isFetching) && <Loader className="border-primary" />}
           <SearchInput
               classNameWrapper="mr-2"
               classNameInput="outline-none w-[100px]"
