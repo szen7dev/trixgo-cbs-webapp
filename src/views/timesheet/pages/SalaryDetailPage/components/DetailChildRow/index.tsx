@@ -100,7 +100,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.salary)}
         </p>
       </div>
@@ -123,7 +122,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.onLeaveSalary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.onLeaveSalary)}
         </p>
       </div>
@@ -146,7 +144,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.revenueBonus}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.revenueBonus)}
         </p>
       </div>
@@ -169,7 +166,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.reward}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.reward)}
         </p>
       </div>
@@ -192,7 +188,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.mealAllowance}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.mealAllowance)}
         </p>
       </div>
@@ -215,7 +210,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.punishment}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.punishment)}
         </p>
       </div>
@@ -238,7 +232,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.insurance}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.insurance)}
         </p>
       </div>
@@ -261,7 +254,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.pitax}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.pitax)}
         </p>
       </div>
@@ -284,7 +276,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.union}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.union)}
         </p>
       </div>
@@ -307,7 +298,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.share}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.share)}
         </p>
       </div>
@@ -330,7 +320,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.other}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.other)}
         </p>
       </div>
@@ -353,7 +342,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.advance}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.advance)}
         </p>
       </div>
@@ -376,7 +364,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.paid}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.paid)}
         </p>
       </div>
@@ -398,7 +385,6 @@ export const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {/* {`${rowData.remaining}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
           {convertCurrency(rowData.remaining)}
         </p>
       </div>
