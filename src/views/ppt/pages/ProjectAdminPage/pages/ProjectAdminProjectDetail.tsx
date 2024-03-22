@@ -132,7 +132,7 @@ const ProjectAdminProjectDetail: FC = () => {
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[120px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[120px] h-8 rounded font-bold"
 						onClick={() =>
 							openModal(
 								<div
@@ -146,9 +146,6 @@ const ProjectAdminProjectDetail: FC = () => {
 						}
 					>
 						Thêm thành viên
-					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
 					</button>
 				</div>
 			</header>
@@ -166,7 +163,6 @@ const ProjectAdminProjectDetail: FC = () => {
 									ref={checkboxRef}
 									onClick={handleCheckAll}
 								/>
-								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
 						<th className="w-1/5 pb-1 pt-1">

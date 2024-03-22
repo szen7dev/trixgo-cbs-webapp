@@ -243,7 +243,6 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
 
     //_____Import excel
     const handleImport1 = ($event: any) => {
-        // console.log('11111111111111111111111111111')
         const files = $event.target.files;
         if (files.length) {
             const file = files[0];
@@ -263,7 +262,6 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     }
 
     const handleImport2 = ($event: any) => {
-        // console.log('2222222222222222222222222222222')
         const files = $event.target.files;
         if (files.length) {
             const file = files[0];
