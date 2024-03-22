@@ -22,7 +22,6 @@ import gojekChannelIcon from "assets/images/fnb/gojek.svg";
 import baemineChannelIcon from "assets/images/fnb/baemin.svg";
 import loshipChannelIcon from "assets/images/fnb/loship.svg";
 import beeChannelIcon from "assets/images/fnb/bee.svg";
-// import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import { IconImage } from 'views/media/shareComponents/common';
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconRefresh from "assets/images/icons8-refresh.png";
@@ -31,6 +30,7 @@ import iconTicket from "assets/images/icons8-ticket.png";
 /*=====4.PAGES/COMPONENTS=====*/
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { ModalDetailItem } from "./components/ModalDetailItem/index";
+import { ModalDetailItem2 } from "./components/ModalDetailItem2/index";
 import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
 import { ModalUpdatePayment } from "./components/ModalUpdatePayment";
 import { ModalUpdateSalesChannel } from "./components/ModalUpdateSalesChannel";
@@ -1251,11 +1251,21 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       </div>
                     </td>
                     <td className={"w-[90px] px-1 py-2"}>
-                      <div className={"user-infor py-2"}>
+                      <button
+                        onClick={() =>
+                          openModal(
+                            <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                              <ModalDetailItem2 order={item} />
+                            </div>
+                          )
+                        }
+                      >
+                        <div className={"user-infor py-2"}>
                         <p className={"truncate user-infor-name text-[14px]  text-left"}>
                           {FNB_CHANNEL[Number(item?.salesChannel) - 1]?.text}
                         </p>
                       </div>
+                      </button>
                     </td>
                     <td className={"px-1 py-2 w-1/4"}>
                       <button

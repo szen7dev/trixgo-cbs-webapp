@@ -1,8 +1,8 @@
 /**
  * Libraries
  */
-import React, { ChangeEvent, FC, UIEvent, useEffect, useState } from "react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { FC, UIEvent, useEffect, useState } from "react";
+import { Formik, Form } from "formik";
 import { toast } from "react-toastify";
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -63,7 +63,6 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
   const { openModal, closeModal } = useModal();
   const [orderProducts, setOrderProducts] = useState([]);
   const [mistakes, setMistakes] = useState([]);
-  const [mistakesSelected, setMistakesSelected] = useState<any>([]);
   const [mistakeDoctypes, setMistakeDocTypes] = useState([]);
 
   const [keywordMistakeDoctypes, setKeywordMistakeDocTypes] = useState('');
@@ -262,7 +261,6 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
           onSubmit={() => Promise.resolve('Done!')}
         >
           {(formik) => {
-            // const { setFieldValue, values } = formik;
             return (
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6 pb-4"}>
@@ -445,7 +443,6 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                             <div className="w-full">
                               <div className="flex justify-between">
                                 <div>
-                                  {/* <p className="font-bold truncate">{op.product?.name} - Size {FNB_SIZE[Number(op.size)-1].text} - {formatNumberMoney(op.product?.unitPrice)}</p> */}
                                   <p className="font-bold truncate">{op.product?.name} - Size {FNB_SIZE[Number(op.size)-1].text}-{formatNumberMoney(getProdPrice(op.size, order.salesChannel, op.product))}</p>
                                   <p className="text-primary-gray">{op.note}</p>
                                 </div>
@@ -455,7 +452,6 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                 <div className="w-4/5 mt-3">
                                   {op.subProducts?.map?.((subProduct: any) => (
                                     <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
-                                      {/* <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(subProduct.unitPrice)} </li> */}
                                       <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(getProdPrice(op.size, order.salesChannel, subProduct))} </li>
                                     </div>
                                   ))}
