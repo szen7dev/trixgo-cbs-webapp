@@ -6,7 +6,7 @@ import { SearchInput } from "shareComponents/common";
 import debounce from "lodash/debounce";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
+// import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-64.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
@@ -63,7 +63,7 @@ const ProjectAdminDetail: FC = () => {
 			history.push("/")
 		}
 	}, [hasPermission, dataUserAccess]);
-	
+
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -73,7 +73,7 @@ const ProjectAdminDetail: FC = () => {
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
 						onChange={debounce(
-							(event: any) => {
+							(_: any) => {
 								//	setKeyword(event.target.value);
 							},
 							500
@@ -104,7 +104,7 @@ const ProjectAdminDetail: FC = () => {
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[120px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green py-2 px-2 rounded font-bold mr-6"
 						onClick={() =>
 							openModal(
 								<div
@@ -119,9 +119,9 @@ const ProjectAdminDetail: FC = () => {
 					>
 						Thêm thành viên
 					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
+					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
+					</button> */}
 				</div>
 			</header>
 

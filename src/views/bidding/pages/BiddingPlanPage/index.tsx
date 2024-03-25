@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, useState, useEffect } from "react";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -10,7 +10,7 @@ import debounce from "lodash/debounce";
 import { SearchInput, GroupActions, ModalContainer, ModalConfirm } from "shareComponents/common";
 import ModalCreateBiddingPlan from "./components/ModalCreateBiddingPlan";
 import ModalUpdateBiddingPlan from "./components/ModalUpdateBiddingPlan";
-import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
+// import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
 // import TriangleDown from "assets/icons/TriangleDown";
 // import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 // import FinancialCashFlowFilterButton from "./components/CashFlowButtonFilter";
@@ -19,7 +19,7 @@ import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-
 /**
  * Utils
  */
-import { 
+import {
   BIDDING_PLAN_TYPE, BIDDING_PLAN_STATUS, BIDDING_PLAN_FORM,
   BIDDING_PLAN_CONTRACT_TYPE
 } from "apis/localdb";
@@ -35,7 +35,6 @@ import { useProject } from 'services/hooks/items/useProject';
 import { useBiddingPlan } from "services/hooks/bidding/useBiddingPlan";
 
 export const BiddingPlanPage: FC = () => {
-  const location = useLocation();
   const { projectID } = useParams<{ projectID: string }>();
 	const { info: projectInfo } = useProject({
 		params: {

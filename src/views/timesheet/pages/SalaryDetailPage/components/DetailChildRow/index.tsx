@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { NavLink, useParams, useHistory } from "react-router-dom";
+import React, { FC, useContext } from "react";
+import { NavLink } from "react-router-dom";
 import type {
   SalaryChild,
   SalaryParent,
@@ -8,6 +8,7 @@ import type {
 import { toast } from "react-toastify";
 import moment from "moment";
 import { convertCurrency } from "utils/converter";
+import { DeleteSalaryContext } from "../../contexts/DeleteSalary";
 
 type Props = {
   parent?: SalaryParent;
@@ -28,6 +29,8 @@ export const DetailChildRow: FC<Props> = ({
   hasPermission,
   onUpdatedSalaryChild
 }) => {
+  const deleteSalaryContext = useContext(DeleteSalaryContext)
+
   const handleClickUpdateSalary = React.useCallback(
     (value) => {
       if(!hasPermission) {
@@ -40,6 +43,23 @@ export const DetailChildRow: FC<Props> = ({
     },
     [onUpdatedSalaryChild, rowData, hasPermission]
   );
+
+  const onChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!deleteSalaryContext) return;
+
+    const { setSalaryIds } = deleteSalaryContext;
+    const { checked, value } = event.target;
+
+    setSalaryIds((curr: string[]) => {
+      if (checked) {
+        const newIds: string[] = [...curr, value];
+        return newIds;
+      }
+
+      const filterCurr = curr.filter(id => id !== value);
+      return filterCurr;
+    })
+  }
 
   return (
     <div
@@ -56,6 +76,16 @@ export const DetailChildRow: FC<Props> = ({
       className={"transition duration-300 ease-in-out child-row table-row "}
       data-row-index={rowData._id}
     >
+      <div className="table-cell relative box-border border border-gray-300 align-middle bg-white">
+				<div className="border-gray-300 flex items-center justify-center">
+					<input
+						className="form-check-input"
+						type="checkbox"
+						value={rowData._id}
+						onChange={onChangeCheckbox}
+					/>
+				</div>
+      </div>
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"

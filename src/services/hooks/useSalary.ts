@@ -14,6 +14,8 @@ import type {
   InsertSalaryChildResponse,
   UpdateSalaryChildPayload,
   UpdateSalaryChildResponse,
+  DeleteSalaryChildPayload,
+  DeleteSalaryChildResponse,
   // DownloadPayload,
   // ImportPayload,
   // ExportManyPayload,
@@ -257,6 +259,9 @@ interface UseMutationSalaryChild {
   onUpdateSalaryAsync: (
     payload: UpdateSalaryChildPayload
   ) => Promise<UpdateSalaryChildResponse>;
+  onDeleteSalaryAsync: (
+    payload: DeleteSalaryChildPayload
+  ) => Promise<DeleteSalaryChildResponse>;
 }
 
 export const useMutationSalaryChild = (): UseMutationSalaryChild => {
@@ -268,8 +273,13 @@ export const useMutationSalaryChild = (): UseMutationSalaryChild => {
     SalaryChildRepository.updateSalary(payload)
   );
 
+  const deleteMutation = useMutation((payload: DeleteSalaryChildPayload) =>
+    SalaryChildRepository.deleteSalary(payload)
+  );
+
   return {
     onCreateSalaryAsync: insertMutation.mutateAsync,
     onUpdateSalaryAsync: updateMutation.mutateAsync,
+    onDeleteSalaryAsync: deleteMutation.mutateAsync,
   };
 };
