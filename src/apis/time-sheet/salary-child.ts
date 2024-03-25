@@ -1,7 +1,8 @@
 import {
     fetchListSalary,
     insertSalary,
-    updateSalary
+    updateSalary,
+    deleteSalary,
 } from './salary-parent';
 
 import type {
@@ -10,13 +11,16 @@ import type {
     InsertSalaryChildPayload,
     InsertSalaryChildResponse,
     UpdateSalaryChildPayload,
-    UpdateSalaryChildResponse
+    UpdateSalaryChildResponse,
+    DeleteSalaryChildPayload,
+    DeleteSalaryChildResponse,
 } from 'typings/salary';
 
 interface SalaryChildRepository {
     fetchListSalary: (params: QueryListSalaryChildPayload) => Promise<QuerySalaryChildResponse>;
     insertSalary: (payload: InsertSalaryChildPayload) => Promise<InsertSalaryChildResponse>;
     updateSalary: (payload: UpdateSalaryChildPayload) => Promise<UpdateSalaryChildResponse>;
+    deleteSalary: (payload: DeleteSalaryChildPayload) => Promise<DeleteSalaryChildResponse>;
 }
 
 export const salaryChildRepository: SalaryChildRepository = {
@@ -28,5 +32,8 @@ export const salaryChildRepository: SalaryChildRepository = {
     },
     updateSalary: async (payload) => {
         return updateSalary(payload)
+    },
+    deleteSalary: async (payload) => {
+        return deleteSalary(payload)
     },
 }

@@ -1,13 +1,9 @@
 import React, { FC, useEffect, useState, useRef } from "react";
-import { NavLink, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import moment from "moment";
-import {debounce} from "lodash";
-import { APP_ID } from "apis/localdb";
+import { useDispatch } from "react-redux";
+import { debounce } from "lodash";
 import { toast } from "react-toastify";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import {
-  DropdownSearchableV2,
-} from "shareComponents/common";
 import { read, utils } from 'xlsx';
 
 /**
@@ -15,12 +11,18 @@ import { read, utils } from 'xlsx';
  */
 import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
+import TrashIcon from "assets/images/icons8-remove-96.svg";
+
+import { createLinkAndClick } from "utils";
+import { APP_ID } from "apis/localdb";
+
+import { DetailMainRow, ModalShare } from "./components";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
-import { createLinkAndClick } from "utils";
-import { DetailMainRow, ModalShare } from "./components";
-import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
-import {useDispatch} from "react-redux";
+import { setFilterDropdown } from "redux/reducer/DocumentProjectSlice";
+
+import { Loader, ModalConfirm, DropdownSearchableV2 } from "shareComponents/common";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 
 import {
   useQueryDetailSalaryParent,
@@ -28,29 +30,33 @@ import {
   useMutationSalaryChild,
 } from "services/hooks/useSalary";
 
+import { useModal } from "services/hooks/useModal";
 import { useProjectCustom } from "services/hooks/items/useProject";
 import { usePosition } from 'services/hooks/items/usePosition';
 import { useCashBook } from "services/hooks/financial/useCashBook";
-
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useAuth } from "services/hooks/auth/useAuth";
+
 import { User } from "typings/user";
-import { Loader } from "shareComponents/common";
-import PaginateV2 from "shareComponents/common/PaginateV2";
+import { DeleteSalaryContext, DeleteSalaryContextType } from "./contexts/DeleteSalary";
 
 const SalaryDetailPage: FC = () => {
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const [projectKeyword, setProjectKeyword] = useState("");
   const [departmentsID, setDepartmentsID] = useState<string[]>([]);
+  const [salaryIds, setSalaryIds] = useState<DeleteSalaryContextType['salaryIds']>([]);
 
   const [positionKeyword, setpPositionKeyword] = useState("");
   const [positionsID, setPositionsID] = useState<string[]>([]);
 
+  const { closeModal, openModal } = useModal();
   const dispatch = useDispatch();
 
   const datahubRef = React.useRef<DropdownHandle>(null);
   const history = useHistory()
   const { hasPermission } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
+
   useEffect(() => {
     if (!hasPermission) {
       toast.error("Bạn không có quyền truy cập chức năng này");
@@ -115,7 +121,7 @@ const SalaryDetailPage: FC = () => {
   const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
   const { data: listPosition } = usePosition({ keyword: positionKeyword }, true);
 
-  const { onUpdateSalaryAsync } = useMutationSalaryChild();
+  const { onUpdateSalaryAsync, onDeleteSalaryAsync } = useMutationSalaryChild();
 
   useEffect(() => {
     if (!salaryInfo || !user) return;
@@ -142,6 +148,7 @@ const SalaryDetailPage: FC = () => {
 
     const hasPermissionCreateUpdate =
       adminsID.includes(user._id) || authorID === user._id;
+
     const hasPermissionShare = authorID === user._id;
     const onlyView =
       membersID.includes(user._id) &&
@@ -211,7 +218,6 @@ const SalaryDetailPage: FC = () => {
 
             if (sheets.length) {
                 const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-
                 // Set data để Import
                 setDataImport(rows)
             }
@@ -222,23 +228,23 @@ const SalaryDetailPage: FC = () => {
 
     // Đọc xong thì xóa value trong Input đi
     $event.target.value = null;
-}
+  }
 
-// Gọi tới API để đẩy data lên
-useEffect(() => {
-    if(dataImport.length){
-        const fetchData = async () => {
-            const data = await importExcelAsync({ option: "1", parentID: salaryParentID, dataImport: JSON.stringify(dataImport) });
-            setDataImport([]);
+  // Gọi tới API để đẩy data lên
+  useEffect(() => {
+      if(dataImport.length){
+          const fetchData = async () => {
+              const data = await importExcelAsync({ option: "1", parentID: salaryParentID, dataImport: JSON.stringify(dataImport) });
+              setDataImport([]);
 
-            if(!data.error){
-                return toast.success("Import thành công");
-            }
-            return toast.error(data.message);
-        }
-        fetchData();
-    }
-}, [JSON.stringify(dataImport)])
+              if(!data.error){
+                  return toast.success("Import thành công");
+              }
+              return toast.error(data.message);
+          }
+          fetchData();
+      }
+  }, [JSON.stringify(dataImport)])
 
   const handleDownloadExcel = async () => {
     try {
@@ -264,329 +270,383 @@ useEffect(() => {
     setKeyword(event.target.value)
   }, 500)
 
-  if (!salaryInfo || loading || !user)
-    return <Loader className="border-primary" />;
+  const handleConfirmDeleteSalary = async () => {
+    try {
+      closeModal();
 
-  return (
-    <div className={"financial-planning-detail"}>
+      if(!salaryIds.length) {
+        return toast.warn('Bạn chưa chọn dữ liệu để xóa');
+      }
+
+      const { error, message, data } = await onDeleteSalaryAsync({ arraysRemove: salaryIds })
+
+      if(error) {
+        return toast.warn(data?.message);
+      }
+
+      setSalaryIds((curr: string[]) => {
+        const filterCurr = curr.filter(id => !salaryIds.includes(id));
+        return filterCurr;
+      })
+
+      toast.success(message);
+      onRefreshSalaryChild();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  const openDeleteModal = () => {
+    openModal(
       <div
         className={
-          "financial-planning-header flex p-2 sticky top-0 z-10 bg-white"
+          "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
         }
       >
-        <FileColorIcon />
-        <div className="w-auto">
-          <div className={"flex"}>
-            <InputWidthAdjust
-              className={"text-lg w-auto mr-2"}
-              value={salaryInfo.name}
-            />
-            <img alt={"star-icon"} src={StarIcon} />
-          </div>
-          <p className={"text-gray-400"}>
-            Chỉnh sửa lần cuối cách đây{" "}
-            {moment(salaryInfo.modifyAt).isValid() &&
-              moment(salaryInfo.modifyAt).fromNow()}{" "}
-            bởi {salaryInfo.userCreate?.fullname}
-          </p>
-        </div>
-        <div className={"flex-1 flex items-center justify-end"}>
-          <button className={"mr-2 text-primary"} onClick={handleDownloadExcel}>
-            Tải Bảng lương
-          </button>
-          <button className={"flex items-center justify-center mx-3 ml-3"}>
-              <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-              accept=".xlsx, .xlsm, .xls, .csv"/>
-              <label className="custom-file-label" htmlFor="inputGroupFile">Import excel cập nhật</label>
-          </button>
-          <button
-            className="text-gray-400 mr-2"
-            onClick={() => {
-              toggleModalShare("admins", salaryInfo.admins);
-            }}
-          >
-            Admin ({salaryInfo.admins?.length})
-          </button>{" "}
-          |
-          <button
-            className="text-gray-400 mr-2 ml-2"
-            onClick={() => {
-              toggleModalShare("members", salaryInfo.members);
-            }}
-          >
-            Thành viên ({salaryInfo.members?.length})
-          </button>
-        </div>
+        <ModalConfirm onConfirm={handleConfirmDeleteSalary} onCancel={closeModal} />
       </div>
-      <div className="flex-1 flex items-center justify-end">
-        <div className="relative flex items-center">
-            <input 
-            placeholder="Tìm kiếm" 
-            className="pl-3 pr-3 mr-1 w-[275px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
-            onChange={onChangeSearch}
-            />
-        </div>
-        <DropdownSearchableV2
-            ref={datahubRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
-            placeholder={"Dự án/Phòng ban"}
-            isMultiple={true}
-            allowClearValueSingleInput={true}
-            data={listProjectsUserIsMember}
-            formatItem={{
-                id: "_id",
-                text: "name"
-            }}
-            onSearchInputChange={debounce(
-                (valueSearch) => setProjectKeyword(valueSearch),
-                500
-            )}
-            onchangeValue={item => {
-                const cloneIDs = [...departmentsID];
-                cloneIDs.push(item._id);
-                setDepartmentsID(cloneIDs);
-                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: cloneIDs}))
+    );
+  }
 
-                setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
-            }}
-            onClearData={() => {
-                setDepartmentsID([]);
-                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
+  if (!salaryInfo || loading || !user) {
+    return <Loader className="border-primary" />;
+  }
 
-                setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
-            }}
-            onMultipleRemoveValue={id => {
-                const cloneIDs = [...departmentsID];
-                const newList = cloneIDs.filter(selectId => selectId !== id);
-                setDepartmentsID(newList);
-                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
-
-                setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
-            }}
-            renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
-            )}
-            selectOneByOne={true}
-        />
-
-        <DropdownSearchableV2
-            ref={datahubRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
-            placeholder={"Bộ phận"}
-            isMultiple={true}
-            allowClearValueSingleInput={true}
-            data={listPosition}
-            formatItem={{
-                id: "_id",
-                text: "name"
-            }}
-            onSearchInputChange={debounce(
-                (valueSearch) => setpPositionKeyword(valueSearch),
-                500
-            )}
-            onchangeValue={item => {
-                const cloneIDs = [...positionsID];
-                cloneIDs.push(item._id);
-                setPositionsID(cloneIDs);
-                dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: cloneIDs}))
-
-                setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
-            }}
-            onClearData={() => {
-              setPositionsID([]);
-                dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: []}))
-
-                setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
-            }}
-            onMultipleRemoveValue={id => {
-                const cloneIDs = [...positionsID];
-                const newList = cloneIDs.filter(selectId => selectId !== id);
-                setPositionsID(newList);
-                dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: newList}))
-
-                setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
-            }}
-            renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
-            )}
-            selectOneByOne={true}
-        />
-
-        <PaginateV2
-          ref={ref}
-          totalRecord={totalRecord}
-          totalPages={totalPages}
-          limit={limit}
-          hasNextPage={hasNextPage}
-          isFetching={isFetchSalaryChild}
-          nextPageAction={() => {
-            setPageIndex((oldState) => oldState + 1);
-            fetchNextPage();
-          }}
-          prevPageAction={() => {
-            setPageIndex((oldState) => oldState - 1);
-            fetchPrevPage();
-          }}
-        />
-      </div>
-
-      <div className={"financial-planning-table mt-2"}>
-        <div className={"relative table border-collapse w-full"}>
-          <div className={"header table-row sticky z-10"}>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              TT
+  return (
+    <DeleteSalaryContext.Provider value={{ salaryIds, setSalaryIds }}>
+      <div className={"financial-planning-detail"}>
+        <div
+          className={
+            "financial-planning-header flex p-2 sticky top-0 z-10 bg-white"
+          }
+        >
+          <FileColorIcon />
+          <div className="w-auto">
+            <div className={"flex"}>
+              <InputWidthAdjust
+                className={"text-lg w-auto mr-2"}
+                value={salaryInfo.name}
+              />
+              <img alt={"star-icon"} src={StarIcon} />
             </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-1/8"
-              }
-            >
-              Nhân sự
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Lương cứng
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Lương lễ, phép
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Thưởng hiệu quả
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Thưởng thành tích
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Phụ cấp
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Trừ vi phạm
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Trừ bảo hiểm
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Trừ thuế TNCN
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Trừ công đoàn
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Trừ quỹ chia sẻ
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Trừ khác
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Đã tạm ứng
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Đã chi trả
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Còn lại phải trả
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Ghi chú
-            </div>
+            <p className={"text-gray-400"}>
+              Chỉnh sửa lần cuối cách đây{" "}
+              {moment(salaryInfo.modifyAt).isValid() &&
+                moment(salaryInfo.modifyAt).fromNow()}{" "}
+              bởi {salaryInfo.userCreate?.fullname}
+            </p>
           </div>
-          {salaryInfo?._id && Array.isArray(listSalaryChild) && (
-            <DetailMainRow
-              salaryParentInfo={salaryInfo}
-              listSalaryChild={listSalaryChild}
-              onUpdatedSalaryChild={handleUpdatedSalary}
-              isFetchSalaryChild={isFetchSalaryChild}
-              hasPermission={permissions.hasPermissionCreateUpdate}
-              pageIndex={pageIndex}
-            />
+          <div className={"flex-1 flex items-center justify-end"}>
+            <button className={"mr-2 text-primary"} onClick={handleDownloadExcel}>
+              Tải Bảng lương
+            </button>
+            <button className={"flex items-center justify-center mx-3 ml-3"}>
+                <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                accept=".xlsx, .xlsm, .xls, .csv"/>
+                <label className="custom-file-label" htmlFor="inputGroupFile">Import excel cập nhật</label>
+            </button>
+            <button
+              className="text-gray-400 mr-2"
+              onClick={() => {
+                toggleModalShare("admins", salaryInfo.admins);
+              }}
+            >
+              Admin ({salaryInfo.admins?.length})
+            </button>{" "}
+            |
+            <button
+              className="text-gray-400 mr-2 ml-2"
+              onClick={() => {
+                toggleModalShare("members", salaryInfo.members);
+              }}
+            >
+              Thành viên ({salaryInfo.members?.length})
+            </button>
+          </div>
+        </div>
+        <div className="flex-1 flex items-center justify-end">
+          <div className="relative flex items-center">
+              <input
+              placeholder="Tìm kiếm"
+              className="pl-3 pr-3 mr-1 w-[275px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
+              onChange={onChangeSearch}
+              />
+          </div>
+          <DropdownSearchableV2
+              ref={datahubRef}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Dự án/Phòng ban"}
+              isMultiple={true}
+              allowClearValueSingleInput={true}
+              data={listProjectsUserIsMember}
+              formatItem={{
+                  id: "_id",
+                  text: "name"
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setProjectKeyword(valueSearch),
+                  500
+              )}
+              onchangeValue={item => {
+                  const cloneIDs = [...departmentsID];
+                  cloneIDs.push(item._id);
+                  setDepartmentsID(cloneIDs);
+                  dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: cloneIDs}))
+
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              onClearData={() => {
+                  setDepartmentsID([]);
+                  dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
+
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              onMultipleRemoveValue={id => {
+                  const cloneIDs = [...departmentsID];
+                  const newList = cloneIDs.filter(selectId => selectId !== id);
+                  setDepartmentsID(newList);
+                  dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
+
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+
+          <DropdownSearchableV2
+              ref={datahubRef}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Bộ phận"}
+              isMultiple={true}
+              allowClearValueSingleInput={true}
+              data={listPosition}
+              formatItem={{
+                  id: "_id",
+                  text: "name"
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setpPositionKeyword(valueSearch),
+                  500
+              )}
+              onchangeValue={item => {
+                  const cloneIDs = [...positionsID];
+                  cloneIDs.push(item._id);
+                  setPositionsID(cloneIDs);
+                  dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: cloneIDs}))
+
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              onClearData={() => {
+                setPositionsID([]);
+                  dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: []}))
+
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              onMultipleRemoveValue={id => {
+                  const cloneIDs = [...positionsID];
+                  const newList = cloneIDs.filter(selectId => selectId !== id);
+                  setPositionsID(newList);
+                  dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: newList}))
+
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+
+          {!!salaryIds.length && (
+            <div className="w-9 h-9 mb-2 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray" onClick={openDeleteModal}>
+  						<img src={TrashIcon} alt="Trash" />
+  					</div>
           )}
-        </div>
-      </div>
 
-      <ModalLarge
-        show={modalShare.isShow}
-        toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
-        className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
-      >
-        <ModalShare
+          <PaginateV2
+            ref={ref}
+            totalRecord={totalRecord}
+            totalPages={totalPages}
+            limit={limit}
+            hasNextPage={hasNextPage}
+            isFetching={isFetchSalaryChild}
+            nextPageAction={() => {
+              setPageIndex((oldState) => oldState + 1);
+              fetchNextPage();
+            }}
+            prevPageAction={() => {
+              setPageIndex((oldState) => oldState - 1);
+              fetchPrevPage();
+            }}
+          />
+        </div>
+
+        <div className={"financial-planning-table mt-2"}>
+          <div className={"relative table border-collapse w-full"}>
+            <div className={"header table-row sticky z-10"}>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                #
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                TT
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-1/8"
+                }
+              >
+                Nhân sự
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Lương cứng
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Lương lễ, phép
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Thưởng hiệu quả
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Thưởng thành tích
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Phụ cấp
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Trừ vi phạm
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Trừ bảo hiểm
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Trừ thuế TNCN
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Trừ công đoàn
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Trừ quỹ chia sẻ
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Trừ khác
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Đã tạm ứng
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Đã chi trả
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Còn lại phải trả
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Ghi chú
+              </div>
+            </div>
+            {salaryInfo?._id && Array.isArray(listSalaryChild) && (
+              <DetailMainRow
+                salaryParentInfo={salaryInfo}
+                listSalaryChild={listSalaryChild}
+                onUpdatedSalaryChild={handleUpdatedSalary}
+                isFetchSalaryChild={isFetchSalaryChild}
+                hasPermission={permissions.hasPermissionCreateUpdate}
+                pageIndex={pageIndex}
+              />
+            )}
+          </div>
+        </div>
+
+        <ModalLarge
+          show={modalShare.isShow}
           toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
-          refetch={refetch}
-          expertSalaryID={salaryParentID}
-          users={modalShare.users}
-          modalType={modalShare.modalType}
-          hasPermission={permissions.hasPermissionShare}
-        />
-      </ModalLarge>
-    </div>
+          className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+        >
+          <ModalShare
+            toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+            refetch={refetch}
+            expertSalaryID={salaryParentID}
+            users={modalShare.users}
+            modalType={modalShare.modalType}
+            hasPermission={permissions.hasPermissionShare}
+          />
+        </ModalLarge>
+      </div>
+    </DeleteSalaryContext.Provider>
   );
 };
 

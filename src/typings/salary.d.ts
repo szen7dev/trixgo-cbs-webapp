@@ -166,6 +166,7 @@ export type InsertSalaryChildResponse = {
     data: SalaryChild & {
         human?: string;
         project: string;
+        message?: string;
     }
 }
 
@@ -193,4 +194,16 @@ export type UpdateSalaryChildPayload = {
     pitax: string;
 }
 
+export type DeleteSalaryChildPayload = {
+  arraysRemove: string[]
+}
+
 export type UpdateSalaryChildResponse = InsertSalaryChildResponse;
+export type DeleteSalaryChildResponse = {
+  error: boolean;
+  status?: number;
+  message?: string;
+  data?: {
+    message: string;
+  }
+}
