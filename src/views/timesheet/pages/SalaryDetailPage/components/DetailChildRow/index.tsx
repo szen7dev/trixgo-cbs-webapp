@@ -76,7 +76,7 @@ export const DetailChildRow: FC<Props> = ({
       className={"transition duration-300 ease-in-out child-row table-row "}
       data-row-index={rowData._id}
     >
-      <div className="table-cell relative box-border border border-gray-300 align-middle bg-white">
+      {/* <div className="table-cell relative box-border border border-gray-300 align-middle bg-white">
 				<div className="border-gray-300 flex items-center justify-center">
 					<input
 						className="form-check-input"
@@ -85,7 +85,7 @@ export const DetailChildRow: FC<Props> = ({
 						onChange={onChangeCheckbox}
 					/>
 				</div>
-      </div>
+      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -95,6 +95,12 @@ export const DetailChildRow: FC<Props> = ({
           suppressContentEditableWarning={true}
           className={"w-full h-full focus:outline-blue-600 px-[16px] py-[9px]"}
         >
+          <input
+						className="form-check-input"
+						type="checkbox"
+						value={rowData._id}
+						onChange={onChangeCheckbox}
+					/>
           {index + 1}
         </p>
       </div>
@@ -131,6 +137,28 @@ export const DetailChildRow: FC<Props> = ({
           }}
         >
           {convertCurrency(rowData.salary)}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              kpiFactor: `${value}`,
+            });
+          }}
+        >
+          {convertCurrency(rowData.kpiFactor)}
         </p>
       </div>
       <div
