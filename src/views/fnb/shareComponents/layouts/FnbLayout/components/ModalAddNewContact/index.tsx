@@ -1,9 +1,8 @@
 /**
  * Libraries
  */
- import React, { ChangeEvent, FC, UIEvent, useEffect, useRef, useState } from "react";
+ import { FC } from "react";
  import { Form, Formik, Field, ErrorMessage } from "formik";
- import { useHistory } from 'react-router-dom';
  import { object, string } from "yup";
  import { toast } from "react-toastify";
  
@@ -32,34 +31,33 @@
      onClosed?: any
  }
 
-//  console.log('=============>>>>>>>>>>>>>>>>>>>>>>>')
- 
  export const ModalAddNewContact: FC<Props> = ({ 
-    defaultValues = {},
     onClosed
   }) => {
-
     const { closeModal } = useModal();
-
-    const {  insertAsync, refetch } = useContact({ params: { keyword: "" }, isFetchList: false, isFetchInfo: false  });
+    const {  insertAsync } = useContact({ params: { keyword: "" }, isFetchList: false, isFetchInfo: false  });
 
     const handleSubmit = async (values: any) => {
-        const query = {
-            ...values,
-            type: values.type.toString(),
-            name: values.name,
-            phone: values.phone,
-            address: values.address,
-            note: values.note,
-            email: values.email,
-        };
-        const result = await insertAsync(query);
-        if (!result.error) {
-            onClosed();
-            closeModal();
-            toast.success('Tạo mới dữ liệu thành công');
-        } else {
-            toast.error(result?.data?.message);
+        try {
+            const query = {
+                ...values,
+                type: values.type.toString(),
+                name: values.name,
+                phone: values.phone,
+                address: values.address,
+                note: values.note,
+                email: values.email,
+            };
+            const result = await insertAsync(query);
+            if (!result.error) {
+                onClosed();
+                closeModal();
+                toast.success('Tạo mới dữ liệu thành công');
+            } else {
+                toast.error(result?.data?.message);
+            }
+        } catch(error: any) {
+            toast.error(error.message);
         }
     };
  
@@ -96,7 +94,7 @@
                  >
                      {
                         formik => {
-                            const { values, getFieldProps, setFieldValue } = formik;
+                            const { getFieldProps } = formik;
                             return (
                                 <Form>
                                     <div className={"t-add-new-task-dialog-select px-6 pb-4"}>

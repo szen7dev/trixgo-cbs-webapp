@@ -225,8 +225,13 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
   }, [data, firstInit, initialValue, isMultiple, setDefaultValue]);
 
   React.useLayoutEffect(() => {
-    if(!valueControlled || !Object.keys(valueControlled).length) return;
-    setValue(valueControlled);
+    if(!valueControlled) return;
+
+    if(Array.isArray(valueControlled)) {
+      setValues(valueControlled);
+    } else if(Object.keys(valueControlled).length) {
+      setValue(valueControlled);
+    }
   }, [valueControlled])
 
   const renderOptions = () => {

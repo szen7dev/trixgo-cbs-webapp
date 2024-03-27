@@ -11,6 +11,8 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import Axios from "axios";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 /**
  * Hooks, Typings
@@ -61,7 +63,6 @@ interface InitialValues {
   description: string,
   authorAttachs: string[],
   type: number,
-  relatedIDs: string[],
   groupID: string,
   expiredHour: string
 }
@@ -80,6 +81,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
 
   const [tokens, setTokens] = useState<any[]>([]);
+  const [usersRelated, setUsersRelated] = useState<any[]>([]);
   const [attachmentsCanceled, setAttachmentsCanceled] = useState<Array<{ type: 'FILE' | 'IMAGE', key: number }>>([]);
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
   const [searchFriendName, setSearchFriendName] = useState("");
@@ -196,7 +198,6 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     description: "",
     authorAttachs: [],
     type: 1,
-    relatedIDs: [],
     subType: '0',
   };
 
@@ -241,8 +242,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
         await deleteFilesAsync(filesDelete);
       }
 
+      const relatedIDs = usersRelated.map(user => user.value)
       const { error, data } = await addTaskAsync({
         ...values,
+        relatedIDs,
         taskID,
         isNotiEmail
       });
@@ -423,6 +426,23 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     }
   };
 
+  const handleChangeSelectAllRelated = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+
+    if(checked) {
+      const users = listUsersProject.map(user => {
+        return {
+          label: user.bizfullname,
+          value: user._id,
+          imageUrl: `${process.env.REACT_APP_URL_S3_USER}/${user.image}`,
+        }
+      })
+      setUsersRelated(users);
+    } else {
+      setUsersRelated([]);
+    }
+  }
+
   useEffect(() => {
     if(projectID && groupID && !taskID) {
       createTaskTemp();
@@ -473,7 +493,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                           setGroupParentPicker({});
                           setFieldValue("groupID", "");
                           setFieldValue("assigneeID", "");
-                          setFieldValue("relatedIDs", []);
+                          setUsersRelated([])
                         }}
                         onClearData={() => {
                           setCompanyID("");
@@ -482,7 +502,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                           setGroupID("");
                           setGroupParentPicker({});
                           setFieldValue("assigneeID", "");
-                          setFieldValue("relatedIDs", []);
+                          setUsersRelated([])
                           setProjectID("");
                           groupSearchableRef.current&&groupSearchableRef.current.resetGroupSearchable();
                         }}
@@ -744,61 +764,71 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                 </div>
                 <div className={"flex py-2 border-b"}>
                   <div className={"w-full flex items-start"}>
-                    <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Liên quan</div>
-                    <DropdownSearchable
-                      onchangeValue={(value: any) => {
-                        if (!values.relatedIDs.includes(value.id)) {
-                          setFieldValue("relatedIDs", [...values.relatedIDs, value.id]);
-                        }
-                        setSearchFriendName("");
-                      }}
-                      onMultipleRemoveValue={(id: any) => {
-                        const newList = values.relatedIDs.filter(item => item !== id);
-                        setFieldValue('relatedIDs', newList);
-                      }}
-                      onClearData={() => setFieldValue("relatedIDs", [])}
-                      onSearchInputChange={debounce(
-                        (value) => setSearchFriendName(value),
-                        500
-                      )}
-                      className={"w-full flex-1"}
-                      placeholder="Liên quan"
-                      isMultiple={true}
-                      allowClearValueSingleInput={true}
-                      showTriangle={false}
-                      maxWidthInput="max-w-none"
-                      renderSelectedItem={(item: any) => (
-                        <div
-                          style={{ width: 100 }}
-                          className="flex items-center"
-                        >
-                          <img alt="Thumbnail" src={item.imageUrl || fakeThumbnail} className="mr-1 w-6 h-6 rounded-full" />
-                          <p
-                            style={{
-                              textOverflow: "ellipsis",
-                              maxWidth: "100%",
-                              minWidth: 0,
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              flex: "1 1 auto",
-                            }}
+                    <div className={"h-full text-left text-gray-500 flex items-center mr-2"}>Liên quan</div>
+                    <div className="flex flex-col items-start">
+                      <DropdownSearchable
+                        onchangeValue={(value: any) => {
+                          const isFound = usersRelated.find(user => user.value === value.id);
+
+                          if(!isFound) {
+                            setUsersRelated(curr => ([...curr, value]))
+                          }
+                          
+                          setSearchFriendName("");
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                          const newUsersRelated = usersRelated.filter(item => item.value !== id);
+                          setUsersRelated(newUsersRelated)
+                        }}
+                        onClearData={() => setUsersRelated([])}
+                        onSearchInputChange={debounce(
+                          (value) => setSearchFriendName(value),
+                          500
+                        )}
+                        className={"w-full flex-1"}
+                        placeholder="Liên quan"
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item: any) => (
+                          <div
+                            style={{ width: 100 }}
+                            className="flex items-center"
                           >
-                            {item.text}
-                          </p>
-                        </div>
-                      )}
-                      onScroll={(e) => handleScroll(e, 'user')}
-                      data={listUsersProject.map((item) => ({
-                        label: item.bizfullname,
-                        value: item._id,
-                        imgUrl: item.imgUrl,
-                      }))}
-                      formatItem={{
-                        id: "value",
-                        text: "label",
-                      }}
-                      inlineSearch={true}
-                    />
+                            <img alt="Thumbnail" src={item.imageUrl ?? fakeThumbnail} className="mr-1 w-6 h-6 rounded-full" />
+                            <p
+                              style={{
+                                textOverflow: "ellipsis",
+                                maxWidth: "100%",
+                                minWidth: 0,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                flex: "1 1 auto",
+                              }}
+                            >
+                              {item.text}
+                            </p>
+                          </div>
+                        )}
+                        onScroll={(e) => handleScroll(e, 'user')}
+                        data={listUsersProject.map((item) => ({
+                          label: item.bizfullname,
+                          value: item._id,
+                          imageUrl: `${process.env.REACT_APP_URL_S3_USER}/${item.image}`,
+                        }))}
+                        valueControlled={usersRelated}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        inlineSearch={true}
+                      />
+                      <label className="cursor-pointer label flex items-center">
+                        <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={handleChangeSelectAllRelated} />
+                        <span className="text-gray-500"> Chọn tất cả </span>
+                      </label>
+                    </div>
                   </div>
                 </div>
                 <div className={"flex py-2 border-b"}>
