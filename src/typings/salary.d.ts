@@ -122,6 +122,7 @@ export type SalaryChild = {
     union: number;
     share: number;
     other: number;
+    kpiFactor: number;
     convertFactor: number;
     project: any;
     position: any;

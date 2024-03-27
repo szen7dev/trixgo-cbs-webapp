@@ -181,6 +181,7 @@ const SalaryDetailPage: FC = () => {
           pitax: `${values.pitax}`,
           union: `${values.union}`,
           share: `${values.share}`,
+          kpiFactor: `${values.kpiFactor}`,
         });
         if (!isUpdated.error) {
           onRefreshSalaryChild();
@@ -491,13 +492,13 @@ const SalaryDetailPage: FC = () => {
         <div className={"financial-planning-table mt-2"}>
           <div className={"relative table border-collapse w-full"}>
             <div className={"header table-row sticky z-10"}>
-              <div
+              {/* <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
                 #
-              </div>
+              </div> */}
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
@@ -518,6 +519,13 @@ const SalaryDetailPage: FC = () => {
                 }
               >
                 Lương cứng
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Hệ số
               </div>
               <div
                 className={
