@@ -764,7 +764,15 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                 </div>
                 <div className={"flex py-2 border-b"}>
                   <div className={"w-full flex items-start"}>
-                    <div className={"h-full text-left text-gray-500 flex items-center mr-2"}>Liên quan</div>
+                    <div className={"h-full text-left text-gray-500 items-center mr-2"}>
+                      <p>Liên quan</p>
+                      <div>
+                        <label className="cursor-pointer label flex items-center">
+                          <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={handleChangeSelectAllRelated} />
+                          <span className="text-gray-500">Tất cả</span>
+                        </label>
+                      </div>
+                    </div>
                     <div className="flex flex-col items-start">
                       <DropdownSearchable
                         onchangeValue={(value: any) => {
@@ -824,10 +832,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         }}
                         inlineSearch={true}
                       />
-                      <label className="cursor-pointer label flex items-center">
+                      {/* <label className="cursor-pointer label flex items-center">
                         <Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 18 } }} onChange={handleChangeSelectAllRelated} />
                         <span className="text-gray-500"> Chọn tất cả </span>
-                      </label>
+                      </label> */}
                     </div>
                   </div>
                 </div>
