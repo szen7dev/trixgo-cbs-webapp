@@ -13,6 +13,7 @@ import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { useFunda } from "services/hooks/items/useFunda";
 import { toast } from "react-toastify";
 import API from "apis/repository";
+import { useGoods } from "services/hooks/items/useGoods";
 const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingInOutDetailPage1: FC = () => {
@@ -24,6 +25,8 @@ export const AccountingInOutDetailPage1: FC = () => {
   const accountRef = React.useRef<DropdownHandle>(null);
 
   const [fundaId, setFundaId] = useState<string | null>();
+  const [goodsID, setGoodsID] = useState<string | null>();
+  const [keyword, setKeyword] = useState('');
   const [fundaKeyword, setFundaKeyword] = useState("");
   const today = new Date();
 
@@ -31,7 +34,7 @@ export const AccountingInOutDetailPage1: FC = () => {
   const currentMonth = new Date().getMonth()
 
   const [inputFilter, setInputFilter] = useState({
-    keyword: '',
+    // keyword: '',
     fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
     toDate: lastDayOfMonth
   })
@@ -44,6 +47,15 @@ export const AccountingInOutDetailPage1: FC = () => {
     isFetchList: true
 	})
 
+  const {
+    list: listGoods,
+  } = useGoods({
+      params: { 
+          keyword,
+      },
+      isFetchList: true
+  })
+
   const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
         option: 9,
@@ -51,6 +63,7 @@ export const AccountingInOutDetailPage1: FC = () => {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
         fundaID: fundaId,
+        goodsID,
         arrAccIDs: [params.accountID]
     },
     isFetchList: true
@@ -143,6 +156,32 @@ export const AccountingInOutDetailPage1: FC = () => {
             )}
             onchangeValue={item => {
                 setFundaId(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Hàng hóa"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listGoods}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setGoodsID(item._id);
                 setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
             }}
