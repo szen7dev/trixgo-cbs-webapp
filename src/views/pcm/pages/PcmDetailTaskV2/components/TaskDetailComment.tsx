@@ -22,7 +22,7 @@ type Props = {
 
 export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
     const [filter, setFilter] = useState(1);
-    const [collapseComment, setCollapseComment] = useState(false);
+    const [collapseComment, setCollapseComment] = useState(true);
     const [isOpenCreateResponse, setIsOpenCreateResponse] = useState(false);
     const [amountComment, setAmountComment] = useState(0);
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
@@ -151,6 +151,7 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
                         comment={comment}
                         socket={socket}
                         tab={filter}
+                        isCollapseComment={collapseComment}
                         isLastComment={(_comments.length - 1) === index}
                         userId={user?._id}
                         onConfirmUpdate={refetchInfo}

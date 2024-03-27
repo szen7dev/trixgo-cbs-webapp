@@ -1,4 +1,10 @@
-import { FC, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { FC, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Popover } from "@mui/material";
+import { toast } from "react-toastify";
+import moment from 'moment';
+import { debounce } from 'lodash';
+import { captureException } from "@sentry/react";
+
 import trigangleDown from "assets/images/triangle-down.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
 import iconReply from "assets/images/icons8-reply-arrow-48.svg";
@@ -8,10 +14,9 @@ import iconAttach from "assets/images/icons8-attach-48.svg";
 // import iconChat from "assets/images/icons8-chat-96 1.svg";
 // import iconTrash from "assets/images/icons8-delete-96 1.svg";
 // import imageDemo from "assets/images/task-detail-image.png";
+
 import { ChildResponseComment } from "../ChildResponseComment";
 import { Comment as CommentType, CommentPayload, CommentProps, Task } from "typings/task";
-import moment from 'moment';
-import { debounce } from 'lodash';
 import { nl2p, removeHTMLTags, sliceText } from 'utils';
 import { APP_KEY } from 'utils/constants';
 import { APP_ID } from "apis/localdb";
@@ -19,17 +24,13 @@ import { humanFileSize } from 'utils/converter';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 import { validateFiles } from 'validation/file';
 import { useUpload } from "services/hooks/useUpload";
-import { toast } from "react-toastify";
 import { useCommentPcm } from "services/hooks/useTask";
 import CommentContext from "views/pcm/contexts/comment/comment.context";
 import { ReplyResponseComment } from "../ReplyResponseComment";
-import { captureException } from "@sentry/react";
 import TaskRepository from "apis/task";
 import { useFileCore } from 'services/hooks/useFileCore';
 // import { useOnClickOutside } from "../../../../../../services/hooks/useOnclickOutside";
 import { OptionsComment } from "../OptionsComment";
-import { Popover } from "@mui/material";
-import React from "react";
 
 type Props = {
     userId?: string;
@@ -37,12 +38,13 @@ type Props = {
     comment: CommentProps;
     tab: number;
     isLastComment: boolean;
+    isCollapseComment: boolean;
     socket?: any;
     onClickImage?: (comment: CommentType, index: number) => void,
     onConfirmUpdate?: () => void;
 }
 
-export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, socket, isLastComment, onClickImage, onConfirmUpdate }) => {
+export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, socket, isLastComment, isCollapseComment, onClickImage, onConfirmUpdate }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
     const handlePopoverClose = () => setAnchorEl(null);
@@ -100,6 +102,11 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 
         scrollToBottom();
     }, [])
+
+    useEffect(() => {
+        if(isLastComment) return;
+        setCollapseComment(isCollapseComment);
+    }, [isCollapseComment])
 
     const receiversText = useMemo(() => {
         if (!comment.receivers) return 'Tới';
@@ -286,19 +293,25 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         onClickImage?.(comment, index);
     }
 
-    if (!comment) return <></>;
-
-    if (task.subtype === 4 && task.openedStatus === 0) {
-        const currentTime = new Date().getTime();
-        const actualFinishTime = new Date(task.actualFinishTime).getTime();
-        // now(FE)<=infoTask.actualFinishTime và infoTask.openedStatus=0
-        if (currentTime < actualFinishTime) {
-            // Chỉ người thực hiện mới nhìn thấy comment
-            if (task?.assignee?._id !== userId && comment.official) {
-                return <></>;
+    const isAssignee = useMemo(() => {
+        if (task.subtype === 4 && task.openedStatus === 0) {
+            const currentTime = new Date().getTime();
+            const actualFinishTime = new Date(task.actualFinishTime).getTime();
+            // now(FE)<=infoTask.actualFinishTime và infoTask.openedStatus=0
+            if (currentTime < actualFinishTime) {
+                // Chỉ người thực hiện mới nhìn thấy comment
+                if (task?.assignee?._id !== userId && comment.official) {
+                    return false;
+                }
             }
-        }
-    };
+        };
+
+        return true;
+    }, [userId, task.subType, task.openedStatus, task.actualFinishTime, task.assignee, comment.official])
+    
+    if(!isAssignee || !comment) {
+        return <></>
+    }
 
     return (
         <div className={"item-comment flex items-start border-b-0.5 border-primary-border pb-4 mb-3"}>
@@ -569,7 +582,11 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                     <ChildResponseComment
                         key={commentReply._id}
                         userId={userId}
+                        task={task}
                         comment={commentReply}
+                        parent={comment}
+                        tab={tab}
+                        socket={socket}
                         onClickImage={onClickImage}
                         handleUploadAttachments={handleUploadAttachments}
                         handleUpdateDescriptionFile={handleUpdateDescriptionFile}

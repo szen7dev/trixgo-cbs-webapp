@@ -263,16 +263,12 @@ const PcmDetailTaskV2: FC = () => {
         setCollapse(!collapse);
     }
 
-    if (isLoadingInfo) {
+    if (isLoadingInfo || !user) {
         return <Loader className="border-primary" />
     }
 
     if (!taskInfo) {
         return <Redirect to='/pcm/home' />
-    }
-
-    if (!user) {
-        return <Loader className="border-primary" />
     }
 
     return (

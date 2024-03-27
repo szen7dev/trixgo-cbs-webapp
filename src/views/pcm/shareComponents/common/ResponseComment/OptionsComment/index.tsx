@@ -1,4 +1,4 @@
-import {FC, useRef, useState} from "react";
+import { FC, useRef, useState } from "react";
 // import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import iconUpload from "assets/images/icons8-upload-48.svg";
