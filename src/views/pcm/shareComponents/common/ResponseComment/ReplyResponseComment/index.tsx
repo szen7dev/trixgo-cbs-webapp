@@ -27,16 +27,19 @@ type Props = {
     userId?: string;
     tab: number;
     socket?: any;
+    receiversDefault?: Item[];
     onCancelCreateResponse: () => void;
     onConfirmCreate?: () => void;
 }
 
-export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, socket, onCancelCreateResponse, onConfirmCreate }) => {
+export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, socket, receiversDefault, onCancelCreateResponse, onConfirmCreate }) => {
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
     // const [rawContent, setRawContent] = useState('');
 
     const initUsersSelected = useMemo(() => {
+        if(receiversDefault?.length) return receiversDefault;
+
         let arr = [];
 
         if(parent) {
@@ -70,7 +73,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
         return arr.filter((item, index, self) => {
             return item.value !== userId && index === self.findIndex((el) => el.value === item.value);
         });
-    }, [task, parent])
+    }, [task, parent, receiversDefault])
 
     const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
     const [isUploading, setIsUploading] = useState(false);

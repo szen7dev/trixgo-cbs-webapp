@@ -1,27 +1,37 @@
-import {FC, useState, useMemo, useRef} from "react";
+import { FC, useState, useMemo, useRef } from "react";
+import { toast } from "react-toastify";
+import moment from "moment";
+
+// import {useOnClickOutside} from "../../../../../../services/hooks/useOnclickOutside";
+
+import iconAttach from "assets/images/icons8-attach-48.svg";
+import iconReply from "assets/images/icons8-reply-arrow-48.svg";
 import taskUserAvt from "assets/images/task-user.svg";
 import trigangleDown from "assets/images/triangle-down.svg";
 import iconUpload from "assets/images/icons8-upload-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
-import iconAttach from "assets/images/icons8-attach-48.svg";
-import type { Comment as CommentType, CommentProps } from "typings/task";
-import moment from "moment";
+
 import { nl2p, removeHTMLTags, sliceText } from 'utils';
 import { humanFileSize } from 'utils/converter';
-import { toast } from "react-toastify";
-// import {useOnClickOutside} from "../../../../../../services/hooks/useOnclickOutside";
+import type { Comment as CommentType, CommentProps, Task } from "typings/task";
+import { ReplyResponseComment } from "../ReplyResponseComment";
 
 type Props = {
     userId?: string;
     comment: CommentProps;
+    task: Task;
+    parent: CommentProps;
+    socket?: any;
+    tab: number;
 	onClickImage?: (comment: CommentType, index: number) => void,
     handleUploadAttachments: (filesSelected: FileList | null, commentChildId: string) => void;
     handleUpdateDescriptionFile: (e: any) => void;
 }
 
-export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage, handleUploadAttachments, handleUpdateDescriptionFile }) => {
+export const ChildResponseComment: FC<Props> = ({ userId, comment, parent, socket, tab, task, onClickImage, handleUploadAttachments, handleUpdateDescriptionFile }) => {
     const [collapseComment, setCollapseComment] = useState(true);
     const [showDetail, setShowDetail] = useState(false);
+    const [openReply, setOpenReply] = useState(false);
     const detailRef = useRef<HTMLDivElement>(null);
 
     // useOnClickOutside(detailRef, () => setShowDetail(false));
@@ -119,10 +129,16 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                                 <span className={"text-primary-gray"}>
                                     {moment(comment.createAt).format('HH:mm DD/MM/YYYY')} ({moment(comment.createAt).fromNow()})
                                 </span>
-                                {/* <input className="form-check-input mx-4" type="checkbox" /> */}
+                                {
+                                    !collapseComment && (
+                                        <button className={"mx-2"} onClick={() => setOpenReply(!openReply)}>
+                                            <img src={iconReply} alt={"----"} className="h-[18px] w-[18px]" />
+                                        </button>
+                                    )
+                                }
                                 {
                                     (!collapseComment && userId === comment.author?._id) && (
-                                        <label className="ml-4">
+                                        <label className="ml-1">
                                             <img
                                                 src={iconUpload}
                                                 alt="Icon attach"
@@ -266,6 +282,12 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
 
                             <div className={"comment-action mt-4 flex items-center justify-between"}>
                                 <div className={"actions"}>
+                                    <button
+                                        className={"font-bold text-primary-gray mr-6"}
+                                        onClick={() => setOpenReply(!openReply)}
+                                    >
+                                        Trả lời
+                                    </button>
                                     {/* <button className={"font-bold text-primary-gray mr-6"}>
                                         Thích
                                     </button> */}
@@ -284,6 +306,24 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                             </div>
                         </div>
                     </div>
+
+                    {openReply &&
+                        <ReplyResponseComment
+                            task={task}
+                            parent={parent}
+                            tab={tab}
+                            socket={socket}
+                            userId={userId}
+                            receiversDefault={[{
+                                label: comment.author?.bizfullname,
+                                value: comment.author?._id,
+                                image: comment.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${comment.author?.image}` : taskUserAvt
+                            }]}
+                            onCancelCreateResponse={() => setOpenReply(false)}
+                            onConfirmCreate={() => setOpenReply(false)}
+                        />
+                    }
+
                 </div>
             </div>
         </div>
