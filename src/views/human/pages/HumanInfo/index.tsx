@@ -144,6 +144,7 @@ export const HumanInfo: FC = () => {
               contractValid: defaultValues.contractValid,
               contractExpire: defaultValues.contractExpire,
               bankAccount: defaultValues.bankAccount,
+              bank: defaultValues.bank,
               insuranceFee: defaultValues.insuranceFee,
             }}
             onFinish={handleFinishForm}
@@ -286,6 +287,7 @@ export const HumanInfo: FC = () => {
             documents: detailHuman.documents,
             modifyAt: detailHuman.modifyAt,
             bankAccount: detailHuman.bankAccount,
+            bank: detailHuman.bank,
             insuranceFee: detailHuman.insuranceFee,
             union: detailHuman.union,
             share: detailHuman.share,

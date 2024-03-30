@@ -165,6 +165,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       insuranceStatus: 1,
       familyPolicy: 1,
       bankAccount: "",
+      bank: "",
       contractType: "",
       contractSign: "",
       family: "",
@@ -280,7 +281,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         className="fixed flex justify-center items-center inset-0 z-auto"
         style={{ background: "rgba(0, 0, 0, 0.5)" }}
       >
-        <div className="relative w-full h-5/6 bg-primary-light">
+        <div className="relative w-full bg-primary-light" style={{height: "100%"}}>
           <div className="h-12 flex items-center border-b border-gray-300 px-6">
             <p className="text-bold text-xl">
               {title || i18n("modal.add-new.title")}
@@ -1435,6 +1436,27 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             handleBlur(e);
                           }}
                         />
+                    </div>
+
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Ngân hàng thụ hưởng
+                      </span>
+                      <Field
+                        type="text"
+                        name="bank"
+                        placeholder="Ngân hàng thụ hưởng"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div>
+
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        #
+                      </span>
                     </div>
 
                   </div>

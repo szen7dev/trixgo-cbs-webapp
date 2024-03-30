@@ -209,6 +209,7 @@ export type Human = {
     documents?: any;
     modifyAt?: any;
     bankAccount?: any;
+    bank?: any;
     insuranceFee?: any;
     dataSource?: any;
     parent?: any;
