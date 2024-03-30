@@ -246,7 +246,7 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Tổng lương
+              Tổng thanh toán
             </div>
             <div
               className={
@@ -298,7 +298,7 @@ const SalaryHomePage: FC = () => {
                 }
               >
                 <NavLink to={`/timesheet/salary/${salaryParent._id}`}>
-                  {salaryParent.name} - {moment(salaryParent.date).format('MM/YYYY')}
+                  {salaryParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
                   Tạo: {salaryParent?.userCreate?.fullname} {moment(salaryParent.createAt).format(DATE_FORMAT)}
@@ -318,11 +318,7 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(Number(salaryParent?.salary + salaryParent?.onLeaveSalary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance))}
-               {/* {`${Number(salaryParent?.salary + salaryParent?.onLeaveSalary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance)}`.replace(
-                  /\B(?=(\d{3})+(?!\d))/g,
-                  ","
-                )} */}
+                {convertCurrency(Number(salaryParent?.remaining))}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.note}
