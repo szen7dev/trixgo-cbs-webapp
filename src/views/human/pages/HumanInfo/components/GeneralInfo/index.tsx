@@ -325,7 +325,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 Tài khoản ngân hàng
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.bankAccount}
+                {info?.bankAccount} - {info?.bank}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 Tiền đóng bảo hiểm
