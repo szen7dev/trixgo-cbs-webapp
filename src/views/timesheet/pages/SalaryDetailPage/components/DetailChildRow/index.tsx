@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import type {
   SalaryChild,
@@ -9,6 +9,9 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { convertCurrency } from "utils/converter";
 import { DeleteSalaryContext } from "../../contexts/DeleteSalary";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import { useCashBook } from "services/hooks/financial/useCashBook";
+import { createLinkAndClick } from "utils";
 
 type Props = {
   parent?: SalaryParent;
@@ -61,6 +64,34 @@ export const DetailChildRow: FC<Props> = ({
     })
   }
 
+  //_____Import, export excel
+  const [, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  });
+
+  const { downloadTemplateExcelAsync, importExcelAsync } = useCashBook({});
+
+  const [dataImport, setDataImport] = useState([]);
+  const handleDownloadExcel = async (param: any) => {
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await downloadTemplateExcelAsync({
+        salaryID: param.salaryID,
+        option: param.option,
+      });
+
+      if (error) {
+        return toast.warn(data?.message);
+      }
+
+      data && createLinkAndClick(data, "_self");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+  };
+
   return (
     <div
       style={
@@ -93,7 +124,7 @@ export const DetailChildRow: FC<Props> = ({
       >
         <p
           suppressContentEditableWarning={true}
-          className={"w-full h-full focus:outline-blue-600 px-[16px] py-[9px]"}
+          className={"w-full h-full focus:outline-blue-600 text-center"}
         >
           <input
 						className="form-check-input"
@@ -101,7 +132,10 @@ export const DetailChildRow: FC<Props> = ({
 						value={rowData._id}
 						onChange={onChangeCheckbox}
 					/>
-          {index + 1}
+          <p>{index + 1}</p>
+          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 4, salaryID: rowData?._id})}>
+            <img src={downloadIcon} className="max-w-full" />
+          </button>
         </p>
       </div>
       <div

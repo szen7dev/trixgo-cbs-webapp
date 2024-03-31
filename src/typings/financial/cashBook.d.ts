@@ -156,6 +156,7 @@ export type CashBookAmountByPropertyResponse = APIResponse & {
 export type CashBookDownloadPayload = {
     parentID?: string;
     option?: string;
+    salaryID?: string;
 }
 
 export type CashBookImportPayload = {
