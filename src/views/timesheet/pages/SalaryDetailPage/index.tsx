@@ -492,13 +492,6 @@ const SalaryDetailPage: FC = () => {
         <div className={"financial-planning-table mt-2"}>
           <div className={"relative table border-collapse w-full"}>
             <div className={"header table-row sticky z-10"}>
-              {/* <div
-                className={
-                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-                }
-              >
-                #
-              </div> */}
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"

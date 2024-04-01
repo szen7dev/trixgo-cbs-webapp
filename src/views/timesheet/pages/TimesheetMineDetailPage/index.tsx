@@ -1,21 +1,9 @@
 import React, { FC, useRef, useState } from "react";
 import moment from "moment";
-import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
-import { TIMESHEET_TYPES } from "apis/localdb";
-import { NavLink, useParams, useHistory } from "react-router-dom";
-
-import {
-  SearchInput,
-  DialogForm,
-  ActionGroupButton,
-} from "views/timesheet/shareComponents/common";
-
-import { useModal } from "services/hooks/useModal";
-import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
+import { NavLink, useParams } from "react-router-dom";
 import {
   useQueryListTimeSheetParent,
-  useMutationTimeSheetParent,
 } from "services/hooks/useTimeSheet";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
@@ -27,17 +15,13 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
   const params = useParams<{ id: string }>();
   console.log(params)
   const humanID = params["id"];
-  const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);
-
   const ref = useRef<RefPaginateHandle>(null);
 
-  const { openModal, closeModal } = useModal();
-  const { openDeleteConfirm } = useDeleteConfirm();
   const {
     dataNotFilter,
-    refetch: refreshListTimeSheet,
+    refetch,
     totalPages,
     totalRecord,
     fetchNextPage,
@@ -46,12 +30,6 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
     loading,
     hasNextPage,
   } = useQueryListTimeSheetParent({ keyword, type, humanID, sortOption: 2 });
-
-  const {
-    onCreateTimeSheetParentAsync,
-    onUpdateTimeSheetParentAsync,
-    onDeleteTimeSheetParentAsync,
-  } = useMutationTimeSheetParent();
 
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>

@@ -3,4 +3,5 @@ export {default as TimesheetDetailPage} from './TimesheetDetailPage';
 export {default as SalaryHomePage } from './SalaryHomePage';
 export {default as SalaryDetailPage} from './SalaryDetailPage';
 export {default as TimesheetMineDetailPage} from './TimesheetMineDetailPage';
+export {default as SalaryMineDetailPage} from './SalaryMineDetailPage';
 export {TimesheetDashboardPage} from './TimesheetDashboardPage';
