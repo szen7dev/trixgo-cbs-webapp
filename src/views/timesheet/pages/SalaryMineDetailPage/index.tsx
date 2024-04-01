@@ -14,9 +14,8 @@ interface TimesheetHomePageProps {
 
 const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
   const params = useParams<{ id: string }>();
-  console.log(params)
-  const humanID = params["id"];
-  const [keyword, setKeyword] = React.useState("");
+  // console.log(params)
+  // const humanID = params["id"];
   const [pageIndex, setPageIndex] = useState(0);
   const ref = useRef<RefPaginateHandle>(null);
 
@@ -34,18 +33,16 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
     option: 1,
     sortOption: 1,
     populates: {
-      path: 'parent',
-      select: 'name date'
-  },
+        path: 'parent userCreate userUpdate',
+        select: 'name date fullname'
+    },
    })
-
-  // console.log(dataNotFilter)
 
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
         className={
-          "financial-cashflow-listing-heading flex items-center border-b py-2 px-6"
+          "financial-cashflow-listing-heading flex items-center border-b py-2"
         }
       >
         <div className={"flex items-center flex-1"}>
@@ -193,36 +190,36 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
               </div>
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((item: any, index: any) => (
-            <div className={"body-table table-row"} key={item._id}>
+            <div className={"transition duration-300 ease-in-out child-row table-row"} key={item._id}>
               <div
                 className={
-                  "px-1 py-2 table-cell box-border border-b align-middle"
+                  "px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white"
                 }
               >
-                <p>{item?.parent?.name} | {moment(item?.parent?.date).format('DD/MM/YYYY')}</p>
-                <p className={"mt-1 text-gray-500"}>
-                  Tạo: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
-                </p>
-                <p className={"mt-1 text-gray-500"}>
-                  Cập nhật: {item?.userUpdate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}
+                <p>{item?.parent?.name}</p>
+                <p className="text-cbs-highlight-color"><i>Giờ làm việc: {convertCurrency(item.hours1)} ({Number(item.hours1/8)})</i></p>
+                <p className="text-cbs-highlight-color"><i>Giờ nghỉ phép: {convertCurrency(item.hours2)} ({Number(item.hours2/8)})</i></p>
+                <p className="text-cbs-highlight-color"><i>Giờ nghỉ lễ: {convertCurrency(item.hours3)} ({Number(item.hours3/8)})</i></p>
+                <p className={"mt-1 text-gray-500 text-[10px]"}>
+                  <i>{item?.userCreate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}</i>
                 </p>
               </div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.salary)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{Number(item.kpiFactor).toFixed(4)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.onLeaveSalary)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.revenueBonus)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.reward)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.mealAllowance)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.punishment)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.insurance)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.pitax)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.union)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.share)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.other)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.advance)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.paid)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{convertCurrency(item.remaining)}</div>
-              <div className={"px-2 py-2 table-cell box-border border-b text-right"}>{item.note}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.salary)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{Number(item.kpiFactor).toFixed(4)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.onLeaveSalary)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.revenueBonus)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.reward)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.mealAllowance)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.punishment)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.insurance)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.pitax)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.union)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.share)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.other)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.advance)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.paid)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.remaining)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{item.note}</div>
             </div>
           ))}
         </div>
