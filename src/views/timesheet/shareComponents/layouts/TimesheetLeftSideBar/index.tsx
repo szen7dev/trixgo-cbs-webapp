@@ -44,6 +44,17 @@ export const TimesheetLeftSideBar: FC = () => {
                         />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Chấm công của tôi</span>
                     </NavLink>
+                    <NavLink
+                        to={`/timesheet/mysalary`}
+                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+                    >
+                        <img
+                        width={'7px'}
+                        src={iconFolder}
+                        alt="Menu item"
+                        />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Lương của tôi</span>
+                    </NavLink>
                     {listAppMenu && listAppMenu.length ?
                         <>
                         {listAppMenu.map((item: any, index: number) => {

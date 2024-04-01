@@ -37,13 +37,6 @@ export const DetailMainRow: FC<Props> = memo(({
 
   return (
     <>
-      {/* <div
-        className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3 font-bold"
-        }
-      >
-        {"#"}
-      </div> */}
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3 font-bold"
