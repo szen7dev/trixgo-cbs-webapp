@@ -323,10 +323,8 @@ export const FnbShiftDetailPage: FC = () => {
 								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
-									{item?.name}
-								</Link> */}
 								{item?.funda?.sign}.{item?.name}
+								<p className="text-cbs-subtext text-[10px]"><i>{item?._id}</i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>{moment(item?.createAt).format('HH:mm DD/MM/YYYY')}</i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Ca chính-{item?.workingHours}h: <b>{item?.staffs?.length}</b></i></p>
 								{
@@ -418,5 +416,5 @@ export const FnbShiftDetailPage: FC = () => {
 			</ModalContainer>
 
 		</main>
-	);
-};
+	)
+}
