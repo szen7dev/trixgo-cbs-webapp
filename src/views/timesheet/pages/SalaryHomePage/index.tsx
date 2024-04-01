@@ -232,6 +232,20 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
+              Quyền Admin
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Quyền xem
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
               Ngày tháng ghi nhận lương
             </div>
             <div
@@ -240,6 +254,13 @@ const SalaryHomePage: FC = () => {
               }
             >
               Hệ số chuyển đổi KPI sang giá trị
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Số nhân sự
             </div>
             <div
               className={
@@ -308,10 +329,19 @@ const SalaryHomePage: FC = () => {
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {salaryParent.admins.length}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {salaryParent.members.length}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {moment(salaryParent.date).format('DD/MM/YYYY')}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.convertFactor}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {salaryParent.numberOfHuman}
               </div>
               <div
                 className={

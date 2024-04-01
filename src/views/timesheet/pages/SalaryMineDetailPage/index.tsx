@@ -198,8 +198,7 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
               >
                 <p>{item?.parent?.name}</p>
                 <p className="text-cbs-highlight-color"><i>Giờ làm việc: {convertCurrency(item.hours1)} ({Number(item.hours1/8)})</i></p>
-                <p className="text-cbs-highlight-color"><i>Giờ nghỉ phép: {convertCurrency(item.hours2)} ({Number(item.hours2/8)})</i></p>
-                <p className="text-cbs-highlight-color"><i>Giờ nghỉ lễ: {convertCurrency(item.hours3)} ({Number(item.hours3/8)})</i></p>
+                <p className="text-cbs-highlight-color"><i>Giờ nghỉ phép, lễ: {convertCurrency(item.hours2)} ({Number(item.hours2/8)})</i></p>
                 <p className={"mt-1 text-gray-500 text-[10px]"}>
                   <i>{item?.userCreate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}</i>
                 </p>

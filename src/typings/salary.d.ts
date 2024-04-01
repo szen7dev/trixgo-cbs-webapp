@@ -37,6 +37,7 @@ export type SalaryParent = {
     union: number;
     share: number;
     other: number;
+    numberOfHuman: number;
 }
 
 export type ListSalaryPayload = QueryParams & {
