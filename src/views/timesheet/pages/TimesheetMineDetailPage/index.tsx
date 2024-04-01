@@ -13,7 +13,7 @@ interface TimesheetHomePageProps {
 
 const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
   const params = useParams<{ id: string }>();
-  console.log(params)
+  // console.log(params)
   const humanID = params["id"];
   const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);
@@ -35,7 +35,7 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
         className={
-          "financial-cashflow-listing-heading flex items-center border-b py-2 px-6"
+          "financial-cashflow-listing-heading flex items-center border-b py-2"
         }
       >
         <div className={"flex items-center flex-1"}>

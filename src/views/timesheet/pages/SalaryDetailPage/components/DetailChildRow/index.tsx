@@ -104,19 +104,9 @@ export const DetailChildRow: FC<Props> = ({
             }
           : {}
       }
-      className={"transition duration-300 ease-in-out child-row table-row "}
+      className={"transition duration-300 ease-in-out child-row table-row"}
       data-row-index={rowData._id}
     >
-      {/* <div className="table-cell relative box-border border border-gray-300 align-middle bg-white">
-				<div className="border-gray-300 flex items-center justify-center">
-					<input
-						className="form-check-input"
-						type="checkbox"
-						value={rowData._id}
-						onChange={onChangeCheckbox}
-					/>
-				</div>
-      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
