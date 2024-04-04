@@ -292,7 +292,7 @@ const SalaryDetailPage: FC = () => {
 
       toast.success(message);
       onRefreshSalaryChild();
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message);
     }
   }

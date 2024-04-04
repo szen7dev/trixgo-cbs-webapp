@@ -1,4 +1,4 @@
-import { FC, memo, useState } from "react";
+import { FC, memo, useContext, useState } from "react";
 import { map as _map, debounce } from "lodash";
 import { convertCurrency } from "utils/converter";
 import { Loader } from "shareComponents/common/Loader";
@@ -6,6 +6,7 @@ import { DetailChildRow } from "../DetailChildRow";
 
 import type { SalaryChild, SalaryParent } from "typings/salary";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { DeleteSalaryContext } from "../../contexts/DeleteSalary";
 
 type Props = {
   salaryParentInfo?: SalaryParent;
@@ -24,12 +25,26 @@ export const DetailMainRow: FC<Props> = memo(({
   hasPermission,
   pageIndex,
 }) => {
+  const deleteSalaryContext = useContext(DeleteSalaryContext)
+
   const [searchAssigneeStr, setSearchAssigneeStr] = useState('');
   const { data: listUsersSystem } = useUserSystem({ keyword: searchAssigneeStr }, true);
 
   const onSearchUser = debounce((value) => {
     setSearchAssigneeStr(value)
   }, 500)
+
+  const onChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!deleteSalaryContext) return;
+
+    const { setSalaryIds } = deleteSalaryContext;
+    const { checked } = event.target;
+
+    const salaries = _map(listSalaryChild[pageIndex] ?? [], (childRow, index) => childRow._id);
+    const salaryIds = checked ? salaries : [];
+
+    setSalaryIds(salaryIds);
+  }
 
   if (isFetchSalaryChild) {
     return <Loader className="border-primary" />;
@@ -42,7 +57,11 @@ export const DetailMainRow: FC<Props> = memo(({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3 font-bold"
         }
       >
-        {"#"}
+        <input
+          className="form-check-input"
+          type="checkbox"
+          onChange={onChangeCheckbox}
+        />
       </div>
       <div
         className={

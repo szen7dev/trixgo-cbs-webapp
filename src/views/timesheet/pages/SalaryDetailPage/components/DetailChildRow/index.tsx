@@ -69,9 +69,8 @@ export const DetailChildRow: FC<Props> = ({
     isExporting: false,
   });
 
-  const { downloadTemplateExcelAsync, importExcelAsync } = useCashBook({});
+  const { downloadTemplateExcelAsync } = useCashBook({});
 
-  const [dataImport, setDataImport] = useState([]);
   const handleDownloadExcel = async (param: any) => {
     try {
       setStateExport({ isExporting: true });
@@ -120,6 +119,7 @@ export const DetailChildRow: FC<Props> = ({
 						className="form-check-input"
 						type="checkbox"
 						value={rowData._id}
+            checked={deleteSalaryContext ? deleteSalaryContext.salaryIds.includes(rowData._id) : false}
 						onChange={onChangeCheckbox}
 					/>
           <p>{index + 1}</p>
