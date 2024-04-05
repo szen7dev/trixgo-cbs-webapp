@@ -154,26 +154,30 @@ export const DashboardV2: FC<Props> = () => {
 
   ////  Danh sách user
   const [searchUserSystem, setSearchUserSystem] = useState("");
+  const [searchUserTask, setSearchUserTask] = useState("");
+  const [searchUserComment, setSearchUserComment] = useState("");
+
   const {
     data: listUsersSystem,
     hasNextPage: hasNextPageUserSystem,
     fetchNextPage: fetchNextPageUserSystem,
   } = useUserSystem({ keyword: searchUserSystem }, true);
 
+  // Tìm user tạo chủ đề
   const { isLoading: isLoadingUT, dataTotal: dataTotalUT } = usePcmPlanTaskGetListByProperty({
     option: 7,
-    keyword: searchUserSystem,
+    keyword: searchUserTask,
     enabled: true,
   });
-  const listUT = dataTotalUT?.data
+  const listUserTask = dataTotalUT?.data
 
+  // Tìm user tạo phản hồi
   const { isLoading: isLoadingU, dataTotal: dataTotalU } = usePcmPlanTaskGetListByProperty({
     option: 9,
-    keyword: searchUserSystem,
+    keyword: searchUserComment,
     enabled: true,
   });
-  const listU = dataTotalU?.data
-  // console.log(listU)
+  const listUserComment = dataTotalU?.data
 
   const handleScrollUserSystem = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -563,7 +567,7 @@ export const DashboardV2: FC<Props> = () => {
                     })
                   );
                 }
-                setSearchUserSystem("");
+                setSearchUserTask("");
                 dispatch(setTabActive(tabIndex));
                 setPageIndex(0);
                 ref.current && ref.current.resetPaginate();
@@ -588,7 +592,7 @@ export const DashboardV2: FC<Props> = () => {
                 )
               }
               onSearchInputChange={debounce(
-                (value) => setSearchUserSystem(value),
+                (value) => setSearchUserTask(value),
                 500
               )}
               onScroll={handleScrollUserSystem}
@@ -619,7 +623,7 @@ export const DashboardV2: FC<Props> = () => {
               //   imgUrl: item.imgUrl,
               //   email: item.email,
               // }))}
-              data={listUT?.map((item: any) => ({
+              data={listUserTask?.map((item: any) => ({
                 label: `${item?._id?.assignee?.fullname} (${item?.amount})`,
                 value: item?._id?.assignee?._id,
                 // imgUrl: item.imgUrl,
@@ -949,7 +953,7 @@ export const DashboardV2: FC<Props> = () => {
                     })
                   );
                 }
-                setSearchUserSystem("");
+                setSearchUserComment("");
                 dispatch(setTabActive(tabIndex));
                 setPageIndex(0);
                 ref.current && ref.current.resetPaginate();
@@ -974,7 +978,7 @@ export const DashboardV2: FC<Props> = () => {
                 )
               }
               onSearchInputChange={debounce(
-                (value) => setSearchUserSystem(value),
+                (value) => setSearchUserComment(value),
                 500
               )}
               onScroll={handleScrollUserSystem}
@@ -999,7 +1003,7 @@ export const DashboardV2: FC<Props> = () => {
                   </p>
                 </div>
               )}
-              data={listU?.map((item: any) => ({
+              data={listUserComment?.map((item: any) => ({
                 label: `${item?._id?.author?.fullname} (${item?.amount})`,
                 value: item?._id?.author?._id,
                 // imgUrl: item.imgUrl,
