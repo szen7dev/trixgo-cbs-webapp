@@ -71,25 +71,20 @@ export const FnbBillOrder: FC = () => {
         <main className="h-screen overflow-auto bg-cbs-border">
             <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between">
                 <div>
-                    <div className="relative mb-6" style={{ height: "110px" }}>
-                        <Link to ={`/fnb/home`}>
-                            <div className="mt-3">
-                                <div className="font-bold text-[12px]">{info?.funda?.name}</div>
-                                <div className="text-[12px]">{info?.funda?.address}</div>
-                                <div className="text-[12px]">{info?.funda?.phone}</div>
-                            </div>
-						</Link>
-                        <div>
-                            <img src={zaloOA} alt="ZaloOA" style={{ width: "125px", height: "125px" }} className="absolute top-0 right-0 mb-2"/>
-                        </div>
+                    <div className="">
+                        <img src={zaloOA} alt="ZaloOA" className="items-center"/>
                     </div>
                     <div className="text-center py-1">
+                        <Link to ={`/fnb/home`}>
+                            <div className="text-[12px]">{info?.funda?.name} - {info?.funda?.address} | {info?.funda?.phone}</div>
+						</Link>
+                        <hr className="mb-3"/>
                         <Link to={`/fnb/home/${info?._id}/print/2`}>
                             <div className="font-bold text-[12px]" title="Bấm vào đây để in Tem">HÓA ĐƠN THANH TOÁN <i className="text-cbs-primary">(in Tem)</i></div>
                         </Link>
                         <div className="text-[12px]">Số: <b>{info?.sign}</b> | Mã đơn app: <b>{FNB_CHANNEL[Number(info?.salesChannel)-1]?.sign}{info?.appOrderSign}</b></div>
                         <div className="text-[12px]">
-                            <p><i>Nếu có điều chưa hài lòng về sản phẩm dịch vụ của Winggo, xin bạn vui lòng liên hệ tới Hotline <b>0985692022</b> hoặc fanpage https://facebook.com/TraSuaWinggo để được hỗ trợ, trước khi đánh giá số Sao (*) trên <b>Food App</b></i></p>
+                            <p><i>Nếu có điều chưa hài lòng về sản phẩm dịch vụ của Winggo, xin bạn vui lòng liên hệ tới Hotline <b>0985692022</b> hoặc kênh Zalo OA <b>Trà sữa Winggo</b> để được hỗ trợ, trước khi đánh giá số Sao (*) trên <b>Food App</b></i></p>
                         </div>
                     </div>
 
@@ -223,7 +218,7 @@ export const FnbBillOrder: FC = () => {
                     <hr className="border-cbs-border" />
                     <div className="text-[12px] text-center mt-3">
                         <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG VÀ LỰA CHỌN WINGGO</b></p>
-                        <p className="">Quét mã QR (trên cùng, bên tay phải), bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>20.000đ</b></p>
+                        <p className="">Quét mã QR ở trên cùng và bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>200.000đ</b></p>
 
                         <hr className="border-cbs-border"/>
                         <p className="text-center mt-3"><i>Nếu Quý khách yêu quý Winggo vui lòng giới thiệu Winggo tới bạn bè để nhận 02 Vocuher <b>20.000đ và 35%/</b> 01 bạn bè mới</i></p>
