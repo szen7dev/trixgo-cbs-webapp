@@ -37,7 +37,7 @@ const CreateFnbVoucherDetail: FC<any> = ({ toggle, modalType, onConfirm, initial
         isFetchList: true,
     });
 
-    const { insertAsync, updateAsync, refetch } = useFnbVoucher({
+    const { updateAsync } = useFnbVoucher({
         params: {
             keyword: "", voucherID, populates: JSON.stringify({
                 path: 'goods', select: "name unit"
