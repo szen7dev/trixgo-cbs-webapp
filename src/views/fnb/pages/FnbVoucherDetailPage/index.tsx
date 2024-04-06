@@ -3,7 +3,6 @@ import React, { FC, useRef, useCallback, useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { APP_ID } from "apis/localdb";
-import { read, utils } from 'xlsx';
 
 /*=====2.CSS=====*/
 
@@ -23,7 +22,6 @@ import { useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 import { useAuth } from "services/hooks/auth/useAuth";
 
 /*=====7.OTHER=====*/
-import { createLinkAndClick } from "utils";
 
 export const FnbVoucherDetailPage: FC = () => {
 	useEffect(() => {
@@ -34,13 +32,6 @@ export const FnbVoucherDetailPage: FC = () => {
 	const { user } = useAuth();
 	const { permission } = useCheckPerAccessOneMenu({ appID: APP_ID.FNB.id, menuID: APP_ID.FNB.menuFnbApp.voucher.id, companyID: user?.company._id, type: "1", });
 
-	// useEffect(() => {
-	// 	if (!permission.read || permission.read == 0) {
-	// 		toast.error("Không có quyền truy cập");
-	// 		history.push("/fnb/home")
-	// 	}
-	// }, [permission]);
-
 	const { voucherID } = useParams<{ voucherID: string }>();
 	const { info: infoVoucher } = useFnbVoucher({ params: { voucherID }, isFetchList: false, isFetchInfo: true  });
 
@@ -50,12 +41,10 @@ export const FnbVoucherDetailPage: FC = () => {
         params: { 
 			limit: 10,
 			voucherID,
-            // keyword, 
             select: "name phone", 
         },
         isFetchList: true,
     });
-	// console.log(listCustomers)
 
 	const [modalCreateFnbProduct, setModalCreateFnbProduct] = useState<boolean>(false);
 	const toggleModalCreateFnbProduct = () => setModalCreateFnbProduct(!modalCreateFnbProduct);
@@ -66,80 +55,6 @@ export const FnbVoucherDetailPage: FC = () => {
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
 
-	/**
-     * LÀM VIỆC VỚI EXCEL
-     */
-    //_____Import, export excel
-    const [dataImport, setDataImport] = useState([]);
-    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-        isExporting: false,
-    });
-    const { downloadTemplateExcelAsync, importExcelAsync, exportExcelAsync } = useFnbVoucher({});
-
-    const handleDownloadTemplateImportExcel = async () => {
-		try {
-            setStateExport({ isExporting: true });
-            const { error, data } = await downloadTemplateExcelAsync({
-                filterParams: {  
-                    // keyword: keywordInput 
-                }
-            });
-
-            if(error) {
-                return toast.warn(data?.message);
-            }
-
-            data && createLinkAndClick(data, '_self');
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false });
-        }
-	}
-
-	//_____Xử lý import excel (đọc file)
-    const handleImport = ($event: any) => {
-        const files = $event.target.files;
-        if (files.length) {
-            const file = files[0];
-            const reader = new FileReader();
-            reader.onload = (event: any) => {
-                const wb = read(event.target.result);
-                const sheets = wb.SheetNames;
-
-                if (sheets.length) {
-                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    
-                    // Set data để Import
-                    setDataImport(rows)
-                }
-            }
-            
-            reader.readAsArrayBuffer(file);
-        }
-
-        // Đọc xong thì xóa value trong Input đi
-        $event.target.value = null;
-    }
-
-	//_____Gọi tới API để đẩy data lên
-    useEffect(() => {
-        if(dataImport.length){
-            const fetchData = async () => {
-                const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
-                setDataImport([]);
-                // refetchTaskInfo?.()
-                // console.log(data)
-
-                if(!data.error){
-                    return toast.success("Import thành công");
-                }
-                return toast.error(data.message);
-            }
-            fetchData();
-        }
-    }, [dataImport])
-
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -149,16 +64,6 @@ export const FnbVoucherDetailPage: FC = () => {
                     </button>
 					<p className="text-lg ml-4">{infoVoucher?.name} - {infoVoucher?.sign}</p>
 				</div>
-				{/* <button className={"flex items-center justify-center mx-3 ml-1"}
-						onClick={handleDownloadTemplateImportExcel}
-					>
-						Tải mẫu Import excel
-				</button> 
-				<button className={"flex items-center justify-center mx-3 ml-1"}>
-						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-						accept=".xlsx, .xlsm, .xls, .csv"/>
-						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel</label>
-				</button> */}
 				<div className="flex items-center">
 					<button
 						className="flex items-center justify-center text-primary-light bg-cbs-green w-[125px] h-8 rounded font-bold ml-6"
