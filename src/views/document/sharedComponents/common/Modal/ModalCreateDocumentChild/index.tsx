@@ -254,10 +254,10 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if(!formatValues.direction)
 			return toast.warning("Vui lòng chọn hướng hồ sơ")
 
-		if(!formatValues.property)
+		if(!formatValues.type)
 			return toast.warning("Vui lòng chọn tính chất")
 
-		if(!formatValues.type)
+		if(!formatValues.property)
 			return toast.warning("Vui lòng chọn phân loại")
 
 		if(!formatValues.sign)

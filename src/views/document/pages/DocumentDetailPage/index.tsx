@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, NavLink } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -10,12 +10,10 @@ import { read, utils } from 'xlsx';
 import { APP_KEY } from 'utils/constants';
 import { ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
 import { ModalConfirm } from "shareComponents/common";
-import { ButtonIcon, ButtonMore } from 'shareComponents/common/Button'
-import { useDocumentCustom, useListFilterDocument } from "services/hooks/document/useDocument";
+import { ButtonIcon } from 'shareComponents/common/Button'
+import { useDocumentCustom } from "services/hooks/document/useDocument";
 
 import {
-  // DropdownFilterButton,
-  // ButtonCreate,
   GroupActionsPageDetail
 } from "views/document/sharedComponents/common";
 
@@ -24,7 +22,7 @@ import { TableGeneralInformation } from "./components/TableGeneralInformation";
 import { TableFileAttach } from "./components/TableFileAttach";
 import { TableSubtextProfile } from "./components/TableSubtextProfile";
 
-import iconMove from "assets/images/icons8-move-stock-96.svg";
+// import iconMove from "assets/images/icons8-move-stock-96.svg";
 import iconShareFolder from "assets/images/icons8-shared-folder-100_1.svg";
 import iconUpload from "assets/images/icons8-upload-file-100 1.png";
 import iconAdd from "assets/images/icon-add.svg";
@@ -246,10 +244,7 @@ export const DocumentDetailPage: FC = () => {
             />
           </svg>
         </button>
-        {/* <DropdownFilterButton /> */}
         <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode} detailDocument={detailDocument} refeshInfoDocument={onFetchDetailDocumentAsync}/>
-        {/* <ButtonCreate onClick={toggleModal} /> */}
-        {/* <ButtonMore /> */}
       </div>
       <div className="text-cbs-subtext flex-1 overflow-y-auto pb-2">
         <div className="bg-white">
@@ -267,9 +262,11 @@ export const DocumentDetailPage: FC = () => {
                 alt=""
               />
               <span className="mr-2.5">
-                {detailDocument?.project?.sign} {">"} {detailDocument?.package?.name} {">"}  {detailDocument?.parent?.name}
+                {detailDocument?.project?.sign} {">"} {detailDocument?.package?.name} {" > "}
+                <NavLink className="text-cbs-highlight-color" title="Hồ sơ cha" to={`/pm/project/${detailDocument?.project?._id}/document/${detailDocument?.parent?._id}`}>
+                  {detailDocument?.parent?.name}
+                </NavLink>
               </span>
-              <img src={iconMove} className="h-6 w-6 inline" alt="" />
             </div>
             <div className="flex justify-between flex-wrap mt-4">
               <div>
@@ -316,12 +313,6 @@ export const DocumentDetailPage: FC = () => {
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
               Tài liệu đính kèm
             </h3>
-            {/* <ButtonIcon
-              title="Thêm"
-              icon={() => (
-                <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
-              )}
-            /> */}
             <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
               <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
               <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
