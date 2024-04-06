@@ -119,7 +119,7 @@ export const DocumentProjectPage: FC = () => {
 
     const { listDocumentWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument,  } = useListFilterDocument({
         params: {
-            isParent: "1",
+            // isParent: "1",
             departmentsID: [departmentID],
             ...fromToDate,
             datahubContactsID,

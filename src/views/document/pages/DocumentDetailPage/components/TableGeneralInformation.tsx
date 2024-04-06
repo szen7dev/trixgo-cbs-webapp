@@ -20,7 +20,7 @@ export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
   ...props
 }) => {
   const { t } = useTranslation(["document"]);
-  console.log({ docInfo })
+  // console.log({ docInfo })
   const table = React.useMemo(
     () => [
       { title: "Mã hiệu", value: docInfo.sign },
