@@ -85,6 +85,7 @@ export const FnbBillOrder: FC = () => {
                         <div className="text-[12px]">Số: <b>{info?.sign}</b> | Mã đơn app: <b>{FNB_CHANNEL[Number(info?.salesChannel)-1]?.sign}{info?.appOrderSign}</b></div>
                         <div className="text-[12px]">
                             <p><i>Nếu có điều chưa hài lòng về sản phẩm dịch vụ của Winggo, xin bạn vui lòng liên hệ tới Hotline <b>0985692022</b> hoặc kênh Zalo OA <b>Trà sữa Winggo</b> để được hỗ trợ, trước khi đánh giá số Sao (*) trên <b>Food App</b></i></p>
+                            <p>Thời gian tiếp nhận đặt hàng trên các nền tảng Food App: TP. Hà Nội 8h00-23h15. TP. HCM 8h00-22h15. Quý khách vui lòng đặt hàng trong khoảng thời gian trên</p>
                         </div>
                     </div>
 
