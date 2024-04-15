@@ -230,13 +230,13 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
   }, 300)
 
   const handleUpdate3 = debounce(async (e: any) => {
-    const value = e.target.value;
+    const { value } = e.target;
     try {
       const { data, status } = await API.put(
         `/api/fnb/orders`,
         {
           orderID: order._id,
-          paid: value,
+          paid: value
         }
       )
       if (status !== 200 || data?.error) return toast.warning('Cập nhật giá trị khách trả thất bại');
@@ -244,6 +244,29 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
       toast.error(error.message);
     }
   }, 300)
+
+  const handleRedirectPayment = async () => {
+    try {
+      const { data, status, statusText } = await API.post(`/api/payment/url`, {
+        orderID: order._id,
+        orderDescription: order.note || order.name,
+        amount: order.amount
+      });
+
+      if(status !== 200) {
+        return toast.warn(statusText);
+      }
+
+      if (data.error) {
+        return toast.warn(data.message || data.data?.message);
+      }
+
+      const { neo_ResponseData } = data.data;
+      window.open(neo_ResponseData.redirect, "_blank", "noopener,noreferrer");
+    } catch(err: any) {
+      toast.error(err.message);
+    }
+  }
 
   if (!order) return <></>;
 
@@ -523,6 +546,12 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                           <div className="flex justify-between mt-2 mb-3 font-bold"><div>Tiền thừa trả lại:</div><div>{formatNumberMoney(order?.paid - order?.amount)}</div></div>
                           : <></>
                       }
+                      <div className="flex justify-end mt-2 mb-3">
+                        <button onClick={handleRedirectPayment} className="bg-cbs-primary rounded text-white font-semibold py-2 px-3">
+                          Thanh toán
+                        </button>
+                      </div>
+
                     </div>
                   </div>
                 </div>
