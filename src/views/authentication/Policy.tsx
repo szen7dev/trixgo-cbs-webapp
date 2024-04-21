@@ -1,5 +1,5 @@
-/*=====LIBRARY=====*/
 import { FC } from "react";
+
 const Policy: FC = () => {
     return (
         <main className="transition-all duration-500 ease-out overflow-auto relative" style={{height: "calc(100vh)"}}>
@@ -30,15 +30,15 @@ Engage with us in other related ways, including any sales, marketing, or events<
                 <p className="mb-3">names</p>
                 <p className="mb-3">email addresses</p>
                 <p className="mb-3">Sensitive Information. We do not process sensitive information.</p>
-                
+
                 <h2 className="mb-5">2. HOW DO WE PROCESS YOUR INFORMATION?</h2>
                 <p className="mb-3">In Short: We process your information to provide, improve, and administer our Services, communicate with you, for security and fraud prevention, and to comply with law. We may also process your information for other purposes with your consent.</p>
-                
+
                 <h2 className="mb-5">3. WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR INFORMATION?
 </h2>
                 <p className="mb-3">In Short: We only process your personal information when we believe it is necessary and we have a valid legal reason (i.e., legal basis) to do so under applicable law, like with your consent, to comply with laws, to provide you with services to enter into or fulfill our contractual obligations, to protect your rights, or to fulfill our legitimate business interests.
 </p>
-                
+
                 <h2 className="mb-5">4. WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?</h2>
                 <p className="mb-3">In Short: We do not share information with third parties.</p>
 
@@ -47,7 +47,7 @@ Engage with us in other related ways, including any sales, marketing, or events<
 
                 <h2 className="mb-5">6. HOW LONG DO WE KEEP YOUR INFORMATION?</h2>
                 <p className="mb-3">In Short: We keep your information for as long as necessary to fulfill the purposes outlined in this privacy notice unless otherwise required by law.</p>
-                
+
                 <h2 className="mb-5">7. HOW DO WE KEEP YOUR INFORMATION SAFE?</h2>
                 <p className="mb-3">In Short: We aim to protect your personal information through a system of organizational and technical security measures.</p>
 
@@ -56,7 +56,7 @@ Engage with us in other related ways, including any sales, marketing, or events<
 
                 <h2 className="mb-5">9. CONTROLS FOR DO-NOT-TRACK FEATURES</h2>
                 <p className="mb-3">Most web browsers and some mobile operating systems and mobile applications include a Do-Not-Track (DNT) feature or setting you can activate to signal your privacy preference not to have data about your online browsing activities monitored and collected. At this stage no uniform technology standard for recognizing and implementing DNT signals has been finalized. As such, we do not currently respond to DNT browser signals or any other mechanism that automatically communicates your choice not to be tracked online. If a standard for online tracking is adopted that we must follow in the future, we will inform you about that practice in a revised version of this privacy notice.</p>
-                
+
                 <h2 className="mb-5">10. DO WE MAKE UPDATES TO THIS NOTICE?</h2>
                 <p className="mb-3">In Short: Yes, we will update this notice as necessary to stay compliant with relevant laws.</p>
 

@@ -19,6 +19,7 @@ import { OwnerMemberPage } from "views/owner/pages/OwnerMember";
 import { OwnerGrantPage } from "views/owner/pages/OwnerGrant";
 import { OwnerDocsManagementPage } from "views/owner/pages/OwnerDocsManagement";
 import { OwnerConfigPage } from "views/owner/pages/OwnerConfigPage";
+import { OwnerPaymentPage } from "views/owner/pages/OwnerPaymentPage";
 import { OwnerTrafficPage } from "views/owner/pages/OwnerTrafficPage";
 import { OwnerStoragePage } from "views/owner/pages/OwnerStoragePage";
 import { OwnerWorkflowPage } from "views/owner/pages/OwnerWorkflowPage";
@@ -31,6 +32,7 @@ const OwnerRouterV2: FC = () => {
                 <ProtectedRoute exact path="/owner/members" component={OwnerMemberPage}/>
                 <ProtectedRoute exact path="/owner/grant" component={OwnerGrantPage}/>
                 <ProtectedRoute exact path="/owner/grant/documents-management/:appID/:companyID/:appName" component={OwnerDocsManagementPage}/>
+                <ProtectedRoute exact path="/owner/payment" component={OwnerPaymentPage}/>
                 <ProtectedRoute exact path="/owner/config" component={OwnerConfigPage}/>
                 <ProtectedRoute exact path="/owner/traffic" component={OwnerTrafficPage}/>
                 <ProtectedRoute exact path="/owner/storage" component={OwnerStoragePage}/>

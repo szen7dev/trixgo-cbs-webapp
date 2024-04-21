@@ -3,8 +3,8 @@ interface QueryParam {
     select?: string;
     keyword?: string;
     lastestID?: string;
+    companyID?: string;
 }
-
 
 export interface CompanyItem {
     _id: string;
@@ -22,6 +22,15 @@ export interface CompanyItem {
     },
     scale: string,
     createAt: string,
+    bankName?: string,
+    bankAccount?: string,
+    bank?: string,
+}
+
+export interface CompanyInfo {
+    bankName?: string,
+    bankAccount?: string,
+    bank?: string,
 }
 
 export interface Data {
@@ -52,4 +61,7 @@ export type CompanyPayload = {
     birthDay?: string,
     image?: string,
     website?: string
+    bankName?: string,
+    bankAccount?: string,
+    bank?: string,
 }

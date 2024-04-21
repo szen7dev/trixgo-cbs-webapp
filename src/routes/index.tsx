@@ -13,6 +13,7 @@ import { FullPageLayout } from "shareComponents/layouts";
 import { MediaLayout } from "shareComponents/layouts/MediaLayout";
 import Policy from "views/authentication/Policy";
 import HumanRouterV2 from "./human/indexV2";
+import { PaymentErrorPage, PaymentSuccessPage } from "views/payment/pages";
 
 /*=====4.CONFIG ROUTE=====*/
 const AccountingRouter = lazy(() => import("./accounting"))
@@ -52,7 +53,8 @@ const FnbPrintBillListPage = lazy(() => import('views/fnb/pages/FnbPrintBillList
 const FnbPrintBillListPage2 = lazy(() => import('views/fnb/pages/FnbPrintBillListPage2'))
 
 const Routes: FC = () => {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
+
     useEffect(() => {
         document.title = `${t("menu:homeTitle")}`;
     }, [])
@@ -118,15 +120,20 @@ const Routes: FC = () => {
                                         <MediaRouter />
                                     </MediaLayout>
                                 </Route>
-                                {/* <Route
-                                    exact
-                                    path="/policy"
-                                    component={Policy}
-                                /> */}
                                 <Route
                                     exact
                                     path="/privacy-policy"
                                     component={Policy}
+                                />
+                                <Route
+                                    exact
+                                    path="/payment-success"
+                                    component={PaymentSuccessPage}
+                                />
+                                <Route
+                                    exact
+                                    path="/payment-error"
+                                    component={PaymentErrorPage}
                                 />
                                 <Route path="*">
                                     <FullPageLayout>

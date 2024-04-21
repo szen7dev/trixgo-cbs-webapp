@@ -51,6 +51,10 @@ export const OwnerLeftSideBar: FC = () => {
                         <img  width={'7px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấp phép ứng dụng</span>
                     </NavLink>
+                    <NavLink to={`/owner/payment`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấu hình thanh toán</span>
+                    </NavLink>
                     <NavLink to={`/owner/config`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img  width={'7px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấu hình môi trường</span>

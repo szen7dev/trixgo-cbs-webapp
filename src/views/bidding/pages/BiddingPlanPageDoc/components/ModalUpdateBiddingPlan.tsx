@@ -330,7 +330,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 										allowClearValueSingleInput={true}
 										showTriangle={true}
 										maxWidthInput="max-w-none"
-										data={listCompany.map(item => ({
+										data={listCompany.map((item: any) => ({
 											value: item._id,
 											label: item.name
 										}))}

@@ -281,7 +281,7 @@ export const SupportCompanyPage: FC = () => {
 					</thead>
 
 					<tbody>
-						{dataListCompanies.length ? dataListCompanies.map(company => (
+						{dataListCompanies.length ? dataListCompanies.map((company: any) => (
 							<tr key={company._id} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input

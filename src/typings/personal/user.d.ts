@@ -4,13 +4,16 @@ export type UpdateUser = {
     birthDay: string,
     gender: string,
     lang: string,
-};
+    bankName: string,
+    bankAccount: string,
+    bank: string,
+}
 
 export type UpdatePasswordUser = {
     confirmPass: string,
     currentPass: string,
     newPass: string,
-};
+}
 
 export type UpdateAvatarUser = {
     image: string,
@@ -19,7 +22,7 @@ export type UpdateAvatarUser = {
 export type PostResponse = APIResponse & {
     data: User;
     message: string;
-};
+}
 
 export type User = {
     _id: string;
@@ -30,7 +33,10 @@ export type User = {
         _id: string,
         name: string,
         sign: string,
-        image: string
+        image: string,
+        bankName: string,
+        bankAccount: string,
+        bank: string
     },
     department: {
         _id: string,
@@ -43,5 +49,8 @@ export type User = {
     image: string
     gender: number,
     lang: string,
-    birthDay: string
-};
+    birthDay: string,
+    bankName: string,
+    bankAccount: string,
+    bank: string
+}

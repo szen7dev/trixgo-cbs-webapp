@@ -12,7 +12,7 @@ const CompanyRepository = {
         const { data } = await API.get<CompaniesResponse>(
             companyURL, {
                 params: {
-                    select: '_id name sign taxid email phone cover image address area scale createAt description birthDay website',
+                    select: '_id name sign taxid email phone cover image address area scale createAt description birthDay website bankName bankAccount bank',
                     populates: JSON.stringify({
                         path: "area",
                         select: "_id name"

@@ -743,7 +743,7 @@ export const DashboardV2: FC<Props> = () => {
               )}
               showTriangle={true}
               isMultiple={true}
-              data={listCompany.map((company) => ({
+              data={listCompany.map((company:any) => ({
                 label: company.name,
                 value: company._id,
               }))}
