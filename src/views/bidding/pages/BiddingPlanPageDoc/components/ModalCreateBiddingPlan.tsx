@@ -272,7 +272,7 @@ const ModalCreateBiddingPlan: FC<ModalProps> = ({ toggle, onConfirm, projectID }
 										allowClearValueSingleInput={true}
 										showTriangle={true}
 										maxWidthInput="max-w-none"
-										data={listCompany.map(item => ({
+										data={listCompany.map((item: any) => ({
 											value: item._id,
 											label: item.name
 										}))}

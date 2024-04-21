@@ -218,7 +218,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                         </p>
                       </div>
                     )}
-                    data={listCompany.map((company) => ({
+                    data={listCompany.map((company: any) => ({
                       label: company.name,
                       value: company._id,
                     }))}

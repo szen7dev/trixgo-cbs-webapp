@@ -1,11 +1,12 @@
-import { InfiniteData, useInfiniteQuery, useMutation } from "react-query";
+import { InfiniteData, useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 import CompanyRepository from 'apis/companies';
 import type { CompanyItem, QueryParam, CompanyPayload, CompaniesResponse } from 'typings/companies';
 
 interface UseQueryListCompany {
     loading: boolean;
-    data: CompanyItem[];
+    data: any;
+    // data: CompanyItem[];
     newData: InfiniteData<CompaniesResponse> | undefined,
     hasNextPage?: boolean;
     totalPages: number;
@@ -58,6 +59,31 @@ export const useQueryListCompany = (params?: QueryParam): UseQueryListCompany =>
         refetch,
         fetchNextPage,
         fetchPreviousPage
+    }
+}
+
+export const useQueryInfoCompany = (params?: QueryParam) => {
+    const result = useInfiniteQuery(
+        ['info_company', params],
+        async ({ pageParam }: any) =>
+        CompanyRepository.companyList({
+            lastestID: pageParam,
+            ...params,
+        }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: true,
+        });
+
+    const {
+        data,
+    } = result;
+
+    return {
+        data
     }
 }
 

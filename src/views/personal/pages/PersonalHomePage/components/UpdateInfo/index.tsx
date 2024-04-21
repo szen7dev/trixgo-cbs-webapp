@@ -11,7 +11,6 @@ import 'swiper/swiper-bundle.min.css';
 /*=====3.ICONS=====*/
 import PersonalLogo from "assets/images/personal-logo.svg";
 import CameraIcon from "assets/images/camera-icon.svg";
-// import SignatureLogo from "assets/images/signature-logo.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 /*=====5.TYPINGS=====*/
@@ -34,6 +33,9 @@ const infoValues = {
 	birthDay: "",
 	gender: '1',
 	lang: "vn",
+	bankName: "",
+	bankAccount: "",
+	bank: "",
 };
 
 export const UpdateInfo: FC = () => {
@@ -55,37 +57,37 @@ export const UpdateInfo: FC = () => {
 	}
 	  
 	useEffect(() => {
-	refetchDataUserInfo()
-	if(dataUserInfo) {
-		setInfoUser(dataUserInfo.data)
-		// Nếu giới tính chưa có
-		if(!dataUserInfo?.data?.gender) {
-			setInfoUser(user => ({
-				...user,
-				...{gender: '1'}
-			}));
-		} else { // Nếu có sẽ đổi sang string
-			setInfoUser(user => ({
-				...user,
-				...{gender: user.gender.toString()}
-			}));
-		}
-		if(!dataUserInfo?.data?.gender) {
-			setInfoUser(user => ({
-				...user,
-				...{lang: 'vn'}
-			}));
-		}
-		if(dataUserInfo?.data?.image) {
-			setAvatar(dataUserInfo.data.image)
-		}
+		refetchDataUserInfo()
+		if(dataUserInfo) {
+			setInfoUser(dataUserInfo.data)
+			// Nếu giới tính chưa có
+			if(!dataUserInfo?.data?.gender) {
+				setInfoUser(user => ({
+					...user,
+					...{gender: '1'}
+				}));
+			} else { // Nếu có sẽ đổi sang string
+				setInfoUser(user => ({
+					...user,
+					...{gender: user.gender.toString()}
+				}));
+			}
+			if(!dataUserInfo?.data?.gender) {
+				setInfoUser(user => ({
+					...user,
+					...{lang: 'vn'}
+				}));
+			}
+			if(dataUserInfo?.data?.image) {
+				setAvatar(dataUserInfo.data.image)
+			}
 
-		if(dataUserInfo && dataUserInfo?.data?.signature) {
-			setSignature(dataUserInfo.data.signature)
-        }
-	} else {
-		setInfoUser(infoValues)
-	}
+			if(dataUserInfo && dataUserInfo?.data?.signature) {
+				setSignature(dataUserInfo.data.signature)
+			}
+		} else {
+			setInfoUser(infoValues)
+		}
 	},[dataUserInfo])
 
 	const handleChangeSignature = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -182,6 +184,51 @@ export const UpdateInfo: FC = () => {
 						  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
 						/>
 					  }
+					/>
+				  </div>
+
+				  <div className="mb-6">
+					<p className="text-sm mb-2">Tài khoản ngân hàng</p>
+					<input
+					  type="text"
+					  name="bankAccount"
+					  placeholder="Tài khoản ngân hàng"
+					  value={values.bankAccount}
+					  onChange={handleChange}
+					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+					  onBlur={(e: FormEvent<HTMLInputElement>) => {
+						handleBlur(e);
+					  }}
+					/>
+				  </div>
+
+				  <div className="mb-6">
+					<p className="text-sm mb-2">Tên chủ tài khoản</p>
+					<input
+					  type="text"
+					  name="bankName"
+					  placeholder="Tên chủ tài khoản"
+					  value={values.bankName}
+					  onChange={handleChange}
+					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+					  onBlur={(e: FormEvent<HTMLInputElement>) => {
+						handleBlur(e);
+					  }}
+					/>
+				  </div>
+
+				  <div className="mb-6">
+					<p className="text-sm mb-2">Tên ngân hàng</p>
+					<input
+					  type="text"
+					  name="bank"
+					  placeholder="Tên ngân hàng"
+					  value={values.bank}
+					  onChange={handleChange}
+					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+					  onBlur={(e: FormEvent<HTMLInputElement>) => {
+						handleBlur(e);
+					  }}
 					/>
 				  </div>
   

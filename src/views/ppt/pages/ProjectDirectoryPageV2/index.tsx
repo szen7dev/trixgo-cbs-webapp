@@ -112,7 +112,7 @@ const ProjectDirectoryPageV2:FC = () => {
                     className={"mr-4 border border-primary-border rounded-lg mb-2"}
                     placeholder={"Đơn vị"}
                     showTriangle={true}
-                    data={listCompanies?.map(company =>({ id: company._id, text: company.name }))}
+                    data={listCompanies?.map((company: any) =>({ id: company._id, text: company.name }))}
                     prefixIcon={<img className={"mr-2"} src={businessBuilding} alt={"icon"}/>}
                     onSearchInputChange={handleSearch}
                     onchangeValue={handleChangeCompany}

@@ -10,7 +10,7 @@ SwiperCore.use([Pagination]);
 
 export const PersonalHomePage: FC = () => {
 	return (
-	  <main className="bg-cbs-gray h-full w-full flex justify-center gap-7 py-4 px-4">
+	  <main className="bg-cbs-gray h-fit w-full flex justify-center gap-7 py-4 px-4">
 		<ChangePassword />
 		<UpdateInfo />
 	  </main>
