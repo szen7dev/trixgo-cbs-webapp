@@ -5,8 +5,9 @@ export type UpdateUser = {
     gender: string,
     lang: string,
     bankName: string,
-    bankAccount: string,
-    bank: string,
+    bankAccountNumber: string,
+    bankAccountName: string,
+	bankSwiftCode: string,
 }
 
 export type UpdatePasswordUser = {
@@ -35,8 +36,8 @@ export type User = {
         sign: string,
         image: string,
         bankName: string,
-        bankAccount: string,
-        bank: string
+        bankAccountNumber: string,
+        bankAccountName: string
     },
     department: {
         _id: string,
@@ -51,6 +52,6 @@ export type User = {
     lang: string,
     birthDay: string,
     bankName: string,
-    bankAccount: string,
-    bank: string
+    bankAccountNumber: string,
+    bankAccountName: string
 }

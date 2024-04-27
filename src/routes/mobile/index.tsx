@@ -29,7 +29,7 @@ const MobileRouter: FC = () => {
                 />
 
                 <Route exact path="/mobile/activity/:id/:rad" component={FnbPage} />
-               
+
                 <ProtectedRoute path="/item/*" component={ErrorPage} />
             </Switch>
         </MobileLayout>
