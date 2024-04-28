@@ -264,11 +264,11 @@ export const UpdateInfo: FC = () => {
 				  </div>
 
 				  <div className="mb-6">
-					<p className="text-sm mb-2">Tên chủ tài khoản</p>
+					<p className="text-sm mb-2">Tên chủ tài khoản (viết hoa, không dấu)</p>
 					<input
 					  type="text"
 					  name="bankAccountName"
-					  placeholder="Tên chủ tài khoản"
+					  placeholder="Tên chủ tài khoản (viết hoa, không dấu)"
 					  value={values.bankAccountName}
 					  onChange={handleChange}
 					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
