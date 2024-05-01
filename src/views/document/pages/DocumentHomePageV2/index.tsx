@@ -1,20 +1,20 @@
-import React, {FC, useEffect, useState} from "react";
+import React, { FC, useEffect, useState } from "react";
 import moment from "moment";
-import {debounce} from "lodash";
-import {Link} from "react-router-dom";
+import { debounce } from "lodash";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from "utils";
 
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "redux/reducer";
-import {setFilterDropdown} from "redux/reducer/DocumentHomeSlice";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "redux/reducer";
+import { setFilterDropdown } from "redux/reducer/DocumentHomeSlice";
 
 import { useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
 import { useQueryListCompany } from "services/hooks/useCompanies";
-import {useContractIsMembers} from "services/hooks/items/useContract";
-import {useProjectCustom} from "services/hooks/items/useProject";
+import { useContractIsMembers } from "services/hooks/items/useContract";
+import { useProjectCustom } from "services/hooks/items/useProject";
 
-import {DIRECTION_TYPES, DOCUMENT_TYPES_SORT} from "apis/localdb";
+import { DIRECTION_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
 
 import { Loader, DropdownSearchableV2 } from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
@@ -65,11 +65,19 @@ const DocumentHomePageV2: FC = () => {
     });
     const { exportDocumentAsync } = useDocumentCustom({});
 	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact })
-    
+
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
     const { listContracts } = useContractIsMembers({ params: { keyword: contractKeyword, populates: JSON.stringify({ "path": "project", "select": "name sign" }) }, isFetch: true });
 
-    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument, isFetching } = useListFilterDocument({
+    const {
+        listDocumentWithPager,
+        isLoading,
+        totalRecord,
+        totalPage,
+        fetchNextPageDocument,
+        hasNextPage,
+        isFetching
+    } = useListFilterDocument({
         params: {
             ...fromToDate,
             datahubContactsID,
@@ -86,7 +94,7 @@ const DocumentHomePageV2: FC = () => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportDocumentAsync({
-                filterParams: {  
+                filterParams: {
                     ...fromToDate,
                     datahubContactsID,
                     types,

@@ -292,7 +292,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                       <div className={"border-0.5 p-2 my-2"}>
                         <div className={"flex py-2"}>
                           <div className={"w-full flex items-center"}>
-                            <img src={IconGreenDot} alt="" />
+                            <img src={IconGreenDot} alt="Three dot" />
                             <div className={"h-full text-left flex items-center px-1 "}>
                               <span className="text-gray-500 pr-1">Tên: </span>
                               <span>{order.name} - </span>

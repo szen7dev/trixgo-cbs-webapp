@@ -129,7 +129,7 @@ const FnbPage: FC = () => {
             });
             const resultWithdraw = data.data;
 
-            if(resultWithdraw.code !== 1 || resultWithdraw.status !== "PASSED") {
+            if (resultWithdraw.code !== 1 || resultWithdraw.status !== "PASSED") {
                 return toast.warn(resultWithdraw.failedReason);
             }
 

@@ -34,8 +34,10 @@ import { ModalDetailItem2 } from "./components/ModalDetailItem2/index";
 import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
 import { ModalUpdatePayment } from "./components/ModalUpdatePayment";
 import { ModalUpdateSalesChannel } from "./components/ModalUpdateSalesChannel";
+import { ModalQRPayment } from "./components/ModalQRPayment";
 import { DropdownSearchableV2, Loader, ModalConfirm } from "shareComponents/common";
 import TriangleDown from "assets/icons/TriangleDown";
+import QRCodeIcon from "assets/images/document/qr-code.png";
 import { APP_ID } from "apis/localdb";
 import { validateFiles } from 'validation/file';
 import { ImageProps } from "typings/common";
@@ -98,6 +100,9 @@ export const fnbAccessData = ['kiemthuvien4.fnb@gmail.com', 'adwgo.winggo@gmail.
 
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const [keyword, setKeyword] = useState('');
+  const [isToggleModalQRPayment, setIsToggleModalQRPayment] = useState(false);
+  const [paymentInfo, setPaymentInfo] = useState({});
+
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
       setKeyword(event.target.value);
   }, 500);
@@ -423,6 +428,14 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       toast.error(error.message)
     }
 	}
+
+  const openModalQRPayment = (order: any) => {
+    setPaymentInfo({
+      description: `Thanh toán đơn hàng ${order.sign || order._id}`,
+      amount: order.amount
+    })
+    setIsToggleModalQRPayment(true);
+  }
 
   if(isUploading) {
     return <Loader className="border-primary" />
@@ -1156,7 +1169,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   />
                 </label>
               )}
-                <button onClick={handleRefreshOrder}><img className="w-[24px] h-[24px] " src={iconRefresh} title="Cập nhật dữ liệu đơn hàng"/></button>
+                <button onClick={handleRefreshOrder}><img className="w-[24px] h-[24px]" src={iconRefresh} title="Cập nhật dữ liệu đơn hàng"/></button>
             </div>
           </div>
           {/* Chưa rõ chỗ này, hình như để phân trang */}
@@ -1196,9 +1209,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <th className="pb-1 pt-1 font-normal text-left">Mã đơn/Mã đơn app</th>
                 <th className="pb-1 pt-1 font-normal text-left">Cơ sở</th>
                 <th className="pb-1 pt-1 font-normal text-left">Hình thức</th>
-                <th className="pb-1 pt-1 font-normal text-left">Trạng thái</th>
-                <th className="pb-1 pt-1 font-normal text-left">Giá trị</th>
-                <th className="pb-1 pt-1 font-normal text-left">In ấn</th>
+                <th className="pb-1 pt-1 font-normal text-center">Trạng thái</th>
+                <th className="pb-1 pt-1 font-normal text-center">Giá trị</th>
+                <th className="pb-1 pt-1 font-normal text-center">Thanh toán</th>
+                <th className="pb-1 pt-1 font-normal text-center">In ấn</th>
               </tr>
             </thead>
             <tbody>
@@ -1354,12 +1368,17 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           </div>
                       }
                     </td>
-                    <td className={"text-right px-2 py-2"}>
+                    <td className={"text-center px-2 py-2"}>
                       <div>
                         {formatNumberMoney(item?.total || 0)} đ
                       </div>
                     </td>
-                    <td className={"text-right px-2 py-2"}>
+                    <td className={"text-center flex justify-center px-2 py-2"}>
+                      <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2" onClick={() => openModalQRPayment(item)}>
+                          <img className="w-[24px] h-[24px]" alt="icon" src={QRCodeIcon} />
+                      </button>
+                    </td>
+                    <td className={"text-center px-2 py-2"}>
                       <Link to={`/fnb/home/${item._id}/print/1`}>
                         <span className="mr-5 text-cbs-primary underline">In bill</span>
                       </Link>
@@ -1379,6 +1398,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         isShow={isShowImageFullScreen}
         toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
         initialData={defaultState}
+      />
+      <ModalQRPayment
+        isToggle={isToggleModalQRPayment}
+        paymentInfo={paymentInfo}
+        toggle={() => setIsToggleModalQRPayment(false)}
       />
     </div>
   )

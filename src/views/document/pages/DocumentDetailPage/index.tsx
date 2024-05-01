@@ -170,11 +170,11 @@ export const DocumentDetailPage: FC = () => {
 
   //_____Import, export excel
   const [dataImport, setDataImport] = useState([]);
-  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-      isExporting: false,
-  });
+  // const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+  //     isExporting: false,
+  // });
 
-  const { downloadTemplateImportExcelDocumentAsync, importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
+  const { importDocumentFromExcelAsync } = useDocumentCustom({});
 
   /**
  * Xử lý import excel (đọc file)
@@ -190,12 +190,12 @@ export const DocumentDetailPage: FC = () => {
 
             if (sheets.length) {
                 const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                
+
                 // Set data để Import
                 setDataImport(rows)
             }
         }
-        
+
         reader.readAsArrayBuffer(file);
     }
 
@@ -244,7 +244,12 @@ export const DocumentDetailPage: FC = () => {
             />
           </svg>
         </button>
-        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode} detailDocument={detailDocument} refeshInfoDocument={onFetchDetailDocumentAsync}/>
+        <GroupActionsPageDetail
+          className="flex items-center flex-1"
+          onGenerateQRCode={toggleModalQRCode}
+          detailDocument={detailDocument}
+          refeshInfoDocument={onFetchDetailDocumentAsync}
+        />
       </div>
       <div className="text-cbs-subtext flex-1 overflow-y-auto pb-2">
         <div className="bg-white">
