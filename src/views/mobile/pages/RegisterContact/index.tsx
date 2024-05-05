@@ -19,6 +19,14 @@ const RegisterContactPage: FC = () => {
 
     const handleSubmit = async () => {
         try {
+            if(!formData.name) {
+                return toast.warn("Bạn cần nhập họ và tên");
+            }
+
+            if(!formData.phone) {
+                return toast.warn("Bạn cần nhập số điện thoại");
+            }
+
             const { status, data } = await API.post(`/api/item/contacts/register`, { ...formData });
 
             if(status !== 200 || data.error) {
