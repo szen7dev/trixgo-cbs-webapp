@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import React, { UIEvent, FC, useState, useEffect } from "react";
+import React, { UIEvent, FC, useState } from "react";
 import { toast } from "react-toastify";
 import debounce from 'lodash/debounce';
 import moment from 'moment';
@@ -18,8 +18,6 @@ import { DropdownSearchable } from "shareComponents/common";
 import { useModal } from "services/hooks/useModal";
 import { useCustomer } from "services/hooks/items/useCustomer";
 import { useFunda } from "services/hooks/items/useFunda";
-import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
-import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
 export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
@@ -67,10 +65,9 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 
         // Cập nhật mẩu tin
         case 'update': {
-
-          const { error, message, data } = await updateAsync({ 
-            ...formData, 
-            type: `${formData.type}`, 
+          const { error, message, data } = await updateAsync({
+            ...formData,
+            type: `${formData.type}`,
             gender: `${formData.gender}`,
           });
 
@@ -84,7 +81,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           toast.success('Cập nhật thành công', { autoClose: 1500 });
           break;
         }
-        
+
         default:
           break;
       }
@@ -111,18 +108,18 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
+    return bottom;
   }
+
   const [keywordFunda, setKeywordFunda] = useState('');
-  const {
-    list: listFunda,
-  } = useFunda({
-    params: { 
-        keyword: keywordFunda, 
-        isListParentOfListChilds: "1", 
-        populates: { 
+  const { list: listFunda } = useFunda({
+    params: {
+        keyword: keywordFunda,
+        isListParentOfListChilds: "1",
+        populates: {
             "path": "area1 area2 area3",
             "select": "name"
-        }, 
+        },
     },
     isFetchList: true
   })
@@ -178,7 +175,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
                 value: funda._id,
             }))}
             initialValue={{
-              value: formData?.funda?._id || "", 
+              value: formData?.funda?._id || "",
               label: formData?.funda?.name || "Chọn cơ sở"
             }}
             formatItem={{

@@ -120,7 +120,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
             }
         } catch (error: any) {
             toast.error(error.message)
-        } 
+        }
     }
 
     const handleExportByFilter = async () => {
@@ -316,7 +316,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                             >
                                 <img src={iconPlus} alt="" />
                             </button>
-                        </div>                        
+                        </div>
                     </div>
 
                     <PaginateV2
