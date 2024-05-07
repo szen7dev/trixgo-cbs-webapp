@@ -15,6 +15,7 @@ import {
 } from "views/mobile/pages";
 
 const FnbPage = lazy(() => import('views/mobile/pages/FnbPage'));
+const RegisterContactPage = lazy(() => import('views/mobile/pages/RegisterContact'));
 
 const MobileRouter: FC = () => {
     return (
@@ -29,7 +30,8 @@ const MobileRouter: FC = () => {
                 />
 
                 <Route exact path="/mobile/activity/:id/:rad" component={FnbPage} />
-               
+                <Route exact path="/mobile/register" component={RegisterContactPage} />
+
                 <ProtectedRoute path="/item/*" component={ErrorPage} />
             </Switch>
         </MobileLayout>

@@ -14,7 +14,7 @@ import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 /*=====5.TYPINGS=====*/
-import { UpdateUser, UpdateAvatarUser } from 'typings/personal/user';
+import { UpdateUser } from 'typings/personal/user';
 /*=====6.HOOKS/APIS=====*/
 import { useUser } from 'services/hooks/personal/useUser';
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -22,8 +22,10 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { Form, Formik, Field } from "formik";
 import moment from 'moment'
 import DatePicker from "react-datepicker";
+import { DropdownSearchable } from "shareComponents/common";
 import { toast } from "react-toastify";
 import { useUpload } from 'services/hooks/useUpload';
+import API from "apis/repository";
 
 SwiperCore.use([Pagination]);
 
@@ -34,28 +36,86 @@ const infoValues = {
 	gender: '1',
 	lang: "vn",
 	bankName: "",
-	bankAccount: "",
-	bank: "",
+	bankAccountNumber: "",
+	bankAccountName: "",
+	bankSwiftCode: "",
 };
 
 export const UpdateInfo: FC = () => {
     const [infoUser, setInfoUser] = useState(infoValues);
 	const { dataUserInfo, refetchDataUserInfo } = useAuth();
-    const [avatar, setAvatar] = useState(PersonalLogo);
-	const { updateUser, updateAvatarUser } = useUser();
+    const [, setAvatar] = useState(PersonalLogo);
+	const { updateUser } = useUser();
     const [signature, setSignature] = useState("signature_default.png");
     const [signatureName, setSignatureName] = useState("");
+    const [banks, setBanks] = useState({
+		tempBanks: [],
+		banks: []
+	});
 
 	const { addFileToUpload } = useUpload({
 		typeUpload: 'user'
 	});
 
-	const handleSubmitUpdateUser = async (values: UpdateUser) => {
-		await updateUser(values);
-		i18n.changeLanguage(values.lang)
-		localStorage.setItem("user_language", values.lang);
+	const checkInquiryBankAccount = async (bankAccountNumber: string, bankSwiftCode: string): Promise<boolean> => {
+		try {
+			const response = await API.post(`/api/payment/inquiry-bank-account`, {
+				bankAccountNumber,
+				bankSwiftCode,
+			});
+			const { error, message } = response.data;
+
+			if(error) {
+				toast.warn(message);
+				return false;
+			}
+
+			return true;
+		} catch(error: any) {
+			toast.error(error.message);
+			return false;
+		}
 	}
-	  
+
+	const handleSubmitUpdateUser = async (values: UpdateUser) => {
+		try {
+			const checkBankAccount = await checkInquiryBankAccount(values.bankAccountNumber, values.bankSwiftCode);
+			if(!checkBankAccount) {
+				return toast.warn("Tài khoản ngân hàng không hợp lệ");
+			}
+
+			await updateUser({
+				...values,
+			});
+			i18n.changeLanguage(values.lang)
+			localStorage.setItem("user_language", values.lang);
+		} catch(error: any) {
+			toast.error(error.message);
+		}
+	}
+
+	useEffect(() => {
+		const fetchBanks = async () => {
+			try {
+				const response = await API.get(`/api/payment/banks`);
+				const { data, error, message } = response.data;
+
+				if(error) {
+					return toast.warn(message);
+				}
+
+				setBanks({
+					tempBanks: data,
+					banks: data,
+				})
+			} catch(error: any) {
+				toast.error(error.message);
+			}
+		}
+
+		fetchBanks();
+	}, [])
+
 	useEffect(() => {
 		refetchDataUserInfo()
 		if(dataUserInfo) {
@@ -104,7 +164,7 @@ export const UpdateInfo: FC = () => {
 			setSignatureName(name);
 		}
 	}
-	
+
 	useEffect(() => {
         if(signatureName) {
 			updateUser({ signature: signatureName })
@@ -117,8 +177,9 @@ export const UpdateInfo: FC = () => {
 	const Signature = memo(function Signature() {
         return <img src={`${process.env.REACT_APP_URL_S3_USER}/${signature}`} alt="Signature" width={200} />
 	});
+
 	return (
-		<section 
+		<section
 			className={cn(
 				"w-6/12 h-fit bg-primary-light relative",
 				styles.boxShadowBorderRadius
@@ -132,7 +193,7 @@ export const UpdateInfo: FC = () => {
 		  >
 			{(formik) => {
 			  const { handleBlur, values, handleChange, setFieldValue } = formik;
-  
+
 			  return (
 				<Form className="px-5">
 				  <div className="mb-6">
@@ -149,7 +210,7 @@ export const UpdateInfo: FC = () => {
 					  }}
 					/>
 				  </div>
-  
+
 				  <div className="mb-6">
 					<p className="text-sm mb-2">Điện thoại</p>
 					<input
@@ -164,7 +225,7 @@ export const UpdateInfo: FC = () => {
 					  }}
 					/>
 				  </div>
-  
+
 				  <div className="mb-6">
 					<p className="text-sm mb-2">Ngày sinh</p>
 					<DatePicker
@@ -191,9 +252,9 @@ export const UpdateInfo: FC = () => {
 					<p className="text-sm mb-2">Tài khoản ngân hàng</p>
 					<input
 					  type="text"
-					  name="bankAccount"
+					  name="bankAccountNumber"
 					  placeholder="Tài khoản ngân hàng"
-					  value={values.bankAccount}
+					  value={values.bankAccountNumber}
 					  onChange={handleChange}
 					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
 					  onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -203,12 +264,12 @@ export const UpdateInfo: FC = () => {
 				  </div>
 
 				  <div className="mb-6">
-					<p className="text-sm mb-2">Tên chủ tài khoản</p>
+					<p className="text-sm mb-2">Tên chủ tài khoản (viết hoa, không dấu)</p>
 					<input
 					  type="text"
-					  name="bankName"
-					  placeholder="Tên chủ tài khoản"
-					  value={values.bankName}
+					  name="bankAccountName"
+					  placeholder="Tên chủ tài khoản (viết hoa, không dấu)"
+					  value={values.bankAccountName}
 					  onChange={handleChange}
 					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
 					  onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -219,19 +280,59 @@ export const UpdateInfo: FC = () => {
 
 				  <div className="mb-6">
 					<p className="text-sm mb-2">Tên ngân hàng</p>
-					<input
-					  type="text"
-					  name="bank"
-					  placeholder="Tên ngân hàng"
-					  value={values.bank}
-					  onChange={handleChange}
-					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
-					  onBlur={(e: FormEvent<HTMLInputElement>) => {
-						handleBlur(e);
-					  }}
+					<DropdownSearchable
+						onchangeValue={(value: any) => {
+							const bank: any = banks.banks.find((b: any) => b.swiftCode === value.value);
+							setFieldValue("bankName", value.label);
+							setFieldValue("bankSwiftCode", bank.swiftCode);
+						}}
+						onClearData={() => {
+							setFieldValue("bankName", "");
+							setFieldValue("bankSwiftCode", "");
+							setBanks(curr => ({ ...curr, tempBanks: curr.banks }));
+						}}
+						onSearchInputChange={
+						  (value) => {
+							if(!value) {
+								return setBanks(curr => ({ ...curr, tempBanks: curr.banks }));
+							}
+
+							const newBanks = banks.tempBanks.filter((b: any) => b.bankShortName.toLowerCase().includes(value.toLowerCase()));
+							setBanks(curr => ({ ...curr, tempBanks: newBanks }));
+						  }}
+						className={"t-main-search-filter-item-dropdown w-full h-9 px-4 flex-1 border border-primary-border rounded outline-none"}
+						placeholder="Tên ngân hàng"
+						isMultiple={false}
+						allowClearValueSingleInput={true}
+						showTriangle={false}
+						maxWidthInput="max-w-none"
+						bordered={true}
+						renderSelectedItem={(item) => (
+							<div
+								style={{ width: 100 }}
+								className="flex items-center"
+							>
+								{item.text}
+							</div>
+						)}
+						data={banks.tempBanks.map((bank: any) => ({
+							label: bank.bankShortName,
+							value: bank.swiftCode,
+						}))}
+						valueControlled={{
+							...values.bankName ? {
+								label: values.bankName,
+								value: values.bankSwiftCode,
+							} : null
+						}}
+						formatItem={{
+							id: "value",
+							text: "label",
+						}}
+						inlineSearch={true}
 					/>
 				  </div>
-  
+
 				  <div className="mb-6">
 					<p className="text-sm">Giới tính</p>
 					<div className="flex items-center gap-14 mt-4">
@@ -249,7 +350,7 @@ export const UpdateInfo: FC = () => {
 					  </label>
 					</div>
 				  </div>
-  
+
 				  <div className="mb-6">
 					<p className="text-sm">Ngôn ngữ hiển thị</p>
 					<div className="flex items-center gap-14 mt-4">
@@ -267,7 +368,7 @@ export const UpdateInfo: FC = () => {
 					  </label>
 					</div>
 				  </div>
-  
+
 				  <div className="mb-6">
 					<div className="flex items-center">
 					  <p className="text-sm">Ảnh chữ ký</p>
@@ -286,7 +387,7 @@ export const UpdateInfo: FC = () => {
 					  <Signature/>
 					</div>
 				  </div>
-  
+
 				  <div className="absolute bottom-0 right-0 p-5">
 					<button
 					  type="submit"

@@ -19,10 +19,9 @@ import orderIcon from "assets/images/icons8-order-history-100.png";
 import orderGift from "assets/images/icons8-gift-100.png";
 import orderRef from "assets/images/icons8-referral-100.png";
 import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
-
-/**
- * Hooks
- */
+import API from "apis/repository";
+import { toast } from "react-toastify";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 // const domain = 'http://localhost:3003';
 const domain = 'https://api.trixgo.com';
@@ -32,8 +31,6 @@ const fixedHeaders = {
 };
 
 const FnbPage: FC = () => {
-    
-    const params = useParams<any>();
     const { id: contactID } = useParams<{ id: string }>();
     const [info, setInfoCustomer] = useState<any>({});
     const [totalPayment, setTotalPayment] = useState(0);
@@ -42,6 +39,8 @@ const FnbPage: FC = () => {
 
     const [totalFnbOrder, setTotalFnbOrder] = useState(0);
     const [listFnbOrder, setListFnbOrder] = useState([]);
+
+    useAuth();
 
     // QR code
     const [isToggleModalQRCode, setIsToggleModalQRCode] = useState(false);
@@ -95,6 +94,51 @@ const FnbPage: FC = () => {
             })
     }, []);
 
+    const handleWithdrawMoney = async () => {
+        try {
+            if(!info?.remainLoyaltyPoints || +info?.remainLoyaltyPoints <= 0) {
+                return toast.warn("Không đủ điểm tích lũy để rút tiền");
+            }
+
+            /*
+             * Lấy thông tin tài khoản ngân hàng của user
+             */
+            const searchParams = new URLSearchParams({
+                select: "bankAccountNumber bankAccountName bankSwiftCode"
+            });
+            const queryString = searchParams.toString();
+
+            const response = await API.get(`/api/auth/users/me?${queryString}`);
+            const { data: user, error, message } = response.data;
+
+            if(error) {
+                return toast.warn(message);
+            }
+
+            const amount = +info?.remainLoyaltyPoints;
+
+            /*
+             * Rút tiền về tài khoản người dùng
+             */
+            const { data } = await API.post(`/api/payment/disbursement/request`, {
+                amount,
+                bankAccountName: user.bankAccountName,
+                bankAccountNumber: user.bankAccountNumber,
+                bankSwiftCode: user.bankSwiftCode,
+                description: "Rút điểm tích lũy",
+            });
+            const resultWithdraw = data.data;
+
+            if (resultWithdraw.code !== 1 || resultWithdraw.status !== "PASSED") {
+                return toast.warn(resultWithdraw.failedReason);
+            }
+
+            return toast.success("Rút tiền thành công");
+        } catch(error: any) {
+            return toast.error(error.message);
+        }
+    }
+
     // Code
     const d = new Date();
     const time = d.getTime();
@@ -122,7 +166,16 @@ const FnbPage: FC = () => {
             </div>
             <div className="relative">
                 <p>Còn lại</p>
-                <p className="absolute top-0 right-0 text-cbs-primary"><b>{formatNumberMoney(Number(info?.remainLoyaltyPoints))}</b></p>
+                <p className="absolute top-0 right-0 text-cbs-primary">
+                    <b>{formatNumberMoney(Number(info?.remainLoyaltyPoints))}</b>
+                </p>
+            </div>
+            <div className="flex justify-end">
+                <p className="text-cbs-primary">
+                    <button className="text-primary-light text-[15px] w-[100px] bg-primary rounded" onClick={handleWithdrawMoney}>
+                        Rút tiền
+                    </button>
+                </p>
             </div>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             <div className="flex items-center">
@@ -175,7 +228,7 @@ const FnbPage: FC = () => {
                             Đơn hàng ngày {moment(item.createAt).format('HH:mm DD/MM/YYYY')}
                             <span className="text-primary-gray"> ({moment(item.createAt).fromNow()})</span>
                         </p>
-                        <p>Voucher: 
+                        <p>Voucher:
                              <b className="text-cbs-primary pr-1 pl-1">{item?.voucher?.sign}</b>
                              <span className="text-primary-gray">- Ưu đãi {formatNumberMoney(item?.voucher?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.voucher?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.voucher?.minOrderAmount)}</span>
                              <p className="text-primary-gray"><i>{item?.voucher?.note}</i></p>
