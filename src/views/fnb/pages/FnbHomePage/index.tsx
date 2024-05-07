@@ -1211,7 +1211,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <th className="pb-1 pt-1 font-normal text-left">Hình thức</th>
                 <th className="pb-1 pt-1 font-normal text-center">Trạng thái</th>
                 <th className="pb-1 pt-1 font-normal text-center">Giá trị</th>
-                <th className="pb-1 pt-1 font-normal text-center">Thanh toán</th>
+                {/* <th className="pb-1 pt-1 font-normal text-center">Thanh toán</th> */}
                 <th className="pb-1 pt-1 font-normal text-center">In ấn</th>
               </tr>
             </thead>
@@ -1373,11 +1373,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                         {formatNumberMoney(item?.total || 0)} đ
                       </div>
                     </td>
-                    <td className={"text-center flex justify-center px-2 py-2"}>
+                    {/* <td className={"text-center flex justify-center px-2 py-2"}>
                       <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2" onClick={() => openModalQRPayment(item)}>
                           <img className="w-[24px] h-[24px]" alt="icon" src={QRCodeIcon} />
                       </button>
-                    </td>
+                    </td> */}
                     <td className={"text-center px-2 py-2"}>
                       <Link to={`/fnb/home/${item._id}/print/1`}>
                         <span className="mr-5 text-cbs-primary underline">In bill</span>
