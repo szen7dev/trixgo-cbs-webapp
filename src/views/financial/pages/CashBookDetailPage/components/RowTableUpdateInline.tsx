@@ -106,6 +106,12 @@ const RowTableUpdateInline: FC<Props> = ({
             onUpdate({ cashBookID: cashBook._id, name: value })
           }, 700)}
         />
+        {/* <p className="text-primary-gray"><i style={{fontSize: '12px'}}>ID: {cashBook._id}</i></p> */}
+        {/* <p className="text-primary-gray"><i style={{fontSize: '12px'}}>Cred: {moment(cashBook.date).format('YYYY-MM-DD HH:mm')}</i></p> */}
+        { 
+          cashBook?.userUpdate ? <p className="text-primary-gray"><i style={{fontSize: '12px'}}>Cập nhật: {moment(cashBook.modifyAt).format('YYYY-MM-DD HH:mm')} - {cashBook?.userUpdate?.fullname}</i></p> : <></>
+        }
+        {/* <p className="text-primary-gray"><i style={{fontSize: '12px'}}>Modi: {moment(cashBook.modifyAt).format('YYYY-MM-DD HH:mm')} - {cashBook?.userUpdate?.fullname}</i></p> */}
       </td>
       {/* Tài khoản */}
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
@@ -237,6 +243,7 @@ const RowTableUpdateInline: FC<Props> = ({
             onUpdate({ cashBookID: cashBook._id, note })
           }, 700)}
         />
+        <p className="text-primary-gray"><i style={{fontSize: '12px'}}>{cashBook?.note}</i></p>
       </td>
     </tr>
   );
