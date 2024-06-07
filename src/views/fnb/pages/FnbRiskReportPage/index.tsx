@@ -203,7 +203,7 @@ export const FnbRiskReportPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal w-[200px]">
 							<div className="border-gray-300 font-normal pl-2">
-								Tổng phạt
+								Tổng Trừ thưởng
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal w-[150px]">

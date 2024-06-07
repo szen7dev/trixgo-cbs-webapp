@@ -175,7 +175,7 @@ export const FnbReportNonameOrder: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Giá trị phạt
+								Giá trị trừ thưởng
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">

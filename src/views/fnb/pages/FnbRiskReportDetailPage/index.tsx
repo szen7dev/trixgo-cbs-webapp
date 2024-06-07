@@ -170,7 +170,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Phạt
+								Trừ thưởng
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
