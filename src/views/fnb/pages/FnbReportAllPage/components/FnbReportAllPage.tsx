@@ -55,7 +55,7 @@ export const FnbReportAllPage: FC = () => {
 						</Link>
 					</td>
 					<td className={"p-2 border-0.5 border-primary-border w-2/4"}>
-						Để quản lý biết là đã mắc lỗi nhiều lần hay chưa và gán phạt, bao gồm người gán lỗi, ngày gán lỗi, người mắc lỗi, giá trị phạt
+						Để quản lý biết là đã mắc lỗi nhiều lần hay chưa và gán Trừ thưởng, bao gồm người gán lỗi, ngày gán lỗi, người mắc lỗi, giá trị Trừ thưởng
 					</td>
 					<td className={"p-2 border-0.5 border-primary-border"}>
 						Vào xem chi tiết để tải báo cáo

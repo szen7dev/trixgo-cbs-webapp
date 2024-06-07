@@ -434,7 +434,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                   <button key={m._id} className="cursor-pointer rounded-md bg-cbs-active-comment px-4 py-1">
                                     <p className="text-left text-[14px] my-1">{m.mistake?.name}</p>
                                     <p className="text-gray-500 text-left"><i>Mắc lỗi: {m.executor?.fullname}</i></p>
-                                    <p className="text-gray-500 text-left"><i>Phạt: {formatNumberMoney(m.amount)}</i></p>
+                                    <p className="text-gray-500 text-left"><i>Trừ thưởng: {formatNumberMoney(m.amount)}</i></p>
                                     <p className="text-gray-500 text-left"><i>Ghi chú: {m.note}</i></p>
                                   </button>
                                 ))}

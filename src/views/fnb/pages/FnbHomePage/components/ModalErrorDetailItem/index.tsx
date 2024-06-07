@@ -553,7 +553,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                 <div className={"flex py-2"}>
                                                     <div className={"w-full flex items-center"}>
                                                         <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-primary-gray font-bold pr-3">Phạt vi phạm</span>
+                                                            <span className="text-primary-gray font-bold pr-3">Trừ thưởng vi phạm</span>
                                                             <Field type="text" name="amount" placeholder=""
                                                                 className="w-[100px] h-[30px] border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none text-right"
                                                             />
