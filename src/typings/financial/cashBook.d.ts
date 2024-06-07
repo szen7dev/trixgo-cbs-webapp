@@ -27,6 +27,7 @@ export type CashBook = {
     admins: User[];
     members: User[];
     userCreate: User;
+    userUpdate: User;
     modifyAt: string;
     createAt: string;
     message?: string
