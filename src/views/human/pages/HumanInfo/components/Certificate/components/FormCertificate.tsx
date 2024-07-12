@@ -139,7 +139,7 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                       <Field
                         type="text"
                         name="place"
-                        placeholder="Số hiệu..."
+                        placeholder="Nơi cấp..."
                         className="w-full h-6 outline-none"
                         onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
@@ -148,7 +148,7 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                     </div>
                     <div className="w-1/4 flex items-center">
                       <span className="w-4/12 text-primary-gray text-left text-left">
-                        Ký hiệu
+                        Số hiệu
                       </span>
                       <Field
                         type="text"
@@ -186,7 +186,7 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/4 flex items-center">
                       <span className="w-4/12 text-primary-gray text-left text-left">
-                        Ngày hết hạn
+                        Thời hạn
                       </span>
                       <DatePicker
                         name="toDate"
@@ -200,7 +200,7 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                         closeOnScroll
                         autoComplete="off"
                         dateFormat="dd/MM/yyyy"
-                        placeholderText="Ngày hết hạn..."
+                        placeholderText="Thời hạn..."
                         className="w-full h-6 outline-none pl-10 focus:outline-none focus:border-primary"
                       />
                     </div>

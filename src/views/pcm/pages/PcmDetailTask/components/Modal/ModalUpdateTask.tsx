@@ -70,7 +70,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     projectID: string().required("Vui lòng nhập tên dự án"),
     assigneeID: string().required("Vui lòng nhập tên người nhận"),
     name: string().required("Vui lòng nhập tiêu đề"),
-    actualFinishTime: string().required("Vui lòng nhập ngày hết hạn"),
+    actualFinishTime: string().required("Vui lòng nhập thời hạn"),
   });
 
   const { updateTaskAsync } = useTask({});

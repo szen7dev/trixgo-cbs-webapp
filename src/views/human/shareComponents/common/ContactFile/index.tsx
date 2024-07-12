@@ -32,7 +32,7 @@ export const ContactFile: React.FC<ContactProps> = ({
     <div key={file._id} className="flex justify-between items-center ">
       <div className="flex relative">
         <div>
-          <img src={fileIcon} alt="PDF" />
+          <img src={fileIcon} alt="Attach" />
         </div>
         <div className="ml-2 cursor-pointer" onClick={handleDownloadFile(file)}>
           <p className="underline">{file.nameOrg}</p>

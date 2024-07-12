@@ -182,21 +182,6 @@ export const Certificate: FC<CertificateProps> = memo((props) => {
     [openModal, handleFinishFormUpdate]
   );
 
-  const handleClickDeleteContactDocument = useCallback(
-    (contactDocument: ContactDocument) => () => {
-      openDeleteConfirm({
-        deleteAction: async () => {
-          const res = await deleteContractDocumentAsync(contactDocument._id);
-          if (res.status === 200) {
-            refetchListContactDocument();
-            setOpenFileOption("");
-          }
-        },
-      });
-    },
-    [deleteContractDocumentAsync, openDeleteConfirm, refetchListContactDocument]
-  );
-
   const handleClickUpload = useCallback(() => {
     if (inputRef?.current) {
       inputRef.current.click();
@@ -307,18 +292,13 @@ export const Certificate: FC<CertificateProps> = memo((props) => {
           >
             <div style={{ width: "15%" }}>
               <p style={{ maxWidth: "90%" }}>{contactDocument.name}</p>
-              <p style={{ maxWidth: "90%" }}>{contactDocument.place}</p>
+              <p style={{ maxWidth: "90%", fontSize: '12px' }} className="text-primary-gray"> <i>Nơi cấp: {contactDocument.place}</i> </p>
+              <p style={{ maxWidth: "90%", fontSize: '12px' }} className="text-primary-gray"> <i>Ngày cấp: {moment(contactDocument.fromDate).format(DATE_FORMAT)}</i> </p>
               {/* <p><i>{contactDocument._id}</i></p> */}
             </div>
             <p style={{ width: "10%" }}>
               {contactDocument.sign && (
-                <span className="t-human-spread">{contactDocument.sign}</span>
-              )}
-              {contactDocument.fromDate && (
-                <span>
-                  {moment(contactDocument.fromDate).isValid() &&
-                    moment(contactDocument.fromDate).format(DATE_FORMAT)}
-                </span>
+                <span >{contactDocument.sign}</span>
               )}
             </p>
             <p style={{ width: "10%" }}>
@@ -327,20 +307,23 @@ export const Certificate: FC<CertificateProps> = memo((props) => {
             </p>
             <div style={{ width: "13%" }}>
               <p style={{ maxWidth: "90%" }}>
-                {contactDocument?.certificateType && (
-                  <span className="t-human-spread">
-                    {contactDocument.certificateType.name}
-                  </span>
-                )}
-                {contactDocument?.certificateName && (
-                  <span className="t-human-spread">
-                    {contactDocument.certificateName.name}
-                  </span>
-                )}
-                {/* cần kiểm tra value là gì và hiển thị theo type của CONTACT_DOCUMENT_GRADES */}
                 {contactDocument?.certificateGrade && (
                   <span>
                     {CONTACT_DOCUMENT_GRADES[contactDocument.certificateGrade]}
+                  </span>
+                )}
+              </p>
+              <p style={{ maxWidth: "90%" }}>
+                {contactDocument?.certificateType && (
+                  <span>
+                    {contactDocument.certificateType.name}
+                  </span>
+                )}
+              </p>
+              <p style={{ maxWidth: "90%" }}>
+                {contactDocument?.certificateName && (
+                  <span>
+                    {contactDocument.certificateName.name}
                   </span>
                 )}
               </p>
