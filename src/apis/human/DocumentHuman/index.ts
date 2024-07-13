@@ -58,20 +58,20 @@ async function fetchListHuman(params : any) {
 async function fetchFilterListHuman(params : any) {
     const { data } = await API.get(`${CONTACT_DOCUMENT_URL}/filter`, {
         params: {
-            // select: 'name phone email sign author createAt note status area area1 area2 department position gender birthday contractType workingStatus identity address taxid insuranceSign insuranceDate contractDate',
+            select: 'name contact sign fromDate toDate place note userCreate',
             populates: {
-                "path": "userCreate contact",
-                "select": "fullname sign image name parent",
-                // populate: {
-                //     "path": "parent",
-                //     "select": "name parent",
-                //     "model": "area",
-                //     populate: {
-                //         "path": "parent",
-                //         "select": "name parent",
-                //         "model": "area",
-                //     }
-                // }
+                "path": "userCreate contact files",
+                "select": "fullname sign image name parent path author nameOrg createAt",
+                populate: {
+                    "path": "author",
+                    "select": "fullname",
+                    // "model": "area",
+                    // populate: {
+                    //     "path": "parent",
+                    //     "select": "name parent",
+                    //     "model": "area",
+                    // }
+                }
             },
             ...params,
         }

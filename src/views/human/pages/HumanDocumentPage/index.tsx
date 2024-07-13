@@ -19,6 +19,7 @@ import {debounce} from "lodash";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "redux/reducer";
 import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
+import { humanFileSize } from 'utils/converter';
 
 // ========== Hooks ========== //
 import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useDocumentHuman";
@@ -60,13 +61,9 @@ export const HumanDocumentPage: FC = () => {
     });
 
     const [genders, setGenders] = useState<string[]>([]);
-
-    const [projectKeyword, setProjectKeyword] = useState("");
     const [departmentsID, setDepartmentsID] = useState<string[]>([]);
 
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
-    
-    const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
 
     const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, refetchListHuman } = useListFilterHuman({
         params: {
@@ -312,7 +309,7 @@ export const HumanDocumentPage: FC = () => {
                                 Nhân sự
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" >
-                                Mã hiệu hồ sơ
+                                Số hiệu
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Ngày cấp
@@ -349,6 +346,22 @@ export const HumanDocumentPage: FC = () => {
                                             {`${document.name}`}
                                             {/* <p><i>{document._id}</i></p> */}
                                         </Link>
+                                        {!!document?.files?.length && (
+                                            <div className={"comment-attach mt-2"}>
+                                                {document?.files.map((file: any) => (
+                                                    <div key={file._id} className={"comment-attach-item flex items-start justify-between"}>
+                                                        <div className={"text-cbs-highlight-color"}>
+                                                            <a href={`${process.env.REACT_APP_URL_S3}${file.path}`} className={"text-primary"}>
+                                                                {file.nameOrg} ({humanFileSize(file.size)})
+                                                            </a>
+                                                            <p className={"text-primary-gray text-xs"}>
+                                                                {file.author?.fullname} - {moment(file.createAt).format('DD/MM/YYYY HH:mm')} ({moment(file.createAt).fromNow()})
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         <p>{`${document?.contact?.name}`}</p>
