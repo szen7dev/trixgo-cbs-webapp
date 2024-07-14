@@ -122,15 +122,15 @@ export const HomeLeftMenuContent: FC = () => {
             count: data?.data?.amountMyTask5,
             route: '/pcm/draft'
         },
-    ]
-
-    const listTabSub: Tab[] = [
         {
             label: t("menu:kpiReport"),
             icon: fileIcon,
             count: 0,
             route: '/pcm/kpi-report'
         },
+    ]
+
+    const listTabSub: Tab[] = [
         {
             label: t("menu:dynamicReport"),
             icon: fileIcon,
