@@ -20,9 +20,9 @@ const UpdatePackage: FC<any> = ({ item, setIdsChecked, projectID, keyword }) => 
     closeModal();
 
     if (!name || !sign) {
-      return toast.warning("Vui lòng nhập đầy đủ tên gói thầu và mã hiệu.");
+      return toast.warning("Vui lòng nhập đầy đủ tên gói và mã hiệu.");
     }
-    console.log({ name, sign , item })
+    // console.log({ name, sign , item })
     const result = await updateDocumentPackageMutateAsync({
         packageID: item._id,
         name,
