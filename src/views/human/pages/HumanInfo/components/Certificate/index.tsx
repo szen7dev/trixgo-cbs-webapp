@@ -273,16 +273,14 @@ export const Certificate: FC<CertificateProps> = memo((props) => {
       />
       <div className="text-[13px]">
         <div className="flex justify-between mt-4 text-primary-gray">
-          <p style={{ width: "15%" }}>{i18n("place2")}</p>
+          <p style={{ width: "20%" }}>{i18n("place2")}</p>
           <p style={{ width: "10%" }}>{i18n("sign2")}</p>
           <p style={{ width: "10%" }}>{i18n("endDate")}</p>
-          <p style={{ width: "13%" }}>
-            {i18n("certificateType-certificateName-certificateGrade")}
-          </p>
+          <p style={{ width: "13%" }}>{i18n("certificateType-certificateName-certificateGrade")}</p>
           <p style={{ width: "7%" }}>{i18n("number")}</p>
           <p style={{ width: "15%" }}>{i18n("store")}</p>
           <p style={{ width: "10%" }}>{i18n("note")}</p>
-          <p style={{ width: "30%" }}>{i18n("attactment")}</p>
+          <p style={{ width: "25%" }}>{i18n("attactment")}</p>
         </div>
 
         {listContactDocument.map((contactDocument) => (
@@ -290,7 +288,7 @@ export const Certificate: FC<CertificateProps> = memo((props) => {
             key={contactDocument._id}
             className="flex justify-between mt-4 relative"
           >
-            <div style={{ width: "15%" }}>
+            <div style={{ width: "20%" }}>
               <p style={{ maxWidth: "90%" }}>{contactDocument.name}</p>
               <p style={{ maxWidth: "90%", fontSize: '12px' }} className="text-primary-gray"> <i>Nơi cấp: {contactDocument.place}</i> </p>
               <p style={{ maxWidth: "90%", fontSize: '12px' }} className="text-primary-gray"> <i>Ngày cấp: {moment(contactDocument.fromDate).format(DATE_FORMAT)}</i> </p>
@@ -334,7 +332,7 @@ export const Certificate: FC<CertificateProps> = memo((props) => {
             </div>
             <p style={{ width: "10%" }}>{contactDocument.note}</p>
 
-            <div className="flex flex-col text-cbs-highlight-color" style={{ width: "30%" }}>
+            <div className="flex flex-col text-cbs-highlight-color" style={{ width: "25%" }}>
               {contactDocument.files.map((elm) => (
                 <ContactFile
                   key={elm._id}

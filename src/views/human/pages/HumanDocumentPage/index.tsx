@@ -70,7 +70,8 @@ export const HumanDocumentPage: FC = () => {
             ...fromToDate,
             genders,
             departmentsID,
-            keyword
+            keyword,
+            types: ['5']
         },
         isFetchList: true
     });
