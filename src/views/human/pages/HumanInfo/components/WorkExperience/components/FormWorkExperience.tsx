@@ -161,7 +161,7 @@ export const FormWorkExperience: React.FC<WorkExperienceProps> = ({
                     </div>
                     <div className="w-1/4 flex items-center">
                       <span className="w-7/12 text-primary-gray text-left">
-                        Lĩnh vực chuyên môn tham gia
+                        Lĩnh vực tham gia
                       </span>
                       <DropdownSearchable
                         onchangeValue={(value) =>
@@ -269,7 +269,7 @@ export const FormWorkExperience: React.FC<WorkExperienceProps> = ({
                       <Field
                         type="text"
                         name="project"
-                        placeholder="Thông tin người tham chiếu..."
+                        placeholder="Người tham chiếu..."
                         className="w-full h-6 outline-none"
                         onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
@@ -283,7 +283,7 @@ export const FormWorkExperience: React.FC<WorkExperienceProps> = ({
                       <Field
                         type="text"
                         name="client"
-                        placeholder="Thông tin người tham chiếu..."
+                        placeholder="Chủ đầu tư..."
                         className="w-full h-6 outline-none"
                         onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
