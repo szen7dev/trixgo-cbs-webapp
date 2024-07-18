@@ -16,7 +16,7 @@
 
   "male": "Nam",
   "female": "Nữ",
-  "id": "ID",
+  "id": "ID Hệ thống",
   "phone": "Điện thoại",
   "sign": "Mã hiệu",
   "email": "Email",
@@ -36,7 +36,7 @@
   "major": "Chuyên ngành đào tạo",
   "educationalBackground": "Trình độ học vấn",
   "insuranceDate": "Ngày nộp số bảo hiểm xã hội",
-  "insuranceStatus": "Số sổ bảo hiểm xã hội/Tình trạng",
+  "insuranceStatus": "Số bảo hiểm",
   "sallarySubFactor": "Phụ cấp/Mức lương đóng bảo hiểm",
   "sallaryFactor": "Hệ số lương",
   "contractType": "Loại hợp đồng",
