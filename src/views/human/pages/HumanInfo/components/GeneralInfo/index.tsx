@@ -26,6 +26,7 @@ export enum INSURANCE_STATUS {
 export const GeneralInfo: FC<Props> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
   const { info } = props;
+  // console.log(info)
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
@@ -191,7 +192,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {i18n("insuranceStatus")}
               </td>
               <td className="border w-2/6 pl-4">
-                {`${info?.insuranceNumber + "- "} ${INSURANCE_STATUS[info?.insuranceStatus || 1]}`}
+                {info?.insuranceSign}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("sallarySubFactor")}
