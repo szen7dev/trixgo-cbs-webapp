@@ -80,7 +80,7 @@ export const Review: FC<CertificateProps> = memo((props) => {
     totalRecord,
     listContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 5, companyID
+    type: 6, companyID
   })
 
   const [openFileOption, setOpenFileOption] = useState("");
@@ -89,7 +89,7 @@ export const Review: FC<CertificateProps> = memo((props) => {
     async (values) => {
       const res = await createContactDocumentAsync({
         ...values,
-        type: "5",
+        type: "6",
         contactID: humanId,
       });
       if (!res.error) {
@@ -114,7 +114,7 @@ export const Review: FC<CertificateProps> = memo((props) => {
         }
       >
         <FormReview
-          title="Tạo mới chứng chỉ, hồ sơ khác"
+          title="Tạo mới"
           onFinish={handleFinishFormCreate}
         />
       </div>
@@ -123,11 +123,10 @@ export const Review: FC<CertificateProps> = memo((props) => {
 
   const handleFinishFormUpdate = useCallback(
     async (values) => {
+      console.log(values)
       const res = await updateContractDocumentAsync({
         ...values,
         contactID: humanId,
-        certificateType: values.certificateType._id || values.certificateType,
-        certificateName: values.certificateName._id || values.certificateName,
       });
       if (!res.error) {
         toast.success("Cập nhật thành công");
@@ -152,20 +151,12 @@ export const Review: FC<CertificateProps> = memo((props) => {
           }
         >
           <FormReview
-            title="Cập nhật chứng chỉ, hồ sơ khác"
+            title="Cập nhật"
             onFinish={handleFinishFormUpdate}
             contactDocumentID={contactDocument._id}
             defaultValues={{
               name: contactDocument.name,
-              place: contactDocument.place,
-              sign: contactDocument.sign,
               fromDate: contactDocument.fromDate,
-              toDate: contactDocument.toDate,
-              certificateType: contactDocument?.certificateType || {},
-              certificateName: contactDocument?.certificateName || {},
-              certificateGrade: contactDocument?.certificateGrade,
-              number: contactDocument.number,
-              store: contactDocument.store,
               note: contactDocument.note,
             }}
           />
@@ -261,19 +252,15 @@ export const Review: FC<CertificateProps> = memo((props) => {
   return (
     <div className="border-accent-light px-4 py-6">
       <HumanInfoHeader
-        title={i18n("certificate")}
+        title={'5-Đánh giá nhân sự'}
         onClickAddNew={handleClickAddNew}
       />
       <div className="text-[13px]">
         <div className="flex justify-between mt-4 text-primary-gray">
-          <p style={{ width: "20%" }}>{i18n("place2")}</p>
-          <p style={{ width: "10%" }}>{i18n("sign2")}</p>
-          <p style={{ width: "10%" }}>{i18n("endDate")}</p>
-          <p style={{ width: "13%" }}>{i18n("certificateType-certificateName-certificateGrade")}</p>
-          <p style={{ width: "7%" }}>{i18n("number")}</p>
-          <p style={{ width: "15%" }}>{i18n("store")}</p>
-          <p style={{ width: "10%" }}>{i18n("note")}</p>
-          <p style={{ width: "25%" }}>{i18n("attactment")}</p>
+        <p style={{ width: "10%" }}>Ngày tháng</p>
+          <p style={{ width: "40%" }}>Nội dung</p>
+          <p style={{ width: "30%" }}>Ghi chú</p>
+          <p style={{ width: "20%" }}>Tệp đính kèm</p>
         </div>
 
         {listContactDocument.map((contactDocument) => (
@@ -281,51 +268,14 @@ export const Review: FC<CertificateProps> = memo((props) => {
             key={contactDocument._id}
             className="flex justify-between mt-4 relative"
           >
-            <div style={{ width: "20%" }}>
-              <p style={{ maxWidth: "90%" }}>{contactDocument.name}</p>
-              <p style={{ maxWidth: "90%", fontSize: '12px' }} className="text-primary-gray"> <i>Nơi cấp: {contactDocument.place}</i> </p>
-              <p style={{ maxWidth: "90%", fontSize: '12px' }} className="text-primary-gray"> <i>Ngày cấp: {moment(contactDocument.fromDate).format(DATE_FORMAT)}</i> </p>
-              {/* <p><i>{contactDocument._id}</i></p> */}
-            </div>
-            <p style={{ width: "10%" }}>
-              {contactDocument.sign && (
-                <span >{contactDocument.sign}</span>
+            <div style={{ width: "10%" }}>{moment(contactDocument.fromDate).format(DATE_FORMAT)}</div>
+            <p style={{ width: "40%" }}>
+              {contactDocument.name && (
+                <span >{contactDocument.name}</span>
               )}
             </p>
-            <p style={{ width: "10%" }}>
-              {moment(contactDocument.toDate).isValid() &&
-                moment(contactDocument.toDate).format(DATE_FORMAT)}
-            </p>
-            <div style={{ width: "13%" }}>
-              <p style={{ maxWidth: "90%" }}>
-                {contactDocument?.certificateGrade && (
-                  <span>
-
-                  </span>
-                )}
-              </p>
-              <p style={{ maxWidth: "90%" }}>
-                {contactDocument?.certificateType && (
-                  <span>
-                    {contactDocument.certificateType.name}
-                  </span>
-                )}
-              </p>
-              <p style={{ maxWidth: "90%" }}>
-                {contactDocument?.certificateName && (
-                  <span>
-                    {contactDocument.certificateName.name}
-                  </span>
-                )}
-              </p>
-            </div>
-            <p style={{ width: "7%" }}>{contactDocument.number}</p>
-            <div style={{ width: "15%" }}>
-              <p style={{ maxWidth: "90%" }}>{contactDocument.store}</p>
-            </div>
-            <p style={{ width: "10%" }}>{contactDocument.note}</p>
-
-            <div className="flex flex-col text-cbs-highlight-color" style={{ width: "25%" }}>
+            <p style={{ width: "30%" }}>{contactDocument.note}</p>
+            <div className="flex flex-col text-cbs-highlight-color" style={{ width: "20%" }}>
               {contactDocument.files.map((elm) => (
                 <ContactFile
                   key={elm._id}

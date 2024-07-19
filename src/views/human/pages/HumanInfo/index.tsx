@@ -302,7 +302,7 @@ export const HumanInfo: FC = () => {
         />
         <ExperienceAppointment humanId={id} humanInfo={detailHuman} companyID={detailHuman?.company?._id}/>
         <Education humanId={id} companyID={detailHuman?.company?._id} />
-        {/* <Review humanId={id} companyID={detailHuman?.company?._id} /> */}
+        <Review humanId={id} companyID={detailHuman?.company?._id} />
         <Certificate humanId={id} companyID={detailHuman?.company?._id}/>
       </section>
     </main>
