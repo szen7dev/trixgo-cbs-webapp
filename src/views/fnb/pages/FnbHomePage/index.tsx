@@ -61,6 +61,7 @@ import { FNB_CHANNEL, FNB_SERVICE, FNB_ORDER_STATUS, FNB_SHIFT, FNB_NORESIDENT_T
 import { useInfiniteQuery } from "react-query";
 import { setQueryFnb } from "redux/reducer/FnbSlice";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+import { options } from "views/financial/pages/CashBookDetailPage/components/ChartExpenseSumary";
 
 type Props = {
   type?: number;
@@ -399,10 +400,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     }
 	}
 
-  const handleExportExcel3 = async () => {
+  const handleExportExcel3 = async (param: any) => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportExcelAsync({
+        option: param.option,
         filterParams: {
           ...queryFnb,
           keyword,
@@ -652,8 +654,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 dispatch(
                   setQueryFnb({
                     ...queryFnb,
-                    fromDate: moment(val.fromDate).format("YYYY-MM-DD 00:00"),
-                    toDate: moment(val.toDate).format("YYYY-MM-DD 23:59"),
+                    fromDate: moment(val.fromDate).format("YYYY-MM-DD 00:00:00:000"),
+                    toDate: moment(val.toDate).format("YYYY-MM-DD 23:59:59:999"),
                   })
                 );
               }}
@@ -1137,8 +1139,14 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               <button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
                 Tải đơn hàng
               </button>
-              <button onClick={handleExportExcel3} title="Tải dữ liệu Excel">
+              <button onClick={() => handleExportExcel3({option: 1})} title="Tải dữ liệu Excel">
                 Tải sản phẩm
+              </button>
+              <button onClick={() => handleExportExcel3({option: 2})} title="Tải phân loại sản phẩm">
+                Tải DM1
+              </button>
+              <button onClick={() => handleExportExcel3({option: 3})} title="Tải phân loại topping">
+                Tải DM2
               </button>
               <button onClick={handleExportExcel} title="Tải dữ liệu Excel">
                 Tải KPI
