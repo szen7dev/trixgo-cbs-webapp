@@ -150,7 +150,7 @@ export const FormWorkHistory: React.FC<WorkHistoryProps> = ({
                     <Field
                       type="text"
                       name="reference"
-                      placeholder="Thông tin người tham chiếu..."
+                      placeholder="Người tham chiếu..."
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);

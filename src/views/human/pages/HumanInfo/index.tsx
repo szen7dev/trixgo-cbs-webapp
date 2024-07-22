@@ -12,7 +12,7 @@ import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { GeneralInfo, WorkHistory, WorkExperience, ExperienceAppointment, Education, Certificate } from "./components";
+import { GeneralInfo, WorkHistory, WorkExperience, ExperienceAppointment, Education, Certificate, Review } from "./components";
 import { Loader } from "shareComponents/common";
 import { NewHumanModal } from "views/human/shareComponents/common";
 
@@ -260,6 +260,7 @@ export const HumanInfo: FC = () => {
             educationalBackground: detailHuman.educationalBackground || [],
             insuranceDate: detailHuman.insuranceDate,
             insuranceNumber: detailHuman.insuranceNumber,
+            insuranceSign: detailHuman.insuranceSign,
             insuranceStatus: detailHuman.insuranceStatus,
             sallarySubFactor: detailHuman.sallarySubFactor,
             sallaryFactor: detailHuman.sallaryFactor,
@@ -301,6 +302,7 @@ export const HumanInfo: FC = () => {
         />
         <ExperienceAppointment humanId={id} humanInfo={detailHuman} companyID={detailHuman?.company?._id}/>
         <Education humanId={id} companyID={detailHuman?.company?._id} />
+        <Review humanId={id} companyID={detailHuman?.company?._id} />
         <Certificate humanId={id} companyID={detailHuman?.company?._id}/>
       </section>
     </main>

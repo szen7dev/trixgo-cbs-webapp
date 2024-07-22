@@ -4,3 +4,4 @@ export * from './ExperienceAppointment';
 export * from './GeneralInfo';
 export * from './WorkExperience';
 export * from './WorkHistory';
+export * from './Review';

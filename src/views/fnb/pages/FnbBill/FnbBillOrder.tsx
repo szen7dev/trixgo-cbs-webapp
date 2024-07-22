@@ -219,7 +219,7 @@ export const FnbBillOrder: FC = () => {
                     <hr className="border-cbs-border" />
                     <div className="text-[12px] text-center mt-3">
                         <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG VÀ LỰA CHỌN WINGGO</b></p>
-                        <p className="">Quét mã QR ở trên cùng và bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>200.000đ</b></p>
+                        <p className="">Quét mã QR ở trên cùng và bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>20.000đ</b></p>
 
                         <hr className="border-cbs-border"/>
                         <p className="text-center mt-3"><i>Nếu Quý khách yêu quý Winggo vui lòng giới thiệu Winggo tới bạn bè để nhận 02 Vocuher <b>20.000đ và 35%/</b> 01 bạn bè mới</i></p>
