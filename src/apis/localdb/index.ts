@@ -407,7 +407,7 @@ export const DOCUMENT_TYPES = [
     { value: 18, text: 'Biên bản', key: 'key' },
     { value: 19, text: 'Hồ sơ năng lực', key: 'key' },
     { value: 20, text: 'Biểu mẫu', key: 'key' },
-    { value: 21, text: 'Tiêu chuẩn, quy chuẩn', key: 'key' },
+    { value: 21, text: 'Tiêu chuẩn, quy chuẩn, ISO', key: 'key' },
     { value: 22, text: 'Quy định', key: 'key' },
     { value: 23, text: 'Quy trình', key: 'key' },
     { value: 24, text: 'Chỉ dẫn', key: 'key' },
@@ -419,11 +419,18 @@ export const DOCUMENT_TYPES = [
     { value: 30, text: 'Thiết kế', key: 'key' },
     { value: 31, text: 'Vật liệu', key: 'key' },
     { value: 32, text: 'Dữ liệu', key: 'key' },
+    { value: 33, text: 'Điều lệ', key: 'key' },
+    { value: 34, text: 'Giấy phép, Chứng nhận', key: 'key' },
+    { value: 35, text: 'Nghị quyết', key: 'key' },
+    
 ]
 
 // Tính chất hồ sơ sắp xếp theo ABC phục vụ show ra thẻ chọn
 export const DOCUMENT_TYPES_SORT = [
     { value: 1, text: 'Chung', key: 'key' },
+    { value: 33, text: 'Điều lệ', key: 'key' },
+    { value: 34, text: 'Giấy phép, Chứng nhận', key: 'key' },
+    { value: 35, text: 'Nghị quyết', key: 'key' },
     { value: 9, text: 'Bản vẽ', key: 'key' },
     { value: 5, text: 'Báo cáo', key: 'key' },
     { value: 6, text: 'Báo giá, chào giá', key: 'key' },
@@ -446,7 +453,7 @@ export const DOCUMENT_TYPES_SORT = [
     { value: 3, text: 'Quyết định', key: 'key' },
     { value: 28, text: 'Sổ tay', key: 'key' },
     { value: 16, text: 'Tiến độ, kế hoạch', key: 'key' },
-    { value: 21, text: 'Tiêu chuẩn, quy chuẩn', key: 'key' },
+    { value: 21, text: 'Tiêu chuẩn, quy chuẩn, ISO', key: 'key' },
     { value: 17, text: 'Tờ trình', key: 'key' },
     { value: 11, text: 'Thanh toán', key: 'key' },
     { value: 30, text: 'Thiết kế', key: 'key' },
