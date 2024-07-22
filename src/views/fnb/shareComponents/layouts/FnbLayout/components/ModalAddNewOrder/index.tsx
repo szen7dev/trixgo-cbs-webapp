@@ -176,6 +176,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
       );
       const { data, status } = response?.data;
 
+      console.log(data)
+
       if (status !== 200) return;
       setProductIsParent(data?.listRecords || []);
     }
