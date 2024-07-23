@@ -14,6 +14,12 @@ const DocumentLeftMenuContent:FC = () => {
             icon: documentIcon,
             count: 0,
             route: '/document/home'
+        },
+        {
+            label: "Dự án phòng ban",
+            icon: documentIcon,
+            count: 0,
+            route: '/document/projects'
         }
     ]
 

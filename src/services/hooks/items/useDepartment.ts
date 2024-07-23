@@ -82,7 +82,7 @@ type ListDepartmentIsMemberProps = {
     lastestID?: string;
 }
 
-export const useQueryListDepartmentsIsMember = (params?: ListDepartmentIsMemberProps): UseQueryListDepartmentIsMember => {
+export const useQueryListDepartmentsIsMember = (params: any): UseQueryListDepartmentIsMember => {
     const res = useInfiniteQuery(
         [`items.department`, params],
         async ({ pageParam }: any) =>
