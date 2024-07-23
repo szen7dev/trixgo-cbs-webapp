@@ -87,10 +87,11 @@ export const PmProjectLeftMenuContent: FC = () => {
 
     return (
         <>
-            <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
+            <div className="t-leftsidebar-title flex items-center pl-3 pr-3 text-[14px] font-bold">
                 <img src={imgUrl} alt="Thumbnail" className="w-10 h-10 mr-3" />
                 <span className="truncate" title={detailDepartment?.sign + "." + detailDepartment?.name}>{detailDepartment?.sign}.{detailDepartment?.name}</span>
             </div>
+            <p className="text-primary-gray">{detailDepartment?.name}</p>
 
             <div className={"mt-1"}>
                 {!detailDepartment?.admins?.includes(user?._id || "") ? <></> :

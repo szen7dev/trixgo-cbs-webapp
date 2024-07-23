@@ -75,7 +75,8 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
         name: string;
         sign: string;
     },
-    amountDocumentChild?:number
+    amountDocumentChild?:number,
+    files: any
 }
 
 interface DocumentInserPayload {
