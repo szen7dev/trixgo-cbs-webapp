@@ -91,7 +91,7 @@ export const PmProjectLeftMenuContent: FC = () => {
                 <img src={imgUrl} alt="Thumbnail" className="w-10 h-10 mr-3" />
                 <span className="truncate" title={detailDepartment?.sign + "." + detailDepartment?.name}>{detailDepartment?.sign}.{detailDepartment?.name}</span>
             </div>
-            <p className="text-primary-gray">{detailDepartment?.name}</p>
+            <p className="text-primary-gray mt-2">{detailDepartment?.name}</p>
 
             <div className={"mt-1"}>
                 {!detailDepartment?.admins?.includes(user?._id || "") ? <></> :
