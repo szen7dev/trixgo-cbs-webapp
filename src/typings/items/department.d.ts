@@ -20,6 +20,8 @@ export type Department = {
     assistant: Human;
     completedMilestones: number;
     milestones: number;
+    map: any;
+    length: any;
 }
 
 export type DepartmentPayload = QueryParam & {
