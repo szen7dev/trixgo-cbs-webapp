@@ -27,6 +27,7 @@ import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
+import pdfIcon from "assets/images/icons8-attach.svg";
 
 const DocumentHomePageV2: FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -423,7 +424,7 @@ const DocumentHomePageV2: FC = () => {
                                     Nội dung
                                 </th>
                                 <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/6 border-b-0.5 border-primary-border align-middle py-3"}>
-                                    Đơn vị ban hành
+                                    Đơn vị ban hành hồ sơ
                                 </th>
                                 <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
                                     Mã hiệu
@@ -470,8 +471,18 @@ const DocumentHomePageV2: FC = () => {
                                             />
                                         </td>
                                         <td className={"border-b-0.5 border-primary-border py-3"}>
-                                            <Link to={`/document/home/${document._id}`}>{document.name}</Link>
-                                            <p className={"mt-1 text-primary-gray text-xs"}>{document.author?.fullname}-{document.createAt}</p>
+                                            <p><Link to={`/document/home/${document._id}`}>{document.name}</Link></p>
+                                            <p className={"mt-1 text-primary-gray text-xs"}>{moment(document.createAt).format('DD/MM/YYYY HH:mm')} | {document.author?.fullname}</p>
+                                            {document?.files.map((fileAttach: any) => (
+                                                <div className="flex items-center" key={fileAttach._id}>
+                                                    <img
+                                                        src={pdfIcon}
+                                                        alt=""
+                                                        className="h-6 w-6 px-1 box-content"
+                                                    />
+                                                    <a className="text-primary" href={`${process.env.REACT_APP_URL_S3}${fileAttach?.path}`} target="_blank" rel="noreferrer"> {fileAttach?.nameOrg || "-"} </a>
+                                                </div>
+                                            ))}
                                         </td>
                                         <td className={"border-b-0.5 border-primary-border py-3"}>
                                             {document.publish?.name}

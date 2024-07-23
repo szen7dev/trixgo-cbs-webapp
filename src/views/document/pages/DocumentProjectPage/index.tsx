@@ -663,7 +663,7 @@ export const DocumentProjectPage: FC = () => {
                                 Nội dung
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '15%' }}>
-                                Đơn vị ban hành
+                                Đơn vị ban hành hồ sơ
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
                                 Mã hiệu
@@ -722,7 +722,8 @@ export const DocumentProjectPage: FC = () => {
                                     </td>
                                     <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
                                         <Link to={linkRef}>
-                                            <p className="text-cbs-highlight-color">{document?.name || ""}</p>
+                                            <p className="text-cbs-highlight-color">{document?.name || ""} {document?.files?.length ? <span className="text-primary-gray">({document?.files?.length} file)</span> : <></>}
+                                            </p>
                                             <p className="mt-1.5 text-primary-gray text-xs">
                                                 {`${document?.author?.fullname || ""}-${
                                                     moment(document.createAt).isValid() &&

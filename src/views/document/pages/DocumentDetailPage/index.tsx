@@ -316,7 +316,7 @@ export const DocumentDetailPage: FC = () => {
         <div className="bg-white pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
-              Tài liệu đính kèm
+              Tài liệu đính kèm hồ sơ
             </h3>
             <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
               <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
