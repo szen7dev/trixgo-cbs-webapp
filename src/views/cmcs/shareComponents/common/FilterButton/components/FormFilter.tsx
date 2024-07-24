@@ -81,7 +81,7 @@ export const FormFilter: React.FC<FormFilterProps> = ({
         name: "realStatus",
       },
       {
-        title: "Tình trạng SBH",
+        title: "Tình trạng Sổ bảo hiểm",
         data: INSURANCE_STATUS.map(elm => ({ _id: elm.value, name: elm.text })),
         name: "insuranceStatus",
       },
