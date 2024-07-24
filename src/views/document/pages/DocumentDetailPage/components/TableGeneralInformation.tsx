@@ -79,11 +79,11 @@ export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
       },
       { title: "Người ký", value: docInfo?.approver || "" },
       {
-        title: "Tình trạng hoàn thành",
+        title: "Tình trạng phản hồi",
         value: t("requestResponseWithTime", {
           requestResponse: docInfo.completeStatus
-            ? "Đã hoàn thành"
-            : "chưa hoàn thành",
+            ? "Đã phản hồi"
+            : "Chưa phản hồi",
         }),
       },
       { title: "Giá trị", value: docInfo.value },

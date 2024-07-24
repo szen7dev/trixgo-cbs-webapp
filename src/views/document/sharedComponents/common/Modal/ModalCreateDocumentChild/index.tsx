@@ -62,7 +62,7 @@ const fieldInputByRow = [
 		type: "datepicker" 
 	},
 	{ 
-		title: "Thời hạn hoàn thành", 
+		title: "Thời hạn phản hồi", 
 		name: "deadline", 
 		type: "datepicker" 
 	},
@@ -257,11 +257,11 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if(!formatValues.type)
 			return toast.warning("Vui lòng chọn tính chất")
 
-		if(!formatValues.property)
-			return toast.warning("Vui lòng chọn phân loại")
+		// if(!formatValues.property)
+		// 	return toast.warning("Vui lòng chọn phân loại")
 
-		if(!formatValues.sign)
-			return toast.warning("Vui lòng nhập mã hiệu")
+		// if(!formatValues.sign)
+		// 	return toast.warning("Vui lòng nhập mã hiệu")
 
 		if(!formatValues.name)
 			return toast.warning("Vui lòng nhập tiêu đề");
@@ -515,7 +515,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 											htmlFor="status"
 											className="py-1.5 h-[30px] box-content"
 										>
-											<p className="py-1.5">Tình trạng hoàn thành</p>
+											<p className="py-1.5">Tình trạng phản hồi</p>
 										</label>
 										<div className="text-black py-1.5 h-[30px] box-content px-2">
 											<div className="py-1.5">
