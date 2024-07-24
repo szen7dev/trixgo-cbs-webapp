@@ -60,7 +60,7 @@ const fieldInputByRow = [
 		type: "datepicker" 
 	},
 	{ 
-		title: "Thời hạn hoàn thành", 
+		title: "Thời hạn phản hồi", 
 		name: "deadline", 
 		type: "datepicker" 
 	},
@@ -484,7 +484,7 @@ export const ModalCreateDocument: React.FC = () => {
 											htmlFor="status"
 											className="py-1.5 h-[30px] box-content"
 										>
-											<p className="py-1.5">Tình trạng hoàn thành</p>
+											<p className="py-1.5">Tình trạng phản hồi</p>
 										</label>
 										<div className="text-black py-1.5 h-[30px] box-content px-2">
 											<div className="py-1.5">
