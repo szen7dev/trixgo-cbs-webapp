@@ -379,11 +379,11 @@ const DocumentHomePageV2: FC = () => {
                         value=""
                         id="flexCheckDefault"
                     />
-                    <span className={"text-lg mx-4"}>Kết quả tìm kiếm</span>
                     <button className={"flex items-center justify-center mx-3 ml-6"}
                         onClick={handleExport.bind(null)}
                     >
-                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                        Download
+                        <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
                     </button>
 
                     <PaginateV2

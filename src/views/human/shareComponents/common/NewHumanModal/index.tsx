@@ -578,13 +578,13 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-5/12 text-primary-gray">
-                        Tình trạng SBH
+                        Tình trạng Sổ bảo hiểm
                       </span>
                       <DropdownSearchable
                         onchangeValue={(value) =>
                           setFieldValue("insuranceStatus", value.id)
                         }
-                        placeholder="Tình trạng SBH..."
+                        placeholder="Tình trạng Sổ bảo hiểm..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -621,13 +621,13 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 text-primary-gray">
-                        Gia đình CS
+                        Gia đình chính sách
                       </span>
                       <DropdownSearchable
                         onchangeValue={(value) =>
                           setFieldValue("familyPolicy", value.id)
                         }
-                        placeholder="Gia đình CS..."
+                        placeholder="Gia đình chính sách..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -915,7 +915,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           (value) => setSearchAreaValue(value),
                           500
                         )}
-                        placeholder="Tìm kiếm thường trú..."
+                        placeholder="Tìm kiếm xã phường..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -961,7 +961,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           (value) => setSearchArea1Value(value),
                           500
                         )}
-                        placeholder="Thường trú..."
+                        placeholder="Tìm kiếm xã phường..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -1009,7 +1009,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           (value) => setSearchArea2Value(value),
                           500
                         )}
-                        placeholder="Thường trú..."
+                        placeholder="Tìm kiếm xã phường..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -1080,7 +1080,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 text-primary-gray">
-                        Ngày nộp BH
+                        Ngày nộp Bảo hiểm
                       </span>
                       <DatePicker
                         name="insuranceDate"
@@ -1094,7 +1094,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         closeOnScroll
                         autoComplete="off"
                         dateFormat="dd/MM/yyyy"
-                        placeholderText="Ngày nộp BH..."
+                        placeholderText="Ngày nộp Bảo hiểm..."
                         className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
@@ -1131,12 +1131,12 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
-                        Mức đóng BH
+                        Mức đóng Bảo hiểm
                       </span>
                       <Field
                         type="text"
                         name="sallaryBasic"
-                        placeholder="Mức đóng BH..."
+                        placeholder="Mức đóng Bảo hiểm..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
@@ -1282,7 +1282,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
-                        Ngày hiệu lực HĐ
+                        Ngày hiệu lực Hợp đồng
                       </span>
                       <DatePicker
                         name="contractValid"
@@ -1296,13 +1296,13 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         closeOnScroll
                         autoComplete="off"
                         dateFormat="dd/MM/yyyy"
-                        placeholderText="Ngày hiệu lực HĐ..."
+                        placeholderText="Ngày hiệu lực Hợp đồng..."
                         className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 text-primary-gray">
-                        Thời hạn HĐ
+                        Thời hạn Hợp đồng
                       </span>
                       <DatePicker
                         name="contractExpire"
@@ -1316,7 +1316,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         closeOnScroll
                         autoComplete="off"
                         dateFormat="dd/MM/yyyy"
-                        placeholderText="Thời hạn HĐ..."
+                        placeholderText="Thời hạn Hợp đồng..."
                         className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
