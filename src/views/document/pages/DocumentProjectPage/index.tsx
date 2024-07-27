@@ -14,8 +14,6 @@ import {
     Loader,
 } from "shareComponents/common";
 
-// ========== Components ==========
-
 // ========== Hooks ==========
 import {
      useQueryDetailDocument,
@@ -25,7 +23,7 @@ import { useMutationDocumentChild } from "services/hooks/document/useDocumentChi
 import { useDocumentCustom, useListFilterDocument } from "services/hooks/document/useDocument";
 
 // ========== Utils ==========
-import {APP_ID, DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT} from 'apis/localdb';
+import { DIRECTION_TYPES, DOCUMENT_TYPES_SORT} from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 
 import {useProject} from "services/hooks/items/useProject";

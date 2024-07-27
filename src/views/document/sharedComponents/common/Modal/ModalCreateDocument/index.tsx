@@ -6,6 +6,8 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import { Formik, Form, Field } from "formik";
 import uniqBy from "lodash/uniqBy";
 import debounce from "lodash/debounce";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { ModalContext } from "views/document/contexts/modal";
 import itemTag from "assets/images/icons8-price-tag.svg";
@@ -20,7 +22,7 @@ import { useQueryListCompany } from "services/hooks/useCompanies";
 
 import { useStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
-import { DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
+import { DIRECTION_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
 
 const fieldInputByRow = [
 	{ title: "Số lượng", name: "amount", type: "text" },
@@ -54,15 +56,15 @@ const fieldInputByRow = [
 	{ title: "Giá trị", name: "value", type: "text" },
 	{ title: "Nhận dạng", name: "style", type: "text" },
 	{ title: "Tình trạng", name: "status", type: "text" },
-	{ 
-		title: "Ngày văn bản (*)", 
-		name: "date", 
-		type: "datepicker" 
+	{
+		title: "Ngày văn bản (*)",
+		name: "date",
+		type: "datepicker"
 	},
-	{ 
-		title: "Thời hạn phản hồi", 
-		name: "deadline", 
-		type: "datepicker" 
+	{
+		title: "Thời hạn phản hồi",
+		name: "deadline",
+		type: "datepicker"
 	},
 	{
 		title: "Ngày nhận",
@@ -74,13 +76,13 @@ const fieldInputByRow = [
 const useInitialValues = (
 	departmentID: string, companyID: string, keywordPackage?: string,
 	keywordSender?: string, keywordReceiver?: string, keywordProperty?: string,
-	keywordContract?: string, keywordStorage?: string, keywordDatahubContact?: string, title?: string ) => {
+	keywordContract?: string, keywordStorage?: string, keywordDatahubContact?: string, title?: string) => {
 
 	const { listPackage } = useQueryListPackage({ keyword: keywordPackage, departmentID });
 	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
 	const { listContact: listContactReceiver } = useQueryContact({ companyID, keyword: keywordReceiver });
 	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
-	
+
 	const { listDoctypes: properties } = useQueryListDoctype({
 		keyword: keywordProperty,
 		type: 2,
@@ -125,26 +127,27 @@ export const ModalCreateDocument: React.FC = () => {
 	const { state, toggleModal, updateModal } = useContext(ModalContext);
 	const initialValues = React.useMemo(() => {
 		const obj = { ...state.initialValues };
+
 		return {
 			...obj,
 			field: state.initialValues?.publish?._id,
 			package: state.initialValues?.package?._id,
 			project: state.initialValues?.project?._id,
 			receiver: state.initialValues?.receiver?._id,
-			// finish: state.initialValues?.finish,
 			storage: state.initialValues?.storage?._id,
 			property: state.initialValues?.property?._id,
 			completeStatus: state.initialValues?.completeStatus,
+			date: null,
 		}
 	}, [state.initialValues]);
-		
-	const  [ keywordPackage, setKeywordPackage	    ] = useState("");
-	const  [ keywordSender,  setKeywordSender 		] = useState("");
-	const  [ keywordReceiver,  setKeywordReceiver   ] = useState("");
-	const  [ keywordProperty,  setKeywordProperty ]   = useState("");
-	const  [ keywordContract,  setKeywordContract ]   = useState("");
-	const  [ keywordStorage,  setKeywordStorage ]     = useState("");
-	const  [ keywordDatahubContact,  setKeywordDatahubContact ] = useState("");
+
+	const [keywordPackage, setKeywordPackage] = useState("");
+	const [keywordSender, setKeywordSender] = useState("");
+	const [keywordReceiver, setKeywordReceiver] = useState("");
+	const [keywordProperty, setKeywordProperty] = useState("");
+	const [keywordContract, setKeywordContract] = useState("");
+	const [keywordStorage, setKeywordStorage] = useState("");
+	const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
 	const {
 		fields,
 		listContactSender,
@@ -165,7 +168,7 @@ export const ModalCreateDocument: React.FC = () => {
 		keywordDatahubContact,
 		state?.title
 	);
-	
+
 	const listFormFieldsDropdown = React.useMemo((): {
 		title: string;
 		name: string;
@@ -194,7 +197,7 @@ export const ModalCreateDocument: React.FC = () => {
 			{ title: "Hợp đồng", data: listContracts, name: "contract" },
 			{ title: "Lưu trữ", data: listStorages, name: "storage" },
 		];
-	}, [listContactSender, listContactReceiver , listContracts, listPackage, listStorages, properties]);
+	}, [listContactSender, listContactReceiver, listContracts, listPackage, listStorages, properties]);
 
 	const handleSubmit = React.useCallback(
 		(values) => {
@@ -217,10 +220,10 @@ export const ModalCreateDocument: React.FC = () => {
 
 			if (values.completeStatus) {
 				formatValues.completeStatus = 1
-			}else{
+			} else {
 				formatValues.completeStatus = 0
 			}
-			
+
 			if (state.onSubmit) {
 				try {
 					state.onSubmit({
@@ -284,7 +287,7 @@ export const ModalCreateDocument: React.FC = () => {
 					onSubmit={handleSubmit}
 				>
 					{(formik) => {
-						const { handleBlur, setFieldValue, getFieldProps, values } = formik;
+						const { handleBlur, setFieldValue, values } = formik;
 						return (
 							<Form>
 								<div className="px-5 pb-4 overflow-auto">
@@ -304,27 +307,27 @@ export const ModalCreateDocument: React.FC = () => {
 											).filter(elm => elm._id);
 
 											const fnKeyword = (value: string) => {
-												if(item.name == "package"){
+												if (item.name == "package") {
 													return setKeywordPackage(value);
 												}
 
-												if(item.name == "receiver"){
+												if (item.name == "receiver") {
 													return setKeywordReceiver(value);
 												}
 
-												if(item.name == "property"){
+												if (item.name == "property") {
 													return setKeywordProperty(value);
 												}
 
-												if(item.name == "contract"){
+												if (item.name == "contract") {
 													return setKeywordContract(value);
 												}
 
-												if(item.name == "storage"){
+												if (item.name == "storage") {
 													return setKeywordStorage(value);
 												}
 											}
-											
+
 											return (
 												<Fragment key={item.title}>
 													<div className="py-1.5 h-[30px] box-content">
@@ -353,8 +356,8 @@ export const ModalCreateDocument: React.FC = () => {
 																			overflow: "hidden",
 																			flex: "1 1 auto",
 																		}}
-																		>
-																		{item.sign}{item?.sign ? ".": ""}{item.text}
+																	>
+																		{item.sign}{item?.sign ? "." : ""}{item.text}
 																	</p>
 																</div>
 															)}
@@ -362,7 +365,7 @@ export const ModalCreateDocument: React.FC = () => {
 																setFieldValue(item.name, value._id)
 															}
 															onSearchInputChange={debounce(
-																(value) => 
+																(value) =>
 																	fnKeyword(value),
 																500
 															)}
@@ -418,10 +421,20 @@ export const ModalCreateDocument: React.FC = () => {
 														</div>
 														<div className="text-black py-1.5 h-[30px] box-content px-2">
 															<div className="py-1.5">
-																<DayPickerInput
-																	onDayChange={(day) =>
+																<DatePicker
+																	className="w-full"
+																	selected={(values as any)[item.name]}
+																	placeholderText="Ngày/tháng/năm"
+																	onChange={(date: Date | null) => {
+																		setFieldValue(item.name, date);
+																	}}
+																	dateFormat="dd/MM/yyyy"
+																/>
+																{/* <DayPickerInput
+																	onDayChange={(day) => {
+																		console.log({ day, item, state, init: state?.initialValues[item.name] })
 																		setFieldValue(item.name, day)
-																	}
+																	}}
 																	value={
 																		state?.initialValues[item.name] &&
 																		moment(
@@ -433,7 +446,7 @@ export const ModalCreateDocument: React.FC = () => {
 																		placeholder: "Ngày tháng...",
 																		dateFormat: "dd/MM/yyyy",
 																	}}
-																/>
+																/> */}
 															</div>
 														</div>
 													</Fragment>
@@ -451,7 +464,6 @@ export const ModalCreateDocument: React.FC = () => {
 																	name={item.name}
 																	type="checkbox"
 																	checked={item.checked}
-																	// className="w-full"
 																	onBlur={(
 																		e: React.FormEvent<HTMLInputElement>
 																	) => {
@@ -523,8 +535,8 @@ export const ModalCreateDocument: React.FC = () => {
 														(value) => (
 															setKeywordDatahubContact(value)
 														),
-													500
-												)}
+														500
+													)}
 												initialValue={
 													state.initialValues?.publish && {
 														_id: state.initialValues?.publish?._id,

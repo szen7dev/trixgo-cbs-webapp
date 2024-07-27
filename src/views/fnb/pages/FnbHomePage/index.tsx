@@ -97,7 +97,7 @@ export const getIconApp = (salesChannel: number) => {
 }
 
 type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-export const fnbAccessData = ['kiemthuvien4.fnb@gmail.com', 'adwgo.winggo@gmail.com', 'hiepnh.winggo@gmail.com', 'chinhnv.winggo@gmail.com','huongnt.winggo@gmail.com','hoangnh.winggo@gmail.com', 'hienpd.winggo@gmail.com','toannd.winggo@gmail.com', 'kiemsoat1.winggo@gmail.com','kiemsoat2.winggo@gmail.com','kiemsoat3.winggo@gmail.com','kiemsoat4.winggo@gmail.com','kiemsoat5.winggo@gmail.com','vund.winggo@gmail.com','quynhntd.winggo@gmail.com','nhungvth.winggo@gmail.com','tuyetnt.winggo@gmail.com']
+export const fnbAccessData = ['kiemthuvien4.fnb@gmail.com', 'adwgo.winggo@gmail.com', 'hiepnh.winggo@gmail.com', 'chinhnv.winggo@gmail.com', 'huongnt.winggo@gmail.com', 'hoangnh.winggo@gmail.com', 'hienpd.winggo@gmail.com', 'toannd.winggo@gmail.com', 'kiemsoat1.winggo@gmail.com', 'kiemsoat2.winggo@gmail.com', 'kiemsoat3.winggo@gmail.com', 'kiemsoat4.winggo@gmail.com', 'kiemsoat5.winggo@gmail.com', 'vund.winggo@gmail.com', 'quynhntd.winggo@gmail.com', 'nhungvth.winggo@gmail.com', 'tuyetnt.winggo@gmail.com']
 
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const [keyword, setKeyword] = useState('');
@@ -105,7 +105,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const [paymentInfo, setPaymentInfo] = useState({});
 
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-      setKeyword(event.target.value);
+    setKeyword(event.target.value);
   }, 500);
 
   const queryClient = useQueryClient();
@@ -245,7 +245,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       setIsUploading(false);
       setIdsChecked([]);
 
-      if(!filesID.length) return toast.warn('Upload ảnh thất bại');
+      if (!filesID.length) return toast.warn('Upload ảnh thất bại');
 
       const response = await API.put(
         `/api/fnb/orders`,
@@ -305,7 +305,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
    * Xử lý download excel
    */
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-      isExporting: false,
+    isExporting: false,
   });
   const { exportOrderAsync, exportOrderAsync2 } = useFnbOrder({});
   const { exportExcelAsync } = useFnbOrderProduct({});
@@ -320,7 +320,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         // }
       });
 
-      if(error) {
+      if (error) {
         return toast.warn(data?.message);
       }
 
@@ -330,7 +330,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     } finally {
       setStateExport({ isExporting: false });
     }
-	}
+  }
 
   const handleExportExcel2 = async () => {
     try {
@@ -342,7 +342,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         }
       });
 
-      if(error) {
+      if (error) {
         return toast.warn(data?.message);
       }
 
@@ -352,7 +352,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     } finally {
       setStateExport({ isExporting: false });
     }
-	}
+  }
 
   const handleExportExcel22 = async () => {
     try {
@@ -365,7 +365,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         }
       });
 
-      if(error) {
+      if (error) {
         return toast.warn(data?.message);
       }
 
@@ -375,7 +375,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     } finally {
       setStateExport({ isExporting: false });
     }
-	}
+  }
 
   const handleExportExcel23 = async () => {
     try {
@@ -388,7 +388,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         }
       });
 
-      if(error) {
+      if (error) {
         return toast.warn(data?.message);
       }
 
@@ -398,7 +398,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     } finally {
       setStateExport({ isExporting: false });
     }
-	}
+  }
 
   const handleExportExcel3 = async (param: any) => {
     try {
@@ -411,7 +411,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         }
       });
 
-      if(error) {
+      if (error) {
         return toast.warn(data?.message);
       }
 
@@ -421,7 +421,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     } finally {
       setStateExport({ isExporting: false });
     }
-	}
+  }
 
   const handleRefreshOrder = async () => {
     try {
@@ -429,7 +429,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     } catch (error: any) {
       toast.error(error.message)
     }
-	}
+  }
 
   const openModalQRPayment = (order: any) => {
     setPaymentInfo({
@@ -439,7 +439,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     setIsToggleModalQRPayment(true);
   }
 
-  if(isUploading) {
+  if (isUploading) {
     return <Loader className="border-primary" />
   }
 
@@ -450,9 +450,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           {(isLoading ||
             isFetching) && <Loader className="border-primary" />}
           <SearchInput
-              classNameWrapper="mr-2"
-              classNameInput="outline-none w-[100px]"
-              onChange={onChangeSearch}
+            classNameWrapper="mr-2"
+            classNameInput="outline-none w-[100px]"
+            onChange={onChangeSearch}
           />
           <DropdownSearchableV2
             reset={reset}
@@ -645,43 +645,43 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           />
 
           <TimeRangeDropdown
-              className={
-                "mr-1 border border-primary-border rounded-lg p-1 pl-2 "
-              }
-              placeholder={"Khoảng"}
-              iconBack={<TriangleDown />}
-              onValueChange={(val) => {
-                dispatch(
-                  setQueryFnb({
-                    ...queryFnb,
-                    fromDate: moment(val.fromDate).format("YYYY-MM-DD 00:00:00:000"),
-                    toDate: moment(val.toDate).format("YYYY-MM-DD 23:59:59:999"),
-                  })
-                );
-              }}
-              options={[
-                {
-                  text: "Tất cả",
-                  fromDate: "",
-                  toDate: "",
-                },
-                {
-                  text: "Ngày nay",
-                  fromDate: moment().format("YYYY-MM-DD 00:00:00:000"),
-                  toDate: moment().format("YYYY-MM-DD 23:59:59:999"),
-                },
-                {
-                  text: "Cách đây 1 tuần",
-                  fromDate: moment().subtract(7, "days").format("YYYY-MM-DD 00:00"),
-                  toDate: moment().format("YYYY-MM-DD HH:mm"),
-                },
-                {
-                  text: "Cách đây 1 tháng",
-                  fromDate: moment().subtract(1, "months").format("YYYY-MM-DD 00:00"),
-                  toDate: moment().format("YYYY-MM-DD HH:mm"),
-                },
-              ]}
-            />
+            className={
+              "mr-1 border border-primary-border rounded-lg p-1 pl-2 "
+            }
+            placeholder={"Khoảng"}
+            iconBack={<TriangleDown />}
+            onValueChange={(val) => {
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  fromDate: moment(val.fromDate).format("YYYY-MM-DD 00:00:00:000"),
+                  toDate: moment(val.toDate).format("YYYY-MM-DD 23:59:59:999"),
+                })
+              );
+            }}
+            options={[
+              {
+                text: "Tất cả",
+                fromDate: "",
+                toDate: "",
+              },
+              {
+                text: "Ngày nay",
+                fromDate: moment().format("YYYY-MM-DD 00:00:00:000"),
+                toDate: moment().format("YYYY-MM-DD 23:59:59:999"),
+              },
+              {
+                text: "Cách đây 1 tuần",
+                fromDate: moment().subtract(7, "days").format("YYYY-MM-DD 00:00"),
+                toDate: moment().format("YYYY-MM-DD HH:mm"),
+              },
+              {
+                text: "Cách đây 1 tháng",
+                fromDate: moment().subtract(1, "months").format("YYYY-MM-DD 00:00"),
+                toDate: moment().format("YYYY-MM-DD HH:mm"),
+              },
+            ]}
+          />
 
           <DropdownSearchableV2
             reset={reset}
@@ -1071,58 +1071,58 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
               {idsChecked.length === 1 && (
                 <>
-                <button
-                  className="text-cbs-schedule-expired"
-                  onClick={() =>
-                    openModal(
-                      <div
-                        className={
-                          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-                        }
-                      >
-                        <ModalConfirm
-                          title="Bạn có muốn xác nhận hủy đơn không?"
-                          description="Đơn hàng của bạn sẽ không thể hoàn tác"
-                          onConfirm={handleCancelOrder}
-                          defaultText={false}
-                          onCancel={closeModal}
-                          isAddTextarea={false}
-                          onKeyUpTextarea={(e: any) => {
-                            console.log({ value: e.target.value })
-                            setCancelNote(e.target.value);
-                          }}
-                        />
-                      </div>
-                    )
-                  }
-                >
-                  Hủy đơn
-                </button>
-                 <button
-                  className="text-cbs-schedule-today"
-                  onClick={() =>
-                    openModal(
-                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
-                        <ModalUpdatePayment defaultValues={{ orderID: idsChecked.length ? idsChecked[0] : '' }} />
-                      </div>
-                    )
-                  }
-                >
-                  Cập nhật Phương thức thanh toán
-                </button>
-                <button
-                  className="text-cbs-schedule-today"
-                  onClick={() =>
-                    openModal(
-                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
-                        <ModalUpdateSalesChannel defaultValues={{ orderID: idsChecked.length ? idsChecked[0] : '' }} />
-                      </div>
-                    )
-                  }
-                >
-                  Cập nhật Kênh bán hàng
-                </button>
-               </>
+                  <button
+                    className="text-cbs-schedule-expired"
+                    onClick={() =>
+                      openModal(
+                        <div
+                          className={
+                            "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+                          }
+                        >
+                          <ModalConfirm
+                            title="Bạn có muốn xác nhận hủy đơn không?"
+                            description="Đơn hàng của bạn sẽ không thể hoàn tác"
+                            onConfirm={handleCancelOrder}
+                            defaultText={false}
+                            onCancel={closeModal}
+                            isAddTextarea={false}
+                            onKeyUpTextarea={(e: any) => {
+                              console.log({ value: e.target.value })
+                              setCancelNote(e.target.value);
+                            }}
+                          />
+                        </div>
+                      )
+                    }
+                  >
+                    Hủy đơn
+                  </button>
+                  <button
+                    className="text-cbs-schedule-today"
+                    onClick={() =>
+                      openModal(
+                        <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                          <ModalUpdatePayment defaultValues={{ orderID: idsChecked.length ? idsChecked[0] : '' }} />
+                        </div>
+                      )
+                    }
+                  >
+                    Cập nhật Phương thức thanh toán
+                  </button>
+                  <button
+                    className="text-cbs-schedule-today"
+                    onClick={() =>
+                      openModal(
+                        <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                          <ModalUpdateSalesChannel defaultValues={{ orderID: idsChecked.length ? idsChecked[0] : '' }} />
+                        </div>
+                      )
+                    }
+                  >
+                    Cập nhật Kênh bán hàng
+                  </button>
+                </>
               )}
               <button
                 className="text-cbs-schedule-nextweek"
@@ -1139,26 +1139,26 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               <button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
                 Tải đơn hàng
               </button>
-              <button onClick={() => handleExportExcel3({option: 1})} title="Tải dữ liệu Excel">
+              <button onClick={() => handleExportExcel3({ option: 1 })} title="Tải dữ liệu Excel">
                 Tải sản phẩm
               </button>
-              <button onClick={() => handleExportExcel3({option: 2})} title="Tải phân loại sản phẩm">
+              <button onClick={() => handleExportExcel3({ option: 2 })} title="Tải phân loại sản phẩm">
                 Tải DM1
               </button>
-              <button onClick={() => handleExportExcel3({option: 3})} title="Tải phân loại topping">
+              <button onClick={() => handleExportExcel3({ option: 3 })} title="Tải phân loại topping">
                 Tải DM2
               </button>
               <button onClick={handleExportExcel} title="Tải dữ liệu Excel">
                 Tải KPI
               </button>
 
-              {( fnbAccessData.includes(`${user?.email}`)) && (
+              {(fnbAccessData.includes(`${user?.email}`)) && (
                 <button onClick={handleExportExcel23} title="Tải Phân loại doanh số">
                   Tải Phân loại doanh số
                 </button>
               )}
 
-              {( fnbAccessData.includes(`${user?.email}`)) && (
+              {(fnbAccessData.includes(`${user?.email}`)) && (
                 <button onClick={handleExportExcel22} title="Tải dữ liệu Excel">
                   Tải Khách hàng
                 </button>
@@ -1177,7 +1177,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   />
                 </label>
               )}
-                <button onClick={handleRefreshOrder}><img className="w-[24px] h-[24px]" src={iconRefresh} title="Cập nhật dữ liệu đơn hàng"/></button>
+              <button onClick={handleRefreshOrder}><img className="w-[24px] h-[24px]" src={iconRefresh} title="Cập nhật dữ liệu đơn hàng" /></button>
             </div>
           </div>
           {/* Chưa rõ chỗ này, hình như để phân trang */}
@@ -1283,10 +1283,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                         }
                       >
                         <div className={"user-infor py-2"}>
-                        <p className={"truncate user-infor-name text-[14px]  text-left"}>
-                          {FNB_CHANNEL[Number(item?.salesChannel) - 1]?.text}
-                        </p>
-                      </div>
+                          <p className={"truncate user-infor-name text-[14px]  text-left"}>
+                            {FNB_CHANNEL[Number(item?.salesChannel) - 1]?.text}
+                          </p>
+                        </div>
                       </button>
                     </td>
                     <td className={"px-1 py-2 w-1/4"}>
@@ -1302,7 +1302,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                         <div className={"user-infor py-2"}>
                           <p className={"user-infor-name text-[14px] text-left"}>
                             {
-                              item?.numberOfMistakes ? <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">{item?.numberOfMistakes} lỗi</span>: <></>
+                              item?.numberOfMistakes ? <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">{item?.numberOfMistakes} lỗi</span> : <></>
                             }
                             <span className="text-cbs-primary">{item?.name}</span>
                           </p>
@@ -1332,22 +1332,22 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           ))
                         }
                         {item?.files?.length > 3 && (
-                          <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.files?.length-1}</div>
+                          <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.files?.length - 1}</div>
                         )}
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>
                       <div className="">
-                        {item?.sign} {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}
+                        {item?.sign} {FNB_CHANNEL[Number(item?.salesChannel) - 1]?.sign}{item?.appOrderSign}
                         <div>
                           {
                             item?.offer > 0 ?
                               <img
                                 src={iconTicket}
-                                  alt={"ticket"}
-                                  className={
-                                    "w-[36px] h-[36px] rounded-full overflow-hidden"
-                                  }
+                                alt={"ticket"}
+                                className={
+                                  "w-[36px] h-[36px] rounded-full overflow-hidden"
+                                }
                               />
                               : <></>
                           }
@@ -1356,7 +1356,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"px-1 py-2"}>
                       <div>
-                      {item?.funda?.sign}.{item?.funda?.name}
+                        {item?.funda?.sign}.{item?.funda?.name}
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>

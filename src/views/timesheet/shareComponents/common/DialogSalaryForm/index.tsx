@@ -1,13 +1,11 @@
-import React, { UIEvent, FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { Formik, Form, Field } from "formik";
-import debounce from "lodash/debounce";
 
 import Close from "assets/icons/Close";
-import { DropdownSearchable } from "shareComponents/common";
 import { useModal } from "services/hooks/useModal";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import { useUserSystem } from "services/hooks/users/useUserSystem";
-import { TIMESHEET_TYPES } from "apis/localdb";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import type { InsertTimeSheetParentPayload } from "typings/time-sheet";
 
@@ -25,16 +23,15 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   defaultValues,
   onSubmit,
   expertSalaryID,
-  assigneeName,
   projectName,
 }) => {
   const [searchhDepartmentStr, setSearchDepartmentSrt] = useState(projectName);
 
   const { closeModal } = useModal();
 
-  const { listDepartments } = useQueryListDepartments({
-    keyword: searchhDepartmentStr,
-  }, true);
+  // const { listDepartments } = useQueryListDepartments({
+  //   keyword: searchhDepartmentStr,
+  // }, true);
 
   const initialValues = {
     name: "",
@@ -43,7 +40,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     project: {},
     convertFactor: "",
     note: "",
-    date: "",
+    date: null,
     ...defaultValues,
   };
 
@@ -84,7 +81,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
       {/* Content */}
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {(formik) => {
-          const { handleBlur, setFieldValue } = formik;
+          const { handleBlur, setFieldValue, values } = formik;
 
           return (
             <Form>
@@ -124,7 +121,17 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 <div>
                   <p className="text-primary-gray text-[13px] mb-1">Ngày tháng ghi nhận lương</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
-                    <Field
+                    <DatePicker
+                      className="w-full h-6 outline-none"
+                      selected={values.date as any}
+                      placeholderText="Ngày/tháng/năm"
+                      name="date"
+                      onChange={(date: Date | null) => {
+                        setFieldValue("date", date);
+                      }}
+                      dateFormat="dd/MM/yyyy"
+                    />
+                    {/* <Field
                       type="text"
                       name="date"
                       placeholder="Nhập định dạng YYYY-MM-DD"
@@ -132,7 +139,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);
                       }}
-                    />
+                    /> */}
                   </div>
                 </div>
 
