@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, FormEvent, useEffect, useState, memo, ChangeEvent} from "react";
+import { FC, FormEvent, useEffect, useState, memo, ChangeEvent } from "react";
 import SwiperCore, { Pagination } from 'swiper';
 import cn from "classnames";
 import i18n from 'i18next';
@@ -26,6 +26,7 @@ import { DropdownSearchable } from "shareComponents/common";
 import { toast } from "react-toastify";
 import { useUpload } from 'services/hooks/useUpload';
 import API from "apis/repository";
+import { ModalPinCode } from "../ModalPinCode";
 
 SwiperCore.use([Pagination]);
 
@@ -42,13 +43,14 @@ const infoValues = {
 };
 
 export const UpdateInfo: FC = () => {
-    const [infoUser, setInfoUser] = useState(infoValues);
+	const [infoUser, setInfoUser] = useState(infoValues);
 	const { dataUserInfo, refetchDataUserInfo } = useAuth();
-    const [, setAvatar] = useState(PersonalLogo);
+	const [, setAvatar] = useState(PersonalLogo);
 	const { updateUser } = useUser();
-    const [signature, setSignature] = useState("signature_default.png");
-    const [signatureName, setSignatureName] = useState("");
-    const [banks, setBanks] = useState({
+	const [signature, setSignature] = useState("signature_default.png");
+	const [signatureName, setSignatureName] = useState("");
+	const [isToggleModal, setIsToggleModal] = useState(false);
+	const [banks, setBanks] = useState({
 		tempBanks: [],
 		banks: []
 	});
@@ -65,13 +67,13 @@ export const UpdateInfo: FC = () => {
 			});
 			const { error, message } = response.data;
 
-			if(error) {
+			if (error) {
 				toast.warn(message);
 				return false;
 			}
 
 			return true;
-		} catch(error: any) {
+		} catch (error: any) {
 			toast.error(error.message);
 			return false;
 		}
@@ -80,7 +82,7 @@ export const UpdateInfo: FC = () => {
 	const handleSubmitUpdateUser = async (values: UpdateUser) => {
 		try {
 			const checkBankAccount = await checkInquiryBankAccount(values.bankAccountNumber, values.bankSwiftCode);
-			if(!checkBankAccount) {
+			if (!checkBankAccount) {
 				return toast.warn("Tài khoản ngân hàng không hợp lệ");
 			}
 
@@ -89,7 +91,7 @@ export const UpdateInfo: FC = () => {
 			});
 			i18n.changeLanguage(values.lang)
 			localStorage.setItem("user_language", values.lang);
-		} catch(error: any) {
+		} catch (error: any) {
 			toast.error(error.message);
 		}
 	}
@@ -100,7 +102,7 @@ export const UpdateInfo: FC = () => {
 				const response = await API.get(`/api/payment/banks`);
 				const { data, error, message } = response.data;
 
-				if(error) {
+				if (error) {
 					return toast.warn(message);
 				}
 
@@ -108,7 +110,7 @@ export const UpdateInfo: FC = () => {
 					tempBanks: data,
 					banks: data,
 				})
-			} catch(error: any) {
+			} catch (error: any) {
 				toast.error(error.message);
 			}
 		}
@@ -118,41 +120,41 @@ export const UpdateInfo: FC = () => {
 
 	useEffect(() => {
 		refetchDataUserInfo()
-		if(dataUserInfo) {
+		if (dataUserInfo) {
 			setInfoUser(dataUserInfo.data)
 			// Nếu giới tính chưa có
-			if(!dataUserInfo?.data?.gender) {
+			if (!dataUserInfo?.data?.gender) {
 				setInfoUser(user => ({
 					...user,
-					...{gender: '1'}
+					...{ gender: '1' }
 				}));
 			} else { // Nếu có sẽ đổi sang string
 				setInfoUser(user => ({
 					...user,
-					...{gender: user.gender.toString()}
+					...{ gender: user.gender.toString() }
 				}));
 			}
-			if(!dataUserInfo?.data?.gender) {
+			if (!dataUserInfo?.data?.gender) {
 				setInfoUser(user => ({
 					...user,
-					...{lang: 'vn'}
+					...{ lang: 'vn' }
 				}));
 			}
-			if(dataUserInfo?.data?.image) {
+			if (dataUserInfo?.data?.image) {
 				setAvatar(dataUserInfo.data.image)
 			}
 
-			if(dataUserInfo && dataUserInfo?.data?.signature) {
+			if (dataUserInfo && dataUserInfo?.data?.signature) {
 				setSignature(dataUserInfo.data.signature)
 			}
 		} else {
 			setInfoUser(infoValues)
 		}
-	},[dataUserInfo])
+	}, [dataUserInfo])
 
 	const handleChangeSignature = async (event: ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files;
-		if(!files || !files.length) return toast.warning("Vui lòng chọn ảnh chữ ký");
+		if (!files || !files.length) return toast.warning("Vui lòng chọn ảnh chữ ký");
 
 		const { name } = await addFileToUpload({
 			files: files[0] as any,
@@ -160,22 +162,22 @@ export const UpdateInfo: FC = () => {
 			useCompress: true
 		});
 
-		if(name){
+		if (name) {
 			setSignatureName(name);
 		}
 	}
 
 	useEffect(() => {
-        if(signatureName) {
+		if (signatureName) {
 			updateUser({ signature: signatureName })
 			setTimeout(() => {
 				refetchDataUserInfo();
 			}, 500);
-        }
+		}
 	}, [signatureName]);
 
 	const Signature = memo(function Signature() {
-        return <img src={`${process.env.REACT_APP_URL_S3_USER}/${signature}`} alt="Signature" width={200} />
+		return <img src={`${process.env.REACT_APP_URL_S3_USER}/${signature}`} alt="Signature" width={200} />
 	});
 
 	return (
@@ -185,221 +187,240 @@ export const UpdateInfo: FC = () => {
 				styles.boxShadowBorderRadius
 			)}
 		>
-		  <p className="text-lg p-5">Thông tin tài khoản</p>
-		  <Formik
-			enableReinitialize
-			initialValues={ infoUser }
-			onSubmit={handleSubmitUpdateUser}
-		  >
-			{(formik) => {
-			  const { handleBlur, values, handleChange, setFieldValue } = formik;
+			<p className="text-lg p-5">Thông tin tài khoản</p>
+			<Formik
+				enableReinitialize
+				initialValues={infoUser}
+				onSubmit={handleSubmitUpdateUser}
+			>
+				{(formik) => {
+					const { handleBlur, values, handleChange, setFieldValue } = formik;
 
-			  return (
-				<Form className="px-5">
-				  <div className="mb-6">
-					<p className="text-sm mb-2">Email</p>
-					<input
-					  type="text"
-					  name="email"
-					  placeholder="Email"
-					  value={values.email}
-					  onChange={handleChange}
-					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
-					  onBlur={(e: FormEvent<HTMLInputElement>) => {
-						handleBlur(e);
-					  }}
-					/>
-				  </div>
-
-				  <div className="mb-6">
-					<p className="text-sm mb-2">Điện thoại</p>
-					<input
-					  type="text"
-					  name="phone"
-					  placeholder="Điện thoại"
-					  value={values.phone}
-					  onChange={handleChange}
-					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
-					  onBlur={(e: FormEvent<HTMLInputElement>) => {
-						handleBlur(e);
-					  }}
-					/>
-				  </div>
-
-				  <div className="mb-6">
-					<p className="text-sm mb-2">Ngày sinh</p>
-					<DatePicker
-					  selected={(values.birthDay && new Date(values.birthDay)) || new Date()}
-					  dateFormat="dd/MM/yyyy"
-					  onChange={(date: Date | null) => setFieldValue("birthDay", moment(date).format('YYYY-MM-DD'))}
-					  showYearDropdown
-					  onKeyDown={(e) => {
-						e.preventDefault();
-					  }}
-					  customInput={
-						<input
-						  type="text"
-						  name="birthDay"
-						  placeholder=""
-						  // value={values.birthDay}
-						  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
-						/>
-					  }
-					/>
-				  </div>
-
-				  <div className="mb-6">
-					<p className="text-sm mb-2">Tài khoản ngân hàng</p>
-					<input
-					  type="text"
-					  name="bankAccountNumber"
-					  placeholder="Tài khoản ngân hàng"
-					  value={values.bankAccountNumber}
-					  onChange={handleChange}
-					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
-					  onBlur={(e: FormEvent<HTMLInputElement>) => {
-						handleBlur(e);
-					  }}
-					/>
-				  </div>
-
-				  <div className="mb-6">
-					<p className="text-sm mb-2">Tên chủ tài khoản (viết hoa, không dấu)</p>
-					<input
-					  type="text"
-					  name="bankAccountName"
-					  placeholder="Tên chủ tài khoản (viết hoa, không dấu)"
-					  value={values.bankAccountName}
-					  onChange={handleChange}
-					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
-					  onBlur={(e: FormEvent<HTMLInputElement>) => {
-						handleBlur(e);
-					  }}
-					/>
-				  </div>
-
-				  <div className="mb-6">
-					<p className="text-sm mb-2">Tên ngân hàng</p>
-					<DropdownSearchable
-						onchangeValue={(value: any) => {
-							const bank: any = banks.banks.find((b: any) => b.swiftCode === value.value);
-							setFieldValue("bankName", value.label);
-							setFieldValue("bankSwiftCode", bank.swiftCode);
-						}}
-						onClearData={() => {
-							setFieldValue("bankName", "");
-							setFieldValue("bankSwiftCode", "");
-							setBanks(curr => ({ ...curr, tempBanks: curr.banks }));
-						}}
-						onSearchInputChange={
-						  (value) => {
-							if(!value) {
-								return setBanks(curr => ({ ...curr, tempBanks: curr.banks }));
-							}
-
-							const newBanks = banks.tempBanks.filter((b: any) => b.bankShortName.toLowerCase().includes(value.toLowerCase()));
-							setBanks(curr => ({ ...curr, tempBanks: newBanks }));
-						  }}
-						className={"t-main-search-filter-item-dropdown w-full h-9 px-4 flex-1 border border-primary-border rounded outline-none"}
-						placeholder="Tên ngân hàng"
-						isMultiple={false}
-						allowClearValueSingleInput={true}
-						showTriangle={false}
-						maxWidthInput="max-w-none"
-						bordered={true}
-						renderSelectedItem={(item) => (
-							<div
-								style={{ width: 100 }}
-								className="flex items-center"
-							>
-								{item.text}
-							</div>
-						)}
-						data={banks.tempBanks.map((bank: any) => ({
-							label: bank.bankShortName,
-							value: bank.swiftCode,
-						}))}
-						valueControlled={{
-							...values.bankName ? {
-								label: values.bankName,
-								value: values.bankSwiftCode,
-							} : null
-						}}
-						formatItem={{
-							id: "value",
-							text: "label",
-						}}
-						inlineSearch={true}
-					/>
-				  </div>
-
-				  <div className="mb-6">
-					<p className="text-sm">Giới tính</p>
-					<div className="flex items-center gap-14 mt-4">
-					  <label>
-						<Field type="radio" name="gender" value='1' className="mr-3" onChange={handleChange} checked={values.gender === '1'} />
-						Nam
-					  </label>
-					  <label>
-						<Field type="radio" name="gender" value='2' className="mr-3" onChange={handleChange} checked={values.gender === '2'} />
-						Nữ
-					  </label>
-					  <label>
-						<Field type="radio" name="gender" value='3' className="mr-3" onChange={handleChange} checked={values.gender === '3'} />
-						Khác
-					  </label>
-					</div>
-				  </div>
-
-				  <div className="mb-6">
-					<p className="text-sm">Ngôn ngữ hiển thị</p>
-					<div className="flex items-center gap-14 mt-4">
-					<label>
-						<Field type="radio" name="lang" value="vn" className="mr-3" onChange={handleChange} checked={values.lang === 'vn'} />
-						Tiếng Việt
-					  </label>
-					  <label>
-						<Field type="radio" name="lang" value="en" className="mr-3" onChange={handleChange} checked={values.lang === 'en'} />
-						English
-					  </label>
-					  <label>
-						<Field type="radio" name="lang" value="ja" className="mr-3" onChange={handleChange} checked={values.lang === 'ja'} />
-						Japanese
-					  </label>
-					</div>
-				  </div>
-
-				  <div className="mb-6">
-					<div className="flex items-center">
-					  <p className="text-sm">Ảnh chữ ký</p>
-						<label className="ml-2">
-							<div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
-								<img
-								src={CameraIcon}
-								alt="Camera"
-								className="w-[15px] h-[13px]"
+					return (
+						<Form className="px-5">
+							<div className="mb-6">
+								<p className="text-sm mb-2">Email</p>
+								<input
+									type="text"
+									name="email"
+									placeholder="Email"
+									value={values.email}
+									onChange={handleChange}
+									className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+									onBlur={(e: FormEvent<HTMLInputElement>) => {
+										handleBlur(e);
+									}}
 								/>
-								<input type="file" name="signature" id="signature" className="hidden" accept="image/*" onChange={handleChangeSignature} />
 							</div>
-						</label>
-					</div>
-					<div>
-					  <Signature/>
-					</div>
-				  </div>
 
-				  <div className="absolute bottom-0 right-0 p-5">
-					<button
-					  type="submit"
-					  className="text-primary-light text-[15px] w-[105px] h-[38px] bg-primary rounded"
-					>
-					  Cập nhật
-					</button>
-				  </div>
-				</Form>
-			  );
-			}}
-		  </Formik>
+							<div className="mb-6">
+								<p className="text-sm mb-2">Điện thoại</p>
+								<input
+									type="text"
+									name="phone"
+									placeholder="Điện thoại"
+									value={values.phone}
+									onChange={handleChange}
+									className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+									onBlur={(e: FormEvent<HTMLInputElement>) => {
+										handleBlur(e);
+									}}
+								/>
+							</div>
+
+							<div className="mb-6">
+								<p className="text-sm mb-2">Ngày sinh</p>
+								<DatePicker
+									selected={(values.birthDay && new Date(values.birthDay)) || new Date()}
+									dateFormat="dd/MM/yyyy"
+									onChange={(date: Date | null) => setFieldValue("birthDay", moment(date).format('YYYY-MM-DD'))}
+									showYearDropdown
+									onKeyDown={(e) => {
+										e.preventDefault();
+									}}
+									customInput={
+										<input
+											type="text"
+											name="birthDay"
+											placeholder=""
+											// value={values.birthDay}
+											className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+										/>
+									}
+								/>
+							</div>
+
+							<div className="mb-6">
+								<p className="text-sm mb-2">Tài khoản ngân hàng</p>
+								<input
+									type="text"
+									name="bankAccountNumber"
+									placeholder="Tài khoản ngân hàng"
+									value={values.bankAccountNumber}
+									onChange={handleChange}
+									className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+									onBlur={(e: FormEvent<HTMLInputElement>) => {
+										handleBlur(e);
+									}}
+								/>
+							</div>
+
+							<div className="mb-6">
+								<p className="text-sm mb-2">Tên chủ tài khoản (viết hoa, không dấu)</p>
+								<input
+									type="text"
+									name="bankAccountName"
+									placeholder="Tên chủ tài khoản (viết hoa, không dấu)"
+									value={values.bankAccountName}
+									onChange={handleChange}
+									className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+									onBlur={(e: FormEvent<HTMLInputElement>) => {
+										handleBlur(e);
+									}}
+								/>
+							</div>
+
+							<div className="mb-6">
+								<p className="text-sm mb-2">Tên ngân hàng</p>
+								<div className="flex justify-between">
+									<DropdownSearchable
+										onchangeValue={(value: any) => {
+											const bank: any = banks.banks.find((b: any) => b.swiftCode === value.value);
+											setFieldValue("bankName", value.label);
+											setFieldValue("bankSwiftCode", bank.swiftCode);
+										}}
+										onClearData={() => {
+											setFieldValue("bankName", "");
+											setFieldValue("bankSwiftCode", "");
+											setBanks(curr => ({ ...curr, tempBanks: curr.banks }));
+										}}
+										onSearchInputChange={
+											(value) => {
+												if (!value) {
+													return setBanks(curr => ({ ...curr, tempBanks: curr.banks }));
+												}
+
+												const newBanks = banks.tempBanks.filter((b: any) => b.bankShortName.toLowerCase().includes(value.toLowerCase()));
+												setBanks(curr => ({ ...curr, tempBanks: newBanks }));
+											}}
+										className={"t-main-search-filter-item-dropdown w-full h-9 px-4 flex-1 border border-primary-border rounded outline-none mr-3"}
+										placeholder="Tên ngân hàng"
+										isMultiple={false}
+										allowClearValueSingleInput={true}
+										showTriangle={false}
+										maxWidthInput="max-w-none"
+										bordered={true}
+										renderSelectedItem={(item) => (
+											<div
+												style={{ width: 100 }}
+												className="flex items-center"
+											>
+												{item.text}
+											</div>
+										)}
+										data={banks.tempBanks.map((bank: any) => ({
+											label: bank.bankShortName,
+											value: bank.swiftCode,
+										}))}
+										valueControlled={{
+											...values.bankName ? {
+												label: values.bankName,
+												value: values.bankSwiftCode,
+											} : null
+										}}
+										formatItem={{
+											id: "value",
+											text: "label",
+										}}
+										inlineSearch={true}
+									/>
+									<button
+										type="button"
+										className="text-primary-light text-[15px] px-4 h-[38px] bg-primary rounded"
+										onClick={() => {
+											console.log({ isToggleModal })
+											setIsToggleModal(true)
+										}}
+									>
+										Pin Code
+									</button>
+								</div>
+							</div>
+
+							<div>
+							</div>
+
+							<div className="mb-6">
+								<p className="text-sm">Giới tính</p>
+								<div className="flex items-center gap-14 mt-4">
+									<label>
+										<Field type="radio" name="gender" value='1' className="mr-3" onChange={handleChange} checked={values.gender === '1'} />
+										Nam
+									</label>
+									<label>
+										<Field type="radio" name="gender" value='2' className="mr-3" onChange={handleChange} checked={values.gender === '2'} />
+										Nữ
+									</label>
+									<label>
+										<Field type="radio" name="gender" value='3' className="mr-3" onChange={handleChange} checked={values.gender === '3'} />
+										Khác
+									</label>
+								</div>
+							</div>
+
+							<div className="mb-6">
+								<p className="text-sm">Ngôn ngữ hiển thị</p>
+								<div className="flex items-center gap-14 mt-4">
+									<label>
+										<Field type="radio" name="lang" value="vn" className="mr-3" onChange={handleChange} checked={values.lang === 'vn'} />
+										Tiếng Việt
+									</label>
+									<label>
+										<Field type="radio" name="lang" value="en" className="mr-3" onChange={handleChange} checked={values.lang === 'en'} />
+										English
+									</label>
+									<label>
+										<Field type="radio" name="lang" value="ja" className="mr-3" onChange={handleChange} checked={values.lang === 'ja'} />
+										Japanese
+									</label>
+								</div>
+							</div>
+
+							<div className="mb-6">
+								<div className="flex items-center">
+									<p className="text-sm">Ảnh chữ ký</p>
+									<label className="ml-2">
+										<div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
+											<img
+												src={CameraIcon}
+												alt="Camera"
+												className="w-[15px] h-[13px]"
+											/>
+											<input type="file" name="signature" id="signature" className="hidden" accept="image/*" onChange={handleChangeSignature} />
+										</div>
+									</label>
+								</div>
+								<div>
+									<Signature />
+								</div>
+							</div>
+
+							<div className="absolute bottom-0 right-0 p-5">
+								<button
+									type="submit"
+									className="text-primary-light text-[15px] w-[105px] h-[38px] bg-primary rounded"
+								>
+									Cập nhật
+								</button>
+							</div>
+						</Form>
+					);
+				}}
+			</Formik>
+			<ModalPinCode
+				isToggle={isToggleModal}
+				toggle={() => setIsToggleModal(false)}
+			/>
 		</section>
 	)
 }
