@@ -16,17 +16,17 @@ import {
 
 // ========== Hooks ==========
 import {
-     useQueryDetailDocument,
+    useQueryDetailDocument,
 } from "services/hooks/ppt/useDocument";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useDocumentCustom, useListFilterDocument } from "services/hooks/document/useDocument";
 
 // ========== Utils ==========
-import { DIRECTION_TYPES, DOCUMENT_TYPES_SORT} from 'apis/localdb';
+import { DIRECTION_TYPES, DOCUMENT_TYPES_SORT } from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 
-import {useProject} from "services/hooks/items/useProject";
+import { useProject } from "services/hooks/items/useProject";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
@@ -36,25 +36,25 @@ import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import {NavigateTab} from "../../sharedComponents/common";
+import { NavigateTab } from "../../sharedComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-import {useContractIsMembers} from "services/hooks/items/useContract";
-import {debounce} from "lodash";
-import {useStorage} from "services/hooks/items/useStorage";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "redux/reducer";
-import {setFilterDropdown, resetAllFilterAndKeyword} from "redux/reducer/DocumentProjectSlice";
+import { useContractIsMembers } from "services/hooks/items/useContract";
+import { debounce } from "lodash";
+import { useStorage } from "services/hooks/items/useStorage";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "redux/reducer";
+import { setFilterDropdown, resetAllFilterAndKeyword } from "redux/reducer/DocumentProjectSlice";
 import { useQueryListCompany } from "services/hooks/useCompanies";
 
 export const DocumentProjectPage: FC = () => {
     const dispatch = useDispatch();
-    const {keywordInput} = useAppSelector(
+    const { keywordInput } = useAppSelector(
         (state) => state.documentProject.data
     );
 
     useEffect(() => {
         setPageIndex(0);
-        ref.current&&ref.current.resetPaginate();
+        ref.current && ref.current.resetPaginate();
     }, [keywordInput]);
 
     const { id: projectID } = useParams<{ id: string }>();
@@ -95,7 +95,7 @@ export const DocumentProjectPage: FC = () => {
         isExporting: false,
     });
 
-    const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
+    const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
 
     const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
     const [datahubContactsID, setDatahubContactsID] = useState<string[]>([]);
@@ -110,12 +110,12 @@ export const DocumentProjectPage: FC = () => {
     const [storageKeyword, setStorageKeyword] = useState("");
     const [storagesID, setStoragesID] = useState<string[]>([]);
 
-	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
+    const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
 
-    const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
-    const { list: listStorages } = useStorage({ params: { companyID: typeof projectInfo.company === "string" ? projectInfo.company : "", keyword: storageKeyword,}, isFetchList: (!isloadingProjectInfo && typeof projectInfo._id === "string")});
+    const { listContracts } = useContractIsMembers({ params: { keyword: contractKeyword, populates: JSON.stringify({ "path": "project", "select": "name sign" }) }, isFetch: true });
+    const { list: listStorages } = useStorage({ params: { companyID: typeof projectInfo.company === "string" ? projectInfo.company : "", keyword: storageKeyword, }, isFetchList: (!isloadingProjectInfo && typeof projectInfo._id === "string") });
 
-    const { listDocumentWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument,  } = useListFilterDocument({
+    const { listDocumentWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument, } = useListFilterDocument({
         params: {
             // isParent: "1",
             departmentsID: [departmentID],
@@ -134,7 +134,7 @@ export const DocumentProjectPage: FC = () => {
     const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
     const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
     const { toggleModal, updateModal } = useContext(ModalContext);
-    const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
+    const { onFetchDetailDocumentAsync } = useQueryDetailDocument();
 
     const handleCreate = React.useCallback(async () => {
         const result = await onFetchDetailDepartmentAsync(departmentID);
@@ -154,7 +154,7 @@ export const DocumentProjectPage: FC = () => {
                     dispatch(resetAllFilterAndKeyword({}));
                     refetchListDocument();
                     setPageIndex(0);
-                    ref.current&&ref.current.resetPaginate();
+                    ref.current && ref.current.resetPaginate();
                     toggleModal();
                     updateModal({
                         departmentInfo: {},
@@ -172,34 +172,34 @@ export const DocumentProjectPage: FC = () => {
     ]);
 
     const handleOnClickUpdate = React.useCallback((record) => async () => {
-            const result = await onFetchDetailDocumentAsync(record._id);
-            toggleModal();
-            updateModal({
-                departmentId: departmentID,
-                departmentInfo: result,
-                title: "Cập nhật",
-                initialValues: result,
-                onSubmit: async (values: any) => {
-                    const result = await updateDocumentChildAsync({
-                        ...values,
-                        documentID: record._id,
+        const result = await onFetchDetailDocumentAsync(record._id);
+        toggleModal();
+        updateModal({
+            departmentId: departmentID,
+            departmentInfo: result,
+            title: "Cập nhật",
+            initialValues: result,
+            onSubmit: async (values: any) => {
+                const result = await updateDocumentChildAsync({
+                    ...values,
+                    documentID: record._id,
+                });
+                if (result.status === 200) {
+                    setSelectRecord({});
+                    resetAllFilter();
+                    dispatch(resetAllFilterAndKeyword({}));
+                    refetchListDocument();
+                    setPageIndex(0);
+                    ref.current && ref.current.resetPaginate();
+                    toggleModal();
+                    updateModal({
+                        departmentInfo: {},
+                        initialValues: {},
                     });
-                    if (result.status === 200) {
-                        setSelectRecord({});
-                        resetAllFilter();
-                        dispatch(resetAllFilterAndKeyword({}));
-                        refetchListDocument();
-                        setPageIndex(0);
-                        ref.current&&ref.current.resetPaginate();
-                        toggleModal();
-                        updateModal({
-                            departmentInfo: {},
-                            initialValues: {},
-                        });
-                    }
-                },
-            });
-        },
+                }
+            },
+        });
+    },
         [
             departmentID,
             onFetchDetailDocumentAsync,
@@ -219,13 +219,13 @@ export const DocumentProjectPage: FC = () => {
      * Xử lý download template excel
      */
     const handleDownloadTemplateImportExcel = async () => {
-		try {
+        try {
             setStateExport({ isExporting: true });
             const { error, data } = await downloadTemplateImportExcelDocumentAsync({
                 projectID: departmentID
             });
 
-            if(error) {
+            if (error) {
                 return toast.warn(data?.message);
             }
 
@@ -235,7 +235,7 @@ export const DocumentProjectPage: FC = () => {
         } finally {
             setStateExport({ isExporting: false });
         }
-	}
+    }
 
     /**
      * 
@@ -245,7 +245,7 @@ export const DocumentProjectPage: FC = () => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportDocumentAsync({
-                filterParams: {  
+                filterParams: {
                     departmentsID: [departmentID],
                     ...fromToDate,
                     datahubContactsID,
@@ -253,11 +253,11 @@ export const DocumentProjectPage: FC = () => {
                     directions,
                     contractsID,
                     storagesID,
-                    keyword: keywordInput 
+                    keyword: keywordInput
                 }
             });
 
-            if(error) {
+            if (error) {
                 return toast.warn(data?.message);
             }
 
@@ -283,12 +283,12 @@ export const DocumentProjectPage: FC = () => {
 
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    
+
                     // Set data để Import
                     setDataImport(rows)
                 }
             }
-            
+
             reader.readAsArrayBuffer(file);
         }
 
@@ -298,13 +298,13 @@ export const DocumentProjectPage: FC = () => {
 
     // Gọi tới API để đẩy data lên
     useEffect(() => {
-        if(dataImport.length){
+        if (dataImport.length) {
             const fetchData = async () => {
                 const data = await importDocumentFromExcelAsync({ projectID, dataImport: JSON.stringify(dataImport) });
                 setDataImport([]);
                 // refetchTaskInfo?.()
 
-                if(!data.error){
+                if (!data.error) {
                     return toast.success("Import thành công");
                 }
                 return toast.error(data.message);
@@ -312,20 +312,20 @@ export const DocumentProjectPage: FC = () => {
 
             fetchData();
         }
-        
+
         // console.log('=========DATA THAY ĐỔI RỒI==============')
     }, [dataImport])
 
     const resetAllFilter = () => {
-        datahubRef.current&&datahubRef.current.resetDropdown();
-        typesRef.current&&typesRef.current.resetDropdown();
-        directionsRef.current&&directionsRef.current.resetDropdown();
-        storagesRef.current&&storagesRef.current.resetDropdown();
-        contractsRef.current&&contractsRef.current.resetDropdown();
-        fromToRef.current&&fromToRef.current.resetTimeRange();
+        datahubRef.current && datahubRef.current.resetDropdown();
+        typesRef.current && typesRef.current.resetDropdown();
+        directionsRef.current && directionsRef.current.resetDropdown();
+        storagesRef.current && storagesRef.current.resetDropdown();
+        contractsRef.current && contractsRef.current.resetDropdown();
+        fromToRef.current && fromToRef.current.resetTimeRange();
     }
 
-    if(stateExport.isExporting) {
+    if (stateExport.isExporting) {
         return <Loader className="border-primary" />
     }
 
@@ -338,7 +338,7 @@ export const DocumentProjectPage: FC = () => {
                             ref={datahubRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Đơn vị ban hành"}
-                            prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
+                            prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"} />}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
                             data={listDatahubContact}
@@ -354,26 +354,26 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...datahubContactsID];
                                 cloneIDs.push(item._id);
                                 setDatahubContactsID(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: cloneIDs}))
+                                dispatch(setFilterDropdown({ keyFilter: "datahubContactsID", dataFilter: cloneIDs }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setDatahubContactsID([]);
-                                dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: []}))
+                                dispatch(setFilterDropdown({ keyFilter: "datahubContactsID", dataFilter: [] }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
                                 const cloneIDs = [...datahubContactsID];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setDatahubContactsID(newList);
-                                dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: newList}))
+                                dispatch(setFilterDropdown({ keyFilter: "datahubContactsID", dataFilter: newList }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             renderItem={(item) => (
                                 <p className={"min-w-[300px]"}>{item.text}</p>
@@ -384,7 +384,7 @@ export const DocumentProjectPage: FC = () => {
                             ref={typesRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Tính chất hồ sơ"}
-                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"} />}
                             isMultiple={true}
                             disableSearch={true}
                             allowClearValueSingleInput={true}
@@ -396,26 +396,26 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...types];
                                 cloneIDs.push(item.value);
                                 setTypes(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "types", dataFilter: cloneIDs}))
+                                dispatch(setFilterDropdown({ keyFilter: "types", dataFilter: cloneIDs }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setTypes([]);
-                                dispatch(setFilterDropdown({keyFilter: "types", dataFilter: []}))
+                                dispatch(setFilterDropdown({ keyFilter: "types", dataFilter: [] }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
                                 const cloneIDs = [...types];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setTypes(newList);
-                                dispatch(setFilterDropdown({keyFilter: "types", dataFilter: newList}))
+                                dispatch(setFilterDropdown({ keyFilter: "types", dataFilter: newList }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             renderItem={(item) => (
                                 <p className={"min-w-[300px]"}>{item.text}</p>
@@ -432,10 +432,10 @@ export const DocumentProjectPage: FC = () => {
                             iconFront={<img src={timelineIcon} alt={"----"} />}
                             onValueChange={(val) => {
                                 setFromToDate(val)
-                                dispatch(setFilterDropdown({keyFilter: "fromDate", dataFilter: val.fromDate}))
-                                dispatch(setFilterDropdown({keyFilter: "toDate", dataFilter: val.toDate}))
+                                dispatch(setFilterDropdown({ keyFilter: "fromDate", dataFilter: val.fromDate }))
+                                dispatch(setFilterDropdown({ keyFilter: "toDate", dataFilter: val.toDate }))
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             options={[
                                 {
@@ -447,19 +447,19 @@ export const DocumentProjectPage: FC = () => {
                                     text: "Cách đây 1 tuần",
                                     fromDate: moment().subtract(7, "days").format("YYYY-MM-DD h:mm"),
                                     toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
-                                  },
-                                  {
+                                },
+                                {
                                     text: "Cách đây 1 tháng",
                                     fromDate: moment().subtract(1, "months").format("YYYY-MM-DD h:mm"),
                                     toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
-                                  },
+                                },
                             ]}
                         />
                         <DropdownSearchableV2
                             ref={directionsRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Hướng hồ sơ"}
-                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"} />}
                             isMultiple={true}
                             disableSearch={true}
                             allowClearValueSingleInput={true}
@@ -471,26 +471,26 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...directions];
                                 cloneIDs.push(item.value);
                                 setDirections(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: cloneIDs}))
+                                dispatch(setFilterDropdown({ keyFilter: "directions", dataFilter: cloneIDs }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setDirections([]);
-                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: []}))
+                                dispatch(setFilterDropdown({ keyFilter: "directions", dataFilter: [] }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
                                 const cloneIDs = [...directions];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setDirections(newList);
-                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: newList}))
+                                dispatch(setFilterDropdown({ keyFilter: "directions", dataFilter: newList }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             renderItem={(item) => (
                                 <p className={"min-w-[300px]"}>{item.text}</p>
@@ -501,7 +501,7 @@ export const DocumentProjectPage: FC = () => {
                             ref={contractsRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Hợp đồng"}
-                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"} />}
                             isMultiple={true}
                             disableSearch={false}
                             allowClearValueSingleInput={true}
@@ -515,26 +515,26 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...contractsID];
                                 cloneIDs.push(item._id);
                                 setContractsID(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: cloneIDs}))
+                                dispatch(setFilterDropdown({ keyFilter: "contractsID", dataFilter: cloneIDs }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setContractsID([]);
-                                dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: []}))
+                                dispatch(setFilterDropdown({ keyFilter: "contractsID", dataFilter: [] }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
                                 const cloneIDs = [...contractsID];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setContractsID(newList);
-                                dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: newList}))
+                                dispatch(setFilterDropdown({ keyFilter: "contractsID", dataFilter: newList }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             renderItem={(item) => (
                                 <p className={"min-w-[300px]"}>{item.project.sign}.{item.name}-{item.sign}</p>
@@ -545,7 +545,7 @@ export const DocumentProjectPage: FC = () => {
                             ref={storagesRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Địa chỉ lưu trữ"}
-                            prefixIcon={<img className={"mr-2"} src={echoDbIcon} alt={"icon"}/>}
+                            prefixIcon={<img className={"mr-2"} src={echoDbIcon} alt={"icon"} />}
                             disableSearch={false}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
@@ -559,26 +559,26 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...storagesID];
                                 cloneIDs.push(item._id);
                                 setStoragesID(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "storagesID", dataFilter: cloneIDs}))
+                                dispatch(setFilterDropdown({ keyFilter: "storagesID", dataFilter: cloneIDs }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setStoragesID([]);
-                                dispatch(setFilterDropdown({keyFilter: "storagesID", dataFilter: []}))
+                                dispatch(setFilterDropdown({ keyFilter: "storagesID", dataFilter: [] }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
                                 const cloneIDs = [...storagesID];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setStoragesID(newList);
-                                dispatch(setFilterDropdown({keyFilter: "storagesID", dataFilter: newList}))
+                                dispatch(setFilterDropdown({ keyFilter: "storagesID", dataFilter: newList }))
 
                                 setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
+                                ref.current && ref.current.resetPaginate();
                             }}
                             renderItem={(item) => (
                                 <p className={"min-w-[300px]"}>{item.text}</p>
@@ -593,28 +593,28 @@ export const DocumentProjectPage: FC = () => {
                     </button>
                 </div>
                 <div className={"flex items-center pb-2"}>
-                    <NavigateTab/>
+                    <NavigateTab />
                     <button className={"flex items-center justify-center mx-3 ml-6"}
                         onClick={handleExport.bind(null)}
                     >
-                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
                     </button>
                     <button className={"flex items-center justify-center mx-3 ml-3"}
-                            onClick={handleDownloadTemplateImportExcel}
-                        >
-                            Tải mẫu Import Excel
+                        onClick={handleDownloadTemplateImportExcel}
+                    >
+                        Tải mẫu Import Excel
                     </button>
                     <button className={"flex items-center justify-center mx-3 ml-3"}>
                         <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-                        accept=".xlsx, .xlsm, .xls, .csv"/>
+                            accept=".xlsx, .xlsm, .xls, .csv" />
                         <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo Hồ sơ</label>
                     </button>
                     {
-                        recordSelected._id&&
+                        recordSelected._id &&
                         <button
                             onClick={handleOnClickUpdate(recordSelected)}
                             className={"flex items-center justify-center mx-3 ml-6"}>
-                            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"} />
                         </button>
                     }
                     <PaginateV2
@@ -626,15 +626,15 @@ export const DocumentProjectPage: FC = () => {
                         isFetching={isLoading}
                         nextPageAction={() => {
                             fetchNextPageDocument();
-                            setPageIndex(oldState => oldState+1)
+                            setPageIndex(oldState => oldState + 1)
                         }}
                         prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
+                            setPageIndex(oldState => oldState - 1)
                         }}
                     />
                 </div>
             </div>
-            
+
             <div className="flex-1 overflow-y-auto">
                 {/* Content */}
                 {isLoading || isFetching && <Loader absolute={true} className="border-primary" />}
@@ -648,115 +648,114 @@ export const DocumentProjectPage: FC = () => {
                         style={{ borderSpacing: 0 }}
                     >
                         <thead className="">
-                        <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-                            <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '30px' }}>
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    value=""
-                                    id="flexCheckDefault"
-                                />
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '25%' }}>
-                                Nội dung
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '15%' }}>
-                                Đơn vị ban hành hồ sơ
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
-                                Mã hiệu
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Mã hiệu lưu
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Ngày văn bản
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Số lượng
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Tình trạng
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Ghi chú
-                            </th>
-                            <th
-                                className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
-                                style={{ width: '10%' }}
-                            >
-                                Địa chỉ lưu trữ
-                            </th>
-                        </tr>
+                            <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
+                                <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '30px' }}>
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value=""
+                                        id="flexCheckDefault"
+                                    />
+                                </th>
+                                <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '25%' }}>
+                                    Nội dung
+                                </th>
+                                <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '15%' }}>
+                                    Đơn vị ban hành hồ sơ
+                                </th>
+                                <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
+                                    Mã hiệu
+                                </th>
+                                <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                    Mã hiệu lưu
+                                </th>
+                                <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                    Ngày văn bản
+                                </th>
+                                <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                    Số lượng
+                                </th>
+                                <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                    Tình trạng
+                                </th>
+                                <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                    Ghi chú
+                                </th>
+                                <th
+                                    className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
+                                    style={{ width: '10%' }}
+                                >
+                                    Địa chỉ lưu trữ
+                                </th>
+                            </tr>
                         </thead>
                         <tbody className="">
-                        {listDocumentWithPager[pageIndex].map((document, index) => {
-                            let linkRef;
-                            if(location.pathname.includes("/document/project/")){
-                                linkRef = `/document/project/${document.project._id}/detail/${document._id}`
-                            }else{
-                                linkRef = `/pm/project/${document.project._id}/document/${document._id}`
-                            }
-                            return (
-                                <tr
-                                    key={index}
-                                    className="text-left hover:bg-cbs-active-comment"
-                                >
-                                    <td className="px-4 py-2.5 border-b border-cbs-border">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            id="flexCheckDefault"
-                                            checked={document._id === recordSelected._id}
-                                            onChange={(e) => {
-                                                if (e.target.checked) {
-                                                    setSelectRecord(document);
+                            {listDocumentWithPager[pageIndex].map((document, index) => {
+                                let linkRef;
+                                if (location.pathname.includes("/document/project/")) {
+                                    linkRef = `/document/project/${document.project._id}/detail/${document._id}`
+                                } else {
+                                    linkRef = `/pm/project/${document.project._id}/document/${document._id}`
+                                }
+                                return (
+                                    <tr
+                                        key={index}
+                                        className="text-left hover:bg-cbs-active-comment"
+                                    >
+                                        <td className="px-4 py-2.5 border-b border-cbs-border">
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                id="flexCheckDefault"
+                                                checked={document._id === recordSelected._id}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setSelectRecord(document);
+                                                        return null;
+                                                    }
+                                                    setSelectRecord({});
                                                     return null;
-                                                }
-                                                setSelectRecord({});
-                                                return null;
-                                            }}
-                                        />
-                                    </td>
-                                    <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
-                                        <Link to={linkRef}>
-                                            <p className="text-cbs-highlight-color">{document?.name || ""} {document?.files?.length ? <span className="text-primary-gray">({document?.files?.length} file)</span> : <></>}
-                                            </p>
-                                            <p className="mt-1.5 text-primary-gray text-xs">
-                                                {`${document?.author?.fullname || ""}-${
-                                                    moment(document.createAt).isValid() &&
-                                                    moment(document.createAt).format("DD/MM/YYYY HH:mm")
-                                                }`}
-                                            </p>
-                                        </Link>
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.publish?.name ? document?.publish?.name : <p className="text-cbs-highlight-color"><i>{document?.datahubContact?.name}</i></p>}
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.sign}
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.storeSign}
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
-                                        {moment(document.date).isValid() && moment(document.date).format("DD/MM/YYYY")}
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right">
-                                        {document.amount}
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 box-border">
-                                        {document.status}
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 box-border">
-                                        {document.note}
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.storage?.name}
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                                                }}
+                                            />
+                                        </td>
+                                        <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
+                                            <Link to={linkRef}>
+                                                <p className="text-cbs-highlight-color">{document?.name || ""} {document?.files?.length ? <span className="text-primary-gray">({document?.files?.length} file)</span> : <></>}
+                                                </p>
+                                                <p className="mt-1.5 text-primary-gray text-xs">
+                                                    {`${document?.author?.fullname || ""}-${moment(document.createAt).isValid() &&
+                                                        moment(document.createAt).format("DD/MM/YYYY HH:mm")
+                                                        }`}
+                                                </p>
+                                            </Link>
+                                        </td>
+                                        <td className="py-2.5 border-b border-cbs-border px-2">
+                                            {document?.publish?.name ? document?.publish?.name : <p className="text-cbs-highlight-color"><i>{document?.datahubContact?.name}</i></p>}
+                                        </td>
+                                        <td className="py-2.5 border-b border-cbs-border px-2">
+                                            {document?.sign}
+                                        </td>
+                                        <td className="py-2.5 border-b border-cbs-border px-2">
+                                            {document?.storeSign}
+                                        </td>
+                                        <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
+                                            {moment(document.date).isValid() && moment(document.date).format("DD/MM/YYYY")}
+                                        </td>
+                                        <td className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right">
+                                            {document.amount}
+                                        </td>
+                                        <td className="py-2.5 border-b border-cbs-border px-2 box-border">
+                                            {document.status}
+                                        </td>
+                                        <td className="py-2.5 border-b border-cbs-border px-2 box-border">
+                                            {document.note}
+                                        </td>
+                                        <td className="py-2.5 border-b border-cbs-border px-2">
+                                            {document?.storage?.name}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 )}
@@ -779,7 +778,7 @@ export const DocumentProjectPage: FC = () => {
                                 className="inline-block h-screen align-middle"
                                 aria-hidden="true"
                             >
-                              &#8203;
+                                &#8203;
                             </span>
 
                             <Transition.Child

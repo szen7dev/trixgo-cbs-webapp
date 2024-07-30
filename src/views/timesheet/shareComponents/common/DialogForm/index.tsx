@@ -129,7 +129,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
                     <DatePicker
                       className="w-full h-6 outline-none"
-                      selected={values.date as any}
+                      selected={values.date ? new Date(values.date) : null}
                       placeholderText="Ngày/tháng/năm"
                       name="date"
                       onChange={(date: Date | null) => {

@@ -2,7 +2,7 @@ import { Dialog } from "@headlessui/react";
 import moment from "moment";
 import React, { Fragment, useContext, useState } from "react";
 import cn from "classnames";
-import DayPickerInput from "react-day-picker/DayPickerInput";
+// import DayPickerInput from "react-day-picker/DayPickerInput";
 import { Formik, Form, Field } from "formik";
 import uniqBy from "lodash/uniqBy";
 import debounce from "lodash/debounce";
@@ -17,7 +17,6 @@ import { ModalContainer } from "shareComponents/common/ModalContainer";
 import { useQueryListPackage } from "services/hooks/document/usePackage";
 import { useQueryContact } from "services/hooks/items/useContact";
 import { useQueryListDoctype } from "services/hooks/items/useDoctype";
-import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
 import { useQueryListCompany } from "services/hooks/useCompanies";
 
 import { useStorage } from "services/hooks/items/useStorage";
@@ -137,7 +136,7 @@ export const ModalCreateDocument: React.FC = () => {
 			storage: state.initialValues?.storage?._id,
 			property: state.initialValues?.property?._id,
 			completeStatus: state.initialValues?.completeStatus,
-			date: null,
+			date: state.initialValues?.date,
 		}
 	}, [state.initialValues]);
 
@@ -288,6 +287,7 @@ export const ModalCreateDocument: React.FC = () => {
 				>
 					{(formik) => {
 						const { handleBlur, setFieldValue, values } = formik;
+
 						return (
 							<Form>
 								<div className="px-5 pb-4 overflow-auto">
@@ -423,7 +423,11 @@ export const ModalCreateDocument: React.FC = () => {
 															<div className="py-1.5">
 																<DatePicker
 																	className="w-full"
-																	selected={(values as any)[item.name]}
+																	selected={
+																		(values as any)[item.name] ? new Date((values as any)[item.name]) :
+																			(state?.initialValues[item.name] ? new Date((state?.initialValues[item.name])) :
+																				null)
+																	}
 																	placeholderText="Ngày/tháng/năm"
 																	onChange={(date: Date | null) => {
 																		setFieldValue(item.name, date);
