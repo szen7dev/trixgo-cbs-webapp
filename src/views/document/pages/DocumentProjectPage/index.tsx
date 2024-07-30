@@ -129,6 +129,7 @@ export const DocumentProjectPage: FC = () => {
         },
         isFetchList: true
     });
+    // console.log(listDocumentWithPager)
 
     const { downloadTemplateImportExcelDocumentAsync, importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
     const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
@@ -693,9 +694,9 @@ export const DocumentProjectPage: FC = () => {
                             {listDocumentWithPager[pageIndex].map((document, index) => {
                                 let linkRef;
                                 if (location.pathname.includes("/document/project/")) {
-                                    linkRef = `/document/project/${document.project._id}/detail/${document._id}`
+                                    linkRef = `/document/project/${document.project}/detail/${document._id}`
                                 } else {
-                                    linkRef = `/pm/project/${document.project._id}/document/${document._id}`
+                                    linkRef = `/pm/project/${document.project}/document/${document._id}`
                                 }
                                 return (
                                     <tr

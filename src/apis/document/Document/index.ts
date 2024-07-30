@@ -37,7 +37,7 @@ async function fetchListDocument(params : any) {
             select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact files',
             populates: {
                 "path": "author sender storage publish datahubContact files",
-                "select": "fullname bizfullname sign image name nameOrg path"
+                "select": "fullname sign image name nameOrg path"
             },
             ...params,
         }
@@ -51,7 +51,7 @@ async function fetchFilterListDocument(params : any) {
             select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact files',
             populates: {
                 "path": "author sender storage publish datahubContact files",
-                "select": "fullname bizfullname sign image name nameOrg path"
+                "select": "fullname sign image name nameOrg path"
             },
             ...params,
         }
