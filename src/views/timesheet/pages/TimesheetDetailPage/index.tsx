@@ -40,7 +40,7 @@ const SUBTYPES = [
   { _id: 1, name: 'Thông thường' },
   { _id: 2, name: 'Nghỉ phép'},
   { _id: 3, name: 'Lễ, tết'},
-  // { _id: 4, name: 'Công tác'},
+  { _id: 4, name: 'Công tác'},
 ]
 
 const TimeSheetDetailPage: FC = () => {
