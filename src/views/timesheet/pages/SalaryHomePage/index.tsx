@@ -246,15 +246,15 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Ngày tháng ghi nhận lương
+              Ngày ghi nhận
             </div>
-            <div
+            {/* <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Hệ số chuyển đổi KPI sang giá trị
-            </div>
+            </div> */}
             <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
@@ -337,9 +337,9 @@ const SalaryHomePage: FC = () => {
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {moment(salaryParent.date).format('DD/MM/YYYY')}
               </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
+              {/* <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.convertFactor}
-              </div>
+              </div> */}
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.numberOfHuman}
               </div>

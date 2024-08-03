@@ -79,12 +79,12 @@ export const DetailMainRow: FC<Props> = memo(({
           {convertCurrency(salaryParentInfo?.salary)}
         </div>
       </div>
-      <div
+      {/* <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
-      </div>
+      </div> */}
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
