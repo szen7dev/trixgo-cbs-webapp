@@ -163,7 +163,7 @@ export const DetailChildRow: FC<Props> = ({
           {convertCurrency(rowData.salary)}
         </p>
       </div>
-      <div
+      {/* <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
@@ -184,7 +184,7 @@ export const DetailChildRow: FC<Props> = ({
         >
           {convertCurrency(rowData.kpiFactor)}
         </p>
-      </div>
+      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"

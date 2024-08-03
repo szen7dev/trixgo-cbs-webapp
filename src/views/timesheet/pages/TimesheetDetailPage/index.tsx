@@ -40,7 +40,7 @@ const SUBTYPES = [
   { _id: 1, name: 'Thông thường' },
   { _id: 2, name: 'Nghỉ phép'},
   { _id: 3, name: 'Lễ, tết'},
-  // { _id: 4, name: 'Công tác'},
+  { _id: 4, name: 'Công tác'},
 ]
 
 const TimeSheetDetailPage: FC = () => {
@@ -330,20 +330,23 @@ useEffect(() => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
-          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 3})}>
+        <button className={"mr-2"} onClick={() => handleDownloadExcel({option: 4})}>
+            Check
+          </button>
+          <button className={"mr-2"} onClick={() => handleDownloadExcel({option: 3})}>
             Tải điểm danh
           </button>
           <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 1})}>
             Tải chấm công
           </button>
-          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 2})}>
+          <button className={"mr-2"} onClick={() => handleDownloadExcel({option: 2})}>
             Tải ngân sách
           </button>
-          <button className={"flex items-center justify-center mr-3"}>
+          {/* <button className={"flex items-center justify-center mr-2"}>
               <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
               accept=".xlsx, .xlsm, .xls, .csv"/>
               <label className="custom-file-label" htmlFor="inputGroupFile">Cập nhật từ Excel</label>
-          </button>
+          </button> */}
           <button
             className="text-gray-400 mr-2"
             onClick={() => {

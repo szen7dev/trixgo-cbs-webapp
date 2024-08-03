@@ -81,15 +81,15 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Lương cứng
+                Lương
               </div>
-              <div
+              {/* <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
                 Hệ số
-              </div>
+              </div> */}
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
@@ -109,56 +109,56 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Thưởng thành tích
+                Thưởng đóng góp
               </div>
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Phụ cấp
+                Phụ cấp/truy lĩnh/thưởng lễ tết
               </div>
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Trừ vi phạm
+                Điểm vi phạm
               </div>
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Trừ bảo hiểm
+                 Bảo hiểm phải nộp
               </div>
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Trừ thuế TNCN
+                Thuế TNCN phải nộp
               </div>
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Trừ công đoàn
+                Công đoàn phải nộp
               </div>
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Trừ quỹ chia sẻ
+                Trích quỹ tương thân tương ái
               </div>
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Trừ khác
+                Trả hộ khác
               </div>
               <div
                 className={
@@ -204,7 +204,7 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                 </p>
               </div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.salary)}</div>
-              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{Number(item.kpiFactor).toFixed(4)}</div>
+              {/* <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{Number(item.kpiFactor).toFixed(4)}</div> */}
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.onLeaveSalary)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.revenueBonus)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.reward)}</div>
