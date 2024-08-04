@@ -14,8 +14,6 @@ interface TimesheetHomePageProps {
 
 const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
   const params = useParams<{ id: string }>();
-  // console.log(params)
-  // const humanID = params["id"];
   const [pageIndex, setPageIndex] = useState(0);
   const ref = useRef<RefPaginateHandle>(null);
 
@@ -46,7 +44,7 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
         }
       >
         <div className={"flex items-center flex-1"}>
-          <div className={"text-lg"}>Chi tiết lương của tôi</div>
+          <div className={"text-lg"}>Chi tiết bảng lương</div>
         </div>
         <PaginateV2
           ref={ref}
@@ -83,13 +81,6 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
               >
                 Lương
               </div>
-              {/* <div
-                className={
-                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-                }
-              >
-                Hệ số
-              </div> */}
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
@@ -181,13 +172,6 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
               >
                 Còn lại phải trả
               </div>
-              <div
-                className={
-                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-                }
-              >
-                Ghi chú
-              </div>
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((item: any, index: any) => (
             <div className={"transition duration-300 ease-in-out child-row table-row"} key={item._id}>
@@ -200,11 +184,10 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                 <p className="text-cbs-highlight-color"><i>Giờ làm việc: {convertCurrency(item.hours1)} ({Number(item.hours1/8)})</i></p>
                 <p className="text-cbs-highlight-color"><i>Giờ nghỉ phép, lễ: {convertCurrency(item.hours2)} ({Number(item.hours2/8)})</i></p>
                 <p className={"mt-1 text-gray-500 text-[10px]"}>
-                  <i>{item?.userCreate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}</i>
+                  <i>Cre: {item?.userCreate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}</i>
                 </p>
               </div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.salary)}</div>
-              {/* <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{Number(item.kpiFactor).toFixed(4)}</div> */}
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.onLeaveSalary)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.revenueBonus)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.reward)}</div>
@@ -218,7 +201,6 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.advance)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.paid)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.remaining)}</div>
-              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{item.note}</div>
             </div>
           ))}
         </div>

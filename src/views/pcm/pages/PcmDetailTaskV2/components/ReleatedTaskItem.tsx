@@ -26,7 +26,7 @@ export const ReleatedTaskItem:FC<Props> = ({ task, index }) => {
             <div className={"flex items-center"}>
                 <div className={"flex items-center justify-center px-4 py-1 rounded bg-cbs-form-input-bg mr-2"}>
                     {/* <img src={iconClock} alt={"----"} className={"mr-2"}/> */}
-                    <span className="text-primary-gray">{moment(task.expiredTime).format('DD/M/YYYY')}</span>
+                    <span className="text-primary-gray">{moment(task.actualFinishTime).format('DD/M/YYYY')}</span>
                 </div>
                 <img
                     alt={"----"}
