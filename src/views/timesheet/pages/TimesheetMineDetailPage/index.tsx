@@ -39,7 +39,7 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
         }
       >
         <div className={"flex items-center flex-1"}>
-          <div className={"text-lg"}>Chi tiết chấm công của tôi</div>
+          <div className={"text-lg"}>Chi tiết chấm công</div>
         </div>
         <PaginateV2
           ref={ref}
@@ -120,6 +120,7 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                 }
               >
                 {item.name} - {moment(item.date).format('DD/MM/YYYY')}
+                <p className="text-cbs-highlight-color"><i>{item?.assignee?.fullname}</i></p>
                 <NavLink  to={`/timesheet/home/${item?.parent?._id}`}>
                   <p><i>{item?.parent?.name}</i></p>
                 </NavLink>
