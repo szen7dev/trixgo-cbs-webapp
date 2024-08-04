@@ -124,8 +124,26 @@ const SalaryHomePage: FC = () => {
         }
       >
         <ModalConfirm
-          title="Bạn có muốn xác nhận không?"
-          description="Dữ liệu từ Bảng chấm công, KPI sẽ được đồng bộ sang Bảng lương này"
+          title="Bạn có muốn xác nhận Đồng bộ không?"
+          description= "Dữ liệu từ Bảng chấm công, KPI sẽ được đồng bộ sang Bảng lương này"
+          onConfirm={() => handleConfirmSync({ option: param.option, salaryID: param.salaryID })}
+          defaultText={false}
+          onCancel={closeModal}
+        />
+      </div>
+    )
+  }
+
+  const toggleModalOpenSignReset = (param: any) => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title="Bạn có muốn xác nhận Xóa không?"
+          description= "Toàn bộ dữ liệu bảng lương này sẽ bị xóa và bạn không thể khôi phục"
           onConfirm={() => handleConfirmSync({ option: param.option, salaryID: param.salaryID })}
           defaultText={false}
           onCancel={closeModal}
@@ -288,7 +306,7 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Xóa/Reset dữ liệu
+              Xóa dữ liệu
             </div>
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((salaryParent) => (
@@ -337,9 +355,6 @@ const SalaryHomePage: FC = () => {
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {moment(salaryParent.date).format('DD/MM/YYYY')}
               </div>
-              {/* <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {salaryParent.convertFactor}
-              </div> */}
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.numberOfHuman}
               </div>
@@ -360,7 +375,7 @@ const SalaryHomePage: FC = () => {
                 </button>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 2, salaryID: salaryParent._id })}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSignReset({ option: 2, salaryID: salaryParent._id })}>
                   <span style={{ "color": "red" }}>Xóa dữ liệu</span>
                 </button>
               </div>
