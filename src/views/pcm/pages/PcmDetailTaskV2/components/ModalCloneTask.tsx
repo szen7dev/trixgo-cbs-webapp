@@ -372,7 +372,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                 <div className={"t-add-new-task-dialog-select px-6"}>
                                     <div className={"flex pb-1 pt-2 border-b"}>
                                         <div className={"w-1/4 flex items-start"}>
-                                            <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Dự án (*)</div>
+                                            <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Dự án, phòng ban (*)</div>
                                             <div className={"flex-1 max-w-4/5 w-4/5"}>
                                                 <DropdownSearchable
                                                     onchangeValue={(value: any) => {
