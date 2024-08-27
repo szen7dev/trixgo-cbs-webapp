@@ -53,7 +53,7 @@ export const HomeLeftMenuContent: FC = () => {
 
     const [badge, setBadge] = useState({
         amountUnreadTask: data?.data?.amountUnreadTask,
-        amountMyTask: Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3),
+        amountMyTask: Number(data?.data?.amountMyTask),
     })
 
     const amountUnreadTask = useMemo(() => {
@@ -61,7 +61,7 @@ export const HomeLeftMenuContent: FC = () => {
     }, [data?.data?.amountUnreadTask, badge.amountUnreadTask])
 
     const amountMyTask = useMemo(() => {
-        return badge.amountMyTask || Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3) || 0;
+        return badge.amountMyTask || Number(data?.data?.amountMyTask) || 0;
     }, [data?.data, badge.amountMyTask])
 
     useEffect(() => {
