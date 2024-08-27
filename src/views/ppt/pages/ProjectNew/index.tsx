@@ -120,7 +120,7 @@ const ProjectNew: FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className="w-1/5 bg-white py-3.5 px-4  border-0.5 border-cbs-border rounded-md" style={{ maxWidth: "250px" }}>
+                {/* <div className="w-1/5 bg-white py-3.5 px-4  border-0.5 border-cbs-border rounded-md" style={{ maxWidth: "250px" }}>
                     <div className=" font-bold text-sm">Đơn vị tạo việc <span>({listDataCompany.length})</span></div>
                     <div className="overflow-y-auto" style={{ height: "140px" }}>
                         {listDataCompany.map((item: any, index: number) => {
@@ -158,7 +158,7 @@ const ProjectNew: FC = () => {
                         })
                         }
                     </div>
-                </div>
+                </div> */}
                 <div className="w-1/4 bg-white py-3.5 px-4  border-0.5 border-cbs-border rounded-md" style={{ maxWidth: "300px" }}>
                     <div className=" font-bold text-sm">Người tạo việc <span>({listDataUser.length})</span></div>
                     <div className="overflow-y-auto" style={{ height: "140px" }}>
@@ -195,7 +195,7 @@ const ProjectNew: FC = () => {
                     </div>
                 </div>
                 <div className="w-1/4 bg-white py-3.5 px-4  border-0.5 border-cbs-border rounded-md" style={{ maxWidth: "300px" }}>
-                    <div className=" font-bold text-sm">Dự án <span>({listDataProject.length})</span></div>
+                    <div className=" font-bold text-sm">Dự án/Phòng ban <span>({listDataProject.length})</span></div>
                     <div className="overflow-y-auto" style={{ height: "140px" }}>
                         {listDataProject.map((item: any, index: number) => {
                             const selected = projectsID.find((e: any) => e.id === item?._id?.project?._id) ? true : false;

@@ -9,7 +9,7 @@ import TriangleDown from "assets/icons/TriangleDown";
 import moment from "moment";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import { PCM_STATUS_TASK, PCM_PROPOSAL_TASK } from "apis/localdb";
-import iconSmallBlackDown from "assets/images/iconSmallBlackDown.svg";
+// import iconSmallBlackDown from "assets/images/iconSmallBlackDown.svg";
 import FilterItem from "./FilterItem";
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { setQueryPcmMine } from "redux/reducer/DashboardV2Slice";
@@ -137,7 +137,7 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
                         <DropdownSearchableV2
                             ref={authorsIDRef}
                             className={"mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
-                            placeholder={"Người giao"}
+                            placeholder={"Người tạo việc"}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
                             data={listDataUser.map((item: any) => ({
@@ -173,7 +173,7 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
                           <DropdownSearchableV2
                             ref={projectsIDRef}
                             className={"mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
-                            placeholder={"Dự án"}
+                            placeholder={"Dự án/Phòng ban"}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
                             data={listDataProject.map((item: any) => ({
@@ -245,7 +245,7 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
                         <DropdownSearchableV2
                             ref={statusRef}
                             selectOneByOne={true}
-                            className={"mr-2 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
+                            className={"mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
                             placeholder={"Trạng thái"}
                             isMultiple={true}
                             disableSearch={true}
@@ -307,7 +307,7 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
                         <DropdownSearchableV2
                             ref={subtypesRef}
                             selectOneByOne={true}
-                            className={"mr-2 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
+                            className={"mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
                             placeholder={"Tính chất"}
                             isMultiple={true}
                             disableSearch={true}
