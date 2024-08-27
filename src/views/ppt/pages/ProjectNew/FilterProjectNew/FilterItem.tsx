@@ -54,7 +54,7 @@ const FilterItem = ({ item, userId }: any) => {
                                         <></>
                                     }
                                     {item?.news.includes(userId) ?
-                                        <span className="text-sm truncate max-w-4xl mr-[5px]">{subContentHtml(item?.name)}</span> : <span className="font-bold text-sm	truncate max-w-4xl mr-[5px]">{subContentHtml(item?.name)}</span>
+                                        <span className="font-bold text-sm truncate max-w-4xl mr-[5px]">{subContentHtml(item?.name)}</span> : <span className="text-sm truncate max-w-4xl mr-[5px]">{subContentHtml(item?.name)}</span>
                                     }
                                 </div>
                             </Link>
