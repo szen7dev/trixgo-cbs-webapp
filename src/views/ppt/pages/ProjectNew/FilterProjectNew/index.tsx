@@ -92,12 +92,12 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
             <div className={"sticky top-0 bg-white z-10"}>
                 <div className={"flex items-center"}>
                     <div className={"filter-bar flex flex-wrap px-4 py-1"}>
-                        <div className="flex gap-1 items-center  my-2 mr-4">
+                        {/* <div className="flex gap-1 items-center  my-2 mr-4">
                             <input type="checkbox" />
                             <button>
                                 <img src={iconSmallBlackDown} alt="Small blackdown" style={{ width: "9px", height: "5px" }} />
                             </button>
-                        </div>
+                        </div> */}
                         <DropdownSearchableV2
                             ref={companyOfAuthorRef}
                             className={"mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
@@ -213,7 +213,6 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
                             }
                             placeholder={"Thời hạn"}
                             iconBack={<TriangleDown />}
-                            // iconFront={<img src={timetableIcon} alt={"----"} />}
                             onValueChange={(val) => {
                                 dispatch(setQueryPcmMine({ key: "fromDate", data: val.fromDate }))
                                 dispatch(setQueryPcmMine({ key: "toDate", data: val.toDate }))
@@ -309,7 +308,7 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
                             ref={subtypesRef}
                             selectOneByOne={true}
                             className={"mr-2 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
-                            placeholder={"Phân loại"}
+                            placeholder={"Tính chất"}
                             isMultiple={true}
                             disableSearch={true}
                             onchangeValue={item => {

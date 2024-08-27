@@ -2,8 +2,7 @@ import * as React from 'react';
 import JobDialog from '../DialogProjectDetail';
 import { Link } from 'react-router-dom';
 import { toast } from "react-toastify";
-
-import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
+// import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import moment from 'moment';
@@ -43,9 +42,9 @@ const FilterItem = ({ item, userId }: any) => {
         <div>
             <div className="flex justify-between gap-6 py-1">
                 <div className="flex">
-                    <div className="w-[50px]">
+                    {/* <div className="w-[50px]">
                         <input type="checkbox" />
-                    </div>
+                    </div> */}
                     <div>
                         <div className="flex">
                             <Link to={`/pcm/detail/${item._id}`}>
@@ -54,7 +53,9 @@ const FilterItem = ({ item, userId }: any) => {
                                         <span className="rounded px-3 py-[1px] text-white bg-cbs-orage mr-[5px] text-sm">Cao</span> :
                                         <></>
                                     }
-                                    <span className="font-bold text-sm	truncate max-w-4xl  mr-[5px]">{subContentHtml(item?.name)}</span>
+                                    {item?.viewedUsers.includes(userId) ?
+                                        <span className="text-sm truncate max-w-4xl mr-[5px]">{subContentHtml(item?.name)}</span> : <span className="font-bold text-sm	truncate max-w-4xl mr-[5px]">{subContentHtml(item?.name)}</span>
+                                    }
                                 </div>
                             </Link>
                             {/* <a onClick={handleClickOpen}>
@@ -70,15 +71,15 @@ const FilterItem = ({ item, userId }: any) => {
                                 {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 14, height: 14 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 14, height: 14 }} />)}
                             </button>
                         </div>
-                        <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">
-                            {item?.project?.sign} - Người tạo: {item?.author?.fullname} - Ngày tạo: {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
-                        </div>
                         {item?.lastComment?.author?.fullname ?
                             <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">
-                                {item?.lastComment?.author?.fullname}: {subContentHtml(item?.lastComment?.content)}
+                                {showTime(item?.lastComment?.createAt)} - {item?.lastComment?.author?.fullname}: {subContentHtml(item?.lastComment?.content)}
                             </div> : <></>
                         }
-                        {images.length ?
+                        <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">
+                           <i> Khởi tạo: {item?.project?.sign} - {item?.author?.fullname} - {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}</i>
+                        </div>
+                        {/* {images.length ?
                             <div className="flex gap-3 text-sm my-1">
                                 <button className="rounded-full flex gap-2 border-0.5 border-cbs-border px-3 py-1">
                                     <img src={icons8pdf} alt="" />
@@ -101,12 +102,14 @@ const FilterItem = ({ item, userId }: any) => {
                                     <></>
                                 }
                             </div> : <></>
-                        }
+                        } */}
                     </div>
                 </div>
                 <div className="flex text-primary-gray">
-                    <div className="w-[100px]">{moment(item?.actualFinishTime).format('DD/MM/YYYY')}</div>
-                    <div className="w-[100px]">{PCM_STATUS_TASK[item?.status - 1]?.text}</div>
+                    <div className="w-[125px]">{moment(item?.actualFinishTime).format('DD/MM/YYYY HH:mm')}</div>
+                    <div className="w-[100px]">
+                        <div className="relative z-5 inline-block -translate-y-1"><button className={`text-[10px] text-white rounded px-1 py-0.5 mx-1 ${PCM_STATUS_TASK[item?.status - 1]?.class}`}>{PCM_STATUS_TASK[item?.status - 1]?.text}</button></div>
+                    </div>
                 </div>
             </div>
             <JobDialog
@@ -117,4 +120,18 @@ const FilterItem = ({ item, userId }: any) => {
         </div>
     );
 }
+
 export default FilterItem;
+
+export const showTime = (time: any) => {
+    const toDay = new Date();
+    const timeDay = new Date(time);
+    if (
+      toDay.getDate() === timeDay.getDate() &&
+      toDay.getMonth() === timeDay.getMonth()
+    ) {
+      return moment(time).format("HH:mm");
+    } else {
+      return moment(time).format("DD/MM/YYYY");
+    }
+  }
