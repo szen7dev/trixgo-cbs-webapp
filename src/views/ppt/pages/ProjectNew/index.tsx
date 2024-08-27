@@ -47,7 +47,7 @@ const ProjectNew: FC = () => {
                         <div className="flex gap-2 justify-between pt-2">
                             <div className="text-cbs-subtext truncate "><input type="checkbox" className="mr-2" />Tổng</div>
                             <div className="bg-cbs-primary rounded-lg px-2 text-white">
-                                {(dataMyTask?.amountMyTask1 || 0) + (dataMyTask?.amountMyTask2 || 0) + (dataMyTask?.amountMyTask3 || 0)}
+                                {(dataMyTask?.amountMyTask || 0)}
                             </div>
                         </div>
                         <div className="flex gap-2 justify-between pt-2">
