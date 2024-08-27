@@ -35,8 +35,8 @@ const FilterItem = ({ item, userId }: any) => {
         }
     };
 
-    const files = item?.lastComment?.files && item?.lastComment?.files.length ? item?.lastComment?.files : [];
-    const images = item?.lastComment?.images && item?.lastComment?.images.length ? item?.lastComment?.images : [];
+    // const files = item?.lastComment?.files && item?.lastComment?.files.length ? item?.lastComment?.files : [];
+    // const images = item?.lastComment?.images && item?.lastComment?.images.length ? item?.lastComment?.images : [];
 
     return (
         <div>
@@ -71,6 +71,11 @@ const FilterItem = ({ item, userId }: any) => {
                                 {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 14, height: 14 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 14, height: 14 }} />)}
                             </button>
                         </div>
+                        {item?.parent ?
+                            <div className="my-1 text-primary-gray text-xs truncate max-w-4xl text-cbs-highlight-color">
+                               Việc cha: {item?.parent?.name}
+                            </div> : <></>
+                        }
                         {item?.lastComment?.author?.fullname ?
                             <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">
                                 {showTime(item?.lastComment?.createAt)} - {item?.lastComment?.author?.fullname}: {subContentHtml(item?.lastComment?.content)}

@@ -1683,6 +1683,7 @@ export const DashboardV2: FC<Props> = () => {
                                 <a
                                   key={file._id}
                                   href={`${process.env.REACT_APP_URL_S3}${file.path}`}
+                                  target="_blank" rel="noreferrer"
                                 >
                                   <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
                                     <img

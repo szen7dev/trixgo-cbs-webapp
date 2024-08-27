@@ -16,7 +16,7 @@ import { PostImage, PostFile } from 'shareComponents/common';
 import taskUserAvt from "assets/images/task-user.svg";
 import iconAttach from "assets/images/icons8-attach-50.png";
 import { IconImage } from "views/media/shareComponents/common";
-import { Checkbox, FormControl, FormHelperText, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Checkbox } from "@mui/material";
 import { FileProps, FilePropsUpload } from "typings/common";
 import { useUpload } from "services/hooks/useUpload";
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
@@ -33,28 +33,29 @@ type Props = {
 }
 
 export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTask, confirmCreateNewSubTask }) => {
-    const initUsersSelected = useMemo(() => {
-        let arr = [];
-        if (task.accessUsers && task.accessUsers.length) {
-            arr = task.accessUsers.map(({ bizfullname, _id, image }) => ({
-                label: bizfullname,
-                value: _id,
-                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
-            }))
-        } else {
-            const accessUsers = [task.author, task.assignee, ...task.related];
-            arr = accessUsers.map(({ bizfullname, _id, image }) => ({
-                label: bizfullname,
-                value: _id,
-                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
-            }))
-        }
+    // const initUsersSelected = useMemo(() => {
+    //     let arr = [];
+    //     if (task.accessUsers && task.accessUsers.length) {
+    //         arr = task.accessUsers.map(({ fullname, _id, image }) => ({
+    //             label: fullname,
+    //             value: _id,
+    //             image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+    //         }))
+    //     } else {
+    //         const accessUsers = [task.author, task.assignee, ...task.related];
+    //         arr = accessUsers.map(({ fullname, _id, image }) => ({
+    //             label: fullname,
+    //             value: _id,
+    //             image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+    //         }))
+    //     }
 
-        return arr.filter(item => item.value !== userId);
-    }, [task])
+    //     return arr.filter(item => item.value !== userId);
+    // }, [task])
 
     const refDivFile = useRef<HTMLDivElement | null>(null);
-    const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
+    // const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
+    const [selectedUser, setSelectedUser] = useState<Item[]>([]);
     const [keywordAssignee, setKeywordAssignee] = useState('');
     const [keywordContact, setKeywordContact] = useState('');
     const [isUploading, setIsUploading] = useState(false);
@@ -77,7 +78,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
             select: 'name phone',
             populates: {
                 path: 'parent userUpdate funda',
-                select: 'name bizfullname'
+                select: 'name fullname'
             },
             keyword: keywordContact
         },
@@ -330,11 +331,11 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                             </div>
                                         )}
                                         data={listUsersProject.map((item) => ({
-                                            label: item.bizfullname,
+                                            label: item.fullname,
                                             value: item._id,
                                         }))}
                                         initialValue={{
-                                            label: task.assignee?.bizfullname,
+                                            label: task.assignee?.fullname,
                                             value: task.assignee?._id
                                         }}
                                         formatItem={{
