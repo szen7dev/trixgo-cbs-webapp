@@ -1665,7 +1665,12 @@ export const DashboardV2: FC<Props> = () => {
                               <></>
                             )}
                             {item.project.sign}.{subContentHtml(item.name)}
-                          </div>
+                            {item?.parent ?
+                              <div className="my-1 text-primary-gray text-xs truncate max-w-4xl text-cbs-highlight-color">
+                                    Việc cha: {item?.parent?.name}
+                                  </div> : <></>
+                              }
+                            </div>
                           <p
                             className={
                               "crop-text truncate text-xs text-primary-gray py-2"
