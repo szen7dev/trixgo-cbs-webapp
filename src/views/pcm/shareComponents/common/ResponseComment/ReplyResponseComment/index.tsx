@@ -35,14 +35,15 @@ type Props = {
 export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, socket, receiversDefault, onCancelCreateResponse, onConfirmCreate }) => {
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
+
     // const [rawContent, setRawContent] = useState('');
 
     const initUsersSelected = useMemo(() => {
-        if(receiversDefault?.length) return receiversDefault;
+        if (receiversDefault?.length) return receiversDefault;
 
         let arr = [];
 
-        if(parent) {
+        if (parent) {
             const { _id, bizfullname, image } = parent.author;
             arr = [{
                 label: bizfullname,
@@ -50,17 +51,17 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                 image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
             }];
 
-            if(_id === userId) {
+            if (_id === userId) {
                 return arr;
             }
-        } else{
-            if(task.accessUsers && task.accessUsers.length) {
+        } else {
+            if (task.accessUsers && task.accessUsers.length) {
                 arr = task.accessUsers.map(({ bizfullname, _id, image }) => ({
                     label: bizfullname,
                     value: _id,
                     image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
                 }))
-            } else{
+            } else {
                 const accessUsers = [task.author, task.assignee, ...task.related];
                 arr = accessUsers.map(({ bizfullname, _id, image }) => ({
                     label: bizfullname,
@@ -187,6 +188,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
 
         if (!files.length && !images.length && !contentText) return;
 
+        setIsUploading(true)
         try {
             const dataInsert: CommentPayload = {
                 taskID: task?._id,
@@ -243,6 +245,8 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
             } else if (error instanceof Error) {
                 toast.error(error.message);
             }
+        } finally {
+            setIsUploading(false)
         }
     }
 
@@ -270,15 +274,15 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
     }
 
     const handlePasteFile = (event: any) => {
-		// event.preventDefault();
+        // event.preventDefault();
 
-		if(event.clipboardData?.files?.length) {
-		  return handleSetFiles(event.clipboardData.files)
-		}
+        if (event.clipboardData?.files?.length) {
+            return handleSetFiles(event.clipboardData.files)
+        }
 
-		const text = event.clipboardData.getData('text/plain');
-		text && window.document.execCommand('insertText', false, text);
-	}
+        const text = event.clipboardData.getData('text/plain');
+        text && window.document.execCommand('insertText', false, text);
+    }
 
     return (
         <>
@@ -291,7 +295,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                     />
                 </div>
                 <Editor
-                    onInit={(evt, editor) => {
+                    onInit={(_, editor) => {
                         editorRef.current = editor;
                     }}
                     onPaste={handlePasteFile}
@@ -299,8 +303,8 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                     init={{
                         height: "350px",
                         force_br_newlines: true,
-                        force_p_newlines : false,
-                        forced_root_block : '',
+                        force_p_newlines: false,
+                        forced_root_block: '',
                         menu: {
                             file: { title: "File", items: "newdocument restoredraft | preview | print | basicitem " },
                             edit: { title: "Edit", items: "undo redo | cut copy paste | selectall | searchreplace" },
@@ -339,12 +343,12 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                                 icon: "save",
                             });
 
-                            editor.on('dragover', function(e) {
+                            editor.on('dragover', function (e) {
                                 e.stopPropagation();
                                 e.preventDefault();
                             });
 
-                            editor.on('drop', function(e) {
+                            editor.on('drop', function (e) {
                                 e.stopPropagation();
                                 e.preventDefault();
                                 if (e.dataTransfer) {

@@ -203,29 +203,30 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
   const handleCreateTask = async (values: any) => {
     try {
+      setIsUploading(true);
       let files: string[] = [];
       const filesCanceled: number[] = [];
       const imagesCanceled: number[] = [];
       const filesDelete: string[] = [];
 
       attachmentsCanceled.map(attachment => {
-        if(attachment.type === 'IMAGE') imagesCanceled[imagesCanceled.length] = attachment.key;
+        if (attachment.type === 'IMAGE') imagesCanceled[imagesCanceled.length] = attachment.key;
         else filesCanceled[filesCanceled.length] = attachment.key;
       })
 
       // Get list file uploaded
       for (const [key, { _id }] of Object.entries(uploads.images)) {
-        if(imagesCanceled.includes(+key)) {
+        if (imagesCanceled.includes(+key)) {
           filesDelete[filesDelete.length] = _id;
-        } else if(_id) {
+        } else if (_id) {
           files = [...files, _id];
         }
       }
 
       for (const [key, { _id }] of Object.entries(uploads.files)) {
-        if(filesCanceled.includes(+key)) {
+        if (filesCanceled.includes(+key)) {
           filesDelete[filesDelete.length] = _id;
-        } else if(_id) {
+        } else if (_id) {
           files = [...files, _id];
         }
       }
@@ -238,7 +239,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
         values.groupID = groupID;
       }
 
-      if(filesDelete.length) {
+      if (filesDelete.length) {
         await deleteFilesAsync(filesDelete);
       }
 
@@ -253,23 +254,25 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       if (error) return toast.warning(data.message);
 
       socket?.emit('SUBJECT_PCM_CSS_ADD_TASK', {
-          taskID,
+        taskID,
       });
       socket?.emit('SUBJECT_PCM_CSS_UPDATE_NOTIFICATION', {
-          taskID,
-          isGetCountNotification: true
+        taskID,
+        isGetCountNotification: true
       });
 
       setTimeout(() => {
         closeModal();
         history.push(`/pcm/detail/${data._id}`);
-      }, 300)
+      }, 500)
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
       } else if (error instanceof Error) {
         toast.error(error.message);
       }
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -371,13 +374,13 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   }
 
   const handlePasteFile = (event: any) => {
-		if(event.clipboardData?.files?.length) {
-		  return handleUploadAttach(event.clipboardData.files)
-		}
+    if (event.clipboardData?.files?.length) {
+      return handleUploadAttach(event.clipboardData.files)
+    }
 
-		// const text = event.clipboardData.getData('text/plain');
-		// text && window.document.execCommand('insertText', false, text);
-	}
+    // const text = event.clipboardData.getData('text/plain');
+    // text && window.document.execCommand('insertText', false, text);
+  }
 
   const handleRemoveUpload = (file: FileProp | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
     if ('id' in file) {
@@ -421,7 +424,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   }
 
   const handleBlurNameInput = async (e: any) => {
-    if(taskID) {
+    if (taskID) {
       await updateTaskAsync({ taskID, name });
     }
   };
@@ -429,7 +432,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const handleChangeSelectAllRelated = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
 
-    if(checked) {
+    if (checked) {
       const users = listUsersProject.map(user => {
         return {
           label: user.bizfullname,
@@ -444,7 +447,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   }
 
   useEffect(() => {
-    if(projectID && groupID && !taskID) {
+    if (projectID && groupID && !taskID) {
       createTaskTemp();
     }
   }, [projectID, groupID, taskID])
@@ -504,7 +507,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                           setFieldValue("assigneeID", "");
                           setUsersRelated([])
                           setProjectID("");
-                          groupSearchableRef.current&&groupSearchableRef.current.resetGroupSearchable();
+                          groupSearchableRef.current && groupSearchableRef.current.resetGroupSearchable();
                         }}
                         onSearchInputChange={
                           debounce(
@@ -533,7 +536,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         initialValue={defaultValues.project?._id ? {
                           value: defaultValues.project?._id,
                           label: defaultValues.project?.name,
-                        }: undefined}
+                        } : undefined}
                         formatItem={{
                           id: "value",
                           text: "label",
@@ -778,10 +781,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         onchangeValue={(value: any) => {
                           const isFound = usersRelated.find(user => user.value === value.id);
 
-                          if(!isFound) {
+                          if (!isFound) {
                             setUsersRelated(curr => ([...curr, value]))
                           }
-                          
+
                           setSearchFriendName("");
                         }}
                         onMultipleRemoveValue={(id: any) => {
@@ -950,7 +953,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                     const { file: fileInfo, progress, id } = file;
                     const isProgress = progress < 100;
 
-                    if(!fileInfo) return;
+                    if (!fileInfo) return;
 
                     return (
                       <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
@@ -977,7 +980,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                     const { file: fileInfo, progress, id } = file;
                     const isProgress = progress < 100;
 
-                    if(!fileInfo) return;
+                    if (!fileInfo) return;
 
                     return (
                       <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
