@@ -74,7 +74,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
         fetchNextPage: fetchNextPage2,
         // totalRecord
     } = useCustomer({
-        params: { 
+        params: {
             select: 'name phone',
             populates: {
                 path: 'parent userUpdate funda',
@@ -209,15 +209,15 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
     }
 
     const handlePasteFile = (event: any) => {
-		// event.preventDefault();
+        // event.preventDefault();
 
-		if(event.clipboardData?.files?.length) {
-		  return handleSetFiles(event.clipboardData.files)
-		}
+        if (event.clipboardData?.files?.length) {
+            return handleSetFiles(event.clipboardData.files)
+        }
 
-		const text = event.clipboardData.getData('text/plain');
-		text && window.document.execCommand('insertText', false, text);
-	}
+        const text = event.clipboardData.getData('text/plain');
+        text && window.document.execCommand('insertText', false, text);
+    }
 
     const handleAddChildTask = async (values: any) => {
         try {
@@ -366,7 +366,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                     />
                                 </div>
                             </div>
-                            
+
                             {/* Validate data */}
                             <div className="flex w-full px-4 pb-4 mt-1">
                                 <div className="w-3/6">
@@ -396,8 +396,8 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                 </div>
                             </div>
 
-                           {/* Hóa đơn */}
-                           {task.subtype == 12 ? (
+                            {/* Hóa đơn */}
+                            {task.subtype == 12 ? (
                                 <div className="flex w-full px-4 pt-4">
                                     <div className="w-3/6 mx-3 border-b">
                                         <DropdownSearchable

@@ -14,6 +14,7 @@ import iconAttach from "assets/images/icons8-attach-48.svg";
 // import iconChat from "assets/images/icons8-chat-96 1.svg";
 // import iconTrash from "assets/images/icons8-delete-96 1.svg";
 // import imageDemo from "assets/images/task-detail-image.png";
+// import { useOnClickOutside } from "../../../../../../services/hooks/useOnclickOutside";
 
 import { ChildResponseComment } from "../ChildResponseComment";
 import { Comment as CommentType, CommentPayload, CommentProps, Task } from "typings/task";
@@ -29,7 +30,6 @@ import CommentContext from "views/pcm/contexts/comment/comment.context";
 import { ReplyResponseComment } from "../ReplyResponseComment";
 import TaskRepository from "apis/task";
 import { useFileCore } from 'services/hooks/useFileCore';
-// import { useOnClickOutside } from "../../../../../../services/hooks/useOnclickOutside";
 import { OptionsComment } from "../OptionsComment";
 
 type Props = {
@@ -62,7 +62,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
     const bottomPageRef = useRef<any>(null);
 
     const scrollToBottom = () => {
-        if(bottomPageRef.current) {
+        if (bottomPageRef.current) {
             bottomPageRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     };
@@ -104,7 +104,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
     }, [])
 
     useEffect(() => {
-        if(isLastComment) return;
+        if (isLastComment) return;
         setCollapseComment(isCollapseComment);
     }, [isCollapseComment])
 
@@ -308,8 +308,8 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 
         return true;
     }, [userId, task.subType, task.openedStatus, task.actualFinishTime, task.assignee, comment.official])
-    
-    if(!isAssignee || !comment) {
+
+    if (!isAssignee || !comment) {
         return <></>
     }
 
