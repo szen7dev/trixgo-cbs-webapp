@@ -22,8 +22,8 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
     } = useBudgetSubmittal({
         params: {
             populates: JSON.stringify({
-                path: "work",
-                select: "name sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount"
+                path: "work staff contact",
+                select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount"
             }),
             taskID: task?._id
         },
@@ -125,6 +125,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                         <p className="text-cbs-highlight-color"><i>{item?.work?.sign}-{item?.work?.name}</i></p>
                                         <p>SL ({formatNumberMoney(item?.work?.quantity)})-Thực hiện ({formatNumberMoney(item?.work?.impleQuantity)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(quantityRetain)}</b>)</p>
                                         <p>Giá trị ({formatNumberMoney(item?.work?.amount)})-Thực hiện ({formatNumberMoney(item?.work?.impleAmount)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(amountRetain)}</b>)</p>
+                                        {item?.staff ? <p><i>Nhân sự: {item?.staff?.fullname}</i></p> : <></>}
                                     </td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
                                         {item?.unit}
@@ -156,6 +157,80 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                     </td>
                                 </tr>
                             )
+
+                            // if(item?.work){
+                            //     return (
+                            //         <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5">{Number(index + 1)}</td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                            //                 {item.name}
+                            //                 <p className="text-cbs-highlight-color"><i>{item?.work?.sign}-{item?.work?.name}</i></p>
+                            //                 <p>SL ({formatNumberMoney(item?.work?.quantity)})-Thực hiện ({formatNumberMoney(item?.work?.impleQuantity)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(quantityRetain)}</b>)</p>
+                            //                 <p>Giá trị ({formatNumberMoney(item?.work?.amount)})-Thực hiện ({formatNumberMoney(item?.work?.impleAmount)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(amountRetain)}</b>)</p>
+                            //                 <p><i>Nhân sự: {item?.staff?.fullname}</i></p>
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                            //                 {item?.unit}
+                            //                 {item?.work?.unit}
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                            //                 {item.quantity.toLocaleString("vi", {
+                            //                     maximumFractionDigits: 3,
+                            //                 })}
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                            //                 {item.amount.toLocaleString("vi", {
+                            //                     maximumFractionDigits: 0,
+                            //                 })}
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                            //                 {amountRetain.toLocaleString("vi", {
+                            //                     maximumFractionDigits: 0,
+                            //                 })}
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5  text-right" style={{color: strColor}}>
+                            //                 {Number(amountCheck).toLocaleString("vi", {
+                            //                     maximumFractionDigits: 0,
+                            //                 })}
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                            //                 {item.note}
+                            //                 <p style={{color: strColor}}>{strNotice}</p>
+                            //             </td>
+                            //         </tr>
+                            //     )
+                            // }
+
+                            // else if(item?.staff){
+                            //     return (
+                            //         <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5">{Number(index + 1)}</td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                            //                 {item.name}
+                            //                 <p><i>Nhân sự: {item?.staff?.fullname}</i></p>
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                                            
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                                            
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                                            
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                                            
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5  text-right" style={{color: strColor}}>
+                                            
+                            //             </td>
+                            //             <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                            //                 {item.note}
+                            //             </td>
+                            //         </tr>
+                            //     )
+                            // }
+
                         }))}
 
                         {
