@@ -76,10 +76,10 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
 	};
 
 	const handleConfirmShare = async () => {
-        if(!hasPermission) {
-            toggle();
-			return toast.warning('Bạn không có quyền chia sẻ nội dung này');
-        }
+        // if(!hasPermission) {
+        //     toggle();
+		// 	return toast.warning('Bạn không có quyền chia sẻ nội dung này');
+        // }
 
 		if (!idsChecked || !idsChecked.length) {
 			return toast.warning('Vui lòng chọn user để chia sẻ');

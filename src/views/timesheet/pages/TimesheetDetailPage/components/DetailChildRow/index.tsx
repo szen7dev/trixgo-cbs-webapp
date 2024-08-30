@@ -78,9 +78,9 @@ export const DetailChildRow: FC<Props> = ({
 
   const handleClickUpdateTimeSheet = React.useCallback(
     (value) => {
-      if(!hasPermission) {
-        return toast.warn('Bạn không có quyền cập nhật nội dung này')
-      }
+      // if(!hasPermission) {
+      //   return toast.warn('Bạn không có quyền cập nhật nội dung này')
+      // }
       onUpdatedTimeSheetChild({
         ...rowData,
         ...value,
