@@ -15,7 +15,6 @@ import fileIcon from "assets/images/icons8-attach-48.svg";
 import { useModal } from "services/hooks/useModal";
 import { FormWorkHistory } from "./components";
 import { useQueryContactDocument, useMutationContactDocument } from "services/hooks/useHuman";
-import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useUpload } from "services/hooks/useUpload";
 import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import { uploadActions, uploadReducer } from "views/human/Reducers/Upload";
