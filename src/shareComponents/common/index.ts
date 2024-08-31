@@ -37,3 +37,6 @@ export * from './LeftNavigate';
 export * from './LeftMenu';
 export * from './TimeRangeDropdown';
 export * from './PaginateV2';
+export * from './ModalHumanInformation';
+export * from './ModalContactInformation';
+export * from './ModalGoodsInformation';

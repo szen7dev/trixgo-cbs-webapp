@@ -41,17 +41,17 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
   const [keyword, setKeyword] = useState('');
 
   const {
-    list: listGoods,
-    hasNextPage,
-    refetch,
-    fetchNextPage,
-    totalRecord,
-    insertAsync, 
-    updateAsync
-} = useGoods({
-    params: { keyword },
-    isFetchList: true
-})
+      list: listGoods,
+      hasNextPage,
+      refetch,
+      fetchNextPage,
+      totalRecord,
+      insertAsync, 
+      updateAsync
+  } = useGoods({
+      params: { keyword },
+      isFetchList: true
+  })
 
   const handleSubmit = async () => {
     if(!formData.name) {

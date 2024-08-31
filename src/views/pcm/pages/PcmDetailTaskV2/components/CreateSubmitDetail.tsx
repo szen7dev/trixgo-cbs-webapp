@@ -8,6 +8,7 @@ import { useBudgetWork } from "services/hooks/budget/useBudgetWork";
 import { useBudgetSubmittal } from "services/hooks/budget/useBudgetSubmittal";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { useQueryContact } from "services/hooks/items/useContact";
+import { useGoods } from "services/hooks/items/useGoods";
 
 type Props = {
     task: Task;
@@ -18,35 +19,44 @@ type Props = {
 
 export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmittal, confirmCreateSubmittal }) => {
     const LIMIT_PER_PAGE_USER = 20;
+    const [keywordBugetWork, setKeywordBugetWork] = useState('');
     const [keywordUser, setKeywordUser] = useState('');
     const [keywordUContact, setKeywordUContact] = useState('');
-    const [keywordBugetWork, setKeywordBugetWork] = useState('');
+    const [keywordWoods, setKeywordWoods] = useState('');
+    const companyID = task?.company?._id
 
     const {
 		list: listBudgetWorks
 	} = useBudgetWork({
 		params: {
-            companyID: task?.company?._id,
+            companyID,
 			keyword: keywordBugetWork
 		},
 		isFetchList: true
 	})
 
     const {
-    data: listUsersSystem,
-        // hasNextPage,
-        // totalRecord,
-        // refetch: refetchUser,
-        // fetchNextPage: fetchNextPageUser,
+        data: listUsersSystem,
     } = useUserSystem({
-        companyID: task?.company?._id,
+        companyID,
         keyword: keywordUser,
         limit: LIMIT_PER_PAGE_USER
     }, !!task?.company?._id);
 
     const { listContact } = useQueryContact({ 
-        companyID: task?.company?._id, keyword: keywordUContact
+        companyID, 
+        keyword: keywordUContact
      });
+
+    const {
+        list: listGoods
+    } = useGoods({
+        params: { 
+            companyID,
+            keyword: keywordWoods 
+        },
+        isFetchList: true
+    })
 
     const {
 		insertAsync: insertBugetWorkAsync,
@@ -67,6 +77,10 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
     const handleSearchContact = (keyword: string) => {
         setKeywordUContact(keyword);
     };
+    const handleSearchWoods = (keyword: string) => {
+        setKeywordWoods(keyword);
+    };
+
     const handleCancelCreateSubmittal = () => {
         cancelCreateSubmittal();
     }
@@ -162,7 +176,34 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onClearData={() => setFieldValue("staffID", "")}
                                     />
                                 </div>
-                                <div className="w-2/6 mr-1 border-b">
+                                <div className="w-1/6 mr-1 border-b">
+                                    <DropdownSearchable
+                                        placeholder={"Vật tư"}
+                                        className={"w-full flex-1"}
+                                        showTriangle={false}
+                                        maxWidthInput={"max-w-none"}
+                                        isMultiple={false}
+                                        allowClearValueSingleInput={true}
+                                        renderSelectedItem={(item) => (
+                                            <div className={"flex items-center"}>
+                                                <span>{item.text}</span>
+                                            </div>
+                                        )}
+                                        data={listGoods.map((item) => ({
+                                            label: `${item.name}`,
+                                            value: item._id,
+                                        }))}
+                                        formatItem={{
+                                            id: "value",
+                                            text: "label",
+                                        }}
+                                        inlineSearch={true}
+                                        onSearchInputChange={handleSearchWoods}
+                                        onchangeValue={item => setFieldValue("goodsID", item.id)}
+                                        onClearData={() => setFieldValue("goodsID", "")}
+                                    />
+                                </div>
+                                <div className="w-1/6 mr-1 border-b">
                                     <DropdownSearchable
                                         placeholder={"Mã khách"}
                                         className={"w-full flex-1"}
@@ -189,7 +230,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onClearData={() => setFieldValue("contactID", "")}
                                     />
                                 </div>
-                                <div className="w-2/6 mr-1 border-b">
+                                <div className="w-1/6 mr-1 border-b">
                                     <DropdownSearchable
                                         placeholder={"Khoản mục phí"}
                                         className={"w-full flex-1"}
@@ -221,7 +262,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         type="number"
                                         name="quantity"
                                         className="w-full h-8 placeholder-gray-300 focus:outline-none"
-                                        placeholder={"Khối lượng"}
+                                        placeholder={"KL"}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
