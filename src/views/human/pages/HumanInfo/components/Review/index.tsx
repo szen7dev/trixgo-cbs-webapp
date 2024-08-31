@@ -252,7 +252,7 @@ export const Review: FC<CertificateProps> = memo((props) => {
   return (
     <div className="border-accent-light px-4 py-6">
       <HumanInfoHeader
-        title={'5-Đánh giá nhân sự'}
+        title={'6-Đánh giá nhân sự'}
         onClickAddNew={handleClickAddNew}
       />
       <div className="text-[13px]">

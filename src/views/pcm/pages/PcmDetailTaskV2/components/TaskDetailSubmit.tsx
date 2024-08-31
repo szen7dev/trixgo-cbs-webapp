@@ -1,9 +1,13 @@
 import {FC, useState, useEffect} from "react";
-import iconNote from "assets/images/icons8-note-48.svg";
+import { useParams, Link } from 'react-router-dom';
 import { CreateSubmitDetail } from "./CreateSubmitDetail";
 import { useBudgetSubmittal } from 'services/hooks/budget/useBudgetSubmittal';
 import { Task } from "typings/task";
 import { formatNumberMoney } from "utils/cmcs";
+import iconNote from "assets/images/icons8-note-48.svg";
+import { ModalHumanInformation } from 'shareComponents/common/ModalHumanInformation';
+import { ModalContactInformation } from 'shareComponents/common/ModalContactInformation';
+import { ModalGoodsInformation } from 'shareComponents/common/ModalGoodsInformation';
 
 type Props = {
     task: Task;
@@ -11,6 +15,13 @@ type Props = {
 }
 
 export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
+    const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
+    const [visibleDrawer2, setVisibleDrawer2] = useState<boolean>(false);
+    const [visibleDrawer3, setVisibleDrawer3] = useState<boolean>(false);
+	const [optionPopup, setOptionPopup] = useState();
+	const [staffPopup, setStaffPopup] = useState();
+	const [contactPopup, setContactPopup] = useState();
+	const [goodsPopup, setGoodsPopup] = useState();
     const [showCreateSubmittal, setShowCreateSubmittal] = useState(false);
 
     const {
@@ -22,8 +33,8 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
     } = useBudgetSubmittal({
         params: {
             populates: JSON.stringify({
-                path: "work",
-                select: "name sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount"
+                path: "work staff contact goods",
+                select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount numberOnLeave"
             }),
             taskID: task?._id
         },
@@ -35,6 +46,30 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
         totalQuantitySubmit = Number(totalQuantitySubmit) + Number(item.quantity)
         totalAmountSubmit = Number(totalAmountSubmit) + Number(item.amount)
     }
+
+    const toggleVisible = ({ option, staffID, contactID, goodsID }: any) => {
+		setVisibleDrawer(!visibleDrawer)
+        setOptionPopup(option)
+		setStaffPopup(staffID)
+		setContactPopup(contactID)
+		setGoodsPopup(goodsID)
+	}
+
+    const toggleVisible2 = ({ option, staffID, contactID, goodsID }: any) => {
+		setVisibleDrawer2(!visibleDrawer2)
+        setOptionPopup(option)
+		setStaffPopup(staffID)
+		setContactPopup(contactID)
+		setGoodsPopup(goodsID)
+	}
+
+    const toggleVisible3 = ({ option, staffID, contactID, goodsID }: any) => {
+		setVisibleDrawer3(!visibleDrawer3)
+        setOptionPopup(option)
+		setStaffPopup(staffID)
+		setContactPopup(contactID)
+		setGoodsPopup(goodsID)
+	}
 
     return (
         <div className={"subtask mt-5 w-2/3"}>
@@ -68,14 +103,14 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Nội dung</th>
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đơn vị</th>
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">SL trình</th>
-                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Thành tiền trình (1)</th>
-                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Còn lại được chi (2)</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Thành tiền (1)</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Còn lại được sử dụng (2)</th>
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Chênh lệch (2-1)</th>
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ghi chú</th>
                                 </tr>
                                 <tr className="whitespace-nowrap align-middle text-left">
                                     <th className="w-1pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5"></th>
-                                    <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">Tổng trình</th>
+                                    <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">Tổng</th>
                                     <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
                                     <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
                                     <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
@@ -122,9 +157,12 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5">{Number(index + 1)}</td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
                                         {item.name}
-                                        <p className="text-cbs-highlight-color"><i>{item?.work?.sign}-{item?.work?.name}</i></p>
-                                        <p>SL ({formatNumberMoney(item?.work?.quantity)})-Thực hiện ({formatNumberMoney(item?.work?.impleQuantity)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(quantityRetain)}</b>)</p>
-                                        <p>Giá trị ({formatNumberMoney(item?.work?.amount)})-Thực hiện ({formatNumberMoney(item?.work?.impleAmount)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(amountRetain)}</b>)</p>
+                                        {item?.work ? <p className="text-cbs-highlight-color"><i>{item?.work?.sign}-{item?.work?.name}</i></p> : <></>}
+                                        {item?.work ? <p>SL ({formatNumberMoney(item?.work?.quantity)})-Thực hiện ({formatNumberMoney(item?.work?.impleQuantity)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(quantityRetain)}</b>)</p> : <></>}
+                                        {item?.work ? <p>Giá trị ({formatNumberMoney(item?.work?.amount)})-Thực hiện ({formatNumberMoney(item?.work?.impleAmount)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(amountRetain)}</b>)</p> : <></>}
+                                        {item?.staff ? <p onClick={() => toggleVisible({ option: 1, staffID: item?.staff?._id})} className="mt-2 text-cbs-highlight-color">Nhân sự: {item?.staff?.fullname} | Số nghỉ phép lũy kế: ({item?.staff?.numberOnLeave})</p> : <></>}
+                                        {item?.contact ? <p onClick={() => toggleVisible2({ option: 2, contactID: item?.contact?._id})} className="mt-2 text-cbs-highlight-color">Mã khách: {item?.contact?.name}</p> : <></>}
+                                        {item?.goods ? <p onClick={() => toggleVisible3({ option: 3, goodsID: item?.goods?._id})} className="mt-2 text-cbs-highlight-color">Vật tư: {item?.goods?.name}</p> : <></>}
                                     </td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
                                         {item?.unit}
@@ -156,6 +194,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                     </td>
                                 </tr>
                             )
+
                         }))}
 
                         {
@@ -193,6 +232,10 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                 >
                     Thêm khoản mục
                 </button>
+
+                <ModalHumanInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
+                <ModalContactInformation open={visibleDrawer2} onClose={toggleVisible2} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
+                <ModalGoodsInformation open={visibleDrawer3} onClose={toggleVisible3} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
             </div>
         </div>
     )

@@ -5,3 +5,4 @@ export * from './GeneralInfo';
 export * from './WorkExperience';
 export * from './WorkHistory';
 export * from './Review';
+export * from './Onleave';

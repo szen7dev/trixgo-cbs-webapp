@@ -2,9 +2,7 @@ import React, { FC, useRef, useState } from "react";
 import moment from "moment";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { NavLink, useParams } from "react-router-dom";
-import {
-  useQueryListTimeSheetParent,
-} from "services/hooks/useTimeSheet";
+import { useQueryListTimeSheetParent } from "services/hooks/useTimeSheet";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface TimesheetHomePageProps {
@@ -13,7 +11,6 @@ interface TimesheetHomePageProps {
 
 const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
   const params = useParams<{ id: string }>();
-  // console.log(params)
   const humanID = params["id"];
   const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);

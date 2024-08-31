@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { DropdownSearchable } from "shareComponents/common";
 import { toast } from "react-toastify";
 import { object, string } from "yup";
@@ -6,6 +6,9 @@ import { getIn, Formik } from "formik";
 import { Task } from "typings/task";
 import { useBudgetWork } from "services/hooks/budget/useBudgetWork";
 import { useBudgetSubmittal } from "services/hooks/budget/useBudgetSubmittal";
+import { useUserSystem } from 'services/hooks/users/useUserSystem';
+import { useQueryContact } from "services/hooks/items/useContact";
+import { useGoods } from "services/hooks/items/useGoods";
 
 type Props = {
     task: Task;
@@ -15,16 +18,45 @@ type Props = {
 }
 
 export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmittal, confirmCreateSubmittal }) => {
+    const LIMIT_PER_PAGE_USER = 20;
     const [keywordBugetWork, setKeywordBugetWork] = useState('');
+    const [keywordUser, setKeywordUser] = useState('');
+    const [keywordUContact, setKeywordUContact] = useState('');
+    const [keywordWoods, setKeywordWoods] = useState('');
+    const companyID = task?.company?._id
+
     const {
 		list: listBudgetWorks
 	} = useBudgetWork({
 		params: {
-            companyID: task?.company?._id,
+            companyID,
 			keyword: keywordBugetWork
 		},
 		isFetchList: true
 	})
+
+    const {
+        data: listUsersSystem,
+    } = useUserSystem({
+        companyID,
+        keyword: keywordUser,
+        limit: LIMIT_PER_PAGE_USER
+    }, !!task?.company?._id);
+
+    const { listContact } = useQueryContact({ 
+        companyID, 
+        keyword: keywordUContact
+     });
+
+    const {
+        list: listGoods
+    } = useGoods({
+        params: { 
+            companyID,
+            keyword: keywordWoods 
+        },
+        isFetchList: true
+    })
 
     const {
 		insertAsync: insertBugetWorkAsync,
@@ -38,6 +70,15 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
 
     const handleSearchBudgetWork = (keyword: string) => {
         setKeywordBugetWork(keyword);
+    };
+    const handleSearchUser = (keyword: string) => {
+        setKeywordUser(keyword);
+    };
+    const handleSearchContact = (keyword: string) => {
+        setKeywordUContact(keyword);
+    };
+    const handleSearchWoods = (keyword: string) => {
+        setKeywordWoods(keyword);
     };
 
     const handleCancelCreateSubmittal = () => {
@@ -99,7 +140,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                     return (
                         <>
                             <div className="flex w-full px-4 pt-4">
-                                <div className="w-2/6 border-b">
+                                <div className="w-2/6 mr-1 border-b">
                                     <input
                                         name="name"
                                         className="w-full h-8 placeholder-gray-300 focus:outline-none"
@@ -108,7 +149,88 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onBlur={handleBlur}
                                     />
                                 </div>
-                                <div className="w-2/6 mx-3 border-b">
+                                <div className="w-2/6 mr-1 border-b">
+                                    <DropdownSearchable
+                                        placeholder={"Nhân sự"}
+                                        className={"w-full flex-1"}
+                                        showTriangle={false}
+                                        maxWidthInput={"max-w-none"}
+                                        isMultiple={false}
+                                        allowClearValueSingleInput={true}
+                                        renderSelectedItem={(item) => (
+                                            <div className={"flex items-center"}>
+                                                <span>{item.text}</span>
+                                            </div>
+                                        )}
+                                        data={listUsersSystem.map((item) => ({
+                                            label: item.fullname,
+                                            value: item._id,
+                                        }))}
+                                        formatItem={{
+                                            id: "value",
+                                            text: "label",
+                                        }}
+                                        inlineSearch={true}
+                                        onSearchInputChange={handleSearchUser}
+                                        onchangeValue={item => setFieldValue("staffID", item.id)}
+                                        onClearData={() => setFieldValue("staffID", "")}
+                                    />
+                                </div>
+                                <div className="w-1/6 mr-1 border-b">
+                                    <DropdownSearchable
+                                        placeholder={"Vật tư"}
+                                        className={"w-full flex-1"}
+                                        showTriangle={false}
+                                        maxWidthInput={"max-w-none"}
+                                        isMultiple={false}
+                                        allowClearValueSingleInput={true}
+                                        renderSelectedItem={(item) => (
+                                            <div className={"flex items-center"}>
+                                                <span>{item.text}</span>
+                                            </div>
+                                        )}
+                                        data={listGoods.map((item) => ({
+                                            label: `${item.name}`,
+                                            value: item._id,
+                                        }))}
+                                        formatItem={{
+                                            id: "value",
+                                            text: "label",
+                                        }}
+                                        inlineSearch={true}
+                                        onSearchInputChange={handleSearchWoods}
+                                        onchangeValue={item => setFieldValue("goodsID", item.id)}
+                                        onClearData={() => setFieldValue("goodsID", "")}
+                                    />
+                                </div>
+                                <div className="w-1/6 mr-1 border-b">
+                                    <DropdownSearchable
+                                        placeholder={"Mã khách"}
+                                        className={"w-full flex-1"}
+                                        showTriangle={false}
+                                        maxWidthInput={"max-w-none"}
+                                        isMultiple={false}
+                                        allowClearValueSingleInput={true}
+                                        renderSelectedItem={(item) => (
+                                            <div className={"flex items-center"}>
+                                                <span>{item.text}</span>
+                                            </div>
+                                        )}
+                                        data={listContact.map((item) => ({
+                                            label: `${item.name}-${item.phone}`,
+                                            value: item._id,
+                                        }))}
+                                        formatItem={{
+                                            id: "value",
+                                            text: "label",
+                                        }}
+                                        inlineSearch={true}
+                                        onSearchInputChange={handleSearchContact}
+                                        onchangeValue={item => setFieldValue("contactID", item.id)}
+                                        onClearData={() => setFieldValue("contactID", "")}
+                                    />
+                                </div>
+                                <div className="w-1/6 mr-1 border-b">
                                     <DropdownSearchable
                                         placeholder={"Khoản mục phí"}
                                         className={"w-full flex-1"}
@@ -135,12 +257,12 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onClearData={() => setFieldValue("workID", "")}
                                     />
                                 </div>
-                                <div className="w-1/6 border-b">
+                                <div className="w-1/6 mr-1 border-b">
                                     <input
                                         type="number"
                                         name="quantity"
                                         className="w-full h-8 placeholder-gray-300 focus:outline-none"
-                                        placeholder={"Khối lượng"}
+                                        placeholder={"KL"}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
