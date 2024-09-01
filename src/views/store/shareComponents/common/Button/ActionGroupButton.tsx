@@ -9,11 +9,10 @@ import type { StoreParent } from "typings/store";
 interface ActionGroupButtonProps {
   recordSelected?: StoreParent;
   onUpdateStore: (values: any) => void;
-  onDeleteStore: (cashBookID: string) => void;
 }
 
 const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
-  const { recordSelected, onUpdateStore, onDeleteStore } = props;
+  const { recordSelected, onUpdateStore } = props;
 
   const { openModal } = useModal();
 

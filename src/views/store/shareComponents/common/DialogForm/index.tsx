@@ -43,25 +43,25 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   warehouseName,
   customerName,
 }) => {
-  // const [searchAssigneeStr, setSearchAssigneeStr] = useState(assigneeName);
-  const [searchhDepartment, setSearchDepartment] = useState(projectName);
-  const [searchWarehouseValue, setSearchWarehouseValue] = useState(warehouseName);
-  const [searchContactValue, setSearchContactValue] = useState(customerName);
+  // const [userKeyword, setUserKeyword] = useState(assigneeName);
+  const [departmentKeyword, setDepartmentKeyword] = useState(projectName);
+  const [warehouseKeyword, setWarehouseKeyword] = useState(warehouseName);
+  const [contactKeyword, setContactKeyword] = useState(customerName);
 
   const { closeModal } = useModal();
 
   const { listDepartments } = useQueryListDepartments({
-    keyword: searchhDepartment,
+    keyword: departmentKeyword,
   }, true);
 
   const { listWarehouse } = useQueryListWarehouse({
 		limit: LIMIT_DROPDOWN,
-		keyword: searchWarehouseValue,
+		keyword: warehouseKeyword,
 	});
 
   const { listContact } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
-		keyword: searchContactValue,
+		keyword: contactKeyword,
 	});
 
   const initialValues = {
@@ -157,7 +157,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     <Field
                       type="text"
                       name="name"
-                      placeholder="Nhập nội dung (Mã dự án, Mã kho, Mã khách)"
+                      placeholder="Nhập nội dung"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);
@@ -189,7 +189,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       text: "name",
                     }}
                     onSearchInputChange={debounce(
-                      (value) => setSearchDepartment(value),
+                      (value) => setDepartmentKeyword(value),
                       1000
                     )}
                     onchangeValue={(value) =>
@@ -222,7 +222,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       text: "name",
                     }}
                     onSearchInputChange={debounce(
-                      (value) => setSearchWarehouseValue(value),
+                      (value) => setWarehouseKeyword(value),
                       500
                     )}
                     onchangeValue={(value) =>
@@ -254,7 +254,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       text: "name",
                     }}
                     onSearchInputChange={debounce(
-                      (value) => setSearchContactValue(value),
+                      (value) => setContactKeyword(value),
                       1000
                     )}
                     onchangeValue={(value) =>
