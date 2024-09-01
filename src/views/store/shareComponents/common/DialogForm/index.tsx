@@ -9,13 +9,24 @@ import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { TIMESHEET_TYPES } from "apis/localdb";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { LIMIT_DROPDOWN } from "apis/localdb/index";
+import {
+	useQueryListWarehouse,
+	useQueryListContact,
+	// useQueryListContract,
+	// useQueryListBudgetWork,
+	// useQueryListAccount,
+	// useQueryListGood
+} from "services/hooks/cmcs/useContractIncome";
 
-import type { InsertTimeSheetParentPayload } from "typings/time-sheet";
+import type { InsertTimeSheetParentPayload } from "typings/store";
 interface CreateOrEditDialogProps {
   title: string;
   defaultValues?: InsertTimeSheetParentPayload;
   projectName: string;
   assigneeName: string;
+  warehouseName?: string;
+  customerName?: string;
   onSubmit?: (values: string) => void;
   expertTimesheetID?: string;
   expertSalaryID?: string;
@@ -28,48 +39,48 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   expertTimesheetID,
   assigneeName,
   projectName,
+  warehouseName,
+  customerName,
 }) => {
-  const [searchhDepartmentStr, setSearchDepartmentSrt] = useState(projectName);
-
-  const [searchAssigneeStr, setSearchAssigneeStr] = useState(assigneeName);
+  // const [searchAssigneeStr, setSearchAssigneeStr] = useState(assigneeName);
+  const [searchhDepartment, setSearchDepartment] = useState(projectName);
+  const [searchWarehouseValue, setSearchWarehouseValue] = useState(warehouseName);
+  const [searchContactValue, setSearchContactValue] = useState(customerName);
 
   const { closeModal } = useModal();
 
   const { listDepartments } = useQueryListDepartments({
-    keyword: searchhDepartmentStr,
+    keyword: searchhDepartment,
   }, true);
 
-  const {
-    data: listUsersSystem,
-    hasNextPage: hasNextPageUsersSystem,
-    fetchNextPage: fetchNextPageUsersSystem
-  } = useUserSystem({
-    keyword: searchAssigneeStr
-  }, true);
+  const { listWarehouse } = useQueryListWarehouse({
+		// limit: LIMIT_DROPDOWN,
+		keyword: searchWarehouseValue,
+	});
+
+  const { listContact } = useQueryListContact({
+		// limit: LIMIT_DROPDOWN,
+		keyword: searchContactValue,
+	});
 
   const initialValues = {
     name: "",
     date: null,
     assignee: {},
-    type: "",
+    outin: 2,
+    type: 2,
     project: {},
+    warehouse: {},
+    customer: {},
     note: "",
     ...defaultValues,
   };
-
-  const handleScrollAssginee = (e: UIEvent<HTMLDivElement>) => {
-    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-    const bottom = scrollHeight - scrollTop === clientHeight;
-
-    if (bottom && hasNextPageUsersSystem) {
-      fetchNextPageUsersSystem();
-    }
-  }
 
   const handleSubmit = React.useCallback(
     (values) => {
       const formatData = {
         ...values,
+        outin: `${values.outin}`,
         type: `${values.type}`,
       };
       if (expertTimesheetID) {
@@ -81,10 +92,10 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "600px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "650px" }}>
       <div className="fixed top-0 w-full">
         <div
-          className={"flex items-center mb-3 border-b bg-cbs-table-header p-2"}
+          className={"flex items-center border-b bg-cbs-table-header p-2"}
         >
           <div className={"flex-1 flex items-center"}>
             <p className={"text-lg ml-2"}>{title}</p>
@@ -107,25 +118,9 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 
           return (
             <Form>
-              <div className="px-5 pt-20 pb-4 flex flex-col space-y-4 overflow-scroll">
+              <div className="px-5 pt-20 pb-4 flex flex-col space-y-2 overflow-scroll">
                 <div>
-                  <p className="text-[13px] text-primary-gray mb-1">
-                    Nội dung (*)
-                  </p>
-                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
-                    <Field
-                      type="text"
-                      name="name"
-                      placeholder="Nhập nội dung..."
-                      className="w-full h-6 outline-none"
-                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                        handleBlur(e);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-primary-gray text-[13px] mb-1">Ngày tháng</p>
+                  <p className="text-primary-gray text-[13px] mb-1">Ngày</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
                     <DatePicker
                       className="w-full h-6 outline-none"
@@ -137,75 +132,38 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       }}
                       dateFormat="dd/MM/yyyy"
                     />
-                    {/* <Field
+                  </div>
+                </div>
+                <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Số hiệu</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
                       type="text"
-                      name="date"
-                      placeholder="Nhập định dạng YYYY-MM-DD"
+                      name="sign"
+                      placeholder="Số hiệu..."
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);
                       }}
-                    /> */}
+                    />
                   </div>
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Người thực hiện
+                    Nội dung (*)
                   </p>
-                  <DropdownSearchable
-                    className={
-                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
-                    }
-                    focusedClass={"border-b border-primary"}
-                    maxWidthInput={"max-w-none"}
-                    showTriangle
-                    inlineSearch
-                    allowClearValueSingleInput
-                    renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={listUsersSystem}
-                    onScroll={handleScrollAssginee}
-                    initialValue={defaultValues?.assignee}
-                    formatItem={{
-                      id: "_id",
-                      text: "fullname",
-                    }}
-                    onSearchInputChange={debounce(
-                      (value) => setSearchAssigneeStr(value),
-                      500
-                    )}
-                    onchangeValue={(value) =>
-                      setFieldValue("assigneeID", value.id)
-                    }
-                  />
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="name"
+                      placeholder="Nhập nội dung (Mã dự án, Mã kho, Mã khách)"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
                 </div>
-
-                <div>
-                  <p className="text-[13px] text-primary-gray mb-1">
-                    Phân loại
-                  </p>
-                  <DropdownSearchable
-                    showTriangle
-                    inlineSearch
-                    className={
-                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
-                    }
-                    focusedClass={"border-b border-primary"}
-                    maxWidthInput={"max-w-none"}
-                    renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={TIMESHEET_TYPES}
-                    initialValue={TIMESHEET_TYPES.filter(
-                      (elm) => elm.value === defaultValues?.type
-                    )}
-                    formatItem={{
-                      id: "value",
-                      text: "text",
-                    }}
-                    onchangeValue={(value) =>
-                      setFieldValue("type", value.value)
-                    }
-                  />
-                </div>
-
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Dự án, phòng ban
@@ -220,9 +178,9 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     showTriangle
                     allowClearValueSingleInput
                     renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={listDepartments.map((department) => ({
-                      _id: department._id,
-                      name: `${department.sign}.${department.name}`,
+                    data={listDepartments.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
                     }))}
                     initialValue={defaultValues?.project}
                     formatItem={{
@@ -230,11 +188,76 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       text: "name",
                     }}
                     onSearchInputChange={debounce(
-                      (value) => setSearchDepartmentSrt(value),
+                      (value) => setSearchDepartment(value),
                       1000
                     )}
                     onchangeValue={(value) =>
                       setFieldValue("projectID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Kho bãi
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    showTriangle
+                    inlineSearch
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listWarehouse.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    // onScroll={handleScrollAssginee}
+                    initialValue={defaultValues?.warehouse}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setSearchWarehouseValue(value),
+                      500
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("warehouseID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Mã khách
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listContact.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.customer}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setSearchContactValue(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("customerID", value.id)
                     }
                   />
                 </div>

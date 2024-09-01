@@ -2,7 +2,8 @@ import { QueryParams } from "./common";
 import { APIResponse } from "./apis/response";
 import { User } from "./user";
 import { Project } from "./items/project";
-
+import { Warehouse } from "./items/warehouse";
+import { Contact } from "./items/contact";
 
 export type TimeSheetParent = {
     _id: string;
@@ -48,6 +49,7 @@ export type QueryDetailTimeSheetParentResponse = APIResponse & {
 }
 
 export type InsertTimeSheetParentPayload = {
+    project: Project;
     name: string;
     assignee: User;
     type: 1;

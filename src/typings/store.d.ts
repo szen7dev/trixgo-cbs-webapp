@@ -2,7 +2,8 @@ import { QueryParams } from "./common";
 import { APIResponse } from "./apis/response";
 import { User } from "./user";
 import { Project } from "./items/project";
-
+import { Warehouse } from "./items/warehouse";
+import { Contact } from "./items/contact";
 
 export type TimeSheetParent = {
     _id: string;
@@ -21,6 +22,8 @@ export type TimeSheetParent = {
     name: string;
     assignee: User;
     project: Project;
+    warehouse: Warehouse;
+    customer: Contact;
     note: string;
     createAt: string;
     modifyAt: string;
@@ -48,10 +51,12 @@ export type QueryDetailTimeSheetParentResponse = APIResponse & {
 }
 
 export type InsertTimeSheetParentPayload = {
-    name: string;
-    assignee: User;
-    type: 1;
     project: Project;
+    assignee: User;
+    warehouse: Warehouse;
+    customer: Contact;
+    type: 1;
+    name: string;
     note: string;
     date: string;
     convertFactor: number;
@@ -62,6 +67,8 @@ export type InsertTimeSheetParentResponse = {
     data: TimeSheetParent & {
         assignee: string;
         project: string;
+        warehouse: string;
+        customer: string;
         message?: string;
     }
 }
@@ -84,6 +91,8 @@ export type DeleteTimeSheetParentResponse = APIResponse & {
     data: TimeSheetParent & {
         assignee: string;
         project: string;
+        warehouse: string;
+        customer: string;
     }
 }
 
@@ -101,6 +110,9 @@ export type TimeSheetChild = {
     date: string;
     parent?: TimeSheetParent;
     assignee?: User
+    project?: Project
+    warehouse?: Warehouse
+    customer?: Contact
     work: strinstring | null
     note?: string
     createAt?: string | null
@@ -126,6 +138,9 @@ export type QueryTimeSheetChildResponse = APIResponse & {
 export type InsertTimeSheetChildPayload = {
     parentID: string;
     assigneeID?: string;
+    projectID?: string;
+    warehouseID?: string;
+    customerID?: string;
     name: string;
     date?: string;
     status?: string;
@@ -133,6 +148,9 @@ export type InsertTimeSheetChildPayload = {
     unitprice?: string;
     amount?: string;
     assignee?: string;
+    project?: string;
+    warehouse?: string;
+    customer?: string;
     note?: string;
 }
 
@@ -147,6 +165,9 @@ export type InsertTimeSheetChildResponse = {
 export type UpdateTimeSheetChildPayload = {
     expertTimesheetID: string;
     assigneeID?: string;
+    projectID?: string;
+    warehouseID?: string;
+    customerID?: string;
     name?: string;
     date?: string;
     status?: string;

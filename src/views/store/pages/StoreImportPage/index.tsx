@@ -136,6 +136,8 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
                   onSubmit={handleCreateTimeSheet}
                   projectName={""}
                   assigneeName={""}
+                  warehouseName={""}
+                  customerName={""}
                 />
               </div>
             )

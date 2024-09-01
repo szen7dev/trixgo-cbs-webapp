@@ -35,7 +35,7 @@ export const useQueryListTimeSheetParent = (
   limit = 50
 ): UseQueryListTimeSheetParent => {
   const result = useInfiniteQuery(
-    [`list_time-sheet.parent`, params],
+    [`list_store.parent`, params],
     async ({ pageParam }: any) =>
         StoreParentRepository.fetchListTimeSheet({
         populates: {
@@ -118,7 +118,7 @@ export const useQueryDetailTimeSheetParent = (
   expertTimesheetID: string
 ): UseQueryDetailTimeSheetParent => {
   const { isLoading, data, refetch } = useQuery(
-    `time-sheet.parent.${expertTimesheetID}`,
+    `store.parent.${expertTimesheetID}`,
     async () =>
         StoreParentRepository.fetchDetailTimeSheet({
         populates: {
@@ -191,7 +191,7 @@ export const useQueryListTimeSheetChild = (
   params: any,
 ): UseQueryListTimeSheetChild => {
   const result = useInfiniteQuery(
-    [`list_time-sheet.child`, params],
+    [`list_store.child`, params],
     async ({ pageParam }: any) =>
         StoreChildRepository.fetchListTimeSheet({
         parentID: timeSheetParentID,
@@ -249,17 +249,17 @@ interface UseMutationTimeSheetChild {
   ) => Promise<UpdateTimeSheetChildResponse>;
 }
 
-export const useMutationTimeSheetChild = (): UseMutationTimeSheetChild => {
-  const insertMutation = useMutation((payload: InsertTimeSheetChildPayload) =>
-    StoreChildRepository.insertTimeSheet(payload)
-  );
+// export const useMutationTimeSheetChild = (): UseMutationTimeSheetChild => {
+//   const insertMutation = useMutation((payload: InsertTimeSheetChildPayload) =>
+//     StoreChildRepository.insertTimeSheet(payload)
+//   );
 
-  const updateMutation = useMutation((payload: UpdateTimeSheetChildPayload) =>
-    StoreChildRepository.updateTimeSheet(payload)
-  );
+//   const updateMutation = useMutation((payload: UpdateTimeSheetChildPayload) =>
+//     StoreChildRepository.updateTimeSheet(payload)
+//   );
 
-  return {
-    onCreateTimeSheetAsync: insertMutation.mutateAsync,
-    onUpdateTimeSheetAsync: updateMutation.mutateAsync,
-  }
-}
+//   return {
+//     onCreateTimeSheetAsync: insertMutation.mutateAsync,
+//     onUpdateTimeSheetAsync: updateMutation.mutateAsync,
+//   }
+// }

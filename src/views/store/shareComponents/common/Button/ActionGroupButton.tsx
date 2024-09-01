@@ -4,7 +4,7 @@ import CreateOrEditDialog from "../DialogForm";
 
 import { useModal } from "services/hooks/useModal";
 
-import type { TimeSheetParent } from "typings/time-sheet";
+import type { TimeSheetParent } from "typings/store";
 
 interface ActionGroupButtonProps {
   recordSelected?: TimeSheetParent;
@@ -28,11 +28,15 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
               expertTimesheetID={record?._id}
               projectName={record?.project?.name}
               assigneeName={record?.assignee?.fullname}
+              warehouseName={record?.warehouse?.name}
+              customerName={record?.customer?.name}
               defaultValues={{
+                project: record.project,
+                warehouse: record.warehouse,
+                customer: record.customer,
                 assignee: record.assignee,
                 name: record.name,
                 note: record.note,
-                project: record.project,
                 type: record.type,
                 convertFactor: record.convertFactor,
                 date: record.date,
