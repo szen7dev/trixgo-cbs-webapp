@@ -619,7 +619,8 @@ export const STORE_TYPES = [
     { value: 2, text: 'Vật tư chính' },
     { value: 3, text: 'Vật tư phụ' },
     { value: 4, text: 'Công cụ dụng cụ' },
-    { value: 5, text: 'Hàng hóa' },
+    { value: 5, text: 'Hàng hóa/Cấu kiện/Thành phẩm' },
+    { value: 6, text: 'Văn phòng phẩm' },
 ]
 
 /**
