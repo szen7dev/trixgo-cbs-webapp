@@ -149,7 +149,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onBlur={handleBlur}
                                     />
                                 </div>
-                                <div className="w-2/6 mr-1 border-b">
+                                <div className="mr-1 border-b">
                                     <DropdownSearchable
                                         placeholder={"Nhân sự"}
                                         className={"w-full flex-1"}
@@ -176,7 +176,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onClearData={() => setFieldValue("staffID", "")}
                                     />
                                 </div>
-                                <div className="w-1/6 mr-1 border-b">
+                                <div className="mr-1 border-b">
                                     <DropdownSearchable
                                         placeholder={"Vật tư"}
                                         className={"w-full flex-1"}
@@ -203,7 +203,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onClearData={() => setFieldValue("goodsID", "")}
                                     />
                                 </div>
-                                <div className="w-1/6 mr-1 border-b">
+                                <div className="mr-1 border-b">
                                     <DropdownSearchable
                                         placeholder={"Mã khách"}
                                         className={"w-full flex-1"}
@@ -230,7 +230,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onClearData={() => setFieldValue("contactID", "")}
                                     />
                                 </div>
-                                <div className="w-1/6 mr-1 border-b">
+                                <div className="mr-1 border-b">
                                     <DropdownSearchable
                                         placeholder={"Khoản mục phí"}
                                         className={"w-full flex-1"}
@@ -257,7 +257,34 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onClearData={() => setFieldValue("workID", "")}
                                     />
                                 </div>
-                                <div className="w-1/6 mr-1 border-b">
+                                <div className="mr-1 border-b">
+                                    <DropdownSearchable
+                                        placeholder={"Thuộc thiết bị"}
+                                        className={"w-full flex-1"}
+                                        showTriangle={false}
+                                        maxWidthInput={"max-w-none"}
+                                        isMultiple={false}
+                                        allowClearValueSingleInput={true}
+                                        renderSelectedItem={(item) => (
+                                            <div className={"flex items-center"}>
+                                                <span>{item.text}</span>
+                                            </div>
+                                        )}
+                                        data={listGoods.map((item) => ({
+                                            label: `${item.name}`,
+                                            value: item._id,
+                                        }))}
+                                        formatItem={{
+                                            id: "value",
+                                            text: "label",
+                                        }}
+                                        inlineSearch={true}
+                                        onSearchInputChange={handleSearchWoods}
+                                        onchangeValue={item => setFieldValue("assetsID", item.id)}
+                                        onClearData={() => setFieldValue("assetsID", "")}
+                                    />
+                                </div>
+                                <div className="mr-1 border-b">
                                     <input
                                         type="number"
                                         name="quantity"
@@ -267,7 +294,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onBlur={handleBlur}
                                     />
                                 </div>
-                                <div className="w-1/6 border-b">
+                                <div className="border-b">
                                     <input
                                         type="number"
                                         name="unitPrice"

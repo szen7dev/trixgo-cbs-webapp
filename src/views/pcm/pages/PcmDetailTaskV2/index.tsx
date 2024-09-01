@@ -299,14 +299,14 @@ const PcmDetailTaskV2: FC = () => {
                     }
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
-                    {
-                        (taskInfo?.subtype == 2) ?
-                        <TaskDetailSubmit task={taskInfo} userId={user?._id} />: <></>
-                    }
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
                     {/* <TaskDetailEvaluate task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} /> */}
                     {
                         taskInfo?.linksDocs?.length ? <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} /> : <></>
+                    }
+                    {
+                        (taskInfo?.subtype == 2) ?
+                        <TaskDetailSubmit task={taskInfo} userId={user?._id} />: <></>
                     }
                 </div>
                 <CommentProvider>

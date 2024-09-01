@@ -8,6 +8,7 @@ import iconNote from "assets/images/icons8-note-48.svg";
 import { ModalHumanInformation } from 'shareComponents/common/ModalHumanInformation';
 import { ModalContactInformation } from 'shareComponents/common/ModalContactInformation';
 import { ModalGoodsInformation } from 'shareComponents/common/ModalGoodsInformation';
+import { ModalAssetsInformation } from 'shareComponents/common/ModalAssetsInformation';
 
 type Props = {
     task: Task;
@@ -18,10 +19,12 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
     const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
     const [visibleDrawer2, setVisibleDrawer2] = useState<boolean>(false);
     const [visibleDrawer3, setVisibleDrawer3] = useState<boolean>(false);
+    const [visibleDrawer4, setVisibleDrawer4] = useState<boolean>(false);
 	const [optionPopup, setOptionPopup] = useState();
 	const [staffPopup, setStaffPopup] = useState();
 	const [contactPopup, setContactPopup] = useState();
 	const [goodsPopup, setGoodsPopup] = useState();
+	const [assetsPopup, setAssetsPopup] = useState();
     const [showCreateSubmittal, setShowCreateSubmittal] = useState(false);
 
     const {
@@ -33,7 +36,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
     } = useBudgetSubmittal({
         params: {
             populates: JSON.stringify({
-                path: "work staff contact goods",
+                path: "work staff contact goods assets",
                 select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount numberOnLeave"
             }),
             taskID: task?._id
@@ -47,32 +50,44 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
         totalAmountSubmit = Number(totalAmountSubmit) + Number(item.amount)
     }
 
-    const toggleVisible = ({ option, staffID, contactID, goodsID }: any) => {
+    const toggleVisible = ({ option, staffID, contactID, goodsID, assetsID }: any) => {
 		setVisibleDrawer(!visibleDrawer)
         setOptionPopup(option)
 		setStaffPopup(staffID)
 		setContactPopup(contactID)
 		setGoodsPopup(goodsID)
+		setAssetsPopup(assetsID)
 	}
 
-    const toggleVisible2 = ({ option, staffID, contactID, goodsID }: any) => {
+    const toggleVisible2 = ({ option, staffID, contactID, goodsID, assetsID }: any) => {
 		setVisibleDrawer2(!visibleDrawer2)
         setOptionPopup(option)
 		setStaffPopup(staffID)
 		setContactPopup(contactID)
 		setGoodsPopup(goodsID)
+        setAssetsPopup(assetsID)
 	}
 
-    const toggleVisible3 = ({ option, staffID, contactID, goodsID }: any) => {
+    const toggleVisible3 = ({ option, staffID, contactID, goodsID, assetsID }: any) => {
 		setVisibleDrawer3(!visibleDrawer3)
         setOptionPopup(option)
 		setStaffPopup(staffID)
 		setContactPopup(contactID)
 		setGoodsPopup(goodsID)
+        setAssetsPopup(assetsID)
+	}
+
+    const toggleVisible4 = ({ option, staffID, contactID, goodsID, assetsID }: any) => {
+		setVisibleDrawer4(!visibleDrawer4)
+        setOptionPopup(option)
+		setStaffPopup(staffID)
+		setContactPopup(contactID)
+		setGoodsPopup(goodsID)
+        setAssetsPopup(assetsID)
 	}
 
     return (
-        <div className={"subtask mt-5 w-2/3"}>
+        <div className={"subtask mt-5"}>
             <div className={"flex items-center"}>
             <span className={"mr-4"}>
                 <img src={iconNote} alt={'-----'} />
@@ -163,6 +178,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                         {item?.staff ? <p onClick={() => toggleVisible({ option: 1, staffID: item?.staff?._id})} className="mt-2 text-cbs-highlight-color">Nhân sự: {item?.staff?.fullname} | Số nghỉ phép lũy kế: ({item?.staff?.numberOnLeave})</p> : <></>}
                                         {item?.contact ? <p onClick={() => toggleVisible2({ option: 2, contactID: item?.contact?._id})} className="mt-2 text-cbs-highlight-color">Mã khách: {item?.contact?.name}</p> : <></>}
                                         {item?.goods ? <p onClick={() => toggleVisible3({ option: 3, goodsID: item?.goods?._id})} className="mt-2 text-cbs-highlight-color">Vật tư: {item?.goods?.name}</p> : <></>}
+                                        {item?.assets ? <p onClick={() => toggleVisible4({ option: 3, assetsID: item?.assets?._id})} className="mt-2 text-cbs-highlight-color">Thiết bị: {item?.assets?.name}</p> : <></>}
                                     </td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
                                         {item?.unit}
@@ -236,6 +252,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                 <ModalHumanInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
                 <ModalContactInformation open={visibleDrawer2} onClose={toggleVisible2} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
                 <ModalGoodsInformation open={visibleDrawer3} onClose={toggleVisible3} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
+                <ModalAssetsInformation open={visibleDrawer4} onClose={toggleVisible4} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
             </div>
         </div>
     )

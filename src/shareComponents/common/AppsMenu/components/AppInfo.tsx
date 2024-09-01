@@ -32,7 +32,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Real Estate Exchange */
     ['5f52341f880c2f26c8df8c10', {
         key: "5f52341f880c2f26c8df8c10",
-        name: "Quản lý kho",
+        name: "Thẻ kho",
         icon: storeLogo,
         route: '/store/home'
     }],
