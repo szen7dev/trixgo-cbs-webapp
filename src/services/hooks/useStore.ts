@@ -115,17 +115,17 @@ interface UseQueryDetailStoreParent {
 }
 
 export const useQueryDetailStoreParent = (
-  expertStoreID: string
+  cashBookID: string
 ): UseQueryDetailStoreParent => {
   const { isLoading, data, refetch } = useQuery(
-    `store.parent.${expertStoreID}`,
+    `store.parent.${cashBookID}`,
     async () =>
         StoreParentRepository.fetchDetailStore({
         populates: {
           path: "assignee project userCreate userUpdate members admins",
           select: "_id fullname bizfullname name sign image",
         },
-        expertStoreID,
+        cashBookID,
       }),
     {
       getNextPageParam: ({ data }: any) => {
@@ -249,17 +249,17 @@ interface UseMutationStoreChild {
   ) => Promise<UpdateStoreChildResponse>;
 }
 
-// export const useMutationStoreChild = (): UseMutationStoreChild => {
-//   const insertMutation = useMutation((payload: InsertStoreChildPayload) =>
-//     StoreChildRepository.insertStore(payload)
-//   );
+export const useMutationStoreChild = (): UseMutationStoreChild => {
+  const insertMutation = useMutation((payload: InsertStoreChildPayload) =>
+    StoreChildRepository.insertStore(payload)
+  );
 
-//   const updateMutation = useMutation((payload: UpdateStoreChildPayload) =>
-//     StoreChildRepository.updateStore(payload)
-//   );
+  const updateMutation = useMutation((payload: UpdateStoreChildPayload) =>
+    StoreChildRepository.updateStore(payload)
+  );
 
-//   return {
-//     onCreateStoreAsync: insertMutation.mutateAsync,
-//     onUpdateStoreAsync: updateMutation.mutateAsync,
-//   }
-// }
+  return {
+    onCreateStoreAsync: insertMutation.mutateAsync,
+    onUpdateStoreAsync: updateMutation.mutateAsync,
+  }
+}

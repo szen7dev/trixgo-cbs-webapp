@@ -34,7 +34,7 @@ export type StoreParent = {
 }
 
 export type ListStorePayload = QueryParams & {
-    expertStoreID?: string;
+    cashBookID?: string;
 };
 
 // time sheet parent
@@ -78,7 +78,7 @@ export type InsertStoreParentResponse = {
 }
 
 export type UpdateStoreParentPayload = {
-    expertStoreID: string;
+    cashBookID: string;
     members?: string[];
     membersRemove?: string[];
     admins?: string[];
@@ -88,7 +88,7 @@ export type UpdateStoreParentPayload = {
 export type UpdateStoreParentResponse = InsertStoreParentResponse;
 
 export type DeleteStoreParentPayload = {
-    expertStoreID: string;
+    cashBookID: string;
 }
 
 export type DeleteStoreParentResponse = APIResponse & {
@@ -158,7 +158,7 @@ export type InsertStoreChildPayload = {
     warehouse?: string;
     customer?: string;
     note?: string;
-    sign: string;
+    sign?: string;
 }
 
 export type InsertStoreChildResponse = {
@@ -170,7 +170,7 @@ export type InsertStoreChildResponse = {
 }
 
 export type UpdateStoreChildPayload = {
-    expertStoreID: string;
+    cashBookID: string;
     assigneeID?: string;
     projectID?: string;
     warehouseID?: string;

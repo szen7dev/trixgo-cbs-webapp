@@ -5,9 +5,6 @@ import moment from "moment";
 import debounce from "lodash/debounce";
 import { read, utils } from 'xlsx';
 
-/**
- * Components, Assets
- */
 import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
@@ -21,9 +18,6 @@ import {
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
 
-/**
- * Hooks, Typings
- */
 import {
   useQueryDetailTimeSheetParent,
   useQueryListTimeSheetChild,
@@ -196,7 +190,7 @@ const TimeSheetDetailPage: FC = () => {
           parentID: timeSheetParentID,
         });
         if (isCreated.error) {
-          throw new Error("ERROR~");
+          throw new Error("ERROR");
         }
 
         refetch();

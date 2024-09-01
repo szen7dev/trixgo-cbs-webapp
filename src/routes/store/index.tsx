@@ -23,6 +23,7 @@ import {
     StoreImportPage,
     StoreExportPage,
     StoreDebtPage,
+    StoreDetailPage,
 } from "views/store/pages";
 
 const StoreRouter: FC = () => {
@@ -52,6 +53,11 @@ const StoreRouter: FC = () => {
                     <Route exact path="/store/home" component={StoreHomePage}/>
                     <Route exact path="/store/dashboard" component={StoreDashboardPage}/>
                     <Route exact path="/store/import" component={StoreImportPage}/>
+                    <Route
+                        exact
+                        path={"/store/import/:id"}
+                        component={StoreDetailPage}
+                    />
                     <Route exact path="/store/export" component={StoreExportPage}/>
                     <Route exact path="/store/debt" component={StoreDebtPage}/>                    
                     <Route exact path="/store/*" component={ErrorPage} />

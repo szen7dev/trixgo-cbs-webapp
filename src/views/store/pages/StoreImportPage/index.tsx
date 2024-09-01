@@ -152,22 +152,6 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
     [closeModal, onUpdateStoreParentAsync, refreshListStore]
   );
 
-  const handleClickDeleteStore = React.useCallback(
-    (StoreID) => {
-      openDeleteConfirm({
-        deleteAction: async () => {
-          const res = await onDeleteStoreParentAsync({
-            expertStoreID: StoreID,
-          });
-          if (res.status === 200) {
-            refreshListStore();
-          }
-        },
-      });
-    },
-    [onDeleteStoreParentAsync, refreshListStore, openDeleteConfirm]
-  );
-
   const handleOnChangeDate = useCallback((date, input) => {
     if (input) {
       setInputFilter((value) => ({ ...value, toDate: date }))
@@ -180,12 +164,12 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
         className={
-          "financial-cashflow-listing-heading flex items-center border-b py-2 px-6"
+          "financial-cashflow-listing-heading flex items-center border-b py-2 px-2"
         }
       >
         <div className={"filter-bar flex flex-wrap px-4 py-1"}>
             <SearchInput
-              classNameWrapper={"ml-4 mr-2"}
+              classNameWrapper={"mr-2"}
               onChange={debounce((e) => {
                 setKeyword(e.target.value);
               }, 1000)}
@@ -432,8 +416,8 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
               Ghi chú
             </div>
           </div>
-          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((StoreParent: any) => (
-            <div className={"body-table table-row"} key={StoreParent._id}>
+          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((item: any) => (
+            <div className={"body-table table-row"} key={item._id}>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b align-middle w-3"
@@ -443,10 +427,10 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
                   className="form-check-input"
                   type="checkbox"
                   id="flexCheckDefault"
-                  checked={recordSelected?._id === StoreParent._id}
+                  checked={recordSelected?._id === item._id}
                   onChange={(e) => {
                     if (e.target.checked) {
-                      toggleRecord(StoreParent);
+                      toggleRecord(item);
                       return null;
                     }
                     toggleRecord({});
@@ -455,48 +439,48 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
                 />
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {moment(StoreParent.date).format('DD/MM/YYYY')}
+                {moment(item.date).format('DD/MM/YYYY')}
               </div>
               <div
                 className={
                   "px-1 py-2 table-cell box-border border-b align-middle"
                 }
               >
-                <NavLink to={`/Store/home/${StoreParent._id}`} className="text-cbs-highlight-color font-bold text-medium">
-                  {StoreParent.name}
+                <NavLink to={`/store/import/${item._id}`} className="text-cbs-highlight-color font-bold text-medium">
+                  {item.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  {StoreParent?.userCreate?.fullname} {moment(StoreParent.createAt).format(DATE_FORMAT)}
+                  {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
                 </p>
                 <p className={"mt-1 text-gray-500"}>
-                  {StoreParent?.userUpdate?.fullname} {moment(StoreParent.modifyAt).format(DATE_FORMAT)}
+                  {item?.userUpdate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {StoreParent.sign}
+                {item.sign}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {STORE_OUTIN[Number(StoreParent.outin - 1)].text}
-                <p>{STORE_TYPES[Number(StoreParent.type - 1)].text}</p>
+                {STORE_OUTIN[Number(item.outin - 1)].text}
+                <p>{STORE_TYPES[Number(item.type - 1)].text}</p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {StoreParent?.project?.name}
+                {item?.project?.name}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {StoreParent?.warehouse?.name}
+                {item?.warehouse?.name}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {StoreParent?.customer?.name}
+                {item?.customer?.name}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(StoreParent?.amount)}
+                {convertCurrency(item?.amount)}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {StoreParent.note}
+                {item.note}
               </div>
             </div>
           ))}
