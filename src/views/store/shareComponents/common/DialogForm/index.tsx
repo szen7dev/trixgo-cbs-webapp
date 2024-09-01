@@ -76,6 +76,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     warehouse: {},
     customer: {},
     note: "",
+    active: "",
     ...defaultValues,
   };
 
@@ -83,6 +84,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     (values) => {
       const formatData = {
         ...values,
+        active: `${values.active}`,
       };
       if (cashBookID) {
         formatData.cashBookID = cashBookID;
@@ -93,7 +95,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "650px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "700px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center border-b bg-cbs-table-header p-2"}
@@ -269,6 +271,20 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       type="text"
                       name="note"
                       placeholder="Ghi chú..."
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Trạng thái (1-Hoạt động | 2-Hủy)</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="active"
+                      placeholder="1-Hoạt động | 2-Hủy"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);
