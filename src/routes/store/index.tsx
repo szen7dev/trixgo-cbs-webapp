@@ -20,9 +20,9 @@ import ErrorPage from "views/authentication/Error";
 import {
     StoreHomePage,
     StoreDashboardPage,
-    StoreImportPage,
+    StorePage,
     StoreExportPage,
-    StoreDebtPage,
+    StoreInventoryPage,
     StoreDetailPage,
 } from "views/store/pages";
 
@@ -52,14 +52,36 @@ const StoreRouter: FC = () => {
                     </Route>
                     <Route exact path="/store/home" component={StoreHomePage}/>
                     <Route exact path="/store/dashboard" component={StoreDashboardPage}/>
-                    <Route exact path="/store/import" component={StoreImportPage}/>
-                    <Route
-                        exact
-                        path={"/store/import/:id"}
-                        component={StoreDetailPage}
-                    />
-                    <Route exact path="/store/export" component={StoreExportPage}/>
-                    <Route exact path="/store/debt" component={StoreDebtPage}/>                    
+                    <Route exact path="/store/inventory" component={StoreInventoryPage}/>  
+
+                    <Route exact path="/store/import" component={() => <StorePage outin={2} type ={2}/>}/>
+                    <Route exact path="/store/import/:id" component={StoreDetailPage}/>
+                    <Route exact path="/store/export" component={() => <StorePage outin={1} type ={2}/>}/>
+                    <Route exact path="/store/export/:id" component={StoreDetailPage}/>
+
+                    <Route exact path="/store/import-consumable" component={() => <StorePage outin={2} type ={3}/>}/>
+                    <Route exact path="/store/import-consumable/:id" component={StoreDetailPage}/>
+                    <Route exact path="/store/export-consumable" component={() => <StorePage outin={1} type ={3}/>}/>
+                    <Route exact path="/store/export-consumable/:id" component={StoreDetailPage}/>
+
+                    <Route exact path="/store/import-equipment" component={() => <StorePage outin={2} type ={4}/>}/>
+                    <Route exact path="/store/import-equipment/:id" component={StoreDetailPage}/>
+                    <Route exact path="/store/export-equipment" component={() => <StorePage outin={1} type ={4}/>}/>
+                    <Route exact path="/store/export-equipment/:id" component={StoreDetailPage}/>
+
+                    <Route exact path="/store/import-factory" component={() => <StorePage outin={2} type ={5}/>}/>
+                    <Route exact path="/store/import-factory/:id" component={StoreDetailPage}/>
+                    <Route exact path="/store/export-factory" component={() => <StorePage outin={1} type ={5}/>}/>
+                    <Route exact path="/store/export-factory/:id" component={StoreDetailPage}/>
+                    
+                    <Route exact path="/store/import-stationery" component={() => <StorePage outin={2} type ={6}/>}/>
+                    <Route exact path="/store/import-stationery/:id" component={StoreDetailPage}/>
+                    <Route exact path="/store/export-stationery" component={() => <StorePage outin={1} type ={6}/>}/>
+                    <Route exact path="/store/export-stationery/:id" component={StoreDetailPage}/>
+
+                    <Route exact path="/store/income" component={StoreDashboardPage}/>  
+                    <Route exact path="/store/expense" component={StoreDashboardPage}/>  
+
                     <Route exact path="/store/*" component={ErrorPage} />
                 </Switch>
             </StoreLayout>

@@ -21,8 +21,8 @@ import {
 
 import type { InsertStoreParentPayload } from "typings/store";
 interface CreateOrEditDialogProps {
-  outin: number,
-  type: number,
+  outin: any,
+  type: any,
   title: string;
   defaultValues?: InsertStoreParentPayload;
   projectName: string;
@@ -34,6 +34,8 @@ interface CreateOrEditDialogProps {
 }
 
 const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
+  outin,
+  type,
   title,
   defaultValues,
   onSubmit,
@@ -68,8 +70,8 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     name: "",
     date: null,
     assignee: {},
-    outin: 2,
-    type: 2,
+    outin: Number(outin),
+    type: Number(type),
     project: {},
     warehouse: {},
     customer: {},
@@ -81,8 +83,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     (values) => {
       const formatData = {
         ...values,
-        outin: `${values.outin}`,
-        type: `${values.type}`,
       };
       if (cashBookID) {
         formatData.cashBookID = cashBookID;
@@ -167,7 +167,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Dự án, phòng ban
+                    Dự án, phòng ban (*)
                   </p>
                   <DropdownSearchable
                     className={
@@ -199,7 +199,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Kho bãi
+                    Kho bãi (*)
                   </p>
                   <DropdownSearchable
                     className={
@@ -232,7 +232,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Mã khách
+                    Mã khách (*)
                   </p>
                   <DropdownSearchable
                     className={

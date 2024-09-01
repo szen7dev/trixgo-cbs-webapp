@@ -7,7 +7,7 @@ export const StoreDashboardPage: FC = () => {
 
     return (
         <div className="flex flex-1 flex-col overflow-hidden h-full">
-            <p>StoreDashboardPage</p>
+            <p>StoreNormalPage</p>
         </div>
     )
 }
