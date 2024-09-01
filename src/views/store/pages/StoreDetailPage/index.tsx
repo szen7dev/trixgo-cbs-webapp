@@ -2,20 +2,20 @@ import React, { FC, useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
-import debounce from "lodash/debounce";
+// import debounce from "lodash/debounce";
 import { read, utils } from 'xlsx';
 
-import FileColorIcon from "assets/icons/FileColor";
-import StarIcon from "assets/images/star.svg";
-import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
-import { InputWidthAdjust } from "views/store/shareComponents/common";
+// import FileColorIcon from "assets/icons/FileColor";
+// import StarIcon from "assets/images/star.svg";
+// import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+// import { InputWidthAdjust } from "views/store/shareComponents/common";
 import { createLinkAndClick } from "utils";
 import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
-import {
-  FilterDateGroup
-} from "views/accounting/shareComponents/common";
-import { useUserSystem } from 'services/hooks/users/useUserSystem';
+// import {
+//   FilterDateGroup
+// } from "views/accounting/shareComponents/common";
+// import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
 
 import {
@@ -30,13 +30,6 @@ import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 
-const SUBTYPES = [
-  { _id: 1, name: 'Thông thường' },
-  { _id: 2, name: 'Nghỉ phép'},
-  { _id: 3, name: 'Lễ, tết'},
-  { _id: 4, name: 'Công tác'},
-]
-
 export const StoreDetailPage: FC = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
@@ -46,14 +39,13 @@ export const StoreDetailPage: FC = () => {
 
   const ref = React.useRef<PaginateHandle>(null);
   const cashBookID = params["id"];
-  const accountRef = React.useRef<DropdownHandle>(null);
+  // const accountRef = React.useRef<DropdownHandle>(null);
 
-  const history = useHistory();
-
-  const [userID, setUserID] = useState<string | null>();
-  const [subtype, setSubtype] = useState<string | null>();
-  const [userKeyword, setUserKeyword] = useState("");  
-  const [keyword, setKeyword] = useState('');
+  // const history = useHistory();
+  // const [userID, setUserID] = useState<string | null>();
+  // const [subtype, setSubtype] = useState<string | null>();
+  // const [userKeyword, setUserKeyword] = useState("");  
+  // const [keyword, setKeyword] = useState('');
 
   const today = new Date();
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
@@ -66,12 +58,12 @@ export const StoreDetailPage: FC = () => {
 
   const { user } = useAuth();
 
-  const { data: listUser } = useUserSystem({
-    companyID: user?.company?._id,
-    keyword: userKeyword,
-    limit: 10,
-    isFetch: true
-}, true)
+  // const { data: listUser } = useUserSystem({
+  //   companyID: user?.company?._id,
+  //   keyword: userKeyword,
+  //   limit: 10,
+  //   isFetch: true
+  // }, true)
 
   const [modalShare, setModalShare] = useState<{
     isShow: boolean;
@@ -112,9 +104,9 @@ export const StoreDetailPage: FC = () => {
     fetchPrevPage,
     refetch: onRefreshStoreChild,
   } = useQueryListStoreChild(cashBookID,{
-    keyword,
-    humanID: userID,
-    subtype,
+    // keyword,
+    // humanID: userID,
+    // subtype,
     limit: 50
   });
 
@@ -160,13 +152,13 @@ export const StoreDetailPage: FC = () => {
         const isUpdated = await onUpdateStoreAsync({
           ...values,
           cashBookID: values._id,
-          hours: `${values.hours}`,
-          amount: `${values.amount}`,
-          state: `${values.state}`,
-          unitprice: `${values.unitprice}`,
-          subtype: `${values.subtype}`,
-          type: `${values.type}`,
-          status: `${values.status}`,
+          // hours: `${values.hours}`,
+          // amount: `${values.amount}`,
+          // state: `${values.state}`,
+          // unitprice: `${values.unitprice}`,
+          // subtype: `${values.subtype}`,
+          // type: `${values.type}`,
+          // status: `${values.status}`,
         });
         if (!isUpdated.error) {
           onRefreshStoreChild();
@@ -285,18 +277,6 @@ useEffect(() => {
     }
 }, [JSON.stringify(dataImport)])
 
-  const handleOnChangeDate = useCallback((date, input) => {
-    if (input) {
-      setInputFilter((value) => ({ ...value, toDate: date }))
-    } else {
-      setInputFilter((value) => ({ ...value, fromDate: date }))
-    }
-  }, [])
-
-  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(event.target.value)
-  }, 500)
-
   if (!storeInfo || loading || !user)
     return <Loader className="border-primary" />;
 
@@ -307,14 +287,9 @@ useEffect(() => {
           "financial-planning-header flex p-2 sticky top-0 z-10 bg-white"
         }
       >
-        <FileColorIcon />
         <div className="w-auto">
           <div className={"flex"}>
-            <InputWidthAdjust
-              className={"text-lg w-auto mr-2"}
-              value={storeInfo.name}
-            />
-            <img alt={"star-icon"} src={StarIcon} />
+            <p className="font-bold text-medium">{storeInfo.name} | {storeInfo.sign}</p>
           </div>
           <p className={"text-gray-400"}>
             Chỉnh sửa {" "}
@@ -350,6 +325,25 @@ useEffect(() => {
             Thành viên ({storeInfo.members?.length})
           </button>
         </div>
+      </div>
+
+      <div className="flex-1 flex items-center justify-end">
+        <PaginateV2
+          ref={ref}
+          totalRecord={totalRecord}
+          totalPages={totalPages}
+          hasNextPage={hasNextPage}
+          limit={limit}
+          isFetching={isFetchStoreChild}
+          nextPageAction={() => {
+            setPageIndex((oldState) => oldState + 1);
+            fetchNextPage();
+          }}
+          prevPageAction={() => {
+            setPageIndex((oldState) => oldState - 1);
+            fetchPrevPage();
+          }}
+        />
       </div>
 
       <div className={"financial-planning-table mt-2"}>

@@ -6,7 +6,7 @@ import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2
 import { STORE_OUTIN, STORE_TYPES } from "apis/localdb";
 import { convertCurrency } from "utils/converter";
 import { useModal } from "services/hooks/useModal";
-import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
+import { toast } from "react-toastify";
 import {
     useQueryListStoreParent,
     useMutationStoreParent,
@@ -23,13 +23,14 @@ import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import {
 	useQueryListWarehouse,
-	useQueryListContact,
+	// useQueryListContact,
 	// useQueryListContract,
 	// useQueryListBudgetWork,
 	// useQueryListAccount,
 	// useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
+import { useLocation } from "react-router-dom";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface StoreHomePageProps {
@@ -37,7 +38,10 @@ interface StoreHomePageProps {
     type?: number
 }
 
-export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 }) => {
+export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
+  const location = useLocation();
+  const { pathname: currentPathname } = location;
+  
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -53,7 +57,6 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
   const [customerID, setCustomerID] = useState<string | null>();
 
   const { openModal, closeModal } = useModal();
-  const { openDeleteConfirm } = useDeleteConfirm();
 
 	const today = new Date();
 	const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
@@ -75,17 +78,17 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
     loading,
     hasNextPage,
   } = useQueryListStoreParent({
-      projectID,
-      warehouseID,
-      customerID,
-      userCreateID: userID,
-      keyword, 
-      outin, 
-      type, 
-      sortOption: 2,
-      fromDate: inputFilter.fromDate,
-			toDate: inputFilter.toDate,
-    });
+    projectID,
+    warehouseID,
+    customerID,
+    userCreateID: userID,
+    keyword, 
+    outin, 
+    type, 
+    sortOption: 2,
+    fromDate: inputFilter.fromDate,
+    toDate: inputFilter.toDate,
+  });
 
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
@@ -115,7 +118,6 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
   const {
     onCreateStoreParentAsync,
     onUpdateStoreParentAsync,
-    onDeleteStoreParentAsync,
   } = useMutationStoreParent();
 
   const handleCreateStore = React.useCallback(
@@ -123,10 +125,12 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
       try {
         const isCreated = await onCreateStoreParentAsync(values);
         if (!isCreated.error) {
+          toast.success('Khởi tạo thành công');
           refreshListStore();
           closeModal();
           return null;
         }
+        toast.error(isCreated?.data?.message);
         throw new Error("Can not create!");
       } catch (err) {
         return null;
@@ -140,11 +144,13 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
       try {
         const isUpdated = await onUpdateStoreParentAsync(values);
         if (!isUpdated.error) {
+          toast.success('Cập nhật thành công');
           refreshListStore();
           closeModal();
           return null;
         }
-        throw new Error("Can not create!");
+        toast.error(isUpdated?.data?.message);
+        throw new Error("Can not update!");
       } catch (err) {
         return null;
       }
@@ -312,8 +318,8 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
                 <DialogForm
                   title="Tạo mới"
                   onSubmit={handleCreateStore}
-                  outin={2}
-                  type={2}
+                  outin={Number(outin)}
+                  type={Number(type)}
                   projectName={""}
                   assigneeName={""}
                   warehouseName={""}
@@ -446,7 +452,8 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
                   "px-1 py-2 table-cell box-border border-b align-middle"
                 }
               >
-                <NavLink to={`/store/import/${item._id}`} className="text-cbs-highlight-color font-bold text-medium">
+                {Number(item.active) == 2 ? <div className="relative z-5 inline-block -translate-y-1"><button className="text-[10px] text-white rounded px-1 py-0.5 mx-1 bg-red-400">Phiếu hủy</button></div> : <></>}
+                <NavLink to={`${currentPathname}/${item._id}`} className="text-cbs-highlight-color font-bold text-medium">
                   {item.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
