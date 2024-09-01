@@ -327,6 +327,25 @@ useEffect(() => {
         </div>
       </div>
 
+      <div className="flex-1 flex items-center justify-end">
+        <PaginateV2
+          ref={ref}
+          totalRecord={totalRecord}
+          totalPages={totalPages}
+          hasNextPage={hasNextPage}
+          limit={limit}
+          isFetching={isFetchStoreChild}
+          nextPageAction={() => {
+            setPageIndex((oldState) => oldState + 1);
+            fetchNextPage();
+          }}
+          prevPageAction={() => {
+            setPageIndex((oldState) => oldState - 1);
+            fetchPrevPage();
+          }}
+        />
+      </div>
+
       <div className={"financial-planning-table mt-2"}>
         <div className={"relative table border-collapse w-full"}>
           <div className={"header table-row sticky z-10"}>
