@@ -3,14 +3,12 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import debounce from "lodash/debounce";
 import { convertCurrency } from "utils/converter";
 import moment from "moment";
-
-import {DropdownSearchable} from "shareComponents/common";
+import { DropdownSearchable } from "shareComponents/common";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
-import {
-	useQueryListBudgetWork,
-} from "services/hooks/cmcs/useContractIncome";
+import { useQueryListBudgetWork } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import { useAuth } from "services/hooks/auth/useAuth";
+import { useGoods } from "services/hooks/items/useGoods";
 
 import type {
   StoreChild,
@@ -29,23 +27,6 @@ type Props = {
   hasPermission: boolean;
 };
 
-const SUBTYPES = [
-  { _id: 1, name: 'Thông thường' },
-  { _id: 2, name: 'Nghỉ phép'},
-  { _id: 3, name: 'Lễ, tết'},
-  { _id: 4, name: 'Công tác'},
-]
-
-const DAYOFWEEKS = [
-  { _id: 0, name: 'Chủ nhật' },
-  { _id: 1, name: 'Thứ 2' },
-  { _id: 2, name: 'Thứ 3'},
-  { _id: 3, name: 'Thứ 4'},
-  { _id: 4, name: 'Thứ 5'},
-  { _id: 5, name: 'Thứ 6'},
-  { _id: 6, name: 'Thứ 7'},
-]
-
 export const DetailChildRow: FC<Props> = ({
   parent,
   rowData,
@@ -55,8 +36,8 @@ export const DetailChildRow: FC<Props> = ({
   onUpdatedStoreChild,
 }) => {
   const { user } = useAuth();
-
-  const [searchBudgetWorkValue, setSearchBudgetWorkValue] = React.useState(
+  const [keywordWoods, setKeywordWoods] = React.useState('');
+  const [keywordWork, setKeywordWork] = React.useState(
     rowData.work?.name || ""
 	);
 
@@ -71,9 +52,20 @@ export const DetailChildRow: FC<Props> = ({
     keyword: searchAssigneeStr 
   }, true);
 
+  const {
+    list: listGoods
+  } = useGoods({
+      params: { 
+          // companyID,
+          keyword: keywordWoods 
+      },
+      isFetchList: true
+  })
+  // console.log(listGoods)
+
   const { listBudgetWork } = useQueryListBudgetWork({
 		limit: LIMIT_DROPDOWN,
-		keyword: searchBudgetWorkValue,
+		keyword: keywordWork,
 	});
 
   const handleClickUpdateStore = React.useCallback(
@@ -116,6 +108,7 @@ export const DetailChildRow: FC<Props> = ({
           {index + 1}
         </p>
       </div>
+
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -136,6 +129,7 @@ export const DetailChildRow: FC<Props> = ({
           {rowData.name}
         </p>
       </div>
+
       <div
         className={
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
@@ -156,12 +150,61 @@ export const DetailChildRow: FC<Props> = ({
               });
           }}
         />
-        <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
-        <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
+        {/* <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p> */}
+        {/* <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p> */}
         {/* <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p> */}
-        <p className="text-gray-400 text-[10px] text-cbs-highlight-color"><i>{DAYOFWEEKS[Number(new Date(rowData?.date).getDay())]?.name}</i></p>
+        {/* <p className="text-gray-400 text-[10px] text-cbs-highlight-color"><i>{DAYOFWEEKS[Number(new Date(rowData?.date).getDay())]?.name}</i></p> */}
         {/* <p className="text-gray-400 text-[10px]"><i>{Number(new Date(rowData?.date).getDay() + 1)}</i></p> */}
       </div>
+
+      <div
+        className={
+          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
+        }
+      >
+        <DropdownSearchable
+          id="ticket-creator"
+          className={"w-full pl-0 -mb-1 outline-none "}
+          bordered
+          isMultiple={false}
+          allowClearValueSingleInput
+          showTriangle
+          placeholder="Hàng hóa, vật tư, công cụ..."
+          renderSelectedItem={(item) => (
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+                minWidth: 0,
+                // width: "150px",
+                // whiteSpace: "nowrap",
+                width: "150px",
+                whiteSpace: "normal",
+                overflow: "hidden",
+              }}
+            >
+              {item.text}
+            </p>
+          )}
+          data={listGoods}
+          initialValue={rowData?.goods}
+          formatItem={{
+            id: "_id",
+            text: "name",
+          }}
+          onSearchInputChange={debounce(
+            (value) => setKeywordWoods(value),
+            500
+          )}
+          onchangeValue={(value) =>
+            handleClickUpdateStore({
+              ...rowData,
+              goodsID: value.id,
+            })
+          }
+        />
+      </div>
+
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -177,12 +220,11 @@ export const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateStore({
               ...rowData,
-              hours: `${value}`,
+              quantity: `${value}`,
             });
           }}
         >
-          {/* {rowData.hours} */}
-          {convertCurrency(rowData.hours)}
+          {convertCurrency(rowData.quantity)}
         </p>
       </div>
       <div
@@ -200,12 +242,11 @@ export const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateStore({
               ...rowData,
-              unitprice: `${value}`,
+              unitPrice: `${value}`,
             });
           }}
         >
-          {convertCurrency(rowData.unitprice)}
-          {/* {`${rowData.unitprice}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
+          {convertCurrency(rowData.unitPrice)}
         </p>
       </div>
       <div
@@ -220,54 +261,9 @@ export const DetailChildRow: FC<Props> = ({
           }
         >
           {convertCurrency(rowData.amount)}
-          {/* {`${rowData.amount}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} */}
         </p>
       </div>
-      <div
-        className={
-          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
-        }
-      >
-        <DropdownSearchable
-          id="ticket-creator"
-          className={"w-full pl-0 -mb-1 outline-none "}
-          bordered
-          isMultiple={false}
-          allowClearValueSingleInput
-          showTriangle
-          placeholder="Người thực hiện"
-          renderSelectedItem={(item) => (
-            <p
-              style={{
-                textOverflow: "ellipsis",
-                maxWidth: "100%",
-                minWidth: 0,
-                width: "100px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-              }}
-            >
-              {item.text}
-            </p>
-          )}
-          data={listUsersSystem}
-          initialValue={rowData?.assignee ?? parent?.assignee}
-          formatItem={{
-            id: "_id",
-            text: "fullname",
-          }}
-          onSearchInputChange={debounce(
-            (value) => setSearchAssigneeStr(value),
-            500
-          )}
-          onchangeValue={(value) =>
-            handleClickUpdateStore({
-              ...rowData,
-              assigneeID: value.id,
-            })
-          }
-        />
-      </div>
+      
       <div
         className={
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
@@ -287,22 +283,31 @@ export const DetailChildRow: FC<Props> = ({
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
                 minWidth: 0,
-                width: "100px",
-                whiteSpace: "nowrap",
+                width: "150px",
+                whiteSpace: "normal",
                 overflow: "hidden",
               }}
             >
               {item.text}
             </p>
           )}
-          data={listBudgetWork}
           initialValue={rowData?.work}
+          data={listBudgetWork}
           formatItem={{
             id: "_id",
             text: "name",
           }}
+
+          // data={listBudgetWork.map((item: any) => ({
+          //     label: `${item.sign}.${item.name}`,
+          //     value: item._id,
+          // }))}
+          // formatItem={{
+          //     id: "value",
+          //     text: "label",
+          // }}
           onSearchInputChange={debounce(
-            (value) => setSearchBudgetWorkValue(value),
+            (value) => setKeywordWork(value),
             500
           )}
           onchangeValue={(value) =>
@@ -313,6 +318,7 @@ export const DetailChildRow: FC<Props> = ({
           }
         />
       </div>
+
       <div
         className={
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
@@ -320,19 +326,19 @@ export const DetailChildRow: FC<Props> = ({
       >
         <DropdownSearchable
           id="ticket-creator"
-          className={"w-full pl-0 outline-none text-gray-400"}
+          className={"w-full pl-0 -mb-1 outline-none "}
           bordered
           isMultiple={false}
           allowClearValueSingleInput
           showTriangle
-          placeholder="Loại"
+          placeholder="Thuộc thiết bị"
           renderSelectedItem={(item) => (
             <p
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
                 minWidth: 0,
-                width: "100px",
+                width: "150px",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
               }}
@@ -340,21 +346,25 @@ export const DetailChildRow: FC<Props> = ({
               {item.text}
             </p>
           )}
-          data={SUBTYPES}
-          initialValue={rowData?.subtype}
+          data={listGoods}
+          initialValue={rowData?.assets}
           formatItem={{
             id: "_id",
             text: "name",
           }}
+          onSearchInputChange={debounce(
+            (value) => setKeywordWoods(value),
+            500
+          )}
           onchangeValue={(value) =>
             handleClickUpdateStore({
               ...rowData,
-              subtype: value.id,
+              assetsID: value.id,
             })
           }
         />
-        <p></p>
       </div>
+
       <div
         className={
           "table-cell relative box-border border border-gray-300 bg-white"

@@ -100,7 +100,7 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
+          "table-cell relative box-border border border-gray-300 bg-white"
         }
       >
         <p
@@ -110,33 +110,6 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
           }
         />
       </div>
-      <div
-        className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
-        }
-      >
-        <p
-          suppressContentEditableWarning={true}
-          className={
-            "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
-          }
-        />
-      </div>
-      <div
-        className={
-          "p-2 table-cell relative box-border border border-gray-300 bg-white"
-        }
-      />
-      <div
-        className={
-          "p-2 table-cell relative box-border border border-gray-300 bg-white"
-        }
-      />
-      <div
-        className={
-          "p-2 table-cell relative box-border border border-gray-300 bg-white"
-        }
-      />
       <div
         className={
           "table-cell relative box-border border border-gray-300 bg-white"
@@ -144,9 +117,31 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
       >
         <p
           suppressContentEditableWarning={true}
-          className={"w-full h-full focus:outline-blue-600 p-2"}
+          className={
+            "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
+          }
         />
       </div>
+      <div
+        className={
+          "p-2 table-cell relative box-border border border-gray-300 bg-white"
+        }
+      />
+      <div
+        className={
+          "p-2 table-cell relative box-border border border-gray-300 bg-white"
+        }
+      />
+      <div
+        className={
+          "p-2 table-cell relative box-border border border-gray-300 bg-white"
+        }
+      />
+      <div
+        className={
+          "p-2 table-cell relative box-border border border-gray-300 bg-white"
+        }
+      />
     </div>
   )
 }

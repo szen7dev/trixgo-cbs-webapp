@@ -4,13 +4,14 @@ import { User } from "./user";
 import { Project } from "./items/project";
 import { Warehouse } from "./items/warehouse";
 import { Contact } from "./items/contact";
+import { Goods } from "./items/goods";
 
 export type StoreParent = {
     _id: string;
     outin: number;
     type: number;
-    hours: number;
-    unitprice: number;
+    quantity: number;
+    unitPrice: number;
     amount: number;
     status: number;
     timeApproved: string | null;
@@ -104,8 +105,8 @@ export type StoreChild = {
     _id: string;
     outin: number;
     type: number;
-    hours: number;
-    unitprice: number;
+    quantity: number;
+    unitPrice: number;
     amount: number;
     status: number;
     subtype: any | null
@@ -118,6 +119,8 @@ export type StoreChild = {
     project?: Project
     warehouse?: Warehouse
     customer?: Contact
+    goods?: Goods
+    assets?: Goods
     work: strinstring | null
     note?: string
     sign?: string
@@ -150,8 +153,8 @@ export type InsertStoreChildPayload = {
     name: string;
     date?: string;
     status?: string;
-    hours?: string;
-    unitprice?: string;
+    quantity?: string;
+    unitPrice?: string;
     amount?: string;
     assignee?: string;
     project?: string;
@@ -178,8 +181,8 @@ export type UpdateStoreChildPayload = {
     name?: string;
     date?: string;
     status?: string;
-    hours?: string;
-    unitprice?: string;
+    quantity?: string;
+    unitPrice?: string;
     amount?: string;
     assignee?: string;
     note?: string;

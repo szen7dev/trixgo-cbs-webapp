@@ -381,7 +381,14 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              KL
+              Hàng hóa, vật tư, công cụ
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Khối lượng
             </div>
             <div
               className={
@@ -402,13 +409,6 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Vật tư
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
               Ngân sách
             </div>
             <div
@@ -416,14 +416,14 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Phân loại
+              Thuộc thiết bị
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Mô tả/ghi chú
+              Ghi chú
             </div>
           </div>
           {storeInfo?._id && Array.isArray(listStoreChild) && (
