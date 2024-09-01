@@ -40,3 +40,4 @@ export * from './PaginateV2';
 export * from './ModalHumanInformation';
 export * from './ModalContactInformation';
 export * from './ModalGoodsInformation';
+export * from './ModalAssetsInformation';

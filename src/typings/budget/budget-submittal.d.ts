@@ -28,6 +28,7 @@ export type BudgetSubmittal = {
     staff: any;
     contact: any;
     goods: any;
+    assets: any;
 }
 
 export type BudgetSubmittalListParams = QueryParam & {
