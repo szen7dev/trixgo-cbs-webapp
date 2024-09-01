@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
-import { TIMESHEET_TYPES } from "apis/localdb";
+import { STORE_OUTIN, STORE_TYPES } from "apis/localdb";
 import { convertCurrency } from "utils/converter";
 import { useModal } from "services/hooks/useModal";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
@@ -178,11 +178,11 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Tháng
+              Ngày
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500 w-1/3"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500 w-1/6"
               }
             >
               Nội dung
@@ -206,7 +206,14 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Khối lượng
+              Kho bãi
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Mã khách
             </div>
             <div
               className={
@@ -246,35 +253,35 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
                 />
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                Tháng {moment(StoreParent.date).format('MM/YYYY')}
+                {moment(StoreParent.date).format('DD/MM/YYYY')}
               </div>
               <div
                 className={
-                  "px-1 py-2 table-cell box-border border-b align-middle w-2/12"
+                  "px-1 py-2 table-cell box-border border-b align-middle"
                 }
               >
-                <NavLink to={`/Store/home/${StoreParent._id}`}>
+                <NavLink to={`/Store/home/${StoreParent._id}`} className="text-cbs-highlight-color font-bold text-medium">
                   {StoreParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  Tạo: {StoreParent?.userCreate?.fullname} {moment(StoreParent.createAt).format(DATE_FORMAT)}
+                  {StoreParent?.userCreate?.fullname} {moment(StoreParent.createAt).format(DATE_FORMAT)}
                 </p>
                 <p className={"mt-1 text-gray-500"}>
-                  Cập nhật: {StoreParent?.userUpdate?.fullname} {moment(StoreParent.modifyAt).format(DATE_FORMAT)}
+                  {StoreParent?.userUpdate?.fullname} {moment(StoreParent.modifyAt).format(DATE_FORMAT)}
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {/* {Store_TYPES[Number(StoreParent.type - 1)].text} */}
+                {STORE_OUTIN[Number(StoreParent.outin - 1)].text}
+                <p>{STORE_TYPES[Number(StoreParent.type - 1)].text}</p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {StoreParent?.project?.name}
               </div>
-              <div
-                className={
-                  "px-2 py-2 table-cell box-border border-b text-right"
-                }
-              >
-                {convertCurrency(StoreParent?.hours)}
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {StoreParent?.warehouse?.name}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {StoreParent?.customer?.name}
               </div>
               <div
                 className={
