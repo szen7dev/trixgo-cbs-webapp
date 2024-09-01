@@ -1,12 +1,12 @@
 import React, { FC, useRef } from "react";
 import debounce from "lodash/debounce";
 
-import type { InsertTimeSheetChildPayload } from "typings/time-sheet";
+import type { InsertStoreChildPayload } from "typings/store";
 
 type DetailChildRowCreateFormProps = {
   collapsed?: boolean;
   isLastRow?: boolean;
-  onInsert: (values: InsertTimeSheetChildPayload) => Promise<boolean>;
+  onInsert: (values: InsertStoreChildPayload) => Promise<boolean>;
 };
 
 export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
@@ -16,7 +16,7 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const handleClickUpdateTimeSheet = React.useCallback(
+  const handleClickUpdateStore = React.useCallback(
     async (value) => {
       const isCreated = await onInsert({
         ...value,
@@ -72,7 +72,7 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
             if (value.length === 0) {
               return null;
             }
-            const isCreated = await handleClickUpdateTimeSheet({
+            const isCreated = await handleClickUpdateStore({
               name: value,
             });
             if (isCreated) {

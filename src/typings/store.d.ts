@@ -183,7 +183,7 @@ export type UpdateStoreChildPayload = {
     amount?: string;
     assignee?: string;
     note?: string;
-    sign: string;
+    sign?: string;
     members?: string[];
     membersRemove?: string[];
     admins?: string[];

@@ -117,7 +117,6 @@ export const StoreDetailPage: FC = () => {
     subtype,
     limit: 50
   });
-  console.log(listStoreChild)
 
   const { onUpdateStoreAsync, onCreateStoreAsync } =
     useMutationStoreChild();
@@ -160,7 +159,7 @@ export const StoreDetailPage: FC = () => {
       try {
         const isUpdated = await onUpdateStoreAsync({
           ...values,
-          expertStoreID: values._id,
+          cashBookID: values._id,
           hours: `${values.hours}`,
           amount: `${values.amount}`,
           state: `${values.state}`,
