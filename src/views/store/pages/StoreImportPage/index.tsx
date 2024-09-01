@@ -192,6 +192,13 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
+              Số phiếu
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
               Phân loại
             </div>
             <div
@@ -269,6 +276,9 @@ export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 })
                 <p className={"mt-1 text-gray-500"}>
                   {StoreParent?.userUpdate?.fullname} {moment(StoreParent.modifyAt).format(DATE_FORMAT)}
                 </p>
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {StoreParent.sign}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {STORE_OUTIN[Number(StoreParent.outin - 1)].text}
