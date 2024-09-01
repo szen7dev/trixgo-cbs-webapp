@@ -608,6 +608,20 @@ export const TIMESHEET_TYPES = [
     { value: 2, text: 'Sản xuất' },
 ]
 
+// PHÂN LOẠI KHO
+export const STORE_OUTIN = [
+    { value: 1, text: 'Xuất' },
+    { value: 2, text: 'Nhập' },
+]
+
+export const STORE_TYPES = [
+    { value: 1, text: 'Sổ quỹ' },
+    { value: 2, text: 'Vật tư chính' },
+    { value: 3, text: 'Vật tư phụ' },
+    { value: 4, text: 'Công cụ dụng cụ' },
+    { value: 5, text: 'Hàng hóa' },
+]
+
 /**
  * FNB
  */

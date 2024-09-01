@@ -45,15 +45,6 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
     [onUpdateTimeSheet, openModal]
   );
 
-  const handleClickDeleteTimeSheet = React.useCallback(
-    (timeSheetID?: string) => () => {
-      if (timeSheetID) {
-        onDeleteTimeSheet(timeSheetID);
-      }
-    },
-    [onDeleteTimeSheet]
-  );
-
   return (
     <div className={"flex items-center"}>
       <button
