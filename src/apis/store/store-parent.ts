@@ -3,18 +3,18 @@ import { STORE_URL } from '.';
 import { convertObToUrl } from "utils";
 
 import type {
-    ListTimeSheetPayload,
-    QueryTimeSheetParentResponse,
-    InsertTimeSheetParentPayload,
-    InsertTimeSheetParentResponse,
-    UpdateTimeSheetParentPayload,
-    UpdateTimeSheetParentResponse,
-    DeleteTimeSheetParentPayload,
-    DeleteTimeSheetParentResponse,
-    QueryDetailTimeSheetParentResponse
+    ListStorePayload,
+    QueryStoreParentResponse,
+    InsertStoreParentPayload,
+    InsertStoreParentResponse,
+    UpdateStoreParentPayload,
+    UpdateStoreParentResponse,
+    DeleteStoreParentPayload,
+    DeleteStoreParentResponse,
+    QueryDetailStoreParentResponse
 } from 'typings/store';
 
-export async function fetchListTimeSheet<T>(params?: ListTimeSheetPayload): Promise<T> {
+export async function fetchListStore<T>(params?: ListStorePayload): Promise<T> {
     const { data } = await API.get(
         `${STORE_URL}`, {
         params: {
@@ -29,17 +29,17 @@ export async function fetchListTimeSheet<T>(params?: ListTimeSheetPayload): Prom
     return data;
 }
 
-export async function insertTimeSheet<P, R>(payload: P): Promise<R> {
+export async function insertStore<P, R>(payload: P): Promise<R> {
     const { data } = await API.post(`${STORE_URL}`, payload);
     return data;
 }
 
-export async function updateTimeSheet<P, R>(payload: P): Promise<R> {
+export async function updateStore<P, R>(payload: P): Promise<R> {
     const { data } = await API.put(`${STORE_URL}`, payload);
     return data;
 }
 
-export async function deleteTimeSheet<P, R>(payload: P): Promise<R> {
+export async function deleteStore<P, R>(payload: P): Promise<R> {
     const { data } = await API.delete(`${STORE_URL}`, {
         data: payload
     });
@@ -47,27 +47,27 @@ export async function deleteTimeSheet<P, R>(payload: P): Promise<R> {
 }
 
 interface StoreParentRepository {
-    fetchListTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryTimeSheetParentResponse>;
-    fetchDetailTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryDetailTimeSheetParentResponse>;
-    insertTimeSheet: (payload: InsertTimeSheetParentPayload) => Promise<InsertTimeSheetParentResponse>;
-    updateTimeSheet: (payload: UpdateTimeSheetParentPayload) => Promise<UpdateTimeSheetParentResponse>;
-    deleteTimeSheet: (payload: DeleteTimeSheetParentPayload) => Promise<DeleteTimeSheetParentResponse>;
+    fetchListStore: (params: ListStorePayload) => Promise<QueryStoreParentResponse>;
+    fetchDetailStore: (params: ListStorePayload) => Promise<QueryDetailStoreParentResponse>;
+    insertStore: (payload: InsertStoreParentPayload) => Promise<InsertStoreParentResponse>;
+    updateStore: (payload: UpdateStoreParentPayload) => Promise<UpdateStoreParentResponse>;
+    deleteStore: (payload: DeleteStoreParentPayload) => Promise<DeleteStoreParentResponse>;
 }
 
 export const storeParentRepository: StoreParentRepository = {
-    fetchListTimeSheet: async (params) => {
-        return fetchListTimeSheet(params)
+    fetchListStore: async (params) => {
+        return fetchListStore(params)
     },
-    fetchDetailTimeSheet: async (params) => {
-        return fetchListTimeSheet(params)
+    fetchDetailStore: async (params) => {
+        return fetchListStore(params)
     },
-    insertTimeSheet: async (payload) => {
-        return insertTimeSheet(payload)
+    insertStore: async (payload) => {
+        return insertStore(payload)
     },
-    updateTimeSheet: (payload) => {
-        return updateTimeSheet(payload);
+    updateStore: (payload) => {
+        return updateStore(payload);
     },
-    deleteTimeSheet: (payload) => {
-        return deleteTimeSheet(payload);
+    deleteStore: (payload) => {
+        return deleteStore(payload);
     }
 }

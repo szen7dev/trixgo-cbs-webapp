@@ -8,8 +8,8 @@ import { convertCurrency } from "utils/converter";
 import { useModal } from "services/hooks/useModal";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import {
-    useQueryListTimeSheetParent,
-    useMutationTimeSheetParent,
+    useQueryListStoreParent,
+    useMutationStoreParent,
   } from "services/hooks/useStore";
 import {
     SearchInput,
@@ -18,12 +18,12 @@ import {
 } from "views/store/shareComponents/common";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
-interface TimesheetHomePageProps {
+interface StoreHomePageProps {
     outin?: number
     type?: number
 }
 
-export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 2 }) => {
+export const StoreImportPage: FC<StoreHomePageProps> = ({ outin = 2, type = 2 }) => {
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);
@@ -34,7 +34,7 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
   const { openDeleteConfirm } = useDeleteConfirm();
   const {
     dataNotFilter,
-    refetch: refreshListTimeSheet,
+    refetch: refreshListStore,
     totalPages,
     totalRecord,
     fetchNextPage,
@@ -42,21 +42,21 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
     limit,
     loading,
     hasNextPage,
-  } = useQueryListTimeSheetParent({ keyword, outin, type, sortOption: 2 });
+  } = useQueryListStoreParent({ keyword, outin, type, sortOption: 2 });
   console.log(dataNotFilter)
 
   const {
-    onCreateTimeSheetParentAsync,
-    onUpdateTimeSheetParentAsync,
-    onDeleteTimeSheetParentAsync,
-  } = useMutationTimeSheetParent();
+    onCreateStoreParentAsync,
+    onUpdateStoreParentAsync,
+    onDeleteStoreParentAsync,
+  } = useMutationStoreParent();
 
-  const handleCreateTimeSheet = React.useCallback(
+  const handleCreateStore = React.useCallback(
     async (values) => {
       try {
-        const isCreated = await onCreateTimeSheetParentAsync(values);
+        const isCreated = await onCreateStoreParentAsync(values);
         if (!isCreated.error) {
-          refreshListTimeSheet();
+          refreshListStore();
           closeModal();
           return null;
         }
@@ -65,15 +65,15 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
         return null;
       }
     },
-    [closeModal, onCreateTimeSheetParentAsync, refreshListTimeSheet]
+    [closeModal, onCreateStoreParentAsync, refreshListStore]
   );
 
-  const handleUpdateTimeSheet = React.useCallback(
+  const handleUpdateStore = React.useCallback(
     async (values) => {
       try {
-        const isUpdated = await onUpdateTimeSheetParentAsync(values);
+        const isUpdated = await onUpdateStoreParentAsync(values);
         if (!isUpdated.error) {
-          refreshListTimeSheet();
+          refreshListStore();
           closeModal();
           return null;
         }
@@ -82,23 +82,23 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
         return null;
       }
     },
-    [closeModal, onUpdateTimeSheetParentAsync, refreshListTimeSheet]
+    [closeModal, onUpdateStoreParentAsync, refreshListStore]
   );
 
-  const handleClickDeleteTimeSheet = React.useCallback(
-    (timeSheetID) => {
+  const handleClickDeleteStore = React.useCallback(
+    (StoreID) => {
       openDeleteConfirm({
         deleteAction: async () => {
-          const res = await onDeleteTimeSheetParentAsync({
-            expertTimesheetID: timeSheetID,
+          const res = await onDeleteStoreParentAsync({
+            expertStoreID: StoreID,
           });
           if (res.status === 200) {
-            refreshListTimeSheet();
+            refreshListStore();
           }
         },
       });
     },
-    [onDeleteTimeSheetParentAsync, refreshListTimeSheet, openDeleteConfirm]
+    [onDeleteStoreParentAsync, refreshListStore, openDeleteConfirm]
   );
 
   return (
@@ -120,8 +120,8 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
               <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
               <ActionGroupButton
                 recordSelected={recordSelected}
-                onUpdateTimeSheet={handleUpdateTimeSheet}
-                onDeleteTimeSheet={handleClickDeleteTimeSheet}
+                onUpdateStore={handleUpdateStore}
+                onDeleteStore={handleClickDeleteStore}
               />
             </>
           )}
@@ -133,7 +133,9 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
               <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
                 <DialogForm
                   title="Tạo mới"
-                  onSubmit={handleCreateTimeSheet}
+                  onSubmit={handleCreateStore}
+                  outin={2}
+                  type={2}
                   projectName={""}
                   assigneeName={""}
                   warehouseName={""}
@@ -221,8 +223,8 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
               Ghi chú
             </div>
           </div>
-          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((timeSheetParent: any) => (
-            <div className={"body-table table-row"} key={timeSheetParent._id}>
+          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((StoreParent: any) => (
+            <div className={"body-table table-row"} key={StoreParent._id}>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b align-middle w-3"
@@ -232,10 +234,10 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
                   className="form-check-input"
                   type="checkbox"
                   id="flexCheckDefault"
-                  checked={recordSelected?._id === timeSheetParent._id}
+                  checked={recordSelected?._id === StoreParent._id}
                   onChange={(e) => {
                     if (e.target.checked) {
-                      toggleRecord(timeSheetParent);
+                      toggleRecord(StoreParent);
                       return null;
                     }
                     toggleRecord({});
@@ -244,45 +246,45 @@ export const StoreImportPage: FC<TimesheetHomePageProps> = ({ outin = 2, type = 
                 />
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                Tháng {moment(timeSheetParent.date).format('MM/YYYY')}
+                Tháng {moment(StoreParent.date).format('MM/YYYY')}
               </div>
               <div
                 className={
                   "px-1 py-2 table-cell box-border border-b align-middle w-2/12"
                 }
               >
-                <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
-                  {timeSheetParent.name}
+                <NavLink to={`/Store/home/${StoreParent._id}`}>
+                  {StoreParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  Tạo: {timeSheetParent?.userCreate?.fullname} {moment(timeSheetParent.createAt).format(DATE_FORMAT)}
+                  Tạo: {StoreParent?.userCreate?.fullname} {moment(StoreParent.createAt).format(DATE_FORMAT)}
                 </p>
                 <p className={"mt-1 text-gray-500"}>
-                  Cập nhật: {timeSheetParent?.userUpdate?.fullname} {moment(timeSheetParent.modifyAt).format(DATE_FORMAT)}
+                  Cập nhật: {StoreParent?.userUpdate?.fullname} {moment(StoreParent.modifyAt).format(DATE_FORMAT)}
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {TIMESHEET_TYPES[Number(timeSheetParent.type - 1)].text}
+                {/* {Store_TYPES[Number(StoreParent.type - 1)].text} */}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {timeSheetParent?.project?.name}
+                {StoreParent?.project?.name}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(timeSheetParent?.hours)}
+                {convertCurrency(StoreParent?.hours)}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(timeSheetParent?.amount)}
+                {convertCurrency(StoreParent?.amount)}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {timeSheetParent.note}
+                {StoreParent.note}
               </div>
             </div>
           ))}

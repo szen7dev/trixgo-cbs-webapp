@@ -5,9 +5,10 @@ import { Project } from "./items/project";
 import { Warehouse } from "./items/warehouse";
 import { Contact } from "./items/contact";
 
-export type TimeSheetParent = {
+export type StoreParent = {
     _id: string;
-    type: 1;
+    outin: number;
+    type: number;
     hours: number;
     unitprice: number;
     amount: number;
@@ -25,20 +26,21 @@ export type TimeSheetParent = {
     warehouse: Warehouse;
     customer: Contact;
     note: string;
+    sign: string;
     createAt: string;
     modifyAt: string;
     date: string;
     convertFactor: number;
 }
 
-export type ListTimeSheetPayload = QueryParams & {
-    expertTimesheetID?: string;
+export type ListStorePayload = QueryParams & {
+    expertStoreID?: string;
 };
 
 // time sheet parent
-export type QueryTimeSheetParentResponse = APIResponse & {
+export type QueryStoreParentResponse = APIResponse & {
     data: {
-        listRecords: TimeSheetParent[];
+        listRecords: StoreParent[];
         limit: number;
         totalRecord: number;
         totalPage: number;
@@ -46,25 +48,27 @@ export type QueryTimeSheetParentResponse = APIResponse & {
     };
 }
 
-export type QueryDetailTimeSheetParentResponse = APIResponse & {
-    data: TimeSheetParent;
+export type QueryDetailStoreParentResponse = APIResponse & {
+    data: StoreParent;
 }
 
-export type InsertTimeSheetParentPayload = {
+export type InsertStoreParentPayload = {
     project: Project;
     assignee: User;
     warehouse: Warehouse;
     customer: Contact;
-    type: 1;
+    outin: number;
+    type: number;
     name: string;
     note: string;
+    sign: string;
     date: string;
     convertFactor: number;
 }
 
-export type InsertTimeSheetParentResponse = {
+export type InsertStoreParentResponse = {
     error: boolean;
-    data: TimeSheetParent & {
+    data: StoreParent & {
         assignee: string;
         project: string;
         warehouse: string;
@@ -73,22 +77,22 @@ export type InsertTimeSheetParentResponse = {
     }
 }
 
-export type UpdateTimeSheetParentPayload = {
-    expertTimesheetID: string;
+export type UpdateStoreParentPayload = {
+    expertStoreID: string;
     members?: string[];
     membersRemove?: string[];
     admins?: string[];
     adminsRemove?: string[];
 }
 
-export type UpdateTimeSheetParentResponse = InsertTimeSheetParentResponse;
+export type UpdateStoreParentResponse = InsertStoreParentResponse;
 
-export type DeleteTimeSheetParentPayload = {
-    expertTimesheetID: string;
+export type DeleteStoreParentPayload = {
+    expertStoreID: string;
 }
 
-export type DeleteTimeSheetParentResponse = APIResponse & {
-    data: TimeSheetParent & {
+export type DeleteStoreParentResponse = APIResponse & {
+    data: StoreParent & {
         assignee: string;
         project: string;
         warehouse: string;
@@ -96,9 +100,10 @@ export type DeleteTimeSheetParentResponse = APIResponse & {
     }
 }
 
-export type TimeSheetChild = {
+export type StoreChild = {
     _id: string;
-    type: 1;
+    outin: number;
+    type: number;
     hours: number;
     unitprice: number;
     amount: number;
@@ -108,26 +113,27 @@ export type TimeSheetChild = {
     state: 1;
     name: string;
     date: string;
-    parent?: TimeSheetParent;
+    parent?: StoreParent;
     assignee?: User
     project?: Project
     warehouse?: Warehouse
     customer?: Contact
     work: strinstring | null
     note?: string
+    sign?: string
     createAt?: string | null
     modifyAt?: string | null
     userCreate?: any
     userUpdate?: any | null
 }
 
-export type QueryListTimeSheetChildPayload = QueryParams & {
+export type QueryListStoreChildPayload = QueryParams & {
     parentID: string;
 }
 
-export type QueryTimeSheetChildResponse = APIResponse & {
+export type QueryStoreChildResponse = APIResponse & {
     data: {
-        listRecords: TimeSheetChild[];
+        listRecords: StoreChild[];
         limit: number;
         totalRecord: number;
         totalPage: number;
@@ -135,7 +141,7 @@ export type QueryTimeSheetChildResponse = APIResponse & {
     };
 }
 
-export type InsertTimeSheetChildPayload = {
+export type InsertStoreChildPayload = {
     parentID: string;
     assigneeID?: string;
     projectID?: string;
@@ -152,18 +158,19 @@ export type InsertTimeSheetChildPayload = {
     warehouse?: string;
     customer?: string;
     note?: string;
+    sign: string;
 }
 
-export type InsertTimeSheetChildResponse = {
+export type InsertStoreChildResponse = {
     error: boolean;
-    data: TimeSheetChild & {
+    data: StoreChild & {
         assignee?: string;
         project: string;
     }
 }
 
-export type UpdateTimeSheetChildPayload = {
-    expertTimesheetID: string;
+export type UpdateStoreChildPayload = {
+    expertStoreID: string;
     assigneeID?: string;
     projectID?: string;
     warehouseID?: string;
@@ -176,10 +183,11 @@ export type UpdateTimeSheetChildPayload = {
     amount?: string;
     assignee?: string;
     note?: string;
+    sign: string;
     members?: string[];
     membersRemove?: string[];
     admins?: string[];
     adminsRemove?: string[];
 }
 
-export type UpdateTimeSheetChildResponse = InsertTimeSheetChildResponse;
+export type UpdateStoreChildResponse = InsertStoreChildResponse;

@@ -19,24 +19,25 @@ import {
 	// useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
 
-import type { InsertTimeSheetParentPayload } from "typings/store";
+import type { InsertStoreParentPayload } from "typings/store";
 interface CreateOrEditDialogProps {
+  outin: number,
+  type: number,
   title: string;
-  defaultValues?: InsertTimeSheetParentPayload;
+  defaultValues?: InsertStoreParentPayload;
   projectName: string;
   assigneeName: string;
   warehouseName?: string;
   customerName?: string;
   onSubmit?: (values: string) => void;
-  expertTimesheetID?: string;
-  expertSalaryID?: string;
+  cashBookID?: string;
 }
 
 const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   title,
   defaultValues,
   onSubmit,
-  expertTimesheetID,
+  cashBookID,
   assigneeName,
   projectName,
   warehouseName,
@@ -54,12 +55,12 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   }, true);
 
   const { listWarehouse } = useQueryListWarehouse({
-		// limit: LIMIT_DROPDOWN,
+		limit: LIMIT_DROPDOWN,
 		keyword: searchWarehouseValue,
 	});
 
   const { listContact } = useQueryListContact({
-		// limit: LIMIT_DROPDOWN,
+		limit: LIMIT_DROPDOWN,
 		keyword: searchContactValue,
 	});
 
@@ -83,12 +84,12 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
         outin: `${values.outin}`,
         type: `${values.type}`,
       };
-      if (expertTimesheetID) {
-        formatData.expertTimesheetID = expertTimesheetID;
+      if (cashBookID) {
+        formatData.cashBookID = cashBookID;
       }
       onSubmit && onSubmit(formatData);
     },
-    [expertTimesheetID, onSubmit]
+    [cashBookID, onSubmit]
   );
 
   return (

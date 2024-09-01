@@ -2,25 +2,25 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { StoreParentRepository, StoreChildRepository } from "apis/store";
 
 import type {
-  TimeSheetParent,
-  InsertTimeSheetParentPayload,
-  InsertTimeSheetParentResponse,
-  UpdateTimeSheetParentPayload,
-  UpdateTimeSheetParentResponse,
-  DeleteTimeSheetParentPayload,
-  DeleteTimeSheetParentResponse,
-  TimeSheetChild,
-  InsertTimeSheetChildPayload,
-  InsertTimeSheetChildResponse,
-  UpdateTimeSheetChildPayload,
-  UpdateTimeSheetChildResponse,
+  StoreParent,
+  InsertStoreParentPayload,
+  InsertStoreParentResponse,
+  UpdateStoreParentPayload,
+  UpdateStoreParentResponse,
+  DeleteStoreParentPayload,
+  DeleteStoreParentResponse,
+  StoreChild,
+  InsertStoreChildPayload,
+  InsertStoreChildResponse,
+  UpdateStoreChildPayload,
+  UpdateStoreChildResponse,
 } from "typings/store";
 
 // Time Sheet Parent
-interface UseQueryListTimeSheetParent {
+interface UseQueryListStoreParent {
   loading: boolean;
-  data: TimeSheetParent[];
-  dataNotFilter: Array<TimeSheetParent[]>;
+  data: StoreParent[];
+  dataNotFilter: Array<StoreParent[]>;
   hasNextPage?: boolean;
   limit: number;
   totalPages: number;
@@ -30,17 +30,17 @@ interface UseQueryListTimeSheetParent {
   fetchPrevPage: () => void;
 }
 
-export const useQueryListTimeSheetParent = (
+export const useQueryListStoreParent = (
   params?: any,
   limit = 50
-): UseQueryListTimeSheetParent => {
+): UseQueryListStoreParent => {
   const result = useInfiniteQuery(
     [`list_store.parent`, params],
     async ({ pageParam }: any) =>
-        StoreParentRepository.fetchListTimeSheet({
+        StoreParentRepository.fetchListStore({
         populates: {
-          path: "assignee project userCreate userUpdate parent",
-          select: "fullname name",
+          path: "assignee project warehouse customer userCreate userUpdate parent",
+          select: "fullname name sign phone",
         },
         limit,
         lastestID: pageParam,
@@ -66,7 +66,7 @@ export const useQueryListTimeSheetParent = (
     hasNextPage,
   } = result;
 
-  const listTimeSheet = []
+  const listStore = []
     .concat(...(data?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
 
@@ -79,23 +79,23 @@ export const useQueryListTimeSheetParent = (
 
   // // Tải mẫu import excel
   // const { mutateAsync: downloadTemplateExcelAsync } =
-  //     useMutation((payload: DownloadPayload ) => TimeSheetChildRepository.downloadTemplateExcel(payload)
+  //     useMutation((payload: DownloadPayload ) => StoreChildRepository.downloadTemplateExcel(payload)
   // );
 
   // // Import excel
   // const { mutateAsync: importExcelAsync } =
-  //     useMutation((payload: ImportPayload) => TimeSheetChildRepository.importExcel(payload)
+  //     useMutation((payload: ImportPayload) => StoreChildRepository.importExcel(payload)
   // );
 
   // // Export excel
   // const { mutateAsync: exportExcelAsync } =
   //     useMutation((payload: ExportManyPayload) =>
-  //     TimeSheetChildRepository.exportExcel(payload)
+  //     StoreChildRepository.exportExcel(payload)
   // );
 
   return {
     loading: isLoading,
-    data: listTimeSheet,
+    data: listStore,
     dataNotFilter,
     hasNextPage,
     limit,
@@ -107,25 +107,25 @@ export const useQueryListTimeSheetParent = (
   };
 };
 
-interface UseQueryDetailTimeSheetParent {
+interface UseQueryDetailStoreParent {
   loading: boolean;
-  data?: TimeSheetParent;
+  data?: StoreParent;
   error: boolean;
   refetch: () => void;
 }
 
-export const useQueryDetailTimeSheetParent = (
-  expertTimesheetID: string
-): UseQueryDetailTimeSheetParent => {
+export const useQueryDetailStoreParent = (
+  expertStoreID: string
+): UseQueryDetailStoreParent => {
   const { isLoading, data, refetch } = useQuery(
-    `store.parent.${expertTimesheetID}`,
+    `store.parent.${expertStoreID}`,
     async () =>
-        StoreParentRepository.fetchDetailTimeSheet({
+        StoreParentRepository.fetchDetailStore({
         populates: {
           path: "assignee project userCreate userUpdate members admins",
           select: "_id fullname bizfullname name sign image",
         },
-        expertTimesheetID,
+        expertStoreID,
       }),
     {
       getNextPageParam: ({ data }: any) => {
@@ -144,40 +144,40 @@ export const useQueryDetailTimeSheetParent = (
   };
 };
 
-interface UseMutationTimeSheetParent {
-  onCreateTimeSheetParentAsync: (
-    payload: InsertTimeSheetParentPayload
-  ) => Promise<InsertTimeSheetParentResponse>;
-  onUpdateTimeSheetParentAsync: (
-    payload: UpdateTimeSheetParentPayload
-  ) => Promise<UpdateTimeSheetParentResponse>;
-  onDeleteTimeSheetParentAsync: (
-    payload: DeleteTimeSheetParentPayload
-  ) => Promise<DeleteTimeSheetParentResponse>;
+interface UseMutationStoreParent {
+  onCreateStoreParentAsync: (
+    payload: InsertStoreParentPayload
+  ) => Promise<InsertStoreParentResponse>;
+  onUpdateStoreParentAsync: (
+    payload: UpdateStoreParentPayload
+  ) => Promise<UpdateStoreParentResponse>;
+  onDeleteStoreParentAsync: (
+    payload: DeleteStoreParentPayload
+  ) => Promise<DeleteStoreParentResponse>;
 }
-export const useMutationTimeSheetParent = (): UseMutationTimeSheetParent => {
-  const insertMutation = useMutation((payload: InsertTimeSheetParentPayload) =>
-    StoreParentRepository.insertTimeSheet(payload)
+export const useMutationStoreParent = (): UseMutationStoreParent => {
+  const insertMutation = useMutation((payload: InsertStoreParentPayload) =>
+    StoreParentRepository.insertStore(payload)
   );
-  const updateMutation = useMutation((payload: UpdateTimeSheetParentPayload) =>
-    StoreParentRepository.updateTimeSheet(payload)
+  const updateMutation = useMutation((payload: UpdateStoreParentPayload) =>
+    StoreParentRepository.updateStore(payload)
   );
-  const deleteMutation = useMutation((payload: DeleteTimeSheetParentPayload) =>
-    StoreParentRepository.deleteTimeSheet(payload)
+  const deleteMutation = useMutation((payload: DeleteStoreParentPayload) =>
+    StoreParentRepository.deleteStore(payload)
   );
 
   return {
-    onCreateTimeSheetParentAsync: insertMutation.mutateAsync,
-    onUpdateTimeSheetParentAsync: updateMutation.mutateAsync,
-    onDeleteTimeSheetParentAsync: deleteMutation.mutateAsync,
+    onCreateStoreParentAsync: insertMutation.mutateAsync,
+    onUpdateStoreParentAsync: updateMutation.mutateAsync,
+    onDeleteStoreParentAsync: deleteMutation.mutateAsync,
   };
 };
 
 // Time Sheet Children
-interface UseQueryListTimeSheetChild {
+interface UseQueryListStoreChild {
   loading: boolean;
-  data: TimeSheetChild[];
-  dataNotFilter: TimeSheetChild[];
+  data: StoreChild[];
+  dataNotFilter: StoreChild[];
   hasNextPage?: boolean;
   totalPages: number;
   totalRecord: number;
@@ -186,15 +186,15 @@ interface UseQueryListTimeSheetChild {
   fetchNextPage: () => void;
   fetchPrevPage: () => void;
 }
-export const useQueryListTimeSheetChild = (
-  timeSheetParentID: string,
+export const useQueryListStoreChild = (
+  StoreParentID: string,
   params: any,
-): UseQueryListTimeSheetChild => {
+): UseQueryListStoreChild => {
   const result = useInfiniteQuery(
     [`list_store.child`, params],
     async ({ pageParam }: any) =>
-        StoreChildRepository.fetchListTimeSheet({
-        parentID: timeSheetParentID,
+        StoreChildRepository.fetchListStore({
+        parentID: StoreParentID,
         lastestID: pageParam,
         ...params
       }),
@@ -215,7 +215,7 @@ export const useQueryListTimeSheetChild = (
     hasNextPage,
   } = result;
 
-  const listTimeSheet = []
+  const listStore = []
     .concat(...(data?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
 
@@ -228,7 +228,7 @@ export const useQueryListTimeSheetChild = (
 
   return {
     loading: isLoading,
-    data: listTimeSheet,
+    data: listStore,
     dataNotFilter,
     hasNextPage,
     totalPages,
@@ -240,26 +240,26 @@ export const useQueryListTimeSheetChild = (
   };
 };
 
-interface UseMutationTimeSheetChild {
-  onCreateTimeSheetAsync: (
-    payload: InsertTimeSheetChildPayload
-  ) => Promise<InsertTimeSheetChildResponse>;
-  onUpdateTimeSheetAsync: (
-    payload: UpdateTimeSheetChildPayload
-  ) => Promise<UpdateTimeSheetChildResponse>;
+interface UseMutationStoreChild {
+  onCreateStoreAsync: (
+    payload: InsertStoreChildPayload
+  ) => Promise<InsertStoreChildResponse>;
+  onUpdateStoreAsync: (
+    payload: UpdateStoreChildPayload
+  ) => Promise<UpdateStoreChildResponse>;
 }
 
-// export const useMutationTimeSheetChild = (): UseMutationTimeSheetChild => {
-//   const insertMutation = useMutation((payload: InsertTimeSheetChildPayload) =>
-//     StoreChildRepository.insertTimeSheet(payload)
+// export const useMutationStoreChild = (): UseMutationStoreChild => {
+//   const insertMutation = useMutation((payload: InsertStoreChildPayload) =>
+//     StoreChildRepository.insertStore(payload)
 //   );
 
-//   const updateMutation = useMutation((payload: UpdateTimeSheetChildPayload) =>
-//     StoreChildRepository.updateTimeSheet(payload)
+//   const updateMutation = useMutation((payload: UpdateStoreChildPayload) =>
+//     StoreChildRepository.updateStore(payload)
 //   );
 
 //   return {
-//     onCreateTimeSheetAsync: insertMutation.mutateAsync,
-//     onUpdateTimeSheetAsync: updateMutation.mutateAsync,
+//     onCreateStoreAsync: insertMutation.mutateAsync,
+//     onUpdateStoreAsync: updateMutation.mutateAsync,
 //   }
 // }

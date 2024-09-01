@@ -4,28 +4,30 @@ import CreateOrEditDialog from "../DialogForm";
 
 import { useModal } from "services/hooks/useModal";
 
-import type { TimeSheetParent } from "typings/store";
+import type { StoreParent } from "typings/store";
 
 interface ActionGroupButtonProps {
-  recordSelected?: TimeSheetParent;
-  onUpdateTimeSheet: (values: any) => void;
-  onDeleteTimeSheet: (timeSheetID: string) => void;
+  recordSelected?: StoreParent;
+  onUpdateStore: (values: any) => void;
+  onDeleteStore: (cashBookID: string) => void;
 }
 
 const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
-  const { recordSelected, onUpdateTimeSheet, onDeleteTimeSheet } = props;
+  const { recordSelected, onUpdateStore, onDeleteStore } = props;
 
   const { openModal } = useModal();
 
-  const handleClickUpdateTimeSheet = React.useCallback(
-    (record?: TimeSheetParent) => () => {
+  const handleClickUpdateStore = React.useCallback(
+    (record?: StoreParent) => () => {
       if (record?._id) {
         openModal(
           <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
             <CreateOrEditDialog
               title="Cập nhật"
-              onSubmit={onUpdateTimeSheet}
-              expertTimesheetID={record?._id}
+              onSubmit={onUpdateStore}
+              cashBookID={record?._id}
+              outin={record?.outin}
+              type={record?.type}
               projectName={record?.project?.name}
               assigneeName={record?.assignee?.fullname}
               warehouseName={record?.warehouse?.name}
@@ -37,6 +39,8 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
                 assignee: record.assignee,
                 name: record.name,
                 note: record.note,
+                sign: record.sign,
+                outin: record.outin,
                 type: record.type,
                 convertFactor: record.convertFactor,
                 date: record.date,
@@ -46,23 +50,14 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
         );
       }
     },
-    [onUpdateTimeSheet, openModal]
-  );
-
-  const handleClickDeleteTimeSheet = React.useCallback(
-    (timeSheetID?: string) => () => {
-      if (timeSheetID) {
-        onDeleteTimeSheet(timeSheetID);
-      }
-    },
-    [onDeleteTimeSheet]
+    [onUpdateStore, openModal]
   );
 
   return (
     <div className={"flex items-center"}>
       <button
         className={"flex items-center mr-3"}
-        onClick={handleClickUpdateTimeSheet(recordSelected)}
+        onClick={handleClickUpdateStore(recordSelected)}
       >
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PencilIcon} />
       </button>

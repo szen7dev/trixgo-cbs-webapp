@@ -1,32 +1,32 @@
 import {
-    fetchListTimeSheet,
-    insertTimeSheet,
-    updateTimeSheet
+    fetchListStore,
+    insertStore,
+    updateStore
 } from './store-parent';
 
 import type {
-    QueryListTimeSheetChildPayload,
-    QueryTimeSheetChildResponse,
-    InsertTimeSheetChildPayload,
-    InsertTimeSheetChildResponse,
-    UpdateTimeSheetChildPayload,
-    UpdateTimeSheetChildResponse
-} from 'typings/time-sheet';
+    QueryListStoreChildPayload,
+    QueryStoreChildResponse,
+    InsertStoreChildPayload,
+    InsertStoreChildResponse,
+    UpdateStoreChildPayload,
+    UpdateStoreChildResponse
+} from 'typings/store';
 
 interface StoreChildRepository {
-    fetchListTimeSheet: (params: QueryListTimeSheetChildPayload) => Promise<QueryTimeSheetChildResponse>;
-    insertTimeSheet: (payload: InsertTimeSheetChildPayload) => Promise<InsertTimeSheetChildResponse>;
-    updateTimeSheet: (payload: UpdateTimeSheetChildPayload) => Promise<UpdateTimeSheetChildResponse>;
+    fetchListStore: (params: QueryListStoreChildPayload) => Promise<QueryStoreChildResponse>;
+    insertStore: (payload: InsertStoreChildPayload) => Promise<InsertStoreChildResponse>;
+    updateStore: (payload: UpdateStoreChildPayload) => Promise<UpdateStoreChildResponse>;
 }
 
 export const storeChildRepository: StoreChildRepository = {
-    fetchListTimeSheet: async (params) => {
-        return fetchListTimeSheet(params)
+    fetchListStore: async (params) => {
+        return fetchListStore(params)
     },
-    insertTimeSheet: async (payload) => {
-        return insertTimeSheet(payload)
+    insertStore: async (payload) => {
+        return insertStore(payload)
     },
-    updateTimeSheet: async (payload) => {
-        return updateTimeSheet(payload)
+    updateStore: async (payload) => {
+        return updateStore(payload)
     },
 }
