@@ -204,6 +204,13 @@ export const DetailChildRow: FC<Props> = ({
           }
         />
       </div>
+      <div
+        className={
+          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
+        }
+      >
+        <p>{rowData?.goods?.unit}</p>
+      </div>
 
       <div
         className={

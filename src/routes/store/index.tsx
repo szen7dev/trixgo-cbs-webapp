@@ -21,7 +21,7 @@ import {
     StoreHomePage,
     StoreDashboardPage,
     StorePage,
-    StoreExportPage,
+    StoreRepairPage,
     StoreInventoryPage,
     StoreDetailPage,
 } from "views/store/pages";
@@ -53,6 +53,7 @@ const StoreRouter: FC = () => {
                     <Route exact path="/store/home" component={StoreHomePage}/>
                     <Route exact path="/store/dashboard" component={StoreDashboardPage}/>
                     <Route exact path="/store/inventory" component={StoreInventoryPage}/>  
+                    <Route exact path="/store/repair" component={StoreRepairPage}/>  
 
                     <Route exact path="/store/import" component={() => <StorePage outin={2} type ={2}/>}/>
                     <Route exact path="/store/import/:id" component={StoreDetailPage}/>
