@@ -186,6 +186,7 @@ interface UseQueryListStoreChild {
   fetchNextPage: () => void;
   fetchPrevPage: () => void;
 }
+
 export const useQueryListStoreChild = (
   StoreParentID: string,
   params: any,
@@ -237,6 +238,26 @@ export const useQueryListStoreChild = (
     refetch,
     fetchNextPage,
     fetchPrevPage,
+  };
+};
+
+export const useQueryListByPropertyStoreChild = (
+  params: any,
+) => {
+  const result = useInfiniteQuery(
+    [`list_store_property.child`, params],
+    async ({ pageParam }: any) =>
+        StoreChildRepository.fetchListByProperty({
+        ...params
+      }),
+  );
+
+  const {
+    data,
+  } = result;
+
+  return {
+    data: data?.pages[0] || []
   };
 };
 

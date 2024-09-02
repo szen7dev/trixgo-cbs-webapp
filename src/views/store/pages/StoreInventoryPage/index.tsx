@@ -1,4 +1,5 @@
 import React, { FC, useRef, useState, useCallback } from "react";
+import { formatNumberMoney } from "utils/cmcs";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -31,6 +32,12 @@ import {
 } from "services/hooks/cmcs/useContractIncome";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { useLocation } from "react-router-dom";
+import {
+  useQueryDetailStoreParent,
+  useQueryListStoreChild,
+  useMutationStoreChild,
+  useQueryListByPropertyStoreChild
+} from "services/hooks/useStore";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface StoreHomePageProps {
@@ -66,29 +73,11 @@ export const StoreInventoryPage: FC<StoreHomePageProps> = ({ outin, type }) => {
 	  toDate: lastDayOfMonth
 	})
 
-  // Danh sách mẩu tin
   const {
-    dataNotFilter,
-    refetch: refreshListStore,
-    totalPages,
-    totalRecord,
-    fetchNextPage,
-    fetchPrevPage,
-    limit,
-    loading,
-    hasNextPage,
-  } = useQueryListStoreParent({
-    projectID,
-    warehouseID,
-    customerID,
-    userCreateID: userID,
-    keyword, 
-    outin, 
-    type, 
-    sortOption: 2,
-    fromDate: inputFilter.fromDate,
-    toDate: inputFilter.toDate,
-  });
+    data,
+  } = useQueryListByPropertyStoreChild({
+    option: 1
+  })
 
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
@@ -114,49 +103,6 @@ export const StoreInventoryPage: FC<StoreHomePageProps> = ({ outin, type }) => {
 		limit: LIMIT_DROPDOWN,
 		keyword: warehouseKeyword,
 	});
-  
-  const {
-    onCreateStoreParentAsync,
-    onUpdateStoreParentAsync,
-  } = useMutationStoreParent();
-
-  const handleCreateStore = React.useCallback(
-    async (values) => {
-      try {
-        const isCreated = await onCreateStoreParentAsync(values);
-        if (!isCreated.error) {
-          toast.success('Khởi tạo thành công');
-          refreshListStore();
-          closeModal();
-          return null;
-        }
-        toast.error(isCreated?.data?.message);
-        throw new Error("Can not create!");
-      } catch (err) {
-        return null;
-      }
-    },
-    [closeModal, onCreateStoreParentAsync, refreshListStore]
-  );
-
-  const handleUpdateStore = React.useCallback(
-    async (values) => {
-      try {
-        const isUpdated = await onUpdateStoreParentAsync(values);
-        if (!isUpdated.error) {
-          toast.success('Cập nhật thành công');
-          refreshListStore();
-          closeModal();
-          return null;
-        }
-        toast.error(isUpdated?.data?.message);
-        throw new Error("Can not update!");
-      } catch (err) {
-        return null;
-      }
-    },
-    [closeModal, onUpdateStoreParentAsync, refreshListStore]
-  );
 
   const handleOnChangeDate = useCallback((date, input) => {
     if (input) {
@@ -299,200 +245,44 @@ export const StoreInventoryPage: FC<StoreHomePageProps> = ({ outin, type }) => {
               selectOneByOne={true}
           />
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          
-          {Object.keys(recordSelected).length > 1 && (
-            <>
-              <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
-              <ActionGroupButton
-                recordSelected={recordSelected}
-                onUpdateStore={handleUpdateStore}
-              />
-            </>
-          )}
         </div>
-        <button
-          className={"bg-green-success h-[32px] text-white rounded px-5"}
-          onClick={() =>
-            openModal(
-              <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
-                <DialogForm
-                  title="Tạo mới"
-                  onSubmit={handleCreateStore}
-                  outin={Number(outin)}
-                  type={Number(type)}
-                  projectName={""}
-                  assigneeName={""}
-                  warehouseName={""}
-                  customerName={""}
-                />
-              </div>
-            )
-          }
-        >
-          Tạo mới
-        </button>
-        <PaginateV2
-          ref={ref}
-          totalRecord={totalRecord}
-          totalPages={totalPages}
-          limit={limit}
-          hasNextPage={hasNextPage}
-          isFetching={loading}
-          nextPageAction={() => {
-            setPageIndex((oldState) => oldState + 1);
-            fetchNextPage();
-          }}
-          prevPageAction={() => {
-            setPageIndex((oldState) => oldState - 1);
-            fetchPrevPage();
-          }}
-        />
       </div>
 
-      <div className={"financial-cashflow-table"}>
-        <div className={"table border-collapse w-full"}>
-          <div className={"header table-row sticky z-10"}>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle w-3"
-              }
-            ></div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-              style={{ width: "100px" }}
-            >
-              Ngày
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500 w-1/6"
-              }
-            >
-              Nội dung
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Số phiếu
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Phân loại
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Dự án/phòng ban
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Kho bãi
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Mã khách
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Giá trị
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Ghi chú
-            </div>
-          </div>
-          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((item: any) => (
-            <div className={"body-table table-row"} key={item._id}>
-              <div
-                className={
-                  "px-2 py-2 table-cell box-border border-b align-middle w-3"
-                }
-              >
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="flexCheckDefault"
-                  checked={recordSelected?._id === item._id}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      toggleRecord(item);
-                      return null;
-                    }
-                    toggleRecord({});
-                    return null;
-                  }}
-                />
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {moment(item.date).format('DD/MM/YYYY')}
-              </div>
-              <div
-                className={
-                  "px-1 py-2 table-cell box-border border-b align-middle"
-                }
-              >
-                {Number(item.active) == 2 ? <div className="relative z-5 inline-block -translate-y-1"><button className="text-[10px] text-white rounded px-1 py-0.5 mx-1 bg-red-400">Phiếu hủy</button></div> : <></>}
-                <NavLink to={`${currentPathname}/${item._id}`} className="text-cbs-highlight-color font-bold text-medium">
-                  {item.name}
-                </NavLink>
-                <p className={"mt-1 text-gray-500"}>
-                  {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
-                </p>
-                <p className={"mt-1 text-gray-500"}>
-                  {item?.userUpdate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}
-                </p>
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item.sign}
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {STORE_OUTIN[Number(item.outin - 1)].text}
-                <p>{STORE_TYPES[Number(item.type - 1)].text}</p>
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item?.project?.name}
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item?.warehouse?.name}
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item?.customer?.name}
-              </div>
-              <div
-                className={
-                  "px-2 py-2 table-cell box-border border-b text-right"
-                }
-              >
-                {convertCurrency(item?.amount)}
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item.note}
-              </div>
-            </div>
+      <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
+        <thead className="bbg-cbs-table-header h-10 border-b border-primary-border">
+            <tr className="text-left text-sm text-primary-gray">
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Hàng hóa, vật tư, công cụ</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Đơn vị tính</th>
+              <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">NHẬP</th>
+              <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">XUẤT</th>
+              <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">TỒN</th>
+            </tr>
+            <tr className="text-left text-sm text-primary-gray">
+              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
+            </tr>
+        </thead>
+        <tbody>
+          {data?.data?.map((item: any, index: any) => (
+            <tr key={index} className="border-b border-primary-border h-10">
+              <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">{item?.name}</td>
+              <td className="py-1 px-2 border-r border-primary-border">{item?.unit}</td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome)}</td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income)}</td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityExpense)}</td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.expense)}</td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome - item?.quantityExpense)}</td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income - item?.expense)}</td>
+            </tr>
           ))}
-        </div>
-      </div>
+        </tbody>
+      </table>
     </div>
   )
 }
