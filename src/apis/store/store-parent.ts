@@ -29,6 +29,15 @@ export async function fetchListStore<T>(params?: ListStorePayload): Promise<T> {
     return data;
 }
 
+export async function fetchListByProperty(params : any) {
+    const { data } = await API.get(`${STORE_URL}/get-list-by-property`, {
+        params: {
+            ...params,
+        }
+    })
+    return data
+}
+
 export async function insertStore<P, R>(payload: P): Promise<R> {
     const { data } = await API.post(`${STORE_URL}`, payload);
     return data;
@@ -48,6 +57,7 @@ export async function deleteStore<P, R>(payload: P): Promise<R> {
 
 interface StoreParentRepository {
     fetchListStore: (params: ListStorePayload) => Promise<QueryStoreParentResponse>;
+    fetchListByProperty: (params: any) => Promise<QueryStoreParentResponse>;
     fetchDetailStore: (params: ListStorePayload) => Promise<QueryDetailStoreParentResponse>;
     insertStore: (payload: InsertStoreParentPayload) => Promise<InsertStoreParentResponse>;
     updateStore: (payload: UpdateStoreParentPayload) => Promise<UpdateStoreParentResponse>;
@@ -57,6 +67,9 @@ interface StoreParentRepository {
 export const storeParentRepository: StoreParentRepository = {
     fetchListStore: async (params) => {
         return fetchListStore(params)
+    },
+    fetchListByProperty: async (params) => {
+        return fetchListByProperty(params)
     },
     fetchDetailStore: async (params) => {
         return fetchListStore(params)
