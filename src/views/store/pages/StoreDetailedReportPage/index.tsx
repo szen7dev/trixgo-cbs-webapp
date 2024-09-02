@@ -57,7 +57,8 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
     customerID,
     goodsID,
     assetsID,
-    userCreateID: userID
+    userCreateID: userID,
+    sortKey: JSON.stringify(['date__1', 'createAt__1']),
   })
 
   const [userKeyword, setUserKeyword] = useState("");  
