@@ -91,6 +91,8 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
 		keyword: goodsKeyword,
 	})
 
+  let inventoryQuantity = 0, inventory = 0
+  
   return (
     <div>
       <div className={"filter-bar flex flex-wrap border-b py-2"}>
@@ -342,14 +344,16 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
                 const jsx = [];
 
                 if(item?.outin == 2){
+                  inventoryQuantity = Number(inventoryQuantity) + Number(item?.quantity)
+                  inventory = Number(inventory) + Number(item?.amount)
+
                   jsx.push(
                     <tr key={index} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                       { moment(item?.date).format('DD/MM/YYYY')}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                        {item?.name}
-                        <p>{item?.goods?.name}</p>
+                        {item?.name}-{item?.goods?.name}
                         <p><i>{item?.assets?.name}</i></p>
                         <NavLink className="text-primary" to={`/store/home/${item?.parent?._id}`}>
                           <p className="text-primary-gray"><i>{item?.parent?.name}</i></p>
@@ -361,21 +365,23 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right"></td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right"></td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventoryQuantity)}</td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory)}</td>
                     </tr>
                   )
                 }
 
                 if(item?.outin == 1){
+                  inventoryQuantity = Number(inventoryQuantity) - Number(item?.quantity)
+                  inventory = Number(inventory) - Number(item?.amount)
+
                   jsx.push(
                     <tr key={index} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                       { moment(item?.date).format('DD/MM/YYYY')}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                        {item?.name}
-                        <p>{item?.goods?.name}</p>
+                        {item?.name}-{item?.goods?.name}
                         <p><i>{item?.assets?.name}</i></p>
                         <NavLink className="text-primary" to={`/store/home/${item?.parent?._id}`}>
                           <p className="text-primary-gray"><i>{item?.parent?.name}</i></p>
@@ -387,8 +393,8 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantity)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right"></td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right"></td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventoryQuantity)}</td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory)}</td>
                     </tr>
                   )
                 }
