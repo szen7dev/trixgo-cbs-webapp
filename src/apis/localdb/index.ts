@@ -615,7 +615,7 @@ export const STORE_OUTIN = [
 ]
 
 export const STORE_TYPES = [
-    { value: 1, text: 'Sổ quỹ' },
+    { value: 1, text: '###' }, // Sổ quỹ
     { value: 2, text: 'Vật tư chính' },
     { value: 3, text: 'Vật tư phụ' },
     { value: 4, text: 'Công cụ dụng cụ' },

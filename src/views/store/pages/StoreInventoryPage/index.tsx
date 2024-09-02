@@ -4,23 +4,9 @@ import { NavLink } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
-import { STORE_OUTIN, STORE_TYPES } from "apis/localdb";
-import { convertCurrency } from "utils/converter";
-import { useModal } from "services/hooks/useModal";
-import { toast } from "react-toastify";
-import {
-    useQueryListStoreParent,
-    useMutationStoreParent,
-  } from "services/hooks/useStore";
-import {
-    SearchInput,
-    DialogForm,
-    ActionGroupButton,
-} from "views/store/shareComponents/common";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
-import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import {
 	useQueryListWarehouse,
@@ -28,60 +14,54 @@ import {
 	// useQueryListContract,
 	// useQueryListBudgetWork,
 	// useQueryListAccount,
-	// useQueryListGood
+	useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import { useLocation } from "react-router-dom";
 import {
-  useQueryDetailStoreParent,
-  useQueryListStoreChild,
-  useMutationStoreChild,
   useQueryListByPropertyStoreChild
 } from "services/hooks/useStore";
+import { STORE_TYPES } from "apis/localdb";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
-interface StoreHomePageProps {
+interface Props {
     outin?: number
-    type?: number
+    // type?: number
 }
 
-export const StoreInventoryPage: FC<StoreHomePageProps> = ({ outin, type }) => {
-  const location = useLocation();
-  const { pathname: currentPathname } = location;
-  
+export const StoreInventoryPage: FC<Props> = ({ outin }) => {  
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
   const accountRef = React.useRef<DropdownHandle>(null);
-
-  const [recordSelected, toggleRecord] = React.useState<any>({});
-  const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);
 
+  // const [outin, setOutin] = useState<string | null>();
+  const [type, setType] = useState<string | null>();
   const [userID, setUserID] = useState<string | null>();
   const [projectID, setProjectID] = useState<string | null>();
   const [warehouseID, setWarehouseID] = useState<string | null>();
+  const [goodsID, setGoodsID] = useState<string | null>();
+  const [assetsID, setAssetsID] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
-
-  const { openModal, closeModal } = useModal();
-
-	const today = new Date();
-	const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-	const currentMonth = new Date().getMonth()
-  const [inputFilter, setInputFilter] = useState({
-	  fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
-	  toDate: lastDayOfMonth
-	})
 
   const {
     data,
   } = useQueryListByPropertyStoreChild({
-    option: 1
+    option: 1,
+    // outin, 
+    type, 
+    projectID,
+    warehouseID,
+    customerID,
+    goodsID,
+    assetsID,
+    userCreateID: userID
   })
 
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
   const [warehouseKeyword, setWarehouseKeyword] = useState("");
+  const [goodsKeyword, setGoodsKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
 
   const { list: listCustomer } = useContact({
@@ -97,60 +77,42 @@ export const StoreInventoryPage: FC<StoreHomePageProps> = ({ outin, type }) => {
 
   const { listDepartments } = useQueryListDepartments({
     keyword: projectKeyword,
-  }, true);
+  }, true)
 
   const { listWarehouse } = useQueryListWarehouse({
 		limit: LIMIT_DROPDOWN,
 		keyword: warehouseKeyword,
-	});
+	})
 
-  const handleOnChangeDate = useCallback((date, input) => {
-    if (input) {
-      setInputFilter((value) => ({ ...value, toDate: date }))
-    } else {
-      setInputFilter((value) => ({ ...value, fromDate: date }))
-    }
-    }, [])
+  const { listGood } = useQueryListGood({
+		limit: LIMIT_DROPDOWN,
+		keyword: goodsKeyword,
+	})
 
   return (
-    <div className={"financial-cashflow-listing paginate-wrapper relative"}>
-      <div
-        className={
-          "financial-cashflow-listing-heading flex items-center border-b py-2 px-2"
-        }
-      >
-        <div className={"filter-bar flex flex-wrap px-4 py-1"}>
-            <SearchInput
-              classNameWrapper={"mr-2"}
-              onChange={debounce((e) => {
-                setKeyword(e.target.value);
-              }, 1000)}
-            />
-            <DropdownSearchableV2
+    <div>
+      <div className={"filter-bar flex flex-wrap border-b py-2"}>
+          <DropdownSearchableV2
               ref={accountRef}
               className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Dự án"}
+              placeholder={"Phân loại"}
               isMultiple={false}
               allowClearValueSingleInput={true}
-              data={listDepartments.map((item: any) => ({
-                _id: item._id,
-                name: `${item.sign}.${item.name}`,
+              data={STORE_TYPES.map((item: any) => ({
+                _id: item.value,
+                name: item.text,
               }))}
               formatItem={{
                   id: "_id",
                   text: "name",
               }}
-              onSearchInputChange={debounce(
-                  (valueSearch) => setProjectKeyword(valueSearch),
-                  500
-              )}
               onClearData={() => {
-                setProjectID("");
+                setType("");
               }}
               onchangeValue={item => {
-                setProjectID(item._id);
-                  setPageIndex(0);
-                  ref.current&&ref.current.resetPaginate();
+                setType(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
               }}
               renderItem={(item) => (
                   <p className={"min-w-[300px]"}>{item.text}</p>
@@ -158,94 +120,179 @@ export const StoreInventoryPage: FC<StoreHomePageProps> = ({ outin, type }) => {
               selectOneByOne={true}
           />
           <DropdownSearchableV2
-              ref={accountRef}
-              className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Kho bãi"}
-              isMultiple={false}
-              allowClearValueSingleInput={true}
-              data={listWarehouse}
-              formatItem={{
-                  id: "_id",
-                  text: "name",
-              }}
-              onSearchInputChange={debounce(
-                  (valueSearch) => setWarehouseKeyword(valueSearch),
-                  500
-              )}
-              onClearData={() => {
-                setWarehouseID("");
-              }}
-              onchangeValue={item => {
-                setWarehouseID(item._id);
-                  setPageIndex(0);
-                  ref.current&&ref.current.resetPaginate();
-              }}
-              renderItem={(item) => (
-                  <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-              selectOneByOne={true}
-          />
-            <DropdownSearchableV2
-              ref={accountRef}
-              className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Mã khách"}
-              isMultiple={false}
-              allowClearValueSingleInput={true}
-              data={listCustomer.map((item: any) => ({
-                _id: item._id,
-                name: `${item.name}.${item.phone}.${item.taxid}`,
-              }))}
-              formatItem={{
-                  id: "_id",
-                  text: "name",
-              }}
-              onSearchInputChange={debounce(
-                  (valueSearch) => setContactKeyword(valueSearch),
-                  500
-              )}
-              onClearData={() => {
-                setCustomerID("");
-              }}
-              onchangeValue={item => {
-                  setCustomerID(item._id);
-                  setPageIndex(0);
-                  ref.current&&ref.current.resetPaginate();
-              }}
-              renderItem={(item) => (
-                  <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-              selectOneByOne={true}
-          />
-          <DropdownSearchableV2
-              ref={accountRef}
-              className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Người tạo"}
-              isMultiple={false}
-              allowClearValueSingleInput={true}
-              data={listUser}
-              formatItem={{
-                  id: "_id",
-                  text: "fullname",
-              }}
-              onSearchInputChange={debounce(
-                  (valueSearch) => setUserKeyword(valueSearch),
-                  500
-              )}
-              onClearData={() => {
-                setUserID("");
-              }}
-              onchangeValue={item => {
-                  setUserID(item._id);
-                  setPageIndex(0);
-                  ref.current&&ref.current.resetPaginate();
-              }}
-              renderItem={(item) => (
-                  <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-              selectOneByOne={true}
-          />
-          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-        </div>
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Dự án"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listDepartments.map((item: any) => ({
+              _id: item._id,
+              name: `${item.sign}.${item.name}`,
+            }))}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setProjectKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setProjectID("");
+            }}
+            onchangeValue={item => {
+              setProjectID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Kho bãi"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listWarehouse}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setWarehouseKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setWarehouseID("");
+            }}
+            onchangeValue={item => {
+              setWarehouseID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Mã khách"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listCustomer.map((item: any) => ({
+              _id: item._id,
+              name: `${item.name}.${item.phone}.${item.taxid}`,
+            }))}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setContactKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setCustomerID("");
+            }}
+            onchangeValue={item => {
+              setCustomerID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Hàng hóa, vật tư, công cụ"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listGood}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setGoodsKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setGoodsID("");
+            }}
+            onchangeValue={item => {
+              setGoodsID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Thuộc tài sản/thiết bị"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listGood}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setGoodsKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setAssetsID("");
+            }}
+            onchangeValue={item => {
+              setAssetsID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Người tạo"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listUser}
+            formatItem={{
+                id: "_id",
+                text: "fullname",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setUserKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setUserID("");
+            }}
+            onchangeValue={item => {
+              setUserID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
       </div>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
