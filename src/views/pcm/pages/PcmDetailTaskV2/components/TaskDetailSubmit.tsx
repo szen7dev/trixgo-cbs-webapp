@@ -37,7 +37,11 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
         params: {
             populates: JSON.stringify({
                 path: "work staff contact goods assets",
-                select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount numberOnLeave"
+                select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount numberOnLeave department",
+                populate: {
+                    path: "department",
+                    select: "name"
+                }
             }),
             taskID: task?._id
         },
@@ -175,7 +179,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                         {item?.work ? <p className="text-cbs-highlight-color"><i>{item?.work?.sign}-{item?.work?.name}</i></p> : <></>}
                                         {item?.work ? <p>SL ({formatNumberMoney(item?.work?.quantity)})-Thực hiện ({formatNumberMoney(item?.work?.impleQuantity)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(quantityRetain)}</b>)</p> : <></>}
                                         {item?.work ? <p>Giá trị ({formatNumberMoney(item?.work?.amount)})-Thực hiện ({formatNumberMoney(item?.work?.impleAmount)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(amountRetain)}</b>)</p> : <></>}
-                                        {item?.staff ? <p onClick={() => toggleVisible({ option: 1, staffID: item?.staff?._id})} className="mt-2 text-cbs-highlight-color">Nhân sự: {item?.staff?.fullname} | Số nghỉ phép lũy kế: ({item?.staff?.numberOnLeave})</p> : <></>}
+                                        {item?.staff ? <p onClick={() => toggleVisible({ option: 1, staffID: item?.staff?._id})} className="mt-2 text-cbs-highlight-color">Nhân sự: {item?.staff?.fullname}-{item?.staff?.department?.name} | Số nghỉ phép lũy kế: ({item?.staff?.numberOnLeave})</p> : <></>}
                                         {item?.contact ? <p onClick={() => toggleVisible2({ option: 2, contactID: item?.contact?._id})} className="mt-2 text-cbs-highlight-color">Mã khách: {item?.contact?.name}</p> : <></>}
                                         {item?.goods ? <p onClick={() => toggleVisible3({ option: 3, goodsID: item?.goods?._id})} className="mt-2 text-cbs-highlight-color">Vật tư: {item?.goods?.name}</p> : <></>}
                                         {item?.assets ? <p onClick={() => toggleVisible4({ option: 3, assetsID: item?.assets?._id})} className="mt-2 text-cbs-highlight-color">Thiết bị: {item?.assets?.name}</p> : <></>}
