@@ -128,6 +128,7 @@ export type StoreChild = {
     modifyAt?: string | null
     userCreate?: any
     userUpdate?: any | null
+    map?: any
 }
 
 export type QueryListStoreChildPayload = QueryParams & {

@@ -392,7 +392,7 @@ export const AccountingDiaryPage: FC = () => {
 
                 return jsx
               })
-          }
+            }
           </tbody>
         </table>
       </section>

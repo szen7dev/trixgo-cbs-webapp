@@ -361,7 +361,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
-              style={{ width: "100px" }}
+              style={{ width: "80px" }}
             >
               Ngày
             </div>

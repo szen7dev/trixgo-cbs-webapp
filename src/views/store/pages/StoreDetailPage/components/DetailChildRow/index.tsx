@@ -134,6 +134,7 @@ export const DetailChildRow: FC<Props> = ({
         className={
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
         }
+        style={{width: "80px"}}
       >
         <DayPickerInput
           value={

@@ -104,12 +104,13 @@ export const StoreDetailPage: FC = () => {
     fetchNextPage,
     fetchPrevPage,
     refetch: onRefreshStoreChild,
-  } = useQueryListStoreChild(cashBookID,{
+  } = useQueryListStoreChild({
     // keyword,
     // humanID: userID,
     // subtype,
+    parentID: cashBookID,
     limit: 50
-  });
+  })
 
   const { onUpdateStoreAsync, onCreateStoreAsync } =
     useMutationStoreChild();
@@ -368,6 +369,7 @@ useEffect(() => {
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
+              style={{width: "80px"}}
             >
               Ngày
             </div>

@@ -188,14 +188,12 @@ interface UseQueryListStoreChild {
 }
 
 export const useQueryListStoreChild = (
-  StoreParentID: string,
   params: any,
 ): UseQueryListStoreChild => {
   const result = useInfiniteQuery(
     [`list_store.child`, params],
     async ({ pageParam }: any) =>
         StoreChildRepository.fetchListStore({
-        parentID: StoreParentID,
         lastestID: pageParam,
         ...params
       }),
