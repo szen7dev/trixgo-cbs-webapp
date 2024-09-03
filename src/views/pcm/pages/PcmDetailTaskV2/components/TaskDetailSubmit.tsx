@@ -63,14 +63,14 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
 		setAssetsPopup(assetsID)
 	}
 
-    const toggleVisible2 = ({ option, staffID, contactID, goodsID, assetsID }: any) => {
-		setVisibleDrawer2(!visibleDrawer2)
-        setOptionPopup(option)
-		setStaffPopup(staffID)
-		setContactPopup(contactID)
-		setGoodsPopup(goodsID)
-        setAssetsPopup(assetsID)
-	}
+    // const toggleVisible2 = ({ option, staffID, contactID, goodsID, assetsID }: any) => {
+	// 	setVisibleDrawer2(!visibleDrawer2)
+    //     setOptionPopup(option)
+	// 	setStaffPopup(staffID)
+	// 	setContactPopup(contactID)
+	// 	setGoodsPopup(goodsID)
+    //     setAssetsPopup(assetsID)
+	// }
 
     const toggleVisible3 = ({ option, staffID, contactID, goodsID, assetsID }: any) => {
 		setVisibleDrawer3(!visibleDrawer3)
@@ -180,7 +180,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                         {item?.work ? <p>SL ({formatNumberMoney(item?.work?.quantity)})-Thực hiện ({formatNumberMoney(item?.work?.impleQuantity)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(quantityRetain)}</b>)</p> : <></>}
                                         {item?.work ? <p>Giá trị ({formatNumberMoney(item?.work?.amount)})-Thực hiện ({formatNumberMoney(item?.work?.impleAmount)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(amountRetain)}</b>)</p> : <></>}
                                         {item?.staff ? <p onClick={() => toggleVisible({ option: 1, staffID: item?.staff?._id})} className="mt-2 text-cbs-highlight-color">Nhân sự: {item?.staff?.fullname}-{item?.staff?.department?.name} | Số nghỉ phép lũy kế: ({item?.staff?.numberOnLeave})</p> : <></>}
-                                        {item?.contact ? <p onClick={() => toggleVisible2({ option: 2, contactID: item?.contact?._id})} className="mt-2 text-cbs-highlight-color">Mã khách: {item?.contact?.name}</p> : <></>}
+                                        {/* {item?.contact ? <p onClick={() => toggleVisible2({ option: 2, contactID: item?.contact?._id})} className="mt-2 text-cbs-highlight-color">Mã khách: {item?.contact?.name}</p> : <></>} */}
                                         {item?.goods ? <p onClick={() => toggleVisible3({ option: 3, goodsID: item?.goods?._id})} className="mt-2 text-cbs-highlight-color">Vật tư: {item?.goods?.name}</p> : <></>}
                                         {item?.assets ? <p onClick={() => toggleVisible4({ option: 3, assetsID: item?.assets?._id})} className="mt-2 text-cbs-highlight-color">Thiết bị: {item?.assets?.name}</p> : <></>}
                                     </td>
@@ -253,10 +253,10 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                     Thêm khoản mục
                 </button>
 
-                <ModalHumanInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
-                <ModalContactInformation open={visibleDrawer2} onClose={toggleVisible2} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
-                <ModalGoodsInformation open={visibleDrawer3} onClose={toggleVisible3} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
-                <ModalAssetsInformation open={visibleDrawer4} onClose={toggleVisible4} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup }}/>
+                <ModalHumanInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup, assetsPopup }}/>
+                {/* <ModalContactInformation open={visibleDrawer2} onClose={toggleVisible2} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup, assetsPopup }}/> */}
+                <ModalGoodsInformation open={visibleDrawer3} onClose={toggleVisible3} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup, assetsPopup }}/>
+                <ModalAssetsInformation open={visibleDrawer4} onClose={toggleVisible4} dataPopup={{ optionPopup, staffPopup, contactPopup, goodsPopup, assetsPopup }}/>
             </div>
         </div>
     )

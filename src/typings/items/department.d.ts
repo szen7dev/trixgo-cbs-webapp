@@ -25,7 +25,7 @@ export type Department = {
 }
 
 export type DepartmentPayload = QueryParam & {
-    type: 1 | 2; //  1: "Phòng Ban", 2: "Dự án" 
+    type: 0 | 1 | 2; //  1: "Phòng Ban", 2: "Dự án" 
     isBudget?: number;
     companyID?: string;
 }

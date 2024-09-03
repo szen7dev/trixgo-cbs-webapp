@@ -5,6 +5,7 @@ import { DepartmentRepository } from 'apis/item';
 import type { Department } from 'typings/items';
 
 type ParamsQuery = Omit<Department.DepartmentPayload, 'type'>;
+// type ParamsQuery = Department.DepartmentPayload;
 
 interface UseQueryListDepartment {
     loading: boolean;
@@ -22,7 +23,7 @@ export const useQueryListDepartments = (params?: ParamsQuery, isFetch?: boolean)
         async ({ pageParam }: any) =>
             DepartmentRepository.fetchListDepartment({
                 lastestID: pageParam || "",
-                type: 1,
+                // type: 1,
                 ...params,
             }),
         {
