@@ -120,8 +120,9 @@ export const ModalAssetsInformation: FC<Props> = ({ open, onClose, dataPopup }) 
 												<div className={"px-2 py-2 table-cell box-border border-b w-2/6"}>
 													<p>{item.name} - <p>{item.note}</p></p>
 													<p className='text-cbs-highlight-color'><i>{item?.goods?.name}</i></p>
+													<p className='text-primary-gray'><i>Mã khách: {item?.customer?.name}</i></p>
 													<NavLink className="text-primary" to={`/store/home/${item?.parent?._id}`}>
-														<p className="text-primary-gray"><i>{item?.parent?.name}</i></p>
+														<p className="text-primary-gray"><i>Phiếu: {item?.parent?.name}</i></p>
 													</NavLink>
 												</div>
 												<div
