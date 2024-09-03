@@ -80,18 +80,20 @@ export const ModalHumanInformation: FC<Props> = ({ open, onClose, dataPopup }) =
 													className={
 													"px-1 py-2 table-cell box-border border-b align-middle"
 													}
+													style={{width: "220px"}}
 												>
 													{moment(item.date).format('DD/MM/YYYY')}
 													<p>{item.name}</p>
 													<p><i>{item?.assignee?.fullname}</i></p>
 												</div>
-												<div className={"px-2 py-2 table-cell box-border border-b w-2/6"}>
+												<div className={"px-2 py-2 table-cell box-border border-b"}>
 													{item.note}
 												</div>
 												<div
 													className={
 													"px-2 py-2 table-cell box-border border-b text-right"
 													}
+													style={{width: "50px"}}
 												>
 													{item?.hours}
 												</div>
@@ -99,6 +101,7 @@ export const ModalHumanInformation: FC<Props> = ({ open, onClose, dataPopup }) =
 													className={
 													"px-1 py-2 table-cell box-border border-b align-middle"
 													}
+													style={{width: "310px"}}
 												>
 													<NavLink  to={`/timesheet/home/${item?.parent?._id}`}>
 														<p>{item?.parent?.name}</p>
