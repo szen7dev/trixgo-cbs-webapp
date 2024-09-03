@@ -2,8 +2,11 @@ import { FC, Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import moment from "moment";
 import { NavLink } from 'react-router-dom';
-import { useQueryListTimeSheetParent } from "services/hooks/useTimeSheet";
+import {
+	useQueryListStoreChild,
+  } from "services/hooks/useStore";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
+import { formatNumberMoney } from "utils/cmcs";
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 
 interface Props {
@@ -12,21 +15,26 @@ interface Props {
 	dataPopup: any,
 }
 export const ModalAssetsInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
-	const { optionPopup, staffPopup, contactPopup, goodsPopup } = dataPopup;
+	const { optionPopup, staffPopup, contactPopup, goodsPopup, assetsPopup } = dataPopup;
 	const [pageIndex, setPageIndex] = useState(0);
 	const ref = useRef<RefPaginateHandle>(null);
 
 	const {
-		dataNotFilter,
-		refetch,
-		totalPages,
-		totalRecord,
-		fetchNextPage,
-		fetchPrevPage,
-		limit,
-		loading,
-		hasNextPage,
-	  } = useQueryListTimeSheetParent({ humanID: staffPopup, sortOption: 2, type: 3, subtype: 2 });
+	dataNotFilter,
+	loading,
+	totalPages,
+	totalRecord,
+	limit,
+	hasNextPage,
+	fetchNextPage,
+	fetchPrevPage,
+	refetch,
+	} = useQueryListStoreChild({
+		option: 1,
+		limit: 50,
+		assetsID: assetsPopup,
+		sortKey: JSON.stringify(['date__-1', 'createAt__-1']),
+	})
 
 	return (
 		<Transition.Root show={open} as={Fragment}>
@@ -43,10 +51,10 @@ export const ModalAssetsInformation: FC<Props> = ({ open, onClose, dataPopup }) 
 							leaveTo="translate-x-full"
 						>
 							<div className="relative w-screen max-w-[680px]">
-								<div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
-									<div className='px-6 pt-2'>
+								<div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll  px-4">
+									<div className='pt-2'>
 										<div className="flex mt-4 mb-3 justify-between items-center">
-											<span className="text-primary-gray text-[16px] font-bold">Báo cáo Thiết bị ({totalRecord})</span>
+											<span className="text-primary-gray text-[16px] font-bold">Báo cáo Sửa chữa thiết bị ({totalRecord})</span>
 											<PaginateV2
 												ref={ref}
 												totalRecord={totalRecord}
@@ -67,45 +75,76 @@ export const ModalAssetsInformation: FC<Props> = ({ open, onClose, dataPopup }) 
 									</div>
 
 									<div className="relative flex-1 overflow-y-auto">
+										<div className={"body-table table-row"}>
+											<div
+												className={
+												"px-1 py-2 table-cell box-border border-b align-middle"
+												}
+											>
+												Ngày
+											</div>
+											<div className={"px-2 py-2 table-cell box-border border-b w-2/6"}>
+												Nội dung
+											</div>
+											<div
+												className={
+												"px-2 py-2 table-cell box-border border-b"
+												}
+											>
+												Khối lượng
+											</div>
+											<div
+												className={
+												"px-2 py-2 table-cell box-border border-b"
+												}
+											>
+												Đơn giá
+											</div>
+											<div
+												className={
+												"px-2 py-2 table-cell box-border border-b"
+												}
+											>
+												Thành tiền
+											</div>
+										</div>
 										{dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((item: any, index: any) => (
 											<div className={"body-table table-row"} key={item._id}>
-												<div
-													className={
-														"px-4 py-2 table-cell box-border border-b align-middle w-3"
-													}
-												>
-													{Number(index + 1)}
-												</div>
 												<div
 													className={
 													"px-1 py-2 table-cell box-border border-b align-middle"
 													}
 												>
 													{moment(item.date).format('DD/MM/YYYY')}
-													<p>{item.name}</p>
-													<p><i>{item?.assignee?.fullname}</i></p>
 												</div>
 												<div className={"px-2 py-2 table-cell box-border border-b w-2/6"}>
-													{item.note}
+													<p>{item.name} - <p>{item.note}</p></p>
+													<p className='text-cbs-highlight-color'><i>{item?.goods?.name}</i></p>
+													<p className='text-primary-gray'><i>Mã khách: {item?.customer?.name}</i></p>
+													<NavLink className="text-primary" to={`/store/home/${item?.parent?._id}`}>
+														<p className="text-primary-gray"><i>Phiếu: {item?.parent?.name}</i></p>
+													</NavLink>
 												</div>
 												<div
 													className={
 													"px-2 py-2 table-cell box-border border-b text-right"
 													}
 												>
-													{item?.hours}
+													{formatNumberMoney(item?.quantity)}
 												</div>
 												<div
 													className={
-													"px-1 py-2 table-cell box-border border-b align-middle"
+													"px-2 py-2 table-cell box-border border-b text-right"
 													}
 												>
-													<NavLink  to={`/timesheet/home/${item?.parent?._id}`}>
-														<p>{item?.parent?.name}</p>
-													</NavLink>
-													<p className={"mt-1 text-gray-500"}>
-														<i>Tạo: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}</i>
-													</p>
+													{formatNumberMoney(item?.unitPrice)}
+												</div>
+												<div
+													className={
+													"px-2 py-2 table-cell box-border border-b text-right"
+													}
+												>
+													{formatNumberMoney(item?.amount)}
 												</div>
 											</div>
 										))}
