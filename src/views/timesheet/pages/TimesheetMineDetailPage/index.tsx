@@ -120,13 +120,13 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                 <p className="text-cbs-highlight-color"><i>{item?.assignee?.fullname}</i></p>
                 <NavLink  to={`/timesheet/home/${item?.parent?._id}`}>
                   <p><i>{item?.parent?.name}</i></p>
+                  <p className={"mt-1 text-gray-500"}>
+                    Tạo: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
+                  </p>
+                  <p className={"mt-1 text-gray-500"}>
+                    Cập nhật: {item?.userUpdate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}
+                  </p>
                 </NavLink>
-                <p className={"mt-1 text-gray-500"}>
-                  Tạo: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
-                </p>
-                <p className={"mt-1 text-gray-500"}>
-                  Cập nhật: {item?.userUpdate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}
-                </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item?.project?.name}
