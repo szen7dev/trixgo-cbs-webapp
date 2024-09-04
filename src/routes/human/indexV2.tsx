@@ -47,7 +47,7 @@ const HumanRouterV2: FC = () => {
           <ProtectedRoute exact path="/human/home" component={() => < HumanHomePage type = {1}/>} />
           <ProtectedRoute exact path="/human/document" component={HumanDocumentPage} />
           <ProtectedRoute exact path="/human/home/hid=:id" component={HumanInfo} />
-          <ProtectedRoute exact path="/human/customer" component={() => < HumanHomePage type = {0}/>} />
+          <ProtectedRoute exact path="/human/contact" component={() => < HumanHomePage type = {0}/>} />
           <Route path="/human/*" component={ErrorPage} />
         </Switch>
     )
