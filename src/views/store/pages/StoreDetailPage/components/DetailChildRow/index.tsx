@@ -129,35 +129,6 @@ export const DetailChildRow: FC<Props> = ({
           {rowData.name}
         </p>
       </div>
-
-      <div
-        className={
-          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
-        }
-        style={{width: "80px"}}
-      >
-        <DayPickerInput
-          value={
-            (moment(rowData.date).isValid() &&
-              moment(rowData.date).format("DD/MM/YYYY")) ||
-            ""
-          }
-          placeholder="Chọn thời gian"
-          onDayChange={(date: Date | null) => {
-            if (moment(date).isValid())
-              handleClickUpdateStore({
-                ...rowData,
-                date: moment(date).toJSON(),
-              });
-          }}
-        />
-        {/* <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p> */}
-        {/* <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p> */}
-        {/* <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p> */}
-        {/* <p className="text-gray-400 text-[10px] text-cbs-highlight-color"><i>{DAYOFWEEKS[Number(new Date(rowData?.date).getDay())]?.name}</i></p> */}
-        {/* <p className="text-gray-400 text-[10px]"><i>{Number(new Date(rowData?.date).getDay() + 1)}</i></p> */}
-      </div>
-
       <div
         className={
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
@@ -179,7 +150,7 @@ export const DetailChildRow: FC<Props> = ({
                 minWidth: 0,
                 // width: "150px",
                 // whiteSpace: "nowrap",
-                width: "150px",
+                width: "125px",
                 whiteSpace: "normal",
                 overflow: "hidden",
               }}
@@ -291,7 +262,7 @@ export const DetailChildRow: FC<Props> = ({
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
                 minWidth: 0,
-                width: "150px",
+                width: "125px",
                 whiteSpace: "normal",
                 overflow: "hidden",
               }}
@@ -305,15 +276,6 @@ export const DetailChildRow: FC<Props> = ({
             id: "_id",
             text: "name",
           }}
-
-          // data={listBudgetWork.map((item: any) => ({
-          //     label: `${item.sign}.${item.name}`,
-          //     value: item._id,
-          // }))}
-          // formatItem={{
-          //     id: "value",
-          //     text: "label",
-          // }}
           onSearchInputChange={debounce(
             (value) => setKeywordWork(value),
             500
