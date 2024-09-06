@@ -369,14 +369,6 @@ useEffect(() => {
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
-              style={{width: "80px"}}
-            >
-              Ngày
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
             >
               Hàng hóa, vật tư, công cụ
             </div>
