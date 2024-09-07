@@ -298,6 +298,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bbg-cbs-table-header h-10 border-b border-primary-border">
             <tr className="text-left text-sm text-primary-gray">
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center" style={{width: "40px"}}>TT</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Hàng hóa, vật tư, công cụ</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Đơn vị tính</th>
               <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">NHẬP</th>
@@ -305,6 +306,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">TỒN</th>
             </tr>
             <tr className="text-left text-sm text-primary-gray">
+              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
               <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
               <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
               <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
@@ -318,7 +320,14 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
         <tbody>
           {data?.data?.map((item: any, index: any) => (
             <tr key={index} className="border-b border-primary-border h-10">
-              <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">{item?.name}</td>
+              <td className="py-1 px-2 border-r border-primary-border">{(index + 1)}</td>
+              <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                {item?.name}
+                {/* <p><i>{item?._id}</i></p> */}
+                {/* <NavLink className="text-primary" to={`/store/detailed-report/${item?._id}`}>
+                  {item?.name}
+                </NavLink> */}
+              </td>
               <td className="py-1 px-2 border-r border-primary-border">{item?.unit}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income)}</td>

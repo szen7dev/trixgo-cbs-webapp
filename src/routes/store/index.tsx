@@ -56,6 +56,7 @@ const StoreRouter: FC = () => {
                     <Route exact path="/store/dashboard" component={StoreDashboardPage}/>
                     <Route exact path="/store/inventory" component={StoreInventoryPage}/>  
                     <Route exact path="/store/detailed-report" component={StoreDetailedReportPage}/>  
+                    <Route exact path="/store/detailed-report/:id" component={StoreDetailedReportPage}/> 
 
                     <Route exact path="/store/import" component={() => <StorePage outin={2} type ={2}/>}/>
                     <Route exact path="/store/import/:id" component={StoreDetailPage}/>

@@ -52,6 +52,7 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
     option: 1,
     limit: 50,
     type, 
+    active: 1,
     projectID,
     warehouseID,
     customerID,
@@ -354,7 +355,8 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
                       { moment(item?.date).format('DD/MM/YYYY')}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                        {item?.name}-{item?.goods?.name}
+                        <p className="text-primary-gray"><i>{item?.name}</i></p>
+                        <p>{item?.goods?.name}</p>
                         <p><i>{item?.assets?.name}</i></p>
                         <NavLink className="text-primary" to={`/store/home/${item?.parent?._id}`}>
                           <p className="text-primary-gray"><i>{item?.parent?.name}</i></p>
