@@ -48,15 +48,6 @@ export const StoreDetailPage: FC = () => {
   // const [userKeyword, setUserKeyword] = useState("");  
   // const [keyword, setKeyword] = useState('');
 
-  const today = new Date();
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-  const currentMonth = new Date().getMonth()
-
-  const [inputFilter, setInputFilter] = useState({
-    fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
-    toDate: lastDayOfMonth
-  });
-
   const { user } = useAuth();
 
   // const { data: listUser } = useUserSystem({
@@ -221,8 +212,6 @@ export const StoreDetailPage: FC = () => {
       const { error, data } = await exportExcelAsync({
         option: param.option,
         parentID: cashBookID,
-        fromDate: inputFilter.fromDate,
-        toDate: inputFilter.toDate,
       });
 
       if (error) {
@@ -301,9 +290,9 @@ useEffect(() => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
-          {/* <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 1})}>
+          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 5})}>
             Tải excel Phiếu kho
-          </button> */}
+          </button>
         </div>
       </div>
 
