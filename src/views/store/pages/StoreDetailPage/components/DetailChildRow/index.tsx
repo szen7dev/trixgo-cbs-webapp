@@ -41,17 +41,6 @@ export const DetailChildRow: FC<Props> = ({
     rowData.work?.name || ""
 	);
 
-  const [searchAssigneeStr, setSearchAssigneeStr] = React.useState(
-    rowData.assignee?.fullname || ""
-  );
-
-  const {
-    data: listUsersSystem,
-  } = useUserSystem({ 
-    companyID: user?.company._id,
-    keyword: searchAssigneeStr 
-  }, true);
-
   const {
     list: listGoods
   } = useGoods({
@@ -149,10 +138,10 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: 0,
+                minWidth: "100px",
                 // width: "150px",
                 // whiteSpace: "nowrap",
-                width: "125px",
+                // width: "125px",
                 whiteSpace: "normal",
                 overflow: "hidden",
               }}
@@ -263,8 +252,8 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: 0,
-                width: "125px",
+                minWidth: "100px",
+                // width: "125px",
                 whiteSpace: "normal",
                 overflow: "hidden",
               }}
@@ -309,8 +298,8 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: 0,
-                width: "150px",
+                minWidth: "100px",
+                // width: "150px",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
               }}
