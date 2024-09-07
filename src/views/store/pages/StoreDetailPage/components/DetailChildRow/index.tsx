@@ -41,17 +41,6 @@ export const DetailChildRow: FC<Props> = ({
     rowData.work?.name || ""
 	);
 
-  const [searchAssigneeStr, setSearchAssigneeStr] = React.useState(
-    rowData.assignee?.fullname || ""
-  );
-
-  const {
-    data: listUsersSystem,
-  } = useUserSystem({ 
-    companyID: user?.company._id,
-    keyword: searchAssigneeStr 
-  }, true);
-
   const {
     list: listGoods
   } = useGoods({
