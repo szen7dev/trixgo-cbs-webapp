@@ -291,7 +291,7 @@ useEffect(() => {
       >
         <div className="w-auto">
           <div className={"flex"}>
-            <p className="font-bold text-medium">{storeInfo.name} | {storeInfo.sign}</p>
+            <p className="font-bold text-medium">{storeInfo.name} | {storeInfo.sign} | {moment(storeInfo.date).format("DD/MM/YYYY")}</p>
           </div>
           <p className={"text-gray-400"}>
             Chỉnh sửa {" "}
@@ -301,31 +301,9 @@ useEffect(() => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
-          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 1})}>
-            Tải excel
-          </button>
-          {/* <button className={"flex items-center justify-center mr-2"}>
-              <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-              accept=".xlsx, .xlsm, .xls, .csv"/>
-              <label className="custom-file-label" htmlFor="inputGroupFile">Cập nhật từ Excel</label>
+          {/* <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 1})}>
+            Tải excel Phiếu kho
           </button> */}
-          <button
-            className="text-gray-400 mr-2"
-            onClick={() => {
-              toggleModalShare("admins", storeInfo.admins);
-            }}
-          >
-            Admin ({storeInfo.admins?.length})
-          </button>{" "}
-          |
-          <button
-            className="text-gray-400 mr-2 ml-2"
-            onClick={() => {
-              toggleModalShare("members", storeInfo.members);
-            }}
-          >
-            Thành viên ({storeInfo.members?.length})
-          </button>
         </div>
       </div>
 
