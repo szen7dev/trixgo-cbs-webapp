@@ -99,8 +99,7 @@ export const DashboardV2: FC<Props> = () => {
 
   const queryResponse = useAppSelector(
     (state) => state.dashboardV2.data.queryResponse
-  );
-  // console.log(queryResponse)
+  )
 
   const keywordForSubject = useAppSelector(
     (state) => state.dashboardV2.data.keywordForSubject
@@ -117,7 +116,8 @@ export const DashboardV2: FC<Props> = () => {
   const queryFile = useAppSelector((state) => state.dashboardV2.data.queryFile);
 
   const [reset, setReset] = useState(false);
-  ///// Danh sách công ty
+
+  // Danh sách công ty
   const [searchCompanyName, setSearchCompanyName] = useState("");
   const {
     data: listCompany,
@@ -138,7 +138,6 @@ export const DashboardV2: FC<Props> = () => {
     enabled: true,
   });
   const listC = dataTotalC?.data
-  // console.log(listC)
 
   const handleScrollCompany = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -152,7 +151,7 @@ export const DashboardV2: FC<Props> = () => {
   // Người tạo
   const [authors, setAuthors] = useState<string[]>([]);
 
-  ////  Danh sách user
+  // Danh sách user
   const [searchUserSystem, setSearchUserSystem] = useState("");
   const [searchUserTask, setSearchUserTask] = useState("");
   const [searchUserComment, setSearchUserComment] = useState("");
@@ -163,12 +162,21 @@ export const DashboardV2: FC<Props> = () => {
     fetchNextPage: fetchNextPageUserSystem,
   } = useUserSystem({ keyword: searchUserSystem }, true);
 
-  // Tìm user tạo chủ đề
+  // Tìm user tạo việc
+  const { isLoading: isLoadingUTV, dataTotal: dataTotalUTV } = usePcmPlanTaskGetListByProperty({
+    option: 10,
+    keyword: searchUserTask,
+    enabled: true,
+  })
+  const listAuthorTask = dataTotalUTV?.data
+  // console.log(listAuthorTask)
+  
+  // Tìm user thực hiện
   const { isLoading: isLoadingUT, dataTotal: dataTotalUT } = usePcmPlanTaskGetListByProperty({
     option: 7,
     keyword: searchUserTask,
     enabled: true,
-  });
+  })
   const listUserTask = dataTotalUT?.data
 
   // Tìm user tạo phản hồi
@@ -190,6 +198,7 @@ export const DashboardV2: FC<Props> = () => {
 
   const [fromCreateDate, setFromCreateDate] = useState("1990/01/01");
   const [toCreateDate, settoCreateDate] = useState("2999/12/31");
+
   ////  Dự án
   const [project, setProject] = useState<string[]>([]);
   const [searchProject, setSearchProject] = useState("");
@@ -255,7 +264,6 @@ export const DashboardV2: FC<Props> = () => {
     keyword: keywordForSubject,
     fromDate: fromExpiredDate,
     toDate: toExpiredDate,
-    authorsID: authors,
     projectsID: project,
     isExpired: isExpired,
     isParent: isParent,
@@ -264,11 +272,15 @@ export const DashboardV2: FC<Props> = () => {
     isGroup:
       querySubject.companiesOfAssignee.length ||
       querySubject.assigneesID.length ||
+      querySubject.authorsID.length ||
       keywordForSubject
         ? "1"
         : "0",
     ...querySubject,
   };
+  // console.log(querySubject)
+  // console.log(querySearchTask)
+
   if (filter !== "all") {
     querySearchTask.read = filter === "read" ? 2 : 1;
   }
@@ -286,7 +298,8 @@ export const DashboardV2: FC<Props> = () => {
     params: querySearchTask,
     isFetch: tabActive === 2 ? true : false,
   });
-
+  // console.log({listDataForSubject})
+  
   const {
     isLoadingFile,
     nextPageFile,
@@ -475,6 +488,104 @@ export const DashboardV2: FC<Props> = () => {
             isFetchingResponse ||
             isLoadingFile ||
             isFetchingFile) && <Loader className="border-primary" />}
+
+          {tabIndex === 2 && (
+            <DropdownSearchableV2
+              selectOneByOne={true}
+              reset={reset}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Người tạo việc"}
+              showTriangle={true}
+              isMultiple={true}
+              countBadge={querySubject.authorsID.length}
+              onchangeValue={(value) => {
+                if (!querySubject.authorsID?.includes?.(value.id as string)) {
+                  const newData: any = [...querySubject.authorsID, value.id];
+                  dispatch(
+                    setQuerySubject({
+                      ...querySubject,
+                      authorsID: newData,
+                    })
+                  );
+                }
+                setSearchUserTask("");
+                dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = querySubject.authorsID.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    authorsID: newList,
+                  })
+                );
+              }}
+              onClearData={() =>
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    authorsID: [],
+                  })
+                )
+              }
+              onSearchInputChange={debounce(
+                (value) => setSearchUserTask(value),
+                500
+              )}
+              onScroll={handleScrollUserSystem}
+              renderSelectedItem={(item: any) => (
+                <div className="flex items-center">
+                  <img
+                    alt="Thumbnail"
+                    src={item.imageUrl || userIcon}
+                    className="mr-1 w-6 h-6 rounded-full"
+                  />
+                  <p
+                    style={{
+                      textOverflow: "ellipsis",
+                      maxWidth: "100%",
+                      minWidth: 0,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      flex: "1 1 auto",
+                    }}
+                  >
+                    {item.text}
+                  </p>
+                </div>
+              )}
+              data={listAuthorTask?.map((item: any) => ({
+                label: `${item?._id?.author?.fullname} (${item?.amount})`,
+                value: item?._id?.author?._id,
+                email: item?._id?.author?.email,
+              }))}
+              formatItem={{
+                id: "value",
+                text: "label",
+                imageUrl: "imgUrl",
+              }}
+              renderItem={(item) => (
+                <div className={"flex"}>
+                  <div
+                    className={
+                      "w-[44px] h-[44px] flex items-center justify-center rounded-full bg-accent text-white text-2xl font-bold"
+                    }
+                  >
+                    {item.label.charAt(0)}
+                  </div>
+                  <div className={"flex-1 ml-2"}>
+                    <p className={"truncate"}>{item.label}</p>
+                    <p className={"text-primary-gray truncate"}>{item.email}</p>
+                  </div>
+                </div>
+              )}
+            />
+          )}
+
           {tabIndex === 2 && (
             <DropdownSearchableV2
               reset={reset}
@@ -762,7 +873,7 @@ export const DashboardV2: FC<Props> = () => {
               selectOneByOne={true}
               reset={reset}
               countBadge={
-                tabIndex === 3
+                (tabIndex === 3)
                   ? (queryFile.authorsID && queryFile.authorsID.length) || 0
                   : 0
               }
