@@ -93,6 +93,11 @@ export const ListTasksReport: FC<Props> = memo(({
                                     onClick={() => handleClickTask(taskOutDate._id)}
                                 >
                                     {`${taskOutDate.project.sign}.${taskOutDate.name}`}
+                                    {taskOutDate?.parent ?
+                                    <div className="my-1 text-primary-gray text-xs truncate max-w-4xl text-cbs-highlight-color">
+                                            Việc cha: {taskOutDate?.parent?.name}
+                                        </div> : <></>
+                                    }
                                 </td>
                                 <td className="p-2 border">
                                     {moment(taskOutDate.actualFinishTime).format("DD/MM/YYYY")}

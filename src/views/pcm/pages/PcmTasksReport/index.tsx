@@ -134,15 +134,6 @@ const PcmTasksReportPage: FC = () => {
             </button>
             <p className="text-lg">Chi tiết báo cáo: {infoReport.name}</p>
           </div>
-					{/* <SearchInput
-						classNameWrapper="ml-4"
-						classNameInput="outline-none w-[296px]"
-						onChange={debounce(
-							(event: any) => setKeyword(event.target.value),
-							500
-						)}
-					/> */}
-
           <div className="flex">
             <button
               className="text-gray-400 mr-2"

@@ -404,13 +404,14 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
                                     </td>
                                     <td className="px-2 py-2.5 border-b border-cbs-border">
                                         <Link to={linkRef}>
-                                        <p>
-                                            {`${document.name}`}
-                                            - {(document?.gender && document?.gender >= 1) && GENDER_TYPES[document?.gender -1].text}
-                                        </p>
-                                        <p className="text-primary-gray mt-1">{document?.identity != null && document?.identity }</p>
-                                        <p className="text-primary-gray mt-1">Ngày sinh: { document?.birthday != null && moment(document?.birthday).format("DD/MM/YYYY")}</p>
+                                            <p>
+                                                {`${document.name}`}
+                                                - {(document?.gender && document?.gender >= 1) && GENDER_TYPES[document?.gender -1].text}
+                                            </p>
+                                            <p className="text-primary-gray mt-1">{document?.identity != null && document?.identity }</p>
+                                            <p className="text-primary-gray mt-1">Ngày sinh: { document?.birthday != null && moment(document?.birthday).format("DD/MM/YYYY")}</p>
                                         </Link>
+                                        <p className="text-primary-gray mt-3"><i>{document._id}</i></p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         <p>{`${document?.phone}`}</p>
