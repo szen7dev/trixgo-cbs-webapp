@@ -8,6 +8,7 @@ import styles from "views/pcm/styles/pcm_task.module.css";
 import { ListProgress, Executor } from "views/pcm/shareComponents/common";
 import { SearchListRecord } from "typings/main-search";
 import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
+import { NavLink } from 'react-router-dom';
 
 type Props = {
     tasks: Array<SearchListRecord>;
@@ -20,7 +21,9 @@ export const ListTasksReport: FC<Props> = memo(({
     totalRecord,
     onClickMore,
 }) => {
+
     const history = useHistory();
+
     const handleClickTask = (id: string) => {
         history.push(`/pcm/detail/${id}`);
     };
@@ -60,21 +63,21 @@ export const ListTasksReport: FC<Props> = memo(({
                         <th className="px-2 py-2 text-[13px] font-normal border w-[41px]">
                             TT
                         </th>
-                        <th className="px-2 py-2 text-[13px] font-normal border w-4/12 text-left">
+                        <th className="px-2 py-2 text-[13px] font-normal border text-left">
                             Nội dung công việc
                         </th>
-                        <th className="px-2 py-2 text-[13px] font-normal border w-1/12 text-left">
+                        <th className="px-2 py-2 text-[13px] font-normal border text-left">
                             Thời hạn
                         </th>
-                        <th className="px-2 py-2 text-[13px] font-normal border w-2/12 text-left">
+                        <th className="px-2 py-2 text-[13px] font-normal border text-left">
                             Thực hiện
                         </th>
-                        <th className="px-2 py-2 text-[13px]  font-normal border w-1/12 text-left">
+                        <th className="px-2 py-2 text-[13px]  font-normal border text-left">
                             Trạng thái
                         </th>
-                        <th className="px-2 py-2 text-[13px]  font-normal border w-1/12 text-left">
+                        {/* <th className="px-2 py-2 text-[13px]  font-normal border text-left">
                             Tiến trình
-                        </th>
+                        </th> */}
                         <th className="px-2 py-2 text-[13px] font-normal border text-left">
                             Cập nhật gần nhất
                         </th>
@@ -85,41 +88,45 @@ export const ListTasksReport: FC<Props> = memo(({
                 </thead>
                 <tbody>
                     {(tasks && tasks.length) ?
-                        tasks.map((taskOutDate, index) => (
-                            <tr key={taskOutDate._id}>
+                        tasks.map((item, index) => (
+                            <tr key={item._id}>
                                 <td className="p-2 border">{index + 1}</td>
                                 <td
                                     className="p-2 border cursor-pointer"
-                                    onClick={() => handleClickTask(taskOutDate._id)}
+                                    onClick={() => handleClickTask(item._id)}
                                 >
-                                    {`${taskOutDate.project.sign}.${taskOutDate.name}`}
-                                    {taskOutDate?.parent ?
-                                    <div className="my-1 text-primary-gray text-xs truncate max-w-4xl text-cbs-highlight-color">
-                                            Việc cha: {taskOutDate?.parent?.name}
+                                    {`${item.project.sign}.${item.name}`}
+                                    {/* <NavLink  to={`/pcm/detail/${item?._id}`}>
+                                        {`${item.project.sign}.${item.name}`}
+									</NavLink> */}
+                                    {item?.parent ?
+                                        <div className="my-1 text-primary-gray text-xs truncate max-w-4xl text-cbs-highlight-color">
+                                            Việc cha: {item?.parent?.name}
                                         </div> : <></>
                                     }
+                                    <p className="text-primary-gray"><i>Tạo: {item?.author?.fullname} | {moment(item.createAt).format("DD/MM/YYYY HH:mm")} | {moment(item.createAt).fromNow()}</i></p>
                                 </td>
                                 <td className="p-2 border">
-                                    {moment(taskOutDate.actualFinishTime).format("DD/MM/YYYY")}
+                                    {moment(item.actualFinishTime).format("DD/MM/YYYY HH:mm")}
                                 </td>
                                 <td className="p-2 border">
-                                    <Executor color="bg-red-500" assignee={taskOutDate.assignee} />
+                                    <Executor color="" assignee={item.assignee} />
                                 </td>
-                                <td className="p-2 border" style={{color: `#${PCM_STATUS_TASK[taskOutDate.status - 1].backgroud}`}}>
-                                    {PCM_STATUS_TASK[taskOutDate.status - 1].text}
+                                <td className="p-2 border" style={{color: `#${PCM_STATUS_TASK[item.status - 1].backgroud}`}}>
+                                    {PCM_STATUS_TASK[item.status - 1].text}
                                 </td>
-                                <td className="p-2 border">
+                                {/* <td className="p-2 border">
                                     <ListProgress
                                     color="bg-red-500"
-                                    checklist={taskOutDate.checklist}
-                                    percentage={taskOutDate.percentage}
+                                    checklist={item.checklist}
+                                    percentage={item.percentage}
                                     />
-                                </td>
+                                </td> */}
                                 <td className="p-2 border">
-                                    {moment(taskOutDate.modifyAt).format("DD/MM/YYYY HH:mm")}
+                                    <p className="text-primary-gray"><i>{item?.userUpdate?.fullname} | {moment(item?.modifyAt).format("DD/MM/YYYY HH:mm")} | {moment(item?.modifyAt).fromNow()}</i></p>
                                 </td>
                                 <td className={cn(styles["dont-break-out"], "p-2 border")}>
-                                    {subContentHtml(taskOutDate.description)}
+                                    {subContentHtml(item.description)}
                                 </td>
                             </tr>
                         )) : <></>}

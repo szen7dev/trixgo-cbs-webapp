@@ -132,7 +132,7 @@ const PcmTasksReportPage: FC = () => {
             <button className="mr-3" onClick={history.goBack}>
               <img src={`${process.env.PUBLIC_URL}/images/common/button_back.png`} alt="Back" />
             </button>
-            <p className="text-lg">Chi tiết báo cáo: {infoReport.name}</p>
+            <p className="text-lg">Chi tiết báo cáo: {infoReport.name} ({totalRecord})</p>
           </div>
           <div className="flex">
             <button

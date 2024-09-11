@@ -105,6 +105,12 @@ export const HomeLeftMenuContent: FC = () => {
             route: '/pcm/mine'
         },
         {
+            label: t("menu:dynamicReport"),
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/report'
+        },
+        {
             label: t("menu:star"),
             icon: starIcon,
             count: 0,
@@ -122,20 +128,14 @@ export const HomeLeftMenuContent: FC = () => {
             count: data?.data?.amountMyTask5,
             route: '/pcm/draft'
         },
+    ]
+
+    const listTabSub: Tab[] = [
         {
             label: t("menu:kpiReport"),
             icon: fileIcon,
             count: 0,
             route: '/pcm/kpi-report'
-        },
-    ]
-
-    const listTabSub: Tab[] = [
-        {
-            label: t("menu:dynamicReport"),
-            icon: fileIcon,
-            count: 0,
-            route: '/pcm/report'
         },
         {
             label: t("menu:relatingTask"),

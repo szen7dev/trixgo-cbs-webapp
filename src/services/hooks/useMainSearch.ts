@@ -112,7 +112,7 @@ export const useSearchTask = ({
         MainSearchRepository.mainSearch({
             lastestID: pageParam || "",
             populates: JSON.stringify({
-                path: "assignee author project group lastLog lastComment parent",
+                path: "assignee author userUpdate project group lastLog lastComment parent",
                 select: "name fullname image sign content author createAt sign files",
                 populate: {
                     path: "author files images",

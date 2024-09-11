@@ -105,6 +105,7 @@ export type Task = {
   createAt: string;
   modifyAt: string;
   author: Author;
+  userUpdate: Author;
   message?: string;
   error?: boolean;
   timeImportExcel?: string;

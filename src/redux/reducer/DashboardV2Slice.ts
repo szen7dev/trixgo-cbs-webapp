@@ -19,14 +19,17 @@ const initialState: any = {
     },
 
     querySubject: {
+      authorsID: [],
       companiesOfAssignee: [],
       assigneesID: [],
       isActive: "1",
     },
+
     queryFile: {
       companyOfAuthorsID: [],
       authorsID: [],
     },
+    
     pcmMine: {
       companiesOfAuthor: [],
       authorsID: [],
