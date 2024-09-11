@@ -185,11 +185,12 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       taxid: "",
       union: "",
       share: "",
+      sallary: "",
+      sallaryFactor: "",
+      sallaryBasic: "",
+      nods: "",
       insuranceSign: "",
       insuranceDate: "",
-      sallaryFactor: "",
-      sallarySubFactor: "",
-      sallaryBasic: "",
       signerIn: "",
       signerOut: "",
       workStartDate: "",
@@ -748,12 +749,12 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
-                        Thông tin khác
+                        Mô tả thông tin khác
                       </span>
                       <Field
                         type="text"
                         name="description"
-                        placeholder="Thông tin khác..."
+                        placeholder="	Mô tả thông tin khác..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
@@ -1118,11 +1119,11 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/5 flex items-center">
-                      <span className="w-2/12 text-primary-gray">Phụ cấp</span>
+                      <span className="w-2/12 text-primary-gray">Lương</span>
                       <Field
                         type="text"
-                        name="sallarySubFactor"
-                        placeholder="Phụ cấp..."
+                        name="sallary"
+                        placeholder="Lương..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
@@ -1131,12 +1132,12 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
-                        Mức đóng Bảo hiểm
+                        Mức lương đóng Bảo hiểm
                       </span>
                       <Field
                         type="text"
                         name="sallaryBasic"
-                        placeholder="Mức đóng Bảo hiểm..."
+                        placeholder="Mức lương đóng Bảo hiểm..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
@@ -1376,17 +1377,17 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
 
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
-                        Mô tả
-                      </span>
-                      <Field
-                        type="text"
-                        name="description"
-                        placeholder="Mô tả..."
-                        className="w-full h-6 outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
+                          Số người phụ thuộc
+                        </span>
+                        <Field
+                          type="text"
+                          name="nods"
+                          placeholder="Số người phụ thuộc"
+                          className="w-full h-6 outline-none pl-3"
+                          onBlur={(e: FormEvent<HTMLInputElement>) => {
+                            handleBlur(e);
+                          }}
+                        />
                     </div>
 
                     <div className="w-1/5 flex items-center">

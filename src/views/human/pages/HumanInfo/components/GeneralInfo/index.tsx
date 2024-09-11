@@ -187,6 +187,22 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {info?.insuranceDate && moment(info?.insuranceDate).isValid() && moment(info?.insuranceDate).format(DATE_FORMAT)}
               </td>
             </tr>
+
+            <tr className="border h-7 leading-7">
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Lương
+              </td>
+              <td className="border w-2/6 pl-4">
+                {formatNumberMoney(info?.sallary)}
+              </td>
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Số người phụ thuộc
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.nods}
+              </td>
+            </tr>
+
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("insuranceStatus")}
@@ -198,7 +214,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {i18n("sallarySubFactor")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.sallarySubFactor}/{formatNumberMoney(info?.sallaryBasic)}
+                {formatNumberMoney(info?.sallaryBasic)}
               </td>
             </tr>
 
