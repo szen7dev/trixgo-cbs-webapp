@@ -3,6 +3,7 @@ import moment from "moment";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { NavLink, useParams } from "react-router-dom";
 import { useQueryListTimeSheetParent } from "services/hooks/useTimeSheet";
+import { DAYOFWEEKS } from "apis/localdb/index";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface TimesheetHomePageProps {
@@ -116,7 +117,7 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                   "px-1 py-2 table-cell box-border border-b align-middle w-2/12"
                 }
               >
-                {item.name} - {moment(item.date).format('DD/MM/YYYY')}
+                {item.name} - {moment(item.date).format('DD/MM/YYYY')} | {DAYOFWEEKS[Number(new Date(item?.date).getDay())]?.name}
                 <p className="text-cbs-highlight-color"><i>{item?.assignee?.fullname}</i></p>
                 <NavLink  to={`/timesheet/home/${item?.parent?._id}`}>
                   <p><i>{item?.parent?.name}</i></p>
