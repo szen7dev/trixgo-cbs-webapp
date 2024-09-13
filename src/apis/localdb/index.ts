@@ -608,6 +608,25 @@ export const TIMESHEET_TYPES = [
     { value: 2, text: 'Sản xuất' },
 ]
 
+export const TIMESHEET_SUBTYPES = [
+    { _id: 1, name: 'Thông thường' },
+    { _id: 2, name: 'Nghỉ phép'},
+    { _id: 3, name: 'Lễ, tết'},
+    { _id: 4, name: 'Công tác'},
+    { _id: 5, name: 'Du lịch, nghỉ mát'},
+    { _id: 6, name: 'Làm thêm giờ'},
+]
+
+export const DAYOFWEEKS = [
+    { _id: 0, name: 'Chủ nhật' },
+    { _id: 1, name: 'Thứ 2' },
+    { _id: 2, name: 'Thứ 3'},
+    { _id: 3, name: 'Thứ 4'},
+    { _id: 4, name: 'Thứ 5'},
+    { _id: 5, name: 'Thứ 6'},
+    { _id: 6, name: 'Thứ 7'},
+]
+
 // PHÂN LOẠI KHO
 export const STORE_OUTIN = [
     { value: 1, text: 'Xuất' },

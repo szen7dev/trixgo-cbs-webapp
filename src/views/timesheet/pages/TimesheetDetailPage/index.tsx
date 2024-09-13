@@ -12,6 +12,7 @@ import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { createLinkAndClick } from "utils";
 import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
+import { TIMESHEET_SUBTYPES } from "apis/localdb/index";
 import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
@@ -29,13 +30,6 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
-
-const SUBTYPES = [
-  { _id: 1, name: 'Thông thường' },
-  { _id: 2, name: 'Nghỉ phép'},
-  { _id: 3, name: 'Lễ, tết'},
-  { _id: 4, name: 'Công tác'},
-]
 
 const TimeSheetDetailPage: FC = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -403,7 +397,7 @@ useEffect(() => {
             placeholder={"Phân loại"}
             isMultiple={false}
             allowClearValueSingleInput={true}
-            data={SUBTYPES}
+            data={TIMESHEET_SUBTYPES}
             formatItem={{
                 id: "_id",
                 text: "name",
@@ -497,14 +491,14 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Công việc/Bill
+              Phân loại
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Phân loại
+              Công việc/Bill
             </div>
             <div
               className={
