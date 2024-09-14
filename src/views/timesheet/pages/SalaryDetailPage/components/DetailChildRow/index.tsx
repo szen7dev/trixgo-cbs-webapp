@@ -163,28 +163,7 @@ export const DetailChildRow: FC<Props> = ({
           {convertCurrency(rowData.salary)}
         </p>
       </div>
-      {/* <div
-        className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white"
-        }
-      >
-        <p
-          contentEditable={"true"}
-          suppressContentEditableWarning={true}
-          className={
-            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
-          }
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-            const value = e.target.innerText;
-            handleClickUpdateSalary({
-              ...rowData,
-              kpiFactor: `${value}`,
-            });
-          }}
-        >
-          {convertCurrency(rowData.kpiFactor)}
-        </p>
-      </div> */}
+
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -207,6 +186,30 @@ export const DetailChildRow: FC<Props> = ({
           {convertCurrency(rowData.onLeaveSalary)}
         </p>
       </div>
+
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              overtimeSalary: `${value}`,
+            });
+          }}
+        >
+          {convertCurrency(rowData.overtimeSalary)}
+        </p>
+      </div>
+
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"

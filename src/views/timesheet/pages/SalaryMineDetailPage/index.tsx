@@ -93,6 +93,13 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
+                Lương làm thêm
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
                 Thưởng hiệu quả
               </div>
               <div
@@ -183,6 +190,7 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                 <p>{item?.parent?.name}</p>
                 <p className="text-cbs-highlight-color"><i>Giờ làm việc: {convertCurrency(item.hours1)} ({Number(item.hours1/8)})</i></p>
                 <p className="text-cbs-highlight-color"><i>Giờ nghỉ phép, lễ: {convertCurrency(item.hours2)} ({Number(item.hours2/8)})</i></p>
+                <p className="text-cbs-highlight-color"><i>Giờ làm thêm: {convertCurrency(item.hours3)} ({Number(item.hours3/8)})</i></p>
                 <p className={"mt-1 text-gray-500 text-[10px]"}>
                   <i>Cre: {item?.userCreate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}</i>
                 </p>
@@ -190,6 +198,7 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.salary)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.onLeaveSalary)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.revenueBonus)}</div>
+              <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.overtimeSalary)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.reward)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.mealAllowance)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.punishment)}</div>
