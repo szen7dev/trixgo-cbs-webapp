@@ -614,7 +614,7 @@ export const TIMESHEET_SUBTYPES = [
     { _id: 3, name: 'Lễ, tết'},
     { _id: 4, name: 'Công tác'},
     { _id: 5, name: 'Du lịch, nghỉ mát'},
-    { _id: 6, name: 'Làm thêm giờ'},
+    { _id: 6, name: 'Làm thêm giờ***'},
 ]
 
 export const DAYOFWEEKS = [

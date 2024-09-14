@@ -513,19 +513,19 @@ const SalaryDetailPage: FC = () => {
               >
                 Lương
               </div>
-              {/* <div
-                className={
-                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-                }
-              >
-                Hệ số
-              </div> */}
               <div
                 className={
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
                 Lương lễ, phép
+              </div>
+              <div
+                className={
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                }
+              >
+                Lương làm thêm
               </div>
               <div
                 className={
