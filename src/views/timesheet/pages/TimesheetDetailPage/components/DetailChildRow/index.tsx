@@ -9,7 +9,7 @@ import { useUserSystem } from "services/hooks/users/useUserSystem";
 import {
 	useQueryListBudgetWork,
 } from "services/hooks/cmcs/useContractIncome";
-import { LIMIT_DROPDOWN } from "apis/localdb/index";
+import { LIMIT_DROPDOWN, TIMESHEET_SUBTYPES, DAYOFWEEKS } from "apis/localdb/index";
 import { useAuth } from "services/hooks/auth/useAuth";
 
 import type {
@@ -17,7 +17,7 @@ import type {
   TimeSheetParent,
   UpdateTimeSheetChildPayload,
 } from "typings/time-sheet";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 type Props = {
   parent?: TimeSheetParent;
@@ -27,24 +27,7 @@ type Props = {
   index: number;
   onUpdatedTimeSheetChild: (values: UpdateTimeSheetChildPayload) => void;
   hasPermission: boolean;
-};
-
-const SUBTYPES = [
-  { _id: 1, name: 'Thông thường' },
-  { _id: 2, name: 'Nghỉ phép'},
-  { _id: 3, name: 'Lễ, tết'},
-  { _id: 4, name: 'Công tác'},
-]
-
-const DAYOFWEEKS = [
-  { _id: 0, name: 'Chủ nhật' },
-  { _id: 1, name: 'Thứ 2' },
-  { _id: 2, name: 'Thứ 3'},
-  { _id: 3, name: 'Thứ 4'},
-  { _id: 4, name: 'Thứ 5'},
-  { _id: 5, name: 'Thứ 6'},
-  { _id: 6, name: 'Thứ 7'},
-]
+}
 
 export const DetailChildRow: FC<Props> = ({
   parent,
@@ -268,6 +251,50 @@ export const DetailChildRow: FC<Props> = ({
           }
         />
       </div>
+
+      <div
+        className={
+          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
+        }
+      >
+        <DropdownSearchable
+          id="ticket-creator"
+          className={"w-full pl-0 outline-none text-gray-400"}
+          bordered
+          isMultiple={false}
+          allowClearValueSingleInput
+          showTriangle
+          placeholder="Loại"
+          renderSelectedItem={(item) => (
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+                minWidth: 0,
+                width: "100px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+              }}
+            >
+              {item.text}
+            </p>
+          )}
+          data={TIMESHEET_SUBTYPES}
+          initialValue={rowData?.subtype}
+          formatItem={{
+            id: "_id",
+            text: "name",
+          }}
+          onchangeValue={(value) =>
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              subtype: value.id,
+            })
+          }
+        />
+        <p>{TIMESHEET_SUBTYPES[Number(rowData?.subtype)-1].name}</p>
+      </div>
+
       <div
         className={
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
@@ -313,48 +340,7 @@ export const DetailChildRow: FC<Props> = ({
           }
         />
       </div>
-      <div
-        className={
-          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
-        }
-      >
-        <DropdownSearchable
-          id="ticket-creator"
-          className={"w-full pl-0 outline-none text-gray-400"}
-          bordered
-          isMultiple={false}
-          allowClearValueSingleInput
-          showTriangle
-          placeholder="Loại"
-          renderSelectedItem={(item) => (
-            <p
-              style={{
-                textOverflow: "ellipsis",
-                maxWidth: "100%",
-                minWidth: 0,
-                width: "100px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-              }}
-            >
-              {item.text}
-            </p>
-          )}
-          data={SUBTYPES}
-          initialValue={rowData?.subtype}
-          formatItem={{
-            id: "_id",
-            text: "name",
-          }}
-          onchangeValue={(value) =>
-            handleClickUpdateTimeSheet({
-              ...rowData,
-              subtype: value.id,
-            })
-          }
-        />
-        <p>{SUBTYPES[Number(rowData?.subtype)-1].name}</p>
-      </div>
+
       <div
         className={
           "table-cell relative box-border border border-gray-300 bg-white"
