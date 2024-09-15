@@ -320,7 +320,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
             </tr>
         </thead>
         <tbody>
-          {data?.data?.map((item: any, index: any) => (
+          {/* {data?.data?.map((item: any, index: any) => (
             <tr key={index} className="border-b border-primary-border h-10">
               <td className="py-1 px-2 border-r border-primary-border">{(index + 1)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
@@ -338,7 +338,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome - item?.quantityExpense)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income - item?.expense)}</td>
             </tr>
-          ))}
+          ))} */}
         </tbody>
       </table>
     </div>
