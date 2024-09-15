@@ -2,26 +2,21 @@ import React, { FC, useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
-// import debounce from "lodash/debounce";
 import { read, utils } from 'xlsx';
-
-// import FileColorIcon from "assets/icons/FileColor";
-// import StarIcon from "assets/images/star.svg";
-// import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
-// import { InputWidthAdjust } from "views/store/shareComponents/common";
 import { createLinkAndClick } from "utils";
 import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
-// import {
-//   FilterDateGroup
-// } from "views/accounting/shareComponents/common";
-// import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
+import { convertCurrency } from "utils/converter";
+
+import {
+  useQueryDetailStoreChild,
+  useQueryListStoreChild,
+  useMutationStoreChild,
+} from "services/hooks/useStoreProduct";
 
 import {
   useQueryDetailStoreParent,
-  useQueryListStoreChild,
-  useMutationStoreChild,
 } from "services/hooks/useStore";
 
 import { useCashBook } from "services/hooks/financial/useCashBook";
@@ -39,23 +34,8 @@ export const StoreDetailPage: FC = () => {
   const [pageIndex, setPageIndex] = useState(0);
 
   const ref = React.useRef<PaginateHandle>(null);
-  const cashBookID = params["id"];
-  // const accountRef = React.useRef<DropdownHandle>(null);
-
-  // const history = useHistory();
-  // const [userID, setUserID] = useState<string | null>();
-  // const [subtype, setSubtype] = useState<string | null>();
-  // const [userKeyword, setUserKeyword] = useState("");  
-  // const [keyword, setKeyword] = useState('');
-
+  const orderID = params["id"];
   const { user } = useAuth();
-
-  // const { data: listUser } = useUserSystem({
-  //   companyID: user?.company?._id,
-  //   keyword: userKeyword,
-  //   limit: 10,
-  //   isFetch: true
-  // }, true)
 
   const [modalShare, setModalShare] = useState<{
     isShow: boolean;
@@ -83,8 +63,8 @@ export const StoreDetailPage: FC = () => {
     data: storeInfo,
     refetch,
     loading,
-  } = useQueryDetailStoreParent(cashBookID);
-
+  } = useQueryDetailStoreParent(orderID);
+  
   const {
     dataNotFilter: listStoreChild,
     loading: isFetchStoreChild,
@@ -99,7 +79,7 @@ export const StoreDetailPage: FC = () => {
     // keyword,
     // humanID: userID,
     // subtype,
-    parentID: cashBookID,
+    orderID,
     limit: 50
   })
 
@@ -144,7 +124,7 @@ export const StoreDetailPage: FC = () => {
       try {
         const isUpdated = await onUpdateStoreAsync({
           ...values,
-          cashBookID: values._id,
+          orderProductID: values._id,
           // hours: `${values.hours}`,
           // amount: `${values.amount}`,
           // state: `${values.state}`,
@@ -172,7 +152,7 @@ export const StoreDetailPage: FC = () => {
         }
         const isCreated = await onCreateStoreAsync({
           name: values.name,
-          parentID: cashBookID,
+          orderID: orderID,
         });
         if (isCreated.error) {
           throw new Error("ERROR~");
@@ -187,7 +167,7 @@ export const StoreDetailPage: FC = () => {
       }
     },
     [
-      cashBookID,
+      orderID,
       onCreateStoreAsync,
       onRefreshStoreChild,
       refetch,
@@ -211,7 +191,7 @@ export const StoreDetailPage: FC = () => {
       setStateExport({ isExporting: true });
       const { error, data } = await exportExcelAsync({
         option: param.option,
-        parentID: cashBookID,
+        parentID: orderID,
       });
 
       if (error) {
@@ -256,7 +236,7 @@ export const StoreDetailPage: FC = () => {
 useEffect(() => {
     if(dataImport.length){
         const fetchData = async () => {
-            const data = await importExcelAsync({ option: "2", parentID: cashBookID, dataImport: JSON.stringify(dataImport) });
+            const data = await importExcelAsync({ option: "2", parentID: orderID, dataImport: JSON.stringify(dataImport) });
             setDataImport([]);
 
             if(!data.error){
@@ -280,7 +260,7 @@ useEffect(() => {
       >
         <div className="w-auto">
           <div className={"flex"}>
-            <p className="font-bold text-medium">{storeInfo.name} | {storeInfo.sign} | {moment(storeInfo.date).format("DD/MM/YYYY")}</p>
+            <p className="font-bold text-medium">{storeInfo?.name} | {storeInfo?.sign} | {convertCurrency(storeInfo?.amount)} | {moment(storeInfo?.date).format("DD/MM/YYYY")}</p>
           </div>
           <p className={"text-gray-400"}>
             Chỉnh sửa {" "}
@@ -291,7 +271,7 @@ useEffect(() => {
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
           <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 5})}>
-            Tải excel Phiếu kho
+            Tải excel Phiếu
           </button>
         </div>
       </div>

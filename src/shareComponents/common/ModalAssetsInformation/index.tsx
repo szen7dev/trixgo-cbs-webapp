@@ -4,7 +4,7 @@ import moment from "moment";
 import { NavLink } from 'react-router-dom';
 import {
 	useQueryListStoreChild,
-  } from "services/hooks/useStore";
+  } from "services/hooks/useStoreProduct";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { formatNumberMoney } from "utils/cmcs";
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
