@@ -58,14 +58,18 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
     userCreateID: userID
   })
 
-  // console.log({ data })
+  console.log(data)
 
-  const tongNhap = 0, tongXuat = 0, tongTon = 0
-  // for(const item of data?.data){
-  //   tongNhap = Number(tongNhap) + Number(item.income)
-  //   tongXuat = Number(tongXuat) + Number(item.expense)
-  // }
-  // tongTon = tongNhap - tongXuat
+  let tongNhap = 0, tongXuat = 0, tongTon = 0
+  for(const item of data?.data){
+    tongNhap = Number(tongNhap) + Number(item.income)
+    tongXuat = Number(tongXuat) + Number(item.expense)
+  }
+  tongTon = tongNhap - tongXuat
+
+  console.log({tongNhap})
+  console.log({tongXuat})
+  console.log({tongTon})
 
   const [userKeyword, setUserKeyword] = useState("");
   const [projectKeyword, setProjectKeyword] = useState("");
