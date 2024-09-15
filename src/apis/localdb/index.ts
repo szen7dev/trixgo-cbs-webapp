@@ -136,6 +136,10 @@ export const PROJECT_CAPITAL = [
 ]
 
 // LOẠI DANH BẠ
+// export const ACCESS_SALARY_TEMP = ['6046bcf1b55525368b11ab79','658cdaab5c952c00131287db','6046bcf1b55525368b11ab91','65a057f21120870012cc60e5']
+export const ACCESS_SALARY_TEMP = ['6046bcf1b55525368b11ab79','658cdaab5c952c00131287db','6046bcf1b55525368b11ab91','65a057f21120870012cc60e5','66c68f46d1fd64001345ee11','654202aea7b45500126c97a6','63f036dde3e82d0012c161f8']
+
+// LOẠI DANH BẠ
 export const CONTACT_TYPES = [
     { value: 1, text: 'Nhân viên' },
     { value: 2, text: 'Khách hàng' },
