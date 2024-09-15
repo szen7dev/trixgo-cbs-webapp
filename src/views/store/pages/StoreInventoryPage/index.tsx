@@ -58,6 +58,8 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
     userCreateID: userID
   })
 
+  console.log(data)
+
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
   const [warehouseKeyword, setWarehouseKeyword] = useState("");
@@ -317,7 +319,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
             </tr>
         </thead>
-        {/* <tbody>
+        <tbody>
           {data?.data?.map((item: any, index: any) => (
             <tr key={index} className="border-b border-primary-border h-10">
               <td className="py-1 px-2 border-r border-primary-border">{(index + 1)}</td>
@@ -337,7 +339,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income - item?.expense)}</td>
             </tr>
           ))}
-        </tbody> */}
+        </tbody>
       </table>
     </div>
   )

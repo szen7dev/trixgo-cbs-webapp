@@ -358,10 +358,10 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
                         <p className="text-primary-gray"><i>{item?.name}</i></p>
                         <p>{item?.goods?.name}</p>
                         <p><i>{item?.assets?.name}</i></p>
-                        <NavLink className="text-primary" to={`/store/home/${item?.parent?._id}`}>
-                          <p className="text-primary-gray"><i>{item?.parent?.name}</i></p>
+                        <NavLink className="text-primary" to={`/store/home/${item?.order?._id}`}>
+                          <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
                         </NavLink>
-                        {/* <p className="text-primary-gray"><i>{item?.parent?._id}</i></p> */}
+                        {/* <p className="text-primary-gray"><i>{item?.order?._id}</i></p> */}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">{item?.goods?.unit}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantity)}</td>
@@ -386,10 +386,10 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                         {item?.name}-{item?.goods?.name}
                         <p><i>{item?.assets?.name}</i></p>
-                        <NavLink className="text-primary" to={`/store/home/${item?.parent?._id}`}>
-                          <p className="text-primary-gray"><i>{item?.parent?.name}</i></p>
+                        <NavLink className="text-primary" to={`/store/home/${item?.order?._id}`}>
+                          <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
                         </NavLink>
-                        {/* <p className="text-primary-gray"><i>{item?.parent?._id}</i></p> */}
+                        {/* <p className="text-primary-gray"><i>{item?.order?._id}</i></p> */}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">{item?.goods?.unit}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>

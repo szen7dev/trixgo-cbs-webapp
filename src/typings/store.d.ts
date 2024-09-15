@@ -40,7 +40,7 @@ export type ListStorePayload = QueryParams & {
 
 export type QueryStoreParentResponse = APIResponse & {
     data: {
-        listRecords: StoreParent[];
+        listRecords: StoreChild[];
         limit: number;
         totalRecord: number;
         totalPage: number;
@@ -147,6 +147,7 @@ export type QueryStoreChildResponse = APIResponse & {
         totalRecord: number;
         totalPage: number;
         nextCursor: string | null;
+        data: any
     };
 }
 
