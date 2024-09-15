@@ -1,9 +1,9 @@
-import React, { FC, useRef, useState, useCallback } from "react";
+import React, { FC, useState, useMemo } from "react";
 import { formatNumberMoney } from "utils/cmcs";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
-import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
@@ -21,8 +21,6 @@ import {
   useQueryListByPropertyStoreChild
 } from "services/hooks/useStoreProduct";
 import { STORE_TYPES } from "apis/localdb";
-
-const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface Props {
   outin?: number
   // type?: number
@@ -58,18 +56,19 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
     userCreateID: userID
   })
 
-  console.log(data)
+  const { tongNhap, tongXuat, tongTon } = useMemo(() => {
+    let tongNhap = 0, tongXuat = 0, tongTon = 0
 
-  let tongNhap = 0, tongXuat = 0, tongTon = 0
-  for(const item of data?.data){
-    tongNhap = Number(tongNhap) + Number(item.income)
-    tongXuat = Number(tongXuat) + Number(item.expense)
-  }
-  tongTon = tongNhap - tongXuat
-
-  console.log({tongNhap})
-  console.log({tongXuat})
-  console.log({tongTon})
+    if(data?.data && data.data.length) { 
+      for(const item of data?.data){
+        tongNhap = Number(tongNhap) + Number(item.income)
+        tongXuat = Number(tongXuat) + Number(item.expense)
+      }
+      tongTon = tongNhap - tongXuat
+    }
+    
+    return { tongNhap, tongXuat, tongTon }
+  }, [data?.data])
 
   const [userKeyword, setUserKeyword] = useState("");
   const [projectKeyword, setProjectKeyword] = useState("");
@@ -347,10 +346,10 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <td className="py-1 px-2 border-r border-primary-border">{(index + 1)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                 {item?.name}
-                <p><i>{item?._id}</i></p>
+                {/* <p><i>{item?._id}</i></p>
                 <NavLink className="text-primary" to={`/store/detailed-report/${item?._id}`}>
                   {item?.name}
-                </NavLink>
+                </NavLink> */}
               </td>
               <td className="py-1 px-2 border-r border-primary-border">{item?.unit}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome)}</td>
