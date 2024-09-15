@@ -23,6 +23,8 @@ import { usePosition } from "services/hooks/items/usePosition";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useContact } from "services/hooks/items/useContact";
 import type { MutationContactPayload } from "typings/human";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { ACCESS_SALARY_TEMP } from "apis/localdb";
 
 enum CLASSIFY {
   "Nhân viên" = 1,
@@ -79,6 +81,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
   onFinish,
   title,
 }) => {
+  const { user } = useAuth();
   const ref = useRef<HTMLDivElement>(null);
   const { t: i18n } = useTranslation(["human"]);
   const { closeModal } = useModal();
@@ -1118,7 +1121,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                   {/* -------------- Line 8 --------------- */}
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
-                    <div className="w-1/5 flex items-center">
+                    {/* <div className="w-1/5 flex items-center">
                       <span className="w-2/12 text-primary-gray">Lương</span>
                       <Field
                         type="text"
@@ -1129,7 +1132,20 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           handleBlur(e);
                         }}
                       />
-                    </div>
+                    </div> */}
+
+                    {ACCESS_SALARY_TEMP.includes(`${user?._id.toString()}`) ?  <div className="w-1/5 flex items-center">
+                      <span className="w-2/12 text-primary-gray">Lương</span>
+                      <Field
+                        type="text"
+                        name="sallary"
+                        placeholder="Lương..."
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div> : <span className="w-2/12 text-primary-gray">Lương</span>}
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
                         Mức lương đóng Bảo hiểm
