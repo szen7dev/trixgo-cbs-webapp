@@ -34,7 +34,7 @@ export const useQueryListStoreChild = (
         StoreChildRepository.fetchListStore({
         populates: {
           path: "account goods assets customer work userCreate userUpdate order",
-          select: "name sign phone unit note",
+          select: "name sign phone unit note fullname",
         },
         limit,
         lastestID: pageParam,
