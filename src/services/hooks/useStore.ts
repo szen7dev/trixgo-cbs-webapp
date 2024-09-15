@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { StoreParentRepository, StoreChildRepository } from "apis/store";
+import { StoreParentRepository } from "apis/store";
 
 import type {
   StoreParent,
@@ -9,11 +9,6 @@ import type {
   UpdateStoreParentResponse,
   DeleteStoreParentPayload,
   DeleteStoreParentResponse,
-  StoreChild,
-  InsertStoreChildPayload,
-  InsertStoreChildResponse,
-  UpdateStoreChildPayload,
-  UpdateStoreChildResponse,
 } from "typings/store";
 
 // Time Sheet Parent
@@ -115,17 +110,17 @@ interface UseQueryDetailStoreParent {
 }
 
 export const useQueryDetailStoreParent = (
-  cashBookID: string
+  orderID: string
 ): UseQueryDetailStoreParent => {
   const { isLoading, data, refetch } = useQuery(
-    `store.parent.${cashBookID}`,
+    `store.parent.${orderID}`,
     async () =>
         StoreParentRepository.fetchDetailStore({
         populates: {
           path: "assignee project userCreate userUpdate members admins",
           select: "_id fullname bizfullname name sign image",
         },
-        cashBookID,
+        orderID,
       }),
     {
       getNextPageParam: ({ data }: any) => {
@@ -170,115 +165,5 @@ export const useMutationStoreParent = (): UseMutationStoreParent => {
     onCreateStoreParentAsync: insertMutation.mutateAsync,
     onUpdateStoreParentAsync: updateMutation.mutateAsync,
     onDeleteStoreParentAsync: deleteMutation.mutateAsync,
-  };
-};
-
-// Time Sheet Children
-interface UseQueryListStoreChild {
-  loading: boolean;
-  data: StoreChild[];
-  dataNotFilter: StoreChild[];
-  hasNextPage?: boolean;
-  totalPages: number;
-  totalRecord: number;
-  limit: number;
-  refetch: () => void;
-  fetchNextPage: () => void;
-  fetchPrevPage: () => void;
-}
-
-export const useQueryListStoreChild = (
-  params: any,
-): UseQueryListStoreChild => {
-  const result = useInfiniteQuery(
-    [`list_store.child`, params],
-    async ({ pageParam }: any) =>
-        StoreChildRepository.fetchListStore({
-        lastestID: pageParam,
-        ...params
-      }),
-    {
-      getNextPageParam: ({ data }: any) => {
-        return data?.nextCursor || undefined;
-      },
-      refetchOnWindowFocus: false,
-      enabled: true,
-    }
-  );
-  const {
-    isLoading,
-    data,
-    refetch,
-    fetchNextPage,
-    fetchPreviousPage: fetchPrevPage,
-    hasNextPage,
-  } = result;
-
-  const listStore = []
-    .concat(...(data?.pages || []).map((d: any) => d.data?.listRecords))
-    .filter(Boolean);
-
-  const dataNotFilter = (data?.pages || []).map(
-    (d: any) => d.data?.listRecords
-  );
-
-  const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-  const totalPages = data?.pages[0]?.data?.totalPage || 0;
-
-  return {
-    loading: isLoading,
-    data: listStore,
-    dataNotFilter,
-    hasNextPage,
-    totalPages,
-    totalRecord,
-    limit: params.limit || 50,
-    refetch,
-    fetchNextPage,
-    fetchPrevPage,
-  };
-};
-
-export const useQueryListByPropertyStoreChild = (
-  params: any,
-) => {
-  const result = useInfiniteQuery(
-    [`list_store_property.child`, params],
-    async ({ pageParam }: any) =>
-        StoreChildRepository.fetchListByProperty({
-        ...params
-      }),
-  );
-
-  const {
-    data,
-  } = result;
-
-  return {
-    data: data?.pages[0] || []
-  };
-};
-
-interface UseMutationStoreChild {
-  onCreateStoreAsync: (
-    payload: InsertStoreChildPayload
-  ) => Promise<InsertStoreChildResponse>;
-  onUpdateStoreAsync: (
-    payload: UpdateStoreChildPayload
-  ) => Promise<UpdateStoreChildResponse>;
-}
-
-export const useMutationStoreChild = (): UseMutationStoreChild => {
-  const insertMutation = useMutation((payload: InsertStoreChildPayload) =>
-    StoreChildRepository.insertStore(payload)
-  );
-
-  const updateMutation = useMutation((payload: UpdateStoreChildPayload) =>
-    StoreChildRepository.updateStore(payload)
-  );
-
-  return {
-    onCreateStoreAsync: insertMutation.mutateAsync,
-    onUpdateStoreAsync: updateMutation.mutateAsync,
   }
 }

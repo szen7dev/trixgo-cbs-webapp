@@ -19,7 +19,7 @@ import {
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import {
   useQueryListByPropertyStoreChild
-} from "services/hooks/useStore";
+} from "services/hooks/useStoreProduct";
 import { STORE_TYPES } from "apis/localdb";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
@@ -57,6 +57,15 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
     assetsID,
     userCreateID: userID
   })
+
+  // console.log(data)
+
+  const tongNhap = 0, tongXuat = 0, tongTon = 0
+  // for(const item of data?.data){
+  //   tongNhap = Number(tongNhap) + Number(item.income)
+  //   tongXuat = Number(tongXuat) + Number(item.expense)
+  // }
+  // tongTon = tongNhap - tongXuat
 
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
@@ -306,27 +315,38 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">TỒN</th>
             </tr>
             <tr className="text-left text-sm text-primary-gray">
-              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
+            </tr>
+            <tr className="text-left text-sm text-primary-gray font-bold">
+              <th className="py-1 px-2 border-r border-primary-border"></th>
+              <th className="py-1 px-2 border-r border-primary-border"></th>
+              <th className="py-1 px-2 border-r border-primary-border"></th>
+              <th className="py-1 px-2 border-r border-primary-border"></th>
+              <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongNhap)}</th>
+              <th className="py-1 px-2 border-r border-primary-border text-right"></th>
+              <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongXuat)}</th>
+              <th className="py-1 px-2 border-r border-primary-border text-right"></th>
+              <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongTon)}</th>
             </tr>
         </thead>
         <tbody>
-          {data?.data?.map((item: any, index: any) => (
+          {/* {data?.data?.map((item: any, index: any) => (
             <tr key={index} className="border-b border-primary-border h-10">
               <td className="py-1 px-2 border-r border-primary-border">{(index + 1)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                 {item?.name}
-                {/* <p><i>{item?._id}</i></p> */}
-                {/* <NavLink className="text-primary" to={`/store/detailed-report/${item?._id}`}>
+                <p><i>{item?._id}</i></p>
+                <NavLink className="text-primary" to={`/store/detailed-report/${item?._id}`}>
                   {item?.name}
-                </NavLink> */}
+                </NavLink>
               </td>
               <td className="py-1 px-2 border-r border-primary-border">{item?.unit}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome)}</td>
@@ -336,7 +356,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome - item?.quantityExpense)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income - item?.expense)}</td>
             </tr>
-          ))}
+          ))} */}
         </tbody>
       </table>
     </div>

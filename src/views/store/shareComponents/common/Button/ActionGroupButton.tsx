@@ -24,7 +24,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
             <CreateOrEditDialog
               title="Cập nhật"
               onSubmit={onUpdateStore}
-              cashBookID={record?._id}
+              orderID={record?._id}
               outin={record?.outin}
               type={record?.type}
               projectName={record?.project?.name}

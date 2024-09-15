@@ -16,7 +16,7 @@ import type {
 
 export async function fetchListStore<T>(params?: ListStorePayload): Promise<T> {
     const { data } = await API.get(
-        `${STORE_URL}`, {
+        `${STORE_URL}/orders`, {
         params: {
             populates: {
                 "path": "parent assignee project warehouse account customer contract goods assets work userCreate userUpdate",
@@ -30,7 +30,7 @@ export async function fetchListStore<T>(params?: ListStorePayload): Promise<T> {
 }
 
 export async function fetchListByProperty(params : any) {
-    const { data } = await API.get(`${STORE_URL}/get-list-by-property`, {
+    const { data } = await API.get(`${STORE_URL}/orders/get-list-by-property`, {
         params: {
             ...params,
         }
@@ -39,17 +39,17 @@ export async function fetchListByProperty(params : any) {
 }
 
 export async function insertStore<P, R>(payload: P): Promise<R> {
-    const { data } = await API.post(`${STORE_URL}`, payload);
+    const { data } = await API.post(`${STORE_URL}/orders`, payload);
     return data;
 }
 
 export async function updateStore<P, R>(payload: P): Promise<R> {
-    const { data } = await API.put(`${STORE_URL}`, payload);
+    const { data } = await API.put(`${STORE_URL}/orders`, payload);
     return data;
 }
 
 export async function deleteStore<P, R>(payload: P): Promise<R> {
-    const { data } = await API.delete(`${STORE_URL}`, {
+    const { data } = await API.delete(`${STORE_URL}/orders`, {
         data: payload
     });
     return data;
