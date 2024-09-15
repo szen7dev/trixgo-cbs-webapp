@@ -78,7 +78,7 @@ export const StoreDetailPage: FC = () => {
     // keyword,
     // humanID: userID,
     // subtype,
-    parentID: cashBookID,
+    orderID: cashBookID,
     limit: 50
   })
 
