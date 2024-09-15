@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { formatNumberMoney, convertDisplayDate } from "utils/cmcs";
 import type { Human } from 'typings/human';
+import { useAuth } from "services/hooks/auth/useAuth";
+import { ACCESS_SALARY_TEMP } from "apis/localdb";
 
 type Props = {
   info: Human
@@ -24,9 +26,10 @@ export enum INSURANCE_STATUS {
 }
 
 export const GeneralInfo: FC<Props> = memo((props) => {
+  const { user } = useAuth();
   const { t: i18n } = useTranslation(["human"]);
   const { info } = props;
-  // console.log(info)
+  // console.log(user)
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
@@ -193,7 +196,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 Lương
               </td>
               <td className="border w-2/6 pl-4">
-                {formatNumberMoney(info?.sallary)}
+                {ACCESS_SALARY_TEMP.includes(`${user?._id.toString()}`) ? formatNumberMoney(info?.sallary) : ''}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 Số người phụ thuộc
