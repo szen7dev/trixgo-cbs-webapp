@@ -151,7 +151,7 @@ export const StoreDetailPage: FC = () => {
         }
         const isCreated = await onCreateStoreAsync({
           name: values.name,
-          cashBookID: cashBookID,
+          orderID: cashBookID,
         });
         if (isCreated.error) {
           throw new Error("ERROR~");
