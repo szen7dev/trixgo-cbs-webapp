@@ -147,17 +147,6 @@ export type QueryStoreChildResponse = APIResponse & {
         totalRecord: number;
         totalPage: number;
         nextCursor: string | null;
-        data: any
-    };
-}
-
-export type QueryStoreChildResponse = APIResponse & {
-    data: {
-        listRecords: StoreChild[];
-        limit: number;
-        totalRecord: number;
-        totalPage: number;
-        nextCursor: string | null;
     };
 }
 
