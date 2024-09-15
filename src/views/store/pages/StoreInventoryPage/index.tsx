@@ -58,7 +58,14 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
     userCreateID: userID
   })
 
-  console.log(data)
+  // console.log(data)
+
+  const tongNhap = 0, tongXuat = 0, tongTon = 0
+  // for(const item of data?.data){
+  //   tongNhap = Number(tongNhap) + Number(item.income)
+  //   tongXuat = Number(tongXuat) + Number(item.expense)
+  // }
+  // tongTon = tongNhap - tongXuat
 
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
@@ -308,15 +315,26 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">TỒN</th>
             </tr>
             <tr className="text-left text-sm text-primary-gray">
-              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
+              <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
+            </tr>
+            <tr className="text-left text-sm text-primary-gray font-bold">
+              <th className="py-1 px-2 border-r border-primary-border"></th>
+              <th className="py-1 px-2 border-r border-primary-border"></th>
+              <th className="py-1 px-2 border-r border-primary-border"></th>
+              <th className="py-1 px-2 border-r border-primary-border"></th>
+              <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongNhap)}</th>
+              <th className="py-1 px-2 border-r border-primary-border text-right"></th>
+              <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongXuat)}</th>
+              <th className="py-1 px-2 border-r border-primary-border text-right"></th>
+              <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongTon)}</th>
             </tr>
         </thead>
         <tbody>

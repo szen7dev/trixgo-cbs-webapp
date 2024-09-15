@@ -486,7 +486,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(item?.amount)}
+                {convertCurrency(Number(item?.amount).toFixed(0))}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item.note}
