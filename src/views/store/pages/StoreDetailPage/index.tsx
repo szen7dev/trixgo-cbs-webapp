@@ -123,7 +123,7 @@ export const StoreDetailPage: FC = () => {
       try {
         const isUpdated = await onUpdateStoreAsync({
           ...values,
-          cashBookID: values._id,
+          orderProductID: values._id,
           // hours: `${values.hours}`,
           // amount: `${values.amount}`,
           // state: `${values.state}`,
