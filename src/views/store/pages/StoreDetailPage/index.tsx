@@ -2,20 +2,10 @@ import React, { FC, useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
-// import debounce from "lodash/debounce";
 import { read, utils } from 'xlsx';
-
-// import FileColorIcon from "assets/icons/FileColor";
-// import StarIcon from "assets/images/star.svg";
-// import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
-// import { InputWidthAdjust } from "views/store/shareComponents/common";
 import { createLinkAndClick } from "utils";
 import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
-// import {
-//   FilterDateGroup
-// } from "views/accounting/shareComponents/common";
-// import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
 
 import {
@@ -44,22 +34,7 @@ export const StoreDetailPage: FC = () => {
 
   const ref = React.useRef<PaginateHandle>(null);
   const cashBookID = params["id"];
-  // const accountRef = React.useRef<DropdownHandle>(null);
-
-  // const history = useHistory();
-  // const [userID, setUserID] = useState<string | null>();
-  // const [subtype, setSubtype] = useState<string | null>();
-  // const [userKeyword, setUserKeyword] = useState("");  
-  // const [keyword, setKeyword] = useState('');
-
   const { user } = useAuth();
-
-  // const { data: listUser } = useUserSystem({
-  //   companyID: user?.company?._id,
-  //   keyword: userKeyword,
-  //   limit: 10,
-  //   isFetch: true
-  // }, true)
 
   const [modalShare, setModalShare] = useState<{
     isShow: boolean;
@@ -176,7 +151,7 @@ export const StoreDetailPage: FC = () => {
         }
         const isCreated = await onCreateStoreAsync({
           name: values.name,
-          parentID: cashBookID,
+          cashBookID: cashBookID,
         });
         if (isCreated.error) {
           throw new Error("ERROR~");

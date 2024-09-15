@@ -165,6 +165,8 @@ export type QueryDetailStoreChildResponse = APIResponse & {
 }
 
 export type InsertStoreChildPayload = {
+    cashBookID: String;
+    orderID: string;
     parentID: string;
     assigneeID?: string;
     projectID?: string;

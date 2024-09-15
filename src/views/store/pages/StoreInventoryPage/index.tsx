@@ -317,16 +317,16 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
             </tr>
         </thead>
-        <tbody>
+        {/* <tbody>
           {data?.data?.map((item: any, index: any) => (
             <tr key={index} className="border-b border-primary-border h-10">
               <td className="py-1 px-2 border-r border-primary-border">{(index + 1)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                 {item?.name}
-                {/* <p><i>{item?._id}</i></p> */}
-                {/* <NavLink className="text-primary" to={`/store/detailed-report/${item?._id}`}>
+                <p><i>{item?._id}</i></p>
+                <NavLink className="text-primary" to={`/store/detailed-report/${item?._id}`}>
                   {item?.name}
-                </NavLink> */}
+                </NavLink>
               </td>
               <td className="py-1 px-2 border-r border-primary-border">{item?.unit}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome)}</td>
@@ -337,7 +337,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income - item?.expense)}</td>
             </tr>
           ))}
-        </tbody>
+        </tbody> */}
       </table>
     </div>
   )
