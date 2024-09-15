@@ -30,7 +30,7 @@ interface CreateOrEditDialogProps {
   warehouseName?: string;
   customerName?: string;
   onSubmit?: (values: string) => void;
-  cashBookID?: string;
+  orderID?: string;
 }
 
 const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
@@ -39,7 +39,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   title,
   defaultValues,
   onSubmit,
-  cashBookID,
+  orderID,
   assigneeName,
   projectName,
   warehouseName,
@@ -76,7 +76,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     warehouse: {},
     customer: {},
     note: "",
-    active: "",
+    status: "",
     ...defaultValues,
   };
 
@@ -86,12 +86,12 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
         ...values,
         active: `${values.active}`,
       };
-      if (cashBookID) {
-        formatData.cashBookID = cashBookID;
+      if (orderID) {
+        formatData.orderID = orderID;
       }
       onSubmit && onSubmit(formatData);
     },
-    [cashBookID, onSubmit]
+    [orderID, onSubmit]
   );
 
   return (
@@ -279,12 +279,12 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                   </div>
                 </div>
                 <div>
-                  <p className="text-primary-gray text-[13px] mb-1">Trạng thái (1-Hoạt động | 2-Hủy)</p>
+                  <p className="text-primary-gray text-[13px] mb-1">Trạng thái (5-Hoạt động | 6-Hủy)</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
                     <Field
                       type="text"
-                      name="active"
-                      placeholder="1-Hoạt động | 2-Hủy"
+                      name="status"
+                      placeholder="5-Hoạt động | 6-Hủy"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);

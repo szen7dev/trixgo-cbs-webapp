@@ -129,17 +129,17 @@ interface UseQueryDetailStoreChild {
 }
 
 export const useQueryDetailStoreChild = (
-  cashBookID: string
+  orderID: string
 ): UseQueryDetailStoreChild => {
   const { isLoading, data, refetch } = useQuery(
-    `store.child.${cashBookID}`,
+    `store.child.${orderID}`,
     async () =>
         StoreChildRepository.fetchDetailStore({
         populates: {
           path: "assignee project userCreate userUpdate members admins",
           select: "_id fullname bizfullname name sign image",
         },
-        cashBookID,
+        orderID,
       }),
     {
       getNextPageParam: ({ data }: any) => {

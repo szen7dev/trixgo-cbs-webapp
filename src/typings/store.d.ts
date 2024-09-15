@@ -35,7 +35,7 @@ export type StoreParent = {
 }
 
 export type ListStorePayload = QueryParams & {
-    cashBookID?: string;
+    orderID?: string;
 };
 
 export type QueryStoreParentResponse = APIResponse & {

@@ -110,17 +110,17 @@ interface UseQueryDetailStoreParent {
 }
 
 export const useQueryDetailStoreParent = (
-  cashBookID: string
+  orderID: string
 ): UseQueryDetailStoreParent => {
   const { isLoading, data, refetch } = useQuery(
-    `store.parent.${cashBookID}`,
+    `store.parent.${orderID}`,
     async () =>
         StoreParentRepository.fetchDetailStore({
         populates: {
           path: "assignee project userCreate userUpdate members admins",
           select: "_id fullname bizfullname name sign image",
         },
-        cashBookID,
+        orderID,
       }),
     {
       getNextPageParam: ({ data }: any) => {

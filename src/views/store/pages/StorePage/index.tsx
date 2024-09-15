@@ -454,7 +454,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                   "px-1 py-2 table-cell box-border border-b align-middle"
                 }
               >
-                {Number(item.active) == 2 ? <div className="relative z-5 inline-block -translate-y-1"><button className="text-[10px] text-white rounded px-1 py-0.5 mx-1 bg-red-400">Phiếu hủy</button></div> : <></>}
+                {Number(item.status) == 6 ? <div className="relative z-5 inline-block -translate-y-1"><button className="text-[10px] text-white rounded px-1 py-0.5 mx-1 bg-red-400">Phiếu hủy</button></div> : <></>}
                 <NavLink to={`${currentPathname}/${item._id}`} className="text-cbs-highlight-color font-bold text-medium">
                   {item.name}
                 </NavLink>
