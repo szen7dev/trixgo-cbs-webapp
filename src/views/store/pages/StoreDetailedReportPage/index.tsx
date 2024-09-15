@@ -16,7 +16,7 @@ import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { STORE_TYPES } from "apis/localdb";
 import {
   useQueryListStoreChild,
-} from "services/hooks/useStore";
+} from "services/hooks/useStoreProduct";
 
 interface Props {
     outin?: number

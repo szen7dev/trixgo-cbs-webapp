@@ -4,14 +4,14 @@ import { convertObToUrl } from "utils";
 
 import type {
     ListStorePayload,
-    QueryStoreParentResponse,
-    InsertStoreParentPayload,
-    InsertStoreParentResponse,
-    UpdateStoreParentPayload,
-    UpdateStoreParentResponse,
-    DeleteStoreParentPayload,
-    DeleteStoreParentResponse,
-    QueryDetailStoreParentResponse
+    QueryStoreChildResponse,
+    InsertStoreChildPayload,
+    InsertStoreChildResponse,
+    UpdateStoreChildPayload,
+    UpdateStoreChildResponse,
+    DeleteStoreChildPayload,
+    DeleteStoreChildResponse,
+    QueryDetailStoreChildResponse
 } from 'typings/store';
 
 export async function fetchListStore<T>(params?: ListStorePayload): Promise<T> {
@@ -55,16 +55,16 @@ export async function deleteStore<P, R>(payload: P): Promise<R> {
     return data;
 }
 
-interface StoreParentRepository {
-    fetchListStore: (params: ListStorePayload) => Promise<QueryStoreParentResponse>;
-    fetchListByProperty: (params: any) => Promise<QueryStoreParentResponse>;
-    fetchDetailStore: (params: ListStorePayload) => Promise<QueryDetailStoreParentResponse>;
-    insertStore: (payload: InsertStoreParentPayload) => Promise<InsertStoreParentResponse>;
-    updateStore: (payload: UpdateStoreParentPayload) => Promise<UpdateStoreParentResponse>;
-    deleteStore: (payload: DeleteStoreParentPayload) => Promise<DeleteStoreParentResponse>;
+interface StoreChildRepository {
+    fetchListStore: (params: ListStorePayload) => Promise<QueryStoreChildResponse>;
+    fetchListByProperty: (params: any) => Promise<QueryStoreChildResponse>;
+    fetchDetailStore: (params: ListStorePayload) => Promise<QueryDetailStoreChildResponse>;
+    insertStore: (payload: InsertStoreChildPayload) => Promise<InsertStoreChildResponse>;
+    updateStore: (payload: UpdateStoreChildPayload) => Promise<UpdateStoreChildResponse>;
+    deleteStore: (payload: DeleteStoreChildPayload) => Promise<DeleteStoreChildResponse>;
 }
 
-export const storeChildRepository: StoreParentRepository = {
+export const storeChildRepository: StoreChildRepository = {
     fetchListStore: async (params) => {
         return fetchListStore(params)
     },

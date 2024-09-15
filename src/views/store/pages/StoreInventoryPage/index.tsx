@@ -19,7 +19,7 @@ import {
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import {
   useQueryListByPropertyStoreChild
-} from "services/hooks/useStore";
+} from "services/hooks/useStoreProduct";
 import { STORE_TYPES } from "apis/localdb";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";

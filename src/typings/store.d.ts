@@ -38,7 +38,6 @@ export type ListStorePayload = QueryParams & {
     cashBookID?: string;
 };
 
-// time sheet parent
 export type QueryStoreParentResponse = APIResponse & {
     data: {
         listRecords: StoreParent[];
@@ -101,6 +100,9 @@ export type DeleteStoreParentResponse = APIResponse & {
     }
 }
 
+/**
+ * CHILD/PRODUCT
+ */
 export type StoreChild = {
     _id: string;
     outin: number;
@@ -111,6 +113,9 @@ export type StoreChild = {
     status: number;
     subtype: any | null
     timeApproved: string | null;
+    author: User;
+    admins: User[];
+    members: User[];
     state: 1;
     name: string;
     date: string;
@@ -143,6 +148,20 @@ export type QueryStoreChildResponse = APIResponse & {
         totalPage: number;
         nextCursor: string | null;
     };
+}
+
+export type QueryStoreChildResponse = APIResponse & {
+    data: {
+        listRecords: StoreChild[];
+        limit: number;
+        totalRecord: number;
+        totalPage: number;
+        nextCursor: string | null;
+    };
+}
+
+export type QueryDetailStoreChildResponse = APIResponse & {
+    data: StoreChild;
 }
 
 export type InsertStoreChildPayload = {
@@ -192,6 +211,19 @@ export type UpdateStoreChildPayload = {
     membersRemove?: string[];
     admins?: string[];
     adminsRemove?: string[];
+}
+
+export type DeleteStoreChildPayload = {
+    cashBookID: string;
+}
+
+export type DeleteStoreChildResponse = APIResponse & {
+    data: StoreChild & {
+        assignee: string;
+        project: string;
+        warehouse: string;
+        customer: string;
+    }
 }
 
 export type UpdateStoreChildResponse = InsertStoreChildResponse;

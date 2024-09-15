@@ -19,9 +19,13 @@ import { CreateRow } from "./components/Form";
 import { DropdownSearchableV2 } from "shareComponents/common";
 
 import {
-  useQueryDetailStoreParent,
+  useQueryDetailStoreChild,
   useQueryListStoreChild,
   useMutationStoreChild,
+} from "services/hooks/useStoreProduct";
+
+import {
+  useQueryDetailStoreParent,
 } from "services/hooks/useStore";
 
 import { useCashBook } from "services/hooks/financial/useCashBook";
