@@ -2,12 +2,9 @@ import { FC, memo } from "react";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import parse from "html-react-parser";
-import cn from "classnames";
-
-import styles from "views/pcm/styles/pcm_task.module.css";
-import { ListProgress, Executor } from "views/pcm/shareComponents/common";
+import { Executor } from "views/pcm/shareComponents/common";
 import { SearchListRecord } from "typings/main-search";
-import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
+import { PCM_STATUS_TASK } from "apis/localdb/index";
 import { NavLink } from 'react-router-dom';
 
 type Props = {
@@ -75,13 +72,10 @@ export const ListTasksReport: FC<Props> = memo(({
                         <th className="px-2 py-2 text-[13px]  font-normal border text-left">
                             Trạng thái
                         </th>
-                        {/* <th className="px-2 py-2 text-[13px]  font-normal border text-left">
-                            Tiến trình
-                        </th> */}
                         <th className="px-2 py-2 text-[13px] font-normal border text-left">
                             Cập nhật gần nhất
                         </th>
-                        <th className="px-2 py-2 text-[13px] font-normal border text-left">
+                        <th className="px-2 py-2 text-[13px] font-normal border text-left w-2/6">
                             Mô tả
                         </th>
                     </tr>
@@ -115,17 +109,10 @@ export const ListTasksReport: FC<Props> = memo(({
                                 <td className="p-2 border" style={{color: `#${PCM_STATUS_TASK[item.status - 1].backgroud}`}}>
                                     {PCM_STATUS_TASK[item.status - 1].text}
                                 </td>
-                                {/* <td className="p-2 border">
-                                    <ListProgress
-                                    color="bg-red-500"
-                                    checklist={item.checklist}
-                                    percentage={item.percentage}
-                                    />
-                                </td> */}
                                 <td className="p-2 border">
                                     <p className="text-primary-gray"><i>{item?.userUpdate?.fullname} | {moment(item?.modifyAt).format("DD/MM/YYYY HH:mm")} | {moment(item?.modifyAt).fromNow()}</i></p>
                                 </td>
-                                <td className={cn(styles["dont-break-out"], "p-2 border")}>
+                                <td className="p-2 border w-2/6">
                                     {subContentHtml(item.description)}
                                 </td>
                             </tr>
