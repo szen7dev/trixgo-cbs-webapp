@@ -621,6 +621,11 @@ export const TIMESHEET_SUBTYPES = [
     { _id: 6, name: 'Làm thêm giờ***'},
 ]
 
+export const CHECK_SALLARY = [
+    { _id: 1, name: 'Có' },
+    { _id: 2, name: 'Không'},
+]
+
 export const DAYOFWEEKS = [
     { _id: 0, name: 'Chủ nhật' },
     { _id: 1, name: 'Thứ 2' },
