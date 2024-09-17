@@ -6,6 +6,7 @@ import documentLogo from "assets/logos/document.png";
 import financialLogo from "assets/logos/financial.png";
 import humanLogo from "assets/logos/human.png";
 import crmLogo from "assets/logos/crm.png";
+import cashLogo from "assets/logos/cash.png";
 import mediaLogo from "assets/logos/media.png";
 import paymentLogo from "assets/logos/payment.png";
 import ownerLogo from "assets/logos/owner.png";
@@ -162,12 +163,12 @@ export const APP_INFO = new Map([
         icon: budgetLogo,
         route: '/budget/home'
     }],
-    /* Ứng dụng Tư vấn giám sát */
+    /* Ứng dụng Sổ quỹ*/
     ['5dfe4bf251dc622100bb9d8c', {
         key: "5dfe4bf251dc622100bb9d8c",
-        name: "Tư vấn giám sát",
-        icon: inspectionLogo,
-        route: '/inspection/home'
+        name: "Sổ quỹ",
+        icon: cashLogo,
+        route: '/cash/home'
     }],
     /* Ứng dụng Quản lý danh mục */
     ['5f5234b2880c2f26c8df8c13', {

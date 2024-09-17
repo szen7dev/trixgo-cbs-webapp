@@ -19,9 +19,9 @@ const AdminDetail: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.STORE.id })
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CASH.id })
 	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = useAdminDetail({ appID: id, keyword: keyword });
-	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.STORE.id, type: "1" });
+	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.CASH.id, type: "1" });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;

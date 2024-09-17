@@ -2,6 +2,7 @@ import timesheetIcon from "assets/images/icons8-timesheet.svg";
 import humanIcon from "assets/images/icons8-human.svg";
 import accountingIcon from "assets/images/icons8-accounting.svg";
 import storeIcon from "assets/images/icons8-store.svg";
+import cashIcon from "assets/images/icons8-cash.svg";
 // import financialIcon from "assets/images/icons8-financial.svg";
 import eshopIcon from "assets/images/icons8-eshop.svg";
 import documentIcon from "assets/images/icons8-document.svg";
@@ -12,7 +13,7 @@ import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 // import chatIcon from "assets/images/icons8-chat-48.svg";
 // import mediaIcon from "assets/images/icons8-commercial-64.svg";
-import projectIcon from "assets/images/icons-project.svg";
+// import projectIcon from "assets/images/icons-project.svg";
 import crmIcon from "assets/images/icons8-crm.svg";
 import contractIcon from "assets/images/icons8-contract-64.svg";
 import { Link, useLocation } from "react-router-dom";
@@ -206,7 +207,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           </div>
           <span className={"text-primary-gray mt-1"}>{t("menu:subject")}</span>
         </Link>
-      {checkPermissionApp('5dfe4b9051dc622100bb9d89') ?
+      {/* {checkPermissionApp('5dfe4b9051dc622100bb9d89') ?
         <Link to={`/pm/projects`} className={"flex flex-col items-center mb-3"}>
           <div
             className={
@@ -217,6 +218,18 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             <img width={'20px'} src={projectIcon} alt={"Dự án"} />
           </div>
           <span className={"text-primary-gray mt-1"}>{t("menu:project")}</span>
+        </Link> : <></>} */}
+        {checkPermissionApp('5dfe4bf251dc622100bb9d8c') ?
+        <Link to={`/cash/home`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "cash" ? "bg-cbs-hightlight-right-navigate" : "")
+            }
+          >
+            <img width={'20px'} src={cashIcon} alt={"Sổ quỹ"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>{t("menu:cash")}</span>
         </Link> : <></>}
         {checkPermissionApp('5f52341f880c2f26c8df8c10') ?
         <Link to={`/store/home`} className={"flex flex-col items-center mb-3"}>
@@ -254,7 +267,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
                 : "")
             }
           >
-            <img width={'20px'} src={eshopIcon} alt={"FnB"} />
+            <img width={'20px'} src={eshopIcon} alt={"Sales"} />
           </div>
           <span className={"text-primary-gray mt-1"}>{t("menu:fnb")}</span>
         </Link> : <></>}

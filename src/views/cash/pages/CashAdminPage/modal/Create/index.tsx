@@ -10,7 +10,7 @@ const Create: FC = () => {
   const { closeModal } = useModal();
   const [name, setName] = useState("");
   const [type, setType] = useState<any>("");
-  const { createAppRolesMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.STORE.id, keyword: "" });
+  const { createAppRolesMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.CASH.id, keyword: "" });
 
   const onCreate = async () => {
     if (!name || !type) {
@@ -23,7 +23,7 @@ const Create: FC = () => {
     };
 
     const result = await createAppRolesMutateAsync({
-      appID: APP_ID.STORE.id,
+      appID: APP_ID.CASH.id,
       type: parseInt(type),
       name
     });

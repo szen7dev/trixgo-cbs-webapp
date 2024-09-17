@@ -9,15 +9,15 @@ import { toast } from "react-toastify";
 
 const AdminAuthorTab: FC = () => {
 	const history = useHistory();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.STORE.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CASH.id });
 	const location = useLocation<string | null>();
 	const [funcID, setFuncID] = useState<string>(location.state || "");
 	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" });
-	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.STORE.id, parentID: typeAppRoleDetail == "1" ? APP_ID.STORE.menuStoreApp.id : APP_ID.STORE.menuStoreApp.id });
-	const { listAppRoles } = useAdmin({ appID: APP_ID.STORE.id, keyword: "" });
-	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.STORE.id, type: typeAppRoleDetail });
+	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.CASH.id, parentID: typeAppRoleDetail == "1" ? APP_ID.CASH.menuCashApp.id : APP_ID.CASH.menuCashApp.id });
+	const { listAppRoles } = useAdmin({ appID: APP_ID.CASH.id, keyword: "" });
+	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.CASH.id, type: typeAppRoleDetail });
 
-	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.STORE.id, companyID: companyAppRoleDetail, roleID: funcID });
+	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.CASH.id, companyID: companyAppRoleDetail, roleID: funcID });
 
 	const data = listAppRoles.map(e => ({
 		_id: e._id,
