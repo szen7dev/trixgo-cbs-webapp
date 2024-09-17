@@ -11,7 +11,7 @@ const Update: FC<any> = ({ item, setIdsChecked }) => {
   const { closeModal } = useModal();
   const [name, setName] = useState(item.name);
   const [type, setType] = useState<any>(item.type ? item.type.toString() : "");
-  const { updateAppRolesMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.STORE.id, keyword: "" });
+  const { updateAppRolesMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.CASH.id, keyword: "" });
 
   const onUpdate = async () => {
     if (!name || !type) {

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const Delete: FC<any> = ({ idsChecked, setIdsChecked }) => {
   const { closeModal } = useModal();
-  const { removeManyAppRoleMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.STORE.id, keyword: "" });
+  const { removeManyAppRoleMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.CASH.id, keyword: "" });
   const onDelete = async () => {
     const result = await removeManyAppRoleMutateAsync({
       appRoleIDs: idsChecked

@@ -5,9 +5,9 @@ import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "
 import { APP_ID } from "apis/localdb"
 
 export const CashLeftSideBar: FC = () => {
-    const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.STORE.id })
-    const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.STORE.id, parentID: APP_ID.STORE.menuStoreApp.id })
-    const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.STORE.id, type: "1" })
+    const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CASH.id })
+    const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.CASH.id, parentID: APP_ID.CASH.menuCashApp.id })
+    const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.CASH.id, type: "1" })
 
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">

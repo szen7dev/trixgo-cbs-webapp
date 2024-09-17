@@ -35,7 +35,7 @@ export const CashLayout: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
 
-          <MainHeaderV2 headerTitle={"Quỹ"}>
+          <MainHeaderV2 headerTitle={"Sổ quỹ"}>
             {/* <HomeHeaderContent /> */}
           </MainHeaderV2>
 
