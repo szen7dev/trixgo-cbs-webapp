@@ -189,7 +189,7 @@ const AdminFunctionalTab: FC = () => {
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to={`/store/admin/${item._id}/detail`}>
+									<Link to={`/cash/admin/${item._id}/detail`}>
 										<div className="flex items-center">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
