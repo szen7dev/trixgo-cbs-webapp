@@ -34,26 +34,26 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
   const [pageIndex, setPageIndex] = useState(0);
 
   // const [outin, setOutin] = useState<string | null>();
-  const [type, setType] = useState<string | null>();
-  const [userID, setUserID] = useState<string | null>();
-  const [projectID, setProjectID] = useState<string | null>();
-  const [warehouseID, setWarehouseID] = useState<string | null>();
-  const [goodsID, setGoodsID] = useState<string | null>();
-  const [assetsID, setAssetsID] = useState<string | null>();
-  const [customerID, setCustomerID] = useState<string | null>();
+  // const [type, setType] = useState<string | null>();
+  // const [userID, setUserID] = useState<string | null>();
+  // const [projectID, setProjectID] = useState<string | null>();
+  // const [warehouseID, setWarehouseID] = useState<string | null>();
+  // const [goodsID, setGoodsID] = useState<string | null>();
+  // const [assetsID, setAssetsID] = useState<string | null>();
+  // const [customerID, setCustomerID] = useState<string | null>();
 
   const {
     data,
   }: any = useQueryListByPropertyStoreChild({
     option: 2,
     // outin, 
-    type,
-    projectID,
-    warehouseID,
-    customerID,
-    goodsID,
-    assetsID,
-    userCreateID: userID
+    // type,
+    // projectID,
+    // warehouseID,
+    // customerID,
+    // goodsID,
+    // assetsID,
+    // userCreateID: userID
   })
 
   const { tongNhap, tongXuat, tongTon } = useMemo(() => {
@@ -70,36 +70,36 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
     return { tongNhap, tongXuat, tongTon }
   }, [data?.data])
 
-  const [userKeyword, setUserKeyword] = useState("");
-  const [projectKeyword, setProjectKeyword] = useState("");
-  const [warehouseKeyword, setWarehouseKeyword] = useState("");
-  const [goodsKeyword, setGoodsKeyword] = useState("");
-  const [contactKeyword, setContactKeyword] = useState("");
+  // const [userKeyword, setUserKeyword] = useState("");
+  // const [projectKeyword, setProjectKeyword] = useState("");
+  // const [warehouseKeyword, setWarehouseKeyword] = useState("");
+  // const [goodsKeyword, setGoodsKeyword] = useState("");
+  // const [contactKeyword, setContactKeyword] = useState("");
 
-  const { list: listCustomer } = useContact({
-    params: { keyword: contactKeyword, limit: 10 },
-    isFetchList: true
-  })
+  // const { list: listCustomer } = useContact({
+  //   params: { keyword: contactKeyword, limit: 10 },
+  //   isFetchList: true
+  // })
 
-  const { data: listUser } = useUserSystem({
-    keyword: userKeyword,
-    limit: 10,
-    isFetch: true
-  }, true)
+  // const { data: listUser } = useUserSystem({
+  //   keyword: userKeyword,
+  //   limit: 10,
+  //   isFetch: true
+  // }, true)
 
-  const { listDepartments } = useQueryListDepartments({
-    keyword: projectKeyword,
-  }, true)
+  // const { listDepartments } = useQueryListDepartments({
+  //   keyword: projectKeyword,
+  // }, true)
 
-  const { listWarehouse } = useQueryListWarehouse({
-    limit: LIMIT_DROPDOWN,
-    keyword: warehouseKeyword,
-  })
+  // const { listWarehouse } = useQueryListWarehouse({
+  //   limit: LIMIT_DROPDOWN,
+  //   keyword: warehouseKeyword,
+  // })
 
-  const { listGood } = useQueryListGood({
-    limit: LIMIT_DROPDOWN,
-    keyword: goodsKeyword,
-  })
+  // const { listGood } = useQueryListGood({
+  //   limit: LIMIT_DROPDOWN,
+  //   keyword: goodsKeyword,
+  // })
 
   return (
     <div>
@@ -312,11 +312,11 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
           <tr className="text-left text-sm text-primary-gray font-bold">
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center" style={{ width: "40px" }}>TT</th>
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tài khoản</th>
-            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tăng</th>
-            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Giảm</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Thu</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Chi</th>
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tồn</th>
           </tr>
-          <tr className="text-left text-sm text-primary-gray font-bold">
+          <tr className="text-left text-sm font-bold">
             <th className="py-1 px-2 border-r border-primary-border"></th>
             <th className="py-1 px-2 border-r border-primary-border"></th>
             <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongNhap)}</th>

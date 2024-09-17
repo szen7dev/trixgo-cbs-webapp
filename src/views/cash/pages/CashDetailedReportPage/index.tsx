@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useCallback } from "react";
+import React, { FC, useRef, useState, useMemo } from "react";
 import { formatNumberMoney } from "utils/cmcs";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
@@ -21,6 +21,7 @@ import {
 	useQueryListContract,
 	useQueryListAccount,
 } from "services/hooks/cmcs/useContractIncome";
+import { useQueryListBudgetWork } from "services/hooks/cmcs/useContractIncome";
 
 interface Props {
     outin?: number
@@ -43,6 +44,7 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
   // const [goodsID, setGoodsID] = useState<string | null>();
   // const [assetsID, setAssetsID] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
+  const [workID, setWorkID] = useState<string | null>();
 
   const {
     dataNotFilter: listDataWithPager,
@@ -65,17 +67,19 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
     customerID,
     // goodsID,
     // assetsID,
+    workID,
     userCreateID: userID,
     sortKey: JSON.stringify(['date__1', 'createAt__1']),
   })
 
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
-  const [warehouseKeyword, setWarehouseKeyword] = useState("");
-  const [goodsKeyword, setGoodsKeyword] = useState("");
+  // const [warehouseKeyword, setWarehouseKeyword] = useState("");
+  // const [goodsKeyword, setGoodsKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
   const [contractKeyword, setContractKeyword] = useState("");
   const [accountKeyword, setAccountKeyword] = useState("");
+  const [keywordWork, setKeywordWork] = React.useState("");
 
   const { list: listCustomer } = useContact({
     params: { keyword: contactKeyword, limit: 20 },
@@ -100,42 +104,88 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
   const { listContract } = useQueryListContract({
 		limit: LIMIT_DROPDOWN,
 		keyword: contractKeyword,
-	});
+	})
 
   const { listAccount } = useQueryListAccount({
 		limit: LIMIT_DROPDOWN,
 		keyword: accountKeyword,
-	});
+	})
 
   // const { listGood } = useQueryListGood({
 	// 	limit: LIMIT_DROPDOWN,
 	// 	keyword: goodsKeyword,
 	// })
 
+  const { listBudgetWork } = useQueryListBudgetWork({
+		limit: LIMIT_DROPDOWN,
+		keyword: keywordWork,
+	})
+
   let inventory = 0
+  let tongNhap = 0, tongXuat = 0
+  {
+    (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {
+      if(item?.outin == 2){
+        tongNhap = Number(tongNhap) + Number(item?.amount)
+      }
+  
+      if(item?.outin == 1){
+        tongXuat = Number(tongXuat) + Number(item?.amount)
+      }
+    })
+  }
+  // console.log({tongNhap, tongXuat})
   
   return (
     <div>
       <div className={"filter-bar flex flex-wrap border-b py-2"}>
-          <DropdownSearchableV2
+            <DropdownSearchableV2
+                ref={accountRef}
+                className={"mr-1 border border-primary-border rounded-lg"}
+                placeholder={"Phân loại"}
+                isMultiple={false}
+                allowClearValueSingleInput={true}
+                data={CASH_TYPES.map((item: any) => ({
+                  _id: item.value,
+                  name: item.text,
+                }))}
+                formatItem={{
+                    id: "_id",
+                    text: "name",
+                }}
+                onClearData={() => {
+                  setType("");
+                }}
+                onchangeValue={item => {
+                  setType(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+                }}
+                renderItem={(item) => (
+                    <p className={"min-w-[300px]"}>{item.text}</p>
+                )}
+                selectOneByOne={true}
+            />
+            <DropdownSearchableV2
               ref={accountRef}
               className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Phân loại"}
+              placeholder={"Tài khoản"}
               isMultiple={false}
               allowClearValueSingleInput={true}
-              data={CASH_TYPES.map((item: any) => ({
-                _id: item.value,
-                name: item.text,
-              }))}
+              data={listAccount}
               formatItem={{
                   id: "_id",
                   text: "name",
               }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setAccountKeyword(valueSearch),
+                  500
+              )}
               onClearData={() => {
-                setType("");
+                setAccountID("");
               }}
               onchangeValue={item => {
-                setType(item._id);
+                setAccountID(item._id);
                 setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
               }}
@@ -145,64 +195,36 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
               selectOneByOne={true}
           />
           <DropdownSearchableV2
-            ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Tài khoản"}
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            data={listAccount}
-            formatItem={{
-                id: "_id",
-                text: "name",
-            }}
-            onSearchInputChange={debounce(
-                (valueSearch) => setAccountKeyword(valueSearch),
-                500
-            )}
-            onClearData={() => {
-              setAccountID("");
-            }}
-            onchangeValue={item => {
-              setAccountID(item._id);
-              setPageIndex(0);
-              ref.current&&ref.current.resetPaginate();
-            }}
-            renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
-            )}
-            selectOneByOne={true}
-        />
-        <DropdownSearchableV2
-            ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Mã khách"}
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            data={listCustomer.map((item: any) => ({
-              _id: item._id,
-              name: `${item.name}.${item.phone}.${item.taxid}`,
-            }))}
-            formatItem={{
-                id: "_id",
-                text: "name",
-            }}
-            onSearchInputChange={debounce(
-                (valueSearch) => setContactKeyword(valueSearch),
-                500
-            )}
-            onClearData={() => {
-              setCustomerID("");
-            }}
-            onchangeValue={item => {
-              setCustomerID(item._id);
-              setPageIndex(0);
-              ref.current&&ref.current.resetPaginate();
-            }}
-            renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
-            )}
-            selectOneByOne={true}
-        />
+              ref={accountRef}
+              className={"mr-1 border border-primary-border rounded-lg"}
+              placeholder={"Mã khách"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={listCustomer.map((item: any) => ({
+                _id: item._id,
+                name: `${item.name}.${item.phone}.${item.taxid}`,
+              }))}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setContactKeyword(valueSearch),
+                  500
+              )}
+              onClearData={() => {
+                setCustomerID("");
+              }}
+              onchangeValue={item => {
+                setCustomerID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
           <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
@@ -233,14 +255,48 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                 <p className={"min-w-[300px]"}>{item.text}</p>
             )}
             selectOneByOne={true}
-        />
+          />
+          <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Khoản mục phí"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listBudgetWork.map((item: any) => ({
+              _id: item._id,
+              name: `${item.sign}.${item.name}`,
+            }))}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setKeywordWork(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setWorkID("");
+            }}
+            onchangeValue={item => {
+              setWorkID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+          />
           <DropdownSearchableV2
               ref={accountRef}
               className={"mr-1 border border-primary-border rounded-lg"}
               placeholder={"Hợp đồng"}
               isMultiple={false}
               allowClearValueSingleInput={true}
-              data={listContract}
+              data={listContract.map((item: any) => ({
+                _id: item._id,
+                name: `${item.sign}.${item.name}`,
+              }))}
               formatItem={{
                   id: "_id",
                   text: "name",
@@ -316,10 +372,22 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Tài khoản</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Mã khách</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Dự án</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Khoản mục phí</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Hợp đồng</th>
-              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Tăng</th>
-              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Giảm</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Thu</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Chi</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Tồn</th>
+            </tr>
+            <tr className="text-left text-sm font-bold">
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center"></th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tổng (của trang hiển thị)</th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center"></th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center"></th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center"></th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center"></th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center text-right">{formatNumberMoney(tongNhap)}</th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center text-right">{formatNumberMoney(tongXuat)}</th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center text-right">{formatNumberMoney(tongNhap - tongXuat)}</th>
             </tr>
         </thead>
         <tbody>
@@ -344,7 +412,8 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                         <p className="text-primary-gray"><i>{item?.userCreate?.fullname} | {moment(item.createAt).format("DD/MM/YYYY HH:mm")}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">{item?.customer?.name} - {item?.customer?.phone}</td>
-                      <td className="py-1 px-2 border-r border-primary-border">{item?.project?.sign}- {item?.contract?.sign}</td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.project?.sign}- {item?.project?.name}</td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.work?.sign}- {item?.work?.name}</td>
                       <td className="py-1 px-2 border-r border-primary-border">{item?.contract?.name} - {item?.contract?.sign}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
@@ -370,7 +439,8 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                         <p className="text-primary-gray"><i>{item?.userCreate?.fullname} | {moment(item.createAt).format("DD/MM/YYYY HH:mm")}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">{item?.customer?.name} - {item?.customer?.phone}</td>
-                      <td className="py-1 px-2 border-r border-primary-border">{item?.project?.sign}- {item?.contract?.sign}</td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.project?.sign}- {item?.project?.name}</td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.work?.sign}- {item?.work?.name}</td>
                       <td className="py-1 px-2 border-r border-primary-border">{item?.contract?.name} - {item?.contract?.sign}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
