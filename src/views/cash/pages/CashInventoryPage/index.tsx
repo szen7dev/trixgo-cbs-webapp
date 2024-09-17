@@ -34,26 +34,26 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
   const [pageIndex, setPageIndex] = useState(0);
 
   // const [outin, setOutin] = useState<string | null>();
-  const [type, setType] = useState<string | null>();
-  const [userID, setUserID] = useState<string | null>();
-  const [projectID, setProjectID] = useState<string | null>();
-  const [warehouseID, setWarehouseID] = useState<string | null>();
-  const [goodsID, setGoodsID] = useState<string | null>();
-  const [assetsID, setAssetsID] = useState<string | null>();
-  const [customerID, setCustomerID] = useState<string | null>();
+  // const [type, setType] = useState<string | null>();
+  // const [userID, setUserID] = useState<string | null>();
+  // const [projectID, setProjectID] = useState<string | null>();
+  // const [warehouseID, setWarehouseID] = useState<string | null>();
+  // const [goodsID, setGoodsID] = useState<string | null>();
+  // const [assetsID, setAssetsID] = useState<string | null>();
+  // const [customerID, setCustomerID] = useState<string | null>();
 
   const {
     data,
   }: any = useQueryListByPropertyStoreChild({
-    option: 1,
+    option: 2,
     // outin, 
-    type,
-    projectID,
-    warehouseID,
-    customerID,
-    goodsID,
-    assetsID,
-    userCreateID: userID
+    // type,
+    // projectID,
+    // warehouseID,
+    // customerID,
+    // goodsID,
+    // assetsID,
+    // userCreateID: userID
   })
 
   const { tongNhap, tongXuat, tongTon } = useMemo(() => {
@@ -70,41 +70,41 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
     return { tongNhap, tongXuat, tongTon }
   }, [data?.data])
 
-  const [userKeyword, setUserKeyword] = useState("");
-  const [projectKeyword, setProjectKeyword] = useState("");
-  const [warehouseKeyword, setWarehouseKeyword] = useState("");
-  const [goodsKeyword, setGoodsKeyword] = useState("");
-  const [contactKeyword, setContactKeyword] = useState("");
+  // const [userKeyword, setUserKeyword] = useState("");
+  // const [projectKeyword, setProjectKeyword] = useState("");
+  // const [warehouseKeyword, setWarehouseKeyword] = useState("");
+  // const [goodsKeyword, setGoodsKeyword] = useState("");
+  // const [contactKeyword, setContactKeyword] = useState("");
 
-  const { list: listCustomer } = useContact({
-    params: { keyword: contactKeyword, limit: 10 },
-    isFetchList: true
-  })
+  // const { list: listCustomer } = useContact({
+  //   params: { keyword: contactKeyword, limit: 10 },
+  //   isFetchList: true
+  // })
 
-  const { data: listUser } = useUserSystem({
-    keyword: userKeyword,
-    limit: 10,
-    isFetch: true
-  }, true)
+  // const { data: listUser } = useUserSystem({
+  //   keyword: userKeyword,
+  //   limit: 10,
+  //   isFetch: true
+  // }, true)
 
-  const { listDepartments } = useQueryListDepartments({
-    keyword: projectKeyword,
-  }, true)
+  // const { listDepartments } = useQueryListDepartments({
+  //   keyword: projectKeyword,
+  // }, true)
 
-  const { listWarehouse } = useQueryListWarehouse({
-    limit: LIMIT_DROPDOWN,
-    keyword: warehouseKeyword,
-  })
+  // const { listWarehouse } = useQueryListWarehouse({
+  //   limit: LIMIT_DROPDOWN,
+  //   keyword: warehouseKeyword,
+  // })
 
-  const { listGood } = useQueryListGood({
-    limit: LIMIT_DROPDOWN,
-    keyword: goodsKeyword,
-  })
+  // const { listGood } = useQueryListGood({
+  //   limit: LIMIT_DROPDOWN,
+  //   keyword: goodsKeyword,
+  // })
 
   return (
     <div>
       <div className={"filter-bar flex flex-wrap border-b py-2"}>
-        <DropdownSearchableV2
+        {/* <DropdownSearchableV2
           ref={accountRef}
           className={"mr-1 border border-primary-border rounded-lg"}
           placeholder={"Phân loại"}
@@ -304,39 +304,23 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
             <p className={"min-w-[300px]"}>{item.text}</p>
           )}
           selectOneByOne={true}
-        />
+        /> */}
       </div>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bbg-cbs-table-header h-10 border-b border-primary-border">
-          <tr className="text-left text-sm text-primary-gray">
-            <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center" style={{ width: "40px" }}>TT</th>
-            <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Hàng hóa, vật tư, công cụ</th>
-            <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Đơn vị tính</th>
-            <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">NHẬP</th>
-            <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">XUẤT</th>
-            <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">TỒN</th>
-          </tr>
-          <tr className="text-left text-sm text-primary-gray">
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
-          </tr>
           <tr className="text-left text-sm text-primary-gray font-bold">
-            <th className="py-1 px-2 border-r border-primary-border"></th>
-            <th className="py-1 px-2 border-r border-primary-border"></th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center" style={{ width: "40px" }}>TT</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tài khoản</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Thu</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Chi</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tồn</th>
+          </tr>
+          <tr className="text-left text-sm font-bold">
             <th className="py-1 px-2 border-r border-primary-border"></th>
             <th className="py-1 px-2 border-r border-primary-border"></th>
             <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongNhap)}</th>
-            <th className="py-1 px-2 border-r border-primary-border text-right"></th>
             <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongXuat)}</th>
-            <th className="py-1 px-2 border-r border-primary-border text-right"></th>
             <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongTon)}</th>
           </tr>
         </thead>
@@ -351,12 +335,8 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
                   {item?.name}
                 </NavLink> */}
               </td>
-              <td className="py-1 px-2 border-r border-primary-border">{item?.unit}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityExpense)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.expense)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome - item?.quantityExpense)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income - item?.expense)}</td>
             </tr>
           ))}

@@ -653,6 +653,11 @@ export const STORE_TYPES = [
     { value: 8, text: 'Quỹ ngân hàng' },
 ]
 
+export const CASH_TYPES = [
+    { value: 7, text: 'Quỹ tiền mặt' },
+    { value: 8, text: 'Quỹ ngân hàng' },
+]
+
 /**
  * FNB
  */
