@@ -137,11 +137,6 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
           "p-2 table-cell relative box-border border border-gray-300 bg-white"
         }
       />
-      <div
-        className={
-          "p-2 table-cell relative box-border border border-gray-300 bg-white"
-        }
-      />
     </div>
   )
 }

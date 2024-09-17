@@ -33,8 +33,8 @@ export const useQueryListStoreChild = (
     async ({ pageParam }: any) =>
         StoreChildRepository.fetchListStore({
         populates: {
-          path: "account goods assets customer work userCreate userUpdate order",
-          select: "name sign phone unit note fullname",
+          path: "account contra goods assets customer work userCreate userUpdate order",
+          select: "name sign phone unit note fullname description",
         },
         limit,
         lastestID: pageParam,

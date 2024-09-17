@@ -400,14 +400,14 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Kho bãi
+              Mã khách
             </div>
             <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Mã khách
+              Hợp đồng
             </div>
             <div
               className={
@@ -476,10 +476,10 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 {item?.project?.name}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item?.warehouse?.name}
+                {item?.customer?.name}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item?.customer?.name}
+                {item?.contract?.name}
               </div>
               <div
                 className={

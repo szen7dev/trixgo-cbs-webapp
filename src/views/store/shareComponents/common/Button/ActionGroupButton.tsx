@@ -30,10 +30,12 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
               projectName={record?.project?.name}
               assigneeName={record?.assignee?.fullname}
               warehouseName={record?.warehouse?.name}
+              contractName={record?.contract?.name}
               customerName={record?.customer?.name}
               defaultValues={{
                 project: record.project,
                 warehouse: record.warehouse,
+                contract: record.contract,
                 customer: record.customer,
                 assignee: record.assignee,
                 name: record.name,

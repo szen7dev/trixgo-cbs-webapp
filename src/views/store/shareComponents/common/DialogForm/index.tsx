@@ -28,6 +28,7 @@ interface CreateOrEditDialogProps {
   projectName: string;
   assigneeName: string;
   warehouseName?: string;
+  contractName?: string;
   customerName?: string;
   onSubmit?: (values: string) => void;
   orderID?: string;
@@ -43,6 +44,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   assigneeName,
   projectName,
   warehouseName,
+  contractName,
   customerName,
 }) => {
   // const [userKeyword, setUserKeyword] = useState(assigneeName);
