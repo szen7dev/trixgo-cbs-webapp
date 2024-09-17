@@ -344,7 +344,7 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                         <p className="text-primary-gray"><i>{item?.name}</i></p>
                         <p>{item?.account?.name}</p>
-                        <NavLink className="text-primary" to={`/store/home/${item?.order?._id}`}>
+                        <NavLink className="text-primary" to={`/cash/home/${item?.order?._id}`}>
                           <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
                         </NavLink>
                         {/* <p className="text-primary-gray"><i>{item?.order?._id}</i></p> */}
@@ -367,7 +367,7 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                       <p className="text-primary-gray"><i>{item?.name}</i></p>
                       <p>{item?.account?.name}</p>
-                        <NavLink className="text-primary" to={`/store/home/${item?.order?._id}`}>
+                        <NavLink className="text-primary" to={`/cash/home/${item?.order?._id}`}>
                           <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
                         </NavLink>
                         {/* <p className="text-primary-gray"><i>{item?.order?._id}</i></p> */}
