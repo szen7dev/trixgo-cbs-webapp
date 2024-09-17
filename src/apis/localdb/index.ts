@@ -1303,7 +1303,7 @@ export const APP_ID = {
     CASH: {
         id: "5dfe4bf251dc622100bb9d8c",
         menuCashApp: {
-            id: "66e934b0e16891001259de1e", //66e96160348bd177507cff89 //66e934b0e16891001259de1e ***
+            id: "66e96160348bd177507cff89", //66e96160348bd177507cff89 //66e934b0e16891001259de1e ***
             detailedReport: {
                 id: "66e948772e57610012980cd3",
                 name: "Báo cáo chi tiết"

@@ -5,6 +5,7 @@ import { Project } from "./items/project";
 import { Warehouse } from "./items/warehouse";
 import { Contact } from "./items/contact";
 import { Goods } from "./items/goods";
+import { Contract } from "./items/contract";
 
 export type StoreParent = {
     _id: string;
@@ -56,6 +57,7 @@ export type InsertStoreParentPayload = {
     project: Project;
     assignee: User;
     warehouse: Warehouse;
+    contract: Contract;
     customer: Contact;
     outin: number;
     type: number;
