@@ -208,29 +208,29 @@ export const CashDetailPage: FC = () => {
 
   const [dataImport, setDataImport] = useState([]);
 
-  const handleImport = ($event: any) => {
-    const files = $event.target.files;
-    if (files.length) {
-        const file = files[0];
-        const reader = new FileReader();
-        reader.onload = (event: any) => {
-            const wb = read(event.target.result);
-            const sheets = wb.SheetNames;
+//   const handleImport = ($event: any) => {
+//     const files = $event.target.files;
+//     if (files.length) {
+//         const file = files[0];
+//         const reader = new FileReader();
+//         reader.onload = (event: any) => {
+//             const wb = read(event.target.result);
+//             const sheets = wb.SheetNames;
 
-            if (sheets.length) {
-                const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+//             if (sheets.length) {
+//                 const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
 
-                // Set data để Import
-                setDataImport(rows)
-            }
-        }
+//                 // Set data để Import
+//                 setDataImport(rows)
+//             }
+//         }
 
-        reader.readAsArrayBuffer(file);
-    }
+//         reader.readAsArrayBuffer(file);
+//     }
 
-    // Đọc xong thì xóa value trong Input đi
-    $event.target.value = null;
-}
+//     // Đọc xong thì xóa value trong Input đi
+//     $event.target.value = null;
+// }
 
 // Gọi tới API để đẩy data lên
 useEffect(() => {

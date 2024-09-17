@@ -8,15 +8,19 @@ import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
-import {
-	useQueryListWarehouse,
-	useQueryListGood
-} from "services/hooks/cmcs/useContractIncome";
+// import {
+// 	useQueryListWarehouse,
+// 	useQueryListGood
+// } from "services/hooks/cmcs/useContractIncome";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import { STORE_TYPES } from "apis/localdb";
+import { STORE_TYPES, CASH_TYPES } from "apis/localdb";
 import {
   useQueryListStoreChild,
 } from "services/hooks/useStoreProduct";
+import {
+	useQueryListContract,
+	useQueryListAccount,
+} from "services/hooks/cmcs/useContractIncome";
 
 interface Props {
     outin?: number
@@ -33,9 +37,11 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
   const [type, setType] = useState<string | null>();
   const [userID, setUserID] = useState<string | null>();
   const [projectID, setProjectID] = useState<string | null>();
-  const [warehouseID, setWarehouseID] = useState<string | null>();
-  const [goodsID, setGoodsID] = useState<string | null>();
-  const [assetsID, setAssetsID] = useState<string | null>();
+  // const [warehouseID, setWarehouseID] = useState<string | null>();
+  const [contractID, setContractID] = useState<string | null>();
+  const [accountID, setAccountID] = useState<string | null>();
+  // const [goodsID, setGoodsID] = useState<string | null>();
+  // const [assetsID, setAssetsID] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
 
   const {
@@ -54,10 +60,11 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
     type, 
     status: 5, // Hoàn thành
     projectID,
-    warehouseID,
+    contractID,
+    accountID,
     customerID,
-    goodsID,
-    assetsID,
+    // goodsID,
+    // assetsID,
     userCreateID: userID,
     sortKey: JSON.stringify(['date__1', 'createAt__1']),
   })
@@ -67,9 +74,11 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
   const [warehouseKeyword, setWarehouseKeyword] = useState("");
   const [goodsKeyword, setGoodsKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
+  const [contractKeyword, setContractKeyword] = useState("");
+  const [accountKeyword, setAccountKeyword] = useState("");
 
   const { list: listCustomer } = useContact({
-    params: { keyword: contactKeyword, limit: 10 },
+    params: { keyword: contactKeyword, limit: 20 },
     isFetchList: true
   })
 
@@ -83,15 +92,25 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
     keyword: projectKeyword,
   }, true)
 
-  const { listWarehouse } = useQueryListWarehouse({
-		limit: LIMIT_DROPDOWN,
-		keyword: warehouseKeyword,
-	})
+  // const { listWarehouse } = useQueryListWarehouse({
+	// 	limit: LIMIT_DROPDOWN,
+	// 	keyword: warehouseKeyword,
+	// })
 
-  const { listGood } = useQueryListGood({
+  const { listContract } = useQueryListContract({
 		limit: LIMIT_DROPDOWN,
-		keyword: goodsKeyword,
-	})
+		keyword: contractKeyword,
+	});
+
+  const { listAccount } = useQueryListAccount({
+		limit: LIMIT_DROPDOWN,
+		keyword: accountKeyword,
+	});
+
+  // const { listGood } = useQueryListGood({
+	// 	limit: LIMIT_DROPDOWN,
+	// 	keyword: goodsKeyword,
+	// })
 
   let inventory = 0
   
@@ -104,7 +123,7 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
               placeholder={"Phân loại"}
               isMultiple={false}
               allowClearValueSingleInput={true}
-              data={STORE_TYPES.map((item: any) => ({
+              data={CASH_TYPES.map((item: any) => ({
                 _id: item.value,
                 name: item.text,
               }))}
@@ -128,54 +147,23 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
           <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Dự án"}
+            placeholder={"Tài khoản"}
             isMultiple={false}
             allowClearValueSingleInput={true}
-            data={listDepartments.map((item: any) => ({
-              _id: item._id,
-              name: `${item.sign}.${item.name}`,
-            }))}
+            data={listAccount}
             formatItem={{
                 id: "_id",
                 text: "name",
             }}
             onSearchInputChange={debounce(
-                (valueSearch) => setProjectKeyword(valueSearch),
+                (valueSearch) => setAccountKeyword(valueSearch),
                 500
             )}
             onClearData={() => {
-              setProjectID("");
+              setAccountID("");
             }}
             onchangeValue={item => {
-              setProjectID(item._id);
-              setPageIndex(0);
-              ref.current&&ref.current.resetPaginate();
-            }}
-            renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
-            )}
-            selectOneByOne={true}
-        />
-        <DropdownSearchableV2
-            ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Kho bãi"}
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            data={listWarehouse}
-            formatItem={{
-                id: "_id",
-                text: "name",
-            }}
-            onSearchInputChange={debounce(
-                (valueSearch) => setWarehouseKeyword(valueSearch),
-                500
-            )}
-            onClearData={() => {
-              setWarehouseID("");
-            }}
-            onchangeValue={item => {
-              setWarehouseID(item._id);
+              setAccountID(item._id);
               setPageIndex(0);
               ref.current&&ref.current.resetPaginate();
             }}
@@ -215,26 +203,29 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
             )}
             selectOneByOne={true}
         />
-        <DropdownSearchableV2
+          <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Hàng hóa, vật tư, công cụ"}
+            placeholder={"Dự án"}
             isMultiple={false}
             allowClearValueSingleInput={true}
-            data={listGood}
+            data={listDepartments.map((item: any) => ({
+              _id: item._id,
+              name: `${item.sign}.${item.name}`,
+            }))}
             formatItem={{
                 id: "_id",
                 text: "name",
             }}
             onSearchInputChange={debounce(
-                (valueSearch) => setGoodsKeyword(valueSearch),
+                (valueSearch) => setProjectKeyword(valueSearch),
                 500
             )}
             onClearData={() => {
-              setGoodsID("");
+              setProjectID("");
             }}
             onchangeValue={item => {
-              setGoodsID(item._id);
+              setProjectID(item._id);
               setPageIndex(0);
               ref.current&&ref.current.resetPaginate();
             }}
@@ -243,34 +234,34 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
             )}
             selectOneByOne={true}
         />
-        <DropdownSearchableV2
-            ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Thuộc tài sản/thiết bị"}
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            data={listGood}
-            formatItem={{
-                id: "_id",
-                text: "name",
-            }}
-            onSearchInputChange={debounce(
-                (valueSearch) => setGoodsKeyword(valueSearch),
-                500
-            )}
-            onClearData={() => {
-              setAssetsID("");
-            }}
-            onchangeValue={item => {
-              setAssetsID(item._id);
-              setPageIndex(0);
-              ref.current&&ref.current.resetPaginate();
-            }}
-            renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
-            )}
-            selectOneByOne={true}
-        />
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-1 border border-primary-border rounded-lg"}
+              placeholder={"Hợp đồng"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={listContract}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setContractKeyword(valueSearch),
+                  500
+              )}
+              onClearData={() => {
+                setContractID("");
+              }}
+              onchangeValue={item => {
+                setContractID(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
@@ -323,6 +314,9 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
             <tr className="text-left text-sm text-primary-gray">
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center" style={{width: "80px"}}>Ngày</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Tài khoản</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Mã khách</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Dự án</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Hợp đồng</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Tăng</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Giảm</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Tồn</th>
@@ -341,14 +335,17 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                       { moment(item?.date).format('DD/MM/YYYY')}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                      <td className="py-1 px-2 border-r border-primary-border">
                         <p className="text-primary-gray"><i>{item?.name}</i></p>
-                        <p>{item?.account?.name}</p>
-                        <NavLink className="text-primary" to={`/cash/home/${item?.order?._id}`}>
-                          <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
+                        <p className="text-cbs-highlight-color">{item?.account?.name}</p>
+                        <NavLink className="" to={`/cash/home/${item?.order?._id}`}>
+                          <p className="">{item?.order?.name}</p>
                         </NavLink>
-                        {/* <p className="text-primary-gray"><i>{item?.order?._id}</i></p> */}
+                        <p className="text-primary-gray"><i>{item?.userCreate?.fullname} | {moment(item.createAt).format("DD/MM/YYYY HH:mm")}</i></p>
                       </td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.customer?.name} - {item?.customer?.phone}</td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.project?.sign}- {item?.contract?.sign}</td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.contract?.name} - {item?.contract?.sign}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory)}</td>
@@ -364,14 +361,17 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                       { moment(item?.date).format('DD/MM/YYYY')}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                      <td className="py-1 px-2 border-r border-primary-border">
                       <p className="text-primary-gray"><i>{item?.name}</i></p>
-                      <p>{item?.account?.name}</p>
-                        <NavLink className="text-primary" to={`/cash/home/${item?.order?._id}`}>
-                          <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
+                      <p className="text-cbs-highlight-color">{item?.account?.name}</p>
+                        <NavLink className="" to={`/cash/home/${item?.order?._id}`}>
+                        <p className="">{item?.order?.name}</p>
                         </NavLink>
-                        {/* <p className="text-primary-gray"><i>{item?.order?._id}</i></p> */}
+                        <p className="text-primary-gray"><i>{item?.userCreate?.fullname} | {moment(item.createAt).format("DD/MM/YYYY HH:mm")}</i></p>
                       </td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.customer?.name} - {item?.customer?.phone}</td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.project?.sign}- {item?.contract?.sign}</td>
+                      <td className="py-1 px-2 border-r border-primary-border">{item?.contract?.name} - {item?.contract?.sign}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory)}</td>
