@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
+import { TIMESHEET_SUBTYPES, CHECK_SALLARY } from "apis/localdb/index";
 
 /**
  * Components, Assets
@@ -46,7 +47,16 @@ const SalaryDetailPage: FC = () => {
   const [projectKeyword, setProjectKeyword] = useState("");
   const [departmentsID, setDepartmentsID] = useState<string[]>([]);
   const [salaryIds, setSalaryIds] = useState<DeleteSalaryContextType['salaryIds']>([]);
+  const accountRef = React.useRef<DropdownHandle>(null);
 
+  const [subtype, setSubtype] = useState<string | null>();
+  const [salary, setSalary] = useState<string | null>();
+  const [onLeaveSalary, setOnLeaveSalary] = useState<string | null>();
+  const [overtimeSalary, setOvertimeSalary] = useState<string | null>();
+  const [mealAllowance, setMealAllowance] = useState<string | null>();
+  const [punishment, setPunishment] = useState<string | null>();
+  // const [subtype, setSubtype] = useState<string | null>();
+  // const [subtype, setSubtype] = useState<string | null>();
   const [positionKeyword, setpPositionKeyword] = useState("");
   const [positionsID, setPositionsID] = useState<string[]>([]);
 
@@ -113,9 +123,15 @@ const SalaryDetailPage: FC = () => {
     fetchPrevPage,
   } = useQueryListSalaryChild(salaryParentID, {
     keyword,
+    limit: 50,
     positionsID,
     departmentsID,
-    limit: 50
+    subtype,
+    salary,
+    onLeaveSalary,
+    overtimeSalary,
+    mealAllowance,
+    punishment
   });
 
   const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
@@ -456,6 +472,156 @@ const SalaryDetailPage: FC = () => {
                   setPositionsID(newList);
                   dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: newList}))
 
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Phân loại"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={TIMESHEET_SUBTYPES}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onClearData={() => {
+                setSubtype("");
+              }}
+              onchangeValue={item => {
+                  setSubtype(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Lương"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={CHECK_SALLARY}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onClearData={() => {
+                setSalary("");
+              }}
+              onchangeValue={item => {
+                setSalary(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Phép"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={CHECK_SALLARY}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onClearData={() => {
+                setOnLeaveSalary("");
+              }}
+              onchangeValue={item => {
+                setOnLeaveSalary(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Làm thêm"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={CHECK_SALLARY}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onClearData={() => {
+                setOvertimeSalary("");
+              }}
+              onchangeValue={item => {
+                setOvertimeSalary(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Phụ cấp"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={CHECK_SALLARY}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onClearData={() => {
+                setMealAllowance("");
+              }}
+              onchangeValue={item => {
+                setMealAllowance(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+          
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Vi phạm"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={CHECK_SALLARY}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onClearData={() => {
+                setPunishment("");
+              }}
+              onchangeValue={item => {
+                setPunishment(item._id);
                   setPageIndex(0);
                   ref.current&&ref.current.resetPaginate();
               }}
