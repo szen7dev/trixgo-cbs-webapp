@@ -13,7 +13,7 @@ import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import {
 	useQueryListWarehouse,
 	useQueryListContact,
-	// useQueryListContract,
+	useQueryListContract,
 	// useQueryListBudgetWork,
 	// useQueryListAccount,
 	// useQueryListGood
@@ -29,6 +29,7 @@ interface CreateOrEditDialogProps {
   assigneeName: string;
   warehouseName?: string;
   customerName?: string;
+  contractName?: string;
   onSubmit?: (values: string) => void;
   orderID?: string;
 }
@@ -43,11 +44,12 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   assigneeName,
   projectName,
   warehouseName,
+  contractName,
   customerName,
 }) => {
   // const [userKeyword, setUserKeyword] = useState(assigneeName);
   const [departmentKeyword, setDepartmentKeyword] = useState(projectName);
-  const [warehouseKeyword, setWarehouseKeyword] = useState(warehouseName);
+  const [contractKeyword, setContractKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState(customerName);
 
   const { closeModal } = useModal();
@@ -56,9 +58,9 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     keyword: departmentKeyword,
   }, true);
 
-  const { listWarehouse } = useQueryListWarehouse({
+	const { listContract } = useQueryListContract({
 		limit: LIMIT_DROPDOWN,
-		keyword: warehouseKeyword,
+		keyword: contractKeyword,
 	});
 
   const { listContact } = useQueryListContact({
@@ -201,39 +203,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Kho bãi (*)
-                  </p>
-                  <DropdownSearchable
-                    className={
-                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
-                    }
-                    focusedClass={"border-b border-primary"}
-                    maxWidthInput={"max-w-none"}
-                    showTriangle
-                    inlineSearch
-                    allowClearValueSingleInput
-                    renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={listWarehouse.map((item: any) => ({
-                      _id: item._id,
-                      name: `${item.sign}.${item.name}`,
-                    }))}
-                    // onScroll={handleScrollAssginee}
-                    initialValue={defaultValues?.warehouse}
-                    formatItem={{
-                      id: "_id",
-                      text: "name",
-                    }}
-                    onSearchInputChange={debounce(
-                      (value) => setWarehouseKeyword(value),
-                      500
-                    )}
-                    onchangeValue={(value) =>
-                      setFieldValue("warehouseID", value.id)
-                    }
-                  />
-                </div>
-                <div>
-                  <p className="text-[13px] text-primary-gray mb-1">
                     Mã khách (*)
                   </p>
                   <DropdownSearchable
@@ -261,6 +230,39 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     )}
                     onchangeValue={(value) =>
                       setFieldValue("customerID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Hợp đồng
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    showTriangle
+                    inlineSearch
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listContract.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    // onScroll={handleScrollAssginee}
+                    initialValue={defaultValues?.contract}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setContractKeyword(value),
+                      500
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("contractID", value.id)
                     }
                   />
                 </div>

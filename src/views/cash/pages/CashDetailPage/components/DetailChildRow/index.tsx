@@ -4,18 +4,26 @@ import debounce from "lodash/debounce";
 import { convertCurrency } from "utils/converter";
 import moment from "moment";
 import { DropdownSearchable } from "shareComponents/common";
-import { useUserSystem } from "services/hooks/users/useUserSystem";
+// import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useQueryListBudgetWork } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useGoods } from "services/hooks/items/useGoods";
+import {
+	// useQueryListWarehouse,
+	// useQueryListContact,
+	// useQueryListContract,
+	// useQueryListBudgetWork,
+	useQueryListAccount,
+	// useQueryListGood
+} from "services/hooks/cmcs/useContractIncome";
 
 import type {
   StoreChild,
   StoreParent,
   UpdateStoreChildPayload,
 } from "typings/store";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 type Props = {
   parent?: StoreParent;
@@ -37,6 +45,7 @@ export const DetailChildRow: FC<Props> = ({
 }) => {
   const { user } = useAuth();
   const [keywordWoods, setKeywordWoods] = React.useState('');
+  const [keywordAccount, setKeywordAccount] = React.useState('');
   const [keywordWork, setKeywordWork] = React.useState(
     rowData.work?.name || ""
 	);
@@ -55,6 +64,11 @@ export const DetailChildRow: FC<Props> = ({
   const { listBudgetWork } = useQueryListBudgetWork({
 		limit: LIMIT_DROPDOWN,
 		keyword: keywordWork,
+	});
+
+  const { listAccount } = useQueryListAccount({
+		limit: LIMIT_DROPDOWN,
+		keyword: keywordAccount,
 	});
 
   const handleClickUpdateStore = React.useCallback(
@@ -132,7 +146,7 @@ export const DetailChildRow: FC<Props> = ({
           isMultiple={false}
           allowClearValueSingleInput
           showTriangle
-          placeholder="Hàng hóa, vật tư, công cụ..."
+          placeholder="Tài khoản tiền mặt/ngân hàng"
           renderSelectedItem={(item) => (
             <p
               style={{
@@ -149,32 +163,24 @@ export const DetailChildRow: FC<Props> = ({
               {item.text}
             </p>
           )}
-          data={listGoods}
-          initialValue={rowData?.goods}
+          data={listAccount}
+          initialValue={rowData?.account}
           formatItem={{
             id: "_id",
             text: "name",
           }}
           onSearchInputChange={debounce(
-            (value) => setKeywordWoods(value),
+            (value) => setKeywordAccount(value),
             500
           )}
           onchangeValue={(value) =>
             handleClickUpdateStore({
               ...rowData,
-              goodsID: value.id,
+              accountID: value.id,
             })
           }
         />
       </div>
-      <div
-        className={
-          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
-        }
-      >
-        <p>{rowData?.goods?.unit}</p>
-      </div>
-
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -292,7 +298,7 @@ export const DetailChildRow: FC<Props> = ({
           isMultiple={false}
           allowClearValueSingleInput
           showTriangle
-          placeholder="Thuộc thiết bị"
+          placeholder="Tài khoản đối ứng"
           renderSelectedItem={(item) => (
             <p
               style={{
@@ -307,20 +313,20 @@ export const DetailChildRow: FC<Props> = ({
               {item.text}
             </p>
           )}
-          data={listGoods}
-          initialValue={rowData?.assets}
+          data={listAccount}
+          initialValue={rowData?.contra}
           formatItem={{
             id: "_id",
             text: "name",
           }}
           onSearchInputChange={debounce(
-            (value) => setKeywordWoods(value),
+            (value) => setKeywordAccount(value),
             500
           )}
           onchangeValue={(value) =>
             handleClickUpdateStore({
               ...rowData,
-              assetsID: value.id,
+              contraID: value.id,
             })
           }
         />

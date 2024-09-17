@@ -5,6 +5,7 @@ import { Project } from "./items/project";
 import { Warehouse } from "./items/warehouse";
 import { Contact } from "./items/contact";
 import { Goods } from "./items/goods";
+import { Contract } from "./items/contract";
 
 export type StoreParent = {
     _id: string;
@@ -26,6 +27,7 @@ export type StoreParent = {
     project: Project;
     warehouse: Warehouse;
     customer: Contact;
+    contract: Contract;
     note: string;
     sign: string;
     createAt: string;
@@ -56,6 +58,7 @@ export type InsertStoreParentPayload = {
     project: Project;
     assignee: User;
     warehouse: Warehouse;
+    contract: Contract;
     customer: Contact;
     outin: number;
     type: number;
@@ -123,8 +126,11 @@ export type StoreChild = {
     assignee?: User
     project?: Project
     warehouse?: Warehouse
+    contract?: Contract
     customer?: Contact
     goods?: Goods
+    account?: any
+    contra?: any
     assets?: Goods
     work: strinstring | null
     note?: string
@@ -172,6 +178,7 @@ export type UpdateStoreChildPayload = {
     assigneeID?: string;
     projectID?: string;
     warehouseID?: string;
+    contractID?: string;
     customerID?: string;
     name?: string;
     date?: string;

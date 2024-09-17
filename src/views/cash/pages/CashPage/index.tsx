@@ -15,7 +15,7 @@ import {
     SearchInput,
     DialogForm,
     ActionGroupButton,
-} from "views/store/shareComponents/common";
+} from "views/cash/shareComponents/common";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
@@ -24,7 +24,7 @@ import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import {
 	useQueryListWarehouse,
 	// useQueryListContact,
-	// useQueryListContract,
+	useQueryListContract,
 	// useQueryListBudgetWork,
 	// useQueryListAccount,
 	// useQueryListGood
@@ -92,11 +92,9 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
     // toDate: inputFilter.toDate,
   })
 
-  console.log(dataNotFilter)
-
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
-  const [warehouseKeyword, setWarehouseKeyword] = useState("");
+  const [contractKeyword, setContractKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
 
   const { list: listCustomer } = useContact({
@@ -114,11 +112,11 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
     keyword: projectKeyword,
   }, true);
 
-  const { listWarehouse } = useQueryListWarehouse({
+	const { listContract } = useQueryListContract({
 		limit: LIMIT_DROPDOWN,
-		keyword: warehouseKeyword,
+		keyword: contractKeyword,
 	});
-  
+
   const {
     onCreateStoreParentAsync,
     onUpdateStoreParentAsync,
@@ -185,64 +183,36 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
               }, 1000)}
             />
             <DropdownSearchableV2
-              ref={accountRef}
-              className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Dự án"}
-              isMultiple={false}
-              allowClearValueSingleInput={true}
-              data={listDepartments.map((item: any) => ({
-                _id: item._id,
-                name: `${item.sign}.${item.name}`,
-              }))}
-              formatItem={{
-                  id: "_id",
-                  text: "name",
-              }}
-              onSearchInputChange={debounce(
-                  (valueSearch) => setProjectKeyword(valueSearch),
-                  500
-              )}
-              onClearData={() => {
-                setProjectID("");
-              }}
-              onchangeValue={item => {
-                setProjectID(item._id);
-                  setPageIndex(0);
-                  ref.current&&ref.current.resetPaginate();
-              }}
-              renderItem={(item) => (
-                  <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-              selectOneByOne={true}
-          />
-          <DropdownSearchableV2
-              ref={accountRef}
-              className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Kho bãi"}
-              isMultiple={false}
-              allowClearValueSingleInput={true}
-              data={listWarehouse}
-              formatItem={{
-                  id: "_id",
-                  text: "name",
-              }}
-              onSearchInputChange={debounce(
-                  (valueSearch) => setWarehouseKeyword(valueSearch),
-                  500
-              )}
-              onClearData={() => {
-                setWarehouseID("");
-              }}
-              onchangeValue={item => {
-                setWarehouseID(item._id);
-                  setPageIndex(0);
-                  ref.current&&ref.current.resetPaginate();
-              }}
-              renderItem={(item) => (
-                  <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-              selectOneByOne={true}
-          />
+                ref={accountRef}
+                className={"mr-1 border border-primary-border rounded-lg"}
+                placeholder={"Dự án"}
+                isMultiple={false}
+                allowClearValueSingleInput={true}
+                data={listDepartments.map((item: any) => ({
+                  _id: item._id,
+                  name: `${item.sign}.${item.name}`,
+                }))}
+                formatItem={{
+                    id: "_id",
+                    text: "name",
+                }}
+                onSearchInputChange={debounce(
+                    (valueSearch) => setProjectKeyword(valueSearch),
+                    500
+                )}
+                onClearData={() => {
+                  setProjectID("");
+                }}
+                onchangeValue={item => {
+                  setProjectID(item._id);
+                    setPageIndex(0);
+                    ref.current&&ref.current.resetPaginate();
+                }}
+                renderItem={(item) => (
+                    <p className={"min-w-[300px]"}>{item.text}</p>
+                )}
+                selectOneByOne={true}
+            />
             <DropdownSearchableV2
               ref={accountRef}
               className={"mr-1 border border-primary-border rounded-lg"}
@@ -266,6 +236,34 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
               }}
               onchangeValue={item => {
                   setCustomerID(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-1 border border-primary-border rounded-lg"}
+              placeholder={"Hợp đồng"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={listContract}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setContractKeyword(valueSearch),
+                  500
+              )}
+              onClearData={() => {
+                setWarehouseID("");
+              }}
+              onchangeValue={item => {
+                setWarehouseID(item._id);
                   setPageIndex(0);
                   ref.current&&ref.current.resetPaginate();
               }}
@@ -402,14 +400,14 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Kho bãi
+              Mã khách
             </div>
             <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Mã khách
+              Hợp đồng
             </div>
             <div
               className={
@@ -478,10 +476,10 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 {item?.project?.name}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item?.warehouse?.name}
+                {item?.customer?.name}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item?.customer?.name}
+                {item?.contract?.name}
               </div>
               <div
                 className={

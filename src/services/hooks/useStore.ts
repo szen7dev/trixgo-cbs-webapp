@@ -34,7 +34,7 @@ export const useQueryListStoreParent = (
     async ({ pageParam }: any) =>
         StoreParentRepository.fetchListStore({
         populates: {
-          path: "assignee project warehouse customer userCreate userUpdate parent",
+          path: "assignee project contract warehouse customer userCreate userUpdate parent",
           select: "fullname name sign phone",
         },
         limit,

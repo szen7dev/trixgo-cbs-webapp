@@ -317,14 +317,7 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Hàng hóa, vật tư, công cụ
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Đơn vị
+              Tài khoản tiền mặt/ngân hàng
             </div>
             <div
               className={
@@ -359,7 +352,7 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Thuộc thiết bị
+              Tài khoản đối ứng
             </div>
             <div
               className={
