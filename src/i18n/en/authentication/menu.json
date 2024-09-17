@@ -2,7 +2,7 @@
   "homeTitle": "Trixgo | Project Management",
   "subject": "Subjects",
   "project": "Projects",
-  "fnb": "SellPose",
+  "fnb": "Sales",
   "contract": "Contracts",
   "document": "Docs",
   "financial": "Financial",
@@ -28,5 +28,6 @@
   "humanReport": "Report by human",
   "deliveredTracking": "Delivered tracking",
   "paymentTracking": "Payment tracking",
-  "biddingTracking": "Bidding tracking"
+  "biddingTracking": "Bidding tracking",
+  "store": "Store"
 }

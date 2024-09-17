@@ -28,5 +28,6 @@
   "humanReport": "人間によるレポート",
   "deliveredTracking": "配送追跡",
   "paymentTracking": "支払い追跡",
-  "biddingTracking": "入札追跡"
+  "biddingTracking": "入札追跡",
+  "store": "Store"
 }

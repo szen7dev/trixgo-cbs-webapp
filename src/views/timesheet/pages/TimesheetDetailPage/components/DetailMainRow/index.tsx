@@ -53,15 +53,8 @@ export const DetailMainRow: FC<Props> = ({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
       >
-        <div className="flex justify-end">{timeSheetParentInfo?.hours}</div>
-      </div>
-      <div
-        className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
-        }
-      >
         <div className="flex justify-end">
-          {convertCurrency(timeSheetParentInfo?.unitprice)}
+          {convertCurrency(Number(timeSheetParentInfo?.hours).toFixed(0))}
         </div>
       </div>
       <div
@@ -70,10 +63,16 @@ export const DetailMainRow: FC<Props> = ({
         }
       >
         <div className="flex justify-end">
-          {`${timeSheetParentInfo?.amount}`.replace(
-            /\B(?=(\d{3})+(?!\d))/g,
-            ","
-          )}
+          {convertCurrency(Number(timeSheetParentInfo?.unitprice).toFixed(0))}
+        </div>
+      </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+        }
+      >
+        <div className="flex justify-end">
+          {convertCurrency(Number(timeSheetParentInfo?.amount).toFixed(0))}
         </div>
       </div>
       <div

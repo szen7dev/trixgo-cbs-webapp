@@ -2,7 +2,7 @@
   "homeTitle": "Trixgo | Quản lý dự án",
   "subject": "Chủ đề",
   "project": "Dự án",
-  "fnb": "SellPose",
+  "fnb": "Sales",
   "contract": "Hợp đồng",
   "document": "Hồ sơ",
   "budget": "Ngân sách",
@@ -28,5 +28,6 @@
   "humanReport": "Báo cáo theo nhân sự",
   "deliveredTracking": "Theo dõi báo cáo",
   "paymentTracking": "Theo dõi thanh toán",
-  "biddingTracking": "Theo dõi hồ sơ thầu"
+  "biddingTracking": "Theo dõi hồ sơ thầu",
+  "store": "Thẻ kho"
 }
