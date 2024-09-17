@@ -49,10 +49,10 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
     fetchPrevPage,
     refetch: onRefreshStoreChild,
   } = useQueryListStoreChild({
-    option: 1,
+    option: 2, // Sổ quỹ
     limit: 50,
     type, 
-    active: 1,
+    status: 5, // Hoàn thành
     projectID,
     warehouseID,
     customerID,
@@ -93,7 +93,7 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
 		keyword: goodsKeyword,
 	})
 
-  let inventoryQuantity = 0, inventory = 0
+  let inventory = 0
   
   return (
     <div>
@@ -322,22 +322,10 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
         <thead className="bbg-cbs-table-header h-10 border-b border-primary-border">
             <tr className="text-left text-sm text-primary-gray">
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center" style={{width: "80px"}}>Ngày</th>
-              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Hàng hóa, vật tư, công cụ</th>
-              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Đơn vị tính</th>
-              <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">NHẬP</th>
-              <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">XUẤT</th>
-              <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">TỒN</th>
-            </tr>
-            <tr className="text-left text-sm text-primary-gray">
-              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Tài khoản</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Tăng</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Giảm</th>
+              <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Tồn</th>
             </tr>
         </thead>
         <tbody>
@@ -346,7 +334,6 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                 const jsx = [];
 
                 if(item?.outin == 2){
-                  inventoryQuantity = Number(inventoryQuantity) + Number(item?.quantity)
                   inventory = Number(inventory) + Number(item?.amount)
 
                   jsx.push(
@@ -356,26 +343,20 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                         <p className="text-primary-gray"><i>{item?.name}</i></p>
-                        <p>{item?.goods?.name}</p>
-                        <p><i>{item?.assets?.name}</i></p>
+                        <p>{item?.account?.name}</p>
                         <NavLink className="text-primary" to={`/store/home/${item?.order?._id}`}>
                           <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
                         </NavLink>
                         {/* <p className="text-primary-gray"><i>{item?.order?._id}</i></p> */}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">{item?.goods?.unit}</td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantity)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right"></td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventoryQuantity)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory)}</td>
                     </tr>
                   )
                 }
 
                 if(item?.outin == 1){
-                  inventoryQuantity = Number(inventoryQuantity) - Number(item?.quantity)
                   inventory = Number(inventory) - Number(item?.amount)
 
                   jsx.push(
@@ -384,19 +365,15 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                       { moment(item?.date).format('DD/MM/YYYY')}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                        {item?.name}-{item?.goods?.name}
-                        <p><i>{item?.assets?.name}</i></p>
+                      <p className="text-primary-gray"><i>{item?.name}</i></p>
+                      <p>{item?.account?.name}</p>
                         <NavLink className="text-primary" to={`/store/home/${item?.order?._id}`}>
                           <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
                         </NavLink>
                         {/* <p className="text-primary-gray"><i>{item?.order?._id}</i></p> */}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">{item?.goods?.unit}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right"></td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantity)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventoryQuantity)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory)}</td>
                     </tr>
                   )

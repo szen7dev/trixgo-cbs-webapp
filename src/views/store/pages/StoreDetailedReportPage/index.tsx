@@ -49,10 +49,10 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
     fetchPrevPage,
     refetch: onRefreshStoreChild,
   } = useQueryListStoreChild({
-    option: 1,
+    option: 1, // Thẻ kho
     limit: 50,
     type, 
-    active: 1,
+    status: 5, // Hoàn thành
     projectID,
     warehouseID,
     customerID,
@@ -384,7 +384,8 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
                       { moment(item?.date).format('DD/MM/YYYY')}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                        {item?.name}-{item?.goods?.name}
+                        <p className="text-primary-gray"><i>{item?.name}</i></p>
+                        <p>{item?.goods?.name}</p>
                         <p><i>{item?.assets?.name}</i></p>
                         <NavLink className="text-primary" to={`/store/home/${item?.order?._id}`}>
                           <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
