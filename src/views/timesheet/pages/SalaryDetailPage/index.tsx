@@ -55,8 +55,6 @@ const SalaryDetailPage: FC = () => {
   const [overtimeSalary, setOvertimeSalary] = useState<string | null>();
   const [mealAllowance, setMealAllowance] = useState<string | null>();
   const [punishment, setPunishment] = useState<string | null>();
-  // const [subtype, setSubtype] = useState<string | null>();
-  // const [subtype, setSubtype] = useState<string | null>();
   const [positionKeyword, setpPositionKeyword] = useState("");
   const [positionsID, setPositionsID] = useState<string[]>([]);
 

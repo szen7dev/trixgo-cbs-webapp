@@ -39,6 +39,7 @@ const BudgetRouterV2 = lazy(() => import("./budget/indexV2"))
 const PaymentRouter = lazy(() => import("./payment/index"))
 const CrmRouter = lazy(() => import("./crm/index"))
 const StoreRouter = lazy(() => import("./store/index"))
+const CashRouter = lazy(() => import("./cash/index"))
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"))
@@ -113,6 +114,7 @@ const Routes: FC = () => {
                                 <Route path="/payment"><PaymentRouter/></Route>
                                 <Route path="/crm"><CrmRouter/></Route>
                                 <Route path="/store"><StoreRouter/></Route>
+                                <Route path="/cash"><CashRouter/></Route>
                                 <Route path="/mobile"><MobileRouter /></Route>
                                 <Route path="/messages"><MessagesRouter /></Route>
                                 <Route path="/media">
