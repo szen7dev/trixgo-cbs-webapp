@@ -643,12 +643,14 @@ export const STORE_OUTIN = [
 ]
 
 export const STORE_TYPES = [
-    { value: 1, text: '###' }, // Sổ quỹ
+    { value: 1, text: 'Chung' },
     { value: 2, text: 'Vật tư chính' },
     { value: 3, text: 'Vật tư phụ' },
     { value: 4, text: 'Công cụ dụng cụ' },
     { value: 5, text: 'Hàng hóa/Cấu kiện/Thành phẩm' },
     { value: 6, text: 'Văn phòng phẩm' },
+    { value: 7, text: 'Quỹ tiền mặt' },
+    { value: 8, text: 'Quỹ ngân hàng' },
 ]
 
 /**
@@ -1295,6 +1297,36 @@ export const APP_ID = {
             activity: {
                 id: "65b3095bb8fc6b0013b8f37d",
                 name: "Giao dịch gần đây"
+            },
+        },
+    },
+    CASH: {
+        id: "5dfe4bf251dc622100bb9d8c",
+        menuCashApp: {
+            id: "66e934b0e16891001259de1e",
+            detailedReport: {
+                id: "66e948772e57610012980cd3",
+                name: "Báo cáo chi tiết"
+            },
+            inventory: {
+                id: "66e9484f2e57610012980cce",
+                name: "Báo cáo tồn"
+            },
+            credit: {
+                id: "66e9355c2e576100129809ef",
+                name: "Giấy báo có"
+            },
+            debit: {
+                id: "66e93551c5d2f60012ebdd22",
+                name: "Giấy báo nợ"
+            },
+            payment: {
+                id: "66e93541c5d2f60012ebdd21",
+                name: "Phiếu chi"
+            },
+            receipt: {
+                id: "66e93535e16891001259de31",
+                name: "Phiếu thu"
             },
         },
     },
