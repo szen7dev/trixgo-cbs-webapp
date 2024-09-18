@@ -621,6 +621,11 @@ export const TIMESHEET_SUBTYPES = [
     { _id: 6, name: 'Làm thêm giờ***'},
 ]
 
+export const SALARY_RESET_PERMISSION = [
+    'hiepnh.winggo@gmail.com', 
+    'hiepnh.tlo@gmail.com', 
+]
+
 export const CHECK_SALLARY = [
     { _id: 1, name: 'Có' },
     { _id: 2, name: 'Không'},

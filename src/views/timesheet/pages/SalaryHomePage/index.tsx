@@ -10,6 +10,7 @@ import { ModalConfirm } from "shareComponents/common";
 import API from "apis/repository";
 import iconRefresh from "assets/images/icons8-refresh.png";
 import { convertCurrency } from "utils/converter";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 import {
   SearchInput,
@@ -23,10 +24,12 @@ import {
   useQueryListSalaryParent,
   useMutationSalaryParent,
 } from "services/hooks/useSalary";
+import { SALARY_RESET_PERMISSION } from "apis/localdb";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 
 const SalaryHomePage: FC = () => {
+  const { user } = useAuth();
   const history = useHistory()
   const { hasPermission } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
   useEffect(() => {
@@ -35,6 +38,8 @@ const SalaryHomePage: FC = () => {
       history.push("/")
     }
   }, [hasPermission])
+
+  // console.log(user)
 
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
@@ -124,7 +129,7 @@ const SalaryHomePage: FC = () => {
         }
       >
         <ModalConfirm
-          title="Bạn có muốn xác nhận Đồng bộ không?"
+          title="Bạn có muốn xác nhận Cập nhật/Đồng bộ không?"
           description= "Dữ liệu từ Bảng chấm công, KPI sẽ được đồng bộ sang Bảng lương này"
           onConfirm={() => handleConfirmSync({ option: param.option, salaryID: param.salaryID })}
           defaultText={false}
@@ -299,6 +304,13 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
+              Cập nhật nhân sự
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
               Đồng bộ dữ liệu
             </div>
             <div
@@ -371,11 +383,17 @@ const SalaryHomePage: FC = () => {
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, salaryID: salaryParent._id })}>
                   <img src={iconRefresh} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
+                  <span>Cập nhật nhân sự</span>
+                </button>
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 2, salaryID: salaryParent._id })}>
+                  <img src={iconRefresh} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
                   <span>Đồng bộ dữ liệu</span>
                 </button>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSignReset({ option: 2, salaryID: salaryParent._id })}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSignReset({ option: 3, salaryID: salaryParent._id })}>
                   <span style={{ "color": "red" }}>Xóa dữ liệu</span>
                 </button>
               </div>
