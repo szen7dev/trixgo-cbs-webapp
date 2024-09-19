@@ -553,23 +553,7 @@ export const PCM_PROPOSAL_TASK = [
     { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
     { value: 12, text: 'Hóa đơn', sign: 'INVOICE', key: 'invoice' },
     { value: 16, text: 'Ghi danh', sign: 'NOTE', key: 'note' },
-]
-
-export const PCM_SUBTYPE = [
-    { value: 0, text: 'Việc thông thường', sign: 'Tasks', key: 'task' },
-    { value: 1, text: 'Đề nghị cấp thông tin', sign: 'RFis', key: 'rfi' },
-    { value: 2, text: 'Đề nghị phê duyệt', sign: 'RFa', key: 'rfa' },
-    { value: 3, text: 'Thanh toán', sign: 'CRFa', key: 'crfa' },
-    { value: 4, text: 'Thầu và mua sắm', sign: 'BRFa', key: 'brfa' },
-    { value: 5, text: 'Nghiệm thu', sign: 'QRFa', key: 'inspection' },
-    { value: 6, text: 'Đề nghị sửa chữa', sign: 'Punch', key: 'punch' },
-    { value: 7, text: 'Đề nghị thay đổi', sign: 'RFc', key: 'rfc' },
-    { value: 8, text: 'Đề nghị thực hiện', sign: 'RFe', key: 'rfe' },
-    { value: 9, text: 'Báo cáo', sign: 'Report', key: 'report' },
-    { value: 10, text: 'Tiến độ, kế hoạch', sign: 'Schedule', key: 'schedule' },
-    { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
-    { value: 12, text: 'Hóa đơn', sign: 'INVOICE', key: 'invoice' },
-    { value: 16, text: 'Ghi danh', sign: 'NOTE', key: 'note' },
+    { value: 17, text: 'Biểu mẫu', sign: 'TEMP', key: 'template' },
 ]
 
 // MỐC TIẾN ĐỘ
