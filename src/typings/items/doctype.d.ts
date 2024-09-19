@@ -75,6 +75,7 @@ interface ModalProps {
         unit: string;
         description: string;
         type: number;
+        status: number;
         amount: number;
         alert: number;
         salesChannel: number;
