@@ -17,6 +17,9 @@ import {
 	useQueryListAccount,
 	// useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
+import {
+	useDoctype,
+} from "services/hooks/items/useDoctype";
 
 import type {
   StoreChild,
@@ -46,9 +49,8 @@ export const DetailChildRow: FC<Props> = ({
   const { user } = useAuth();
   const [keywordWoods, setKeywordWoods] = React.useState('');
   const [keywordAccount, setKeywordAccount] = React.useState('');
-  const [keywordWork, setKeywordWork] = React.useState(
-    rowData.work?.name || ""
-	);
+  const [keywordWork, setKeywordWork] = React.useState('');
+  const [keywordDoctype, setKeywordDoctype] = React.useState('');
 
   const {
     list: listGoods
@@ -70,6 +72,15 @@ export const DetailChildRow: FC<Props> = ({
 		limit: LIMIT_DROPDOWN,
 		keyword: keywordAccount,
 	});
+
+	const { list: listSubType } = useDoctype({
+		params: {
+			limit: LIMIT_DROPDOWN,
+			type: 23,
+			keyword: keywordDoctype
+		 },
+		isFetchList: true
+	})
 
   const handleClickUpdateStore = React.useCallback(
     (value) => {
@@ -183,7 +194,54 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
+        }
+      >
+        <DropdownSearchable
+          id="ticket-creator"
+          className={"w-full pl-0 -mb-1 outline-none "}
+          bordered
+          isMultiple={false}
+          allowClearValueSingleInput
+          showTriangle
+          placeholder="Khoản mục phí"
+          renderSelectedItem={(item) => (
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+                minWidth: "100px",
+                // width: "150px",
+                // whiteSpace: "nowrap",
+                // width: "125px",
+                whiteSpace: "normal",
+                overflow: "hidden",
+              }}
+            >
+              {item.text}
+            </p>
+          )}
+          data={listSubType}
+          initialValue={rowData?.subtype}
+          formatItem={{
+            id: "_id",
+            text: "name",
+          }}
+          onSearchInputChange={debounce(
+            (value) => setKeywordDoctype(value),
+            500
+          )}
+          onchangeValue={(value) =>
+            handleClickUpdateStore({
+              ...rowData,
+              subtypeID: value.id,
+            })
+          }
+        />
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white hidden"
         }
       >
         <p
@@ -227,7 +285,7 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 bg-white"
+          "table-cell relative box-border border border-gray-300 bg-white hidden"
         }
       >
         <p
@@ -267,7 +325,7 @@ export const DetailChildRow: FC<Props> = ({
               {item.text}
             </p>
           )}
-          initialValue={rowData?.work}
+          initialValue={rowData?.budgetWork}
           data={listBudgetWork}
           formatItem={{
             id: "_id",

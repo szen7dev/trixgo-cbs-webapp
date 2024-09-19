@@ -324,6 +324,13 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
+              Khoản mục phí
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 hidden"
+              }
+            >
               Khối lượng
             </div>
             <div
@@ -331,11 +338,11 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Đơn giá
+              Giá trị
             </div>
             <div
               className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 hidden"
               }
             >
               Thành tiền
