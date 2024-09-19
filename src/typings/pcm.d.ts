@@ -149,6 +149,8 @@ export type PcmFile = {
 }
 
 export type ListFilesPcmPayload = {
+  isTemplateFile?: boolean,
+  isXlsxFile?: boolean,
   isFileOfProject?: boolean,
   isSearchFile?: boolean,
   contractID?: string,
