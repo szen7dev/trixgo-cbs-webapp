@@ -21,7 +21,7 @@ import { DetailMainRow, ModalShare } from "./components";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { setFilterDropdown } from "redux/reducer/DocumentProjectSlice";
-
+import { usePcmFile } from "services/hooks/pcm/usePcm";
 import { Loader, ModalConfirm, DropdownSearchableV2 } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 
@@ -57,6 +57,9 @@ const SalaryDetailPage: FC = () => {
   const [punishment, setPunishment] = useState<string | null>();
   const [positionKeyword, setpPositionKeyword] = useState("");
   const [positionsID, setPositionsID] = useState<string[]>([]);
+
+  const [templateKeyword, setpTemplateKeyword] = useState("");
+  const [templateID, setTemplateID] = useState<string | null>();
 
   const { closeModal, openModal } = useModal();
   const dispatch = useDispatch();
@@ -129,8 +132,26 @@ const SalaryDetailPage: FC = () => {
     onLeaveSalary,
     overtimeSalary,
     mealAllowance,
-    punishment
-  });
+    punishment,
+    templateID
+  })
+
+  const { 
+    listFilesPcm, 
+    // isLoading, 
+    // totalRecord, 
+    // totalPage, 
+    // nextCursor 
+  } = usePcmFile({
+    params: {
+      isTemplateFile: true,
+      isXlsxFile: true,
+      companyID: user?.company?._id,
+      keyword: templateKeyword
+    },
+    isFetch: true
+  })
+  // console.log(listFilesPcm)
 
   const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
   const { data: listPosition } = usePosition({ keyword: positionKeyword }, true);
@@ -267,6 +288,7 @@ const SalaryDetailPage: FC = () => {
       const { error, data } = await downloadTemplateExcelAsync({
         parentID: salaryParentID,
         option: "2",
+        templateID,
       });
 
       if (error) {
@@ -383,7 +405,7 @@ const SalaryDetailPage: FC = () => {
           <div className="relative flex items-center">
               <input
               placeholder="Tìm kiếm"
-              className="pl-3 pr-3 mr-1 w-[275px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
+              className="pl-3 pr-3 mr-1 w-[225px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
               onChange={onChangeSearch}
               />
           </div>
@@ -435,7 +457,7 @@ const SalaryDetailPage: FC = () => {
 
           <DropdownSearchableV2
               ref={datahubRef}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Bộ phận"}
               isMultiple={true}
               allowClearValueSingleInput={true}
@@ -481,7 +503,7 @@ const SalaryDetailPage: FC = () => {
 
           <DropdownSearchableV2
               ref={accountRef}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
               isMultiple={false}
               allowClearValueSingleInput={true}
@@ -506,7 +528,7 @@ const SalaryDetailPage: FC = () => {
 
           <DropdownSearchableV2
               ref={accountRef}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Lương"}
               isMultiple={false}
               allowClearValueSingleInput={true}
@@ -531,7 +553,7 @@ const SalaryDetailPage: FC = () => {
 
           <DropdownSearchableV2
               ref={accountRef}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phép"}
               isMultiple={false}
               allowClearValueSingleInput={true}
@@ -556,7 +578,7 @@ const SalaryDetailPage: FC = () => {
 
           <DropdownSearchableV2
               ref={accountRef}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Làm thêm"}
               isMultiple={false}
               allowClearValueSingleInput={true}
@@ -581,7 +603,7 @@ const SalaryDetailPage: FC = () => {
 
           <DropdownSearchableV2
               ref={accountRef}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phụ cấp"}
               isMultiple={false}
               allowClearValueSingleInput={true}
@@ -606,7 +628,7 @@ const SalaryDetailPage: FC = () => {
           
           <DropdownSearchableV2
               ref={accountRef}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Vi phạm"}
               isMultiple={false}
               allowClearValueSingleInput={true}
@@ -628,6 +650,35 @@ const SalaryDetailPage: FC = () => {
               )}
               selectOneByOne={true}
           />
+
+          <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Template"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listFilesPcm}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setpTemplateKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setTemplateID("");
+            }}
+            onchangeValue={item => {
+              setTemplateID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
 
           {!!salaryIds.length && (
             <div className="w-9 h-9 mb-2 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray" onClick={openDeleteModal}>

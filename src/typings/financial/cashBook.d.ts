@@ -155,6 +155,7 @@ export type CashBookAmountByPropertyResponse = APIResponse & {
  * EXCEL
  */
 export type CashBookDownloadPayload = {
+    templateID?: any;
     parentID?: string;
     option?: string;
     salaryID?: string;
