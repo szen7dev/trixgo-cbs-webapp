@@ -322,6 +322,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                   onSubmit={handleCreateStore}
                   outin={Number(outin)}
                   type={Number(type)}
+                  fundaName={""}
                   projectName={""}
                   assigneeName={""}
                   warehouseName={""}

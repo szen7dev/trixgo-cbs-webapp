@@ -25,6 +25,7 @@ interface CreateOrEditDialogProps {
   type: any,
   title: string;
   defaultValues?: InsertStoreParentPayload;
+  fundaName: string;
   projectName: string;
   assigneeName: string;
   warehouseName?: string;
@@ -42,6 +43,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   onSubmit,
   orderID,
   assigneeName,
+  fundaName,
   projectName,
   warehouseName,
   contractName,
@@ -74,6 +76,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     assignee: {},
     outin: Number(outin),
     type: Number(type),
+    funda: {},
     project: {},
     warehouse: {},
     customer: {},
@@ -124,6 +127,22 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
           return (
             <Form>
               <div className="px-5 pt-20 pb-4 flex flex-col space-y-2 overflow-scroll">
+              <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Nội dung (*)
+                  </p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="name"
+                      placeholder="Nhập nội dung"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
                 <div>
                   <p className="text-primary-gray text-[13px] mb-1">Ngày</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
@@ -146,22 +165,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       type="text"
                       name="sign"
                       placeholder="Số hiệu..."
-                      className="w-full h-6 outline-none"
-                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                        handleBlur(e);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-[13px] text-primary-gray mb-1">
-                    Nội dung (*)
-                  </p>
-                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
-                    <Field
-                      type="text"
-                      name="name"
-                      placeholder="Nhập nội dung"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);

@@ -1,6 +1,7 @@
 import { QueryParams } from "./common";
 import { APIResponse } from "./apis/response";
 import { User } from "./user";
+import { Funda } from "./items/funda";
 import { Project } from "./items/project";
 import { Warehouse } from "./items/warehouse";
 import { Contact } from "./items/contact";
@@ -24,6 +25,7 @@ export type StoreParent = {
     state: 1;
     name: string;
     assignee: User;
+    funda: Funda;
     project: Project;
     warehouse: Warehouse;
     customer: Contact;
@@ -34,6 +36,7 @@ export type StoreParent = {
     modifyAt: string;
     date: string;
     convertFactor: number;
+    budgetWork: strinstring | null
 }
 
 export type ListStorePayload = QueryParams & {
@@ -55,6 +58,7 @@ export type QueryDetailStoreParentResponse = APIResponse & {
 }
 
 export type InsertStoreParentPayload = {
+    funda: Funda;
     project: Project;
     assignee: User;
     warehouse: Warehouse;
@@ -133,6 +137,7 @@ export type StoreChild = {
     contra?: any
     assets?: Goods
     work: strinstring | null
+    budgetWork: strinstring | null
     note?: string
     sign?: string
     createAt?: string | null

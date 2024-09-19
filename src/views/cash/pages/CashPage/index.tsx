@@ -322,6 +322,7 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
                   onSubmit={handleCreateStore}
                   outin={Number(outin)}
                   type={Number(type)}
+                  fundaName={""}
                   projectName={""}
                   assigneeName={""}
                   warehouseName={""}
@@ -474,6 +475,7 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item?.project?.name}
+                <p className="text-gray-500"><i>{item?.funda?.name}</i></p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item?.customer?.name}
@@ -483,7 +485,7 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
               </div>
               <div
                 className={
-                  "px-2 py-2 table-cell box-border border-b text-right"
+                  "px-2 py-2 table-cell box-border border-b text-right text-cbs-highlight-color font-bold text-medium"
                 }
               >
                 {convertCurrency(Number(item?.amount).toFixed(0))}

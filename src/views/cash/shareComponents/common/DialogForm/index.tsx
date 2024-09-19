@@ -19,12 +19,15 @@ import {
 	// useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
 
+import { useFunda } from "services/hooks/items/useFunda";
+
 import type { InsertStoreParentPayload } from "typings/store";
 interface CreateOrEditDialogProps {
   outin: any,
   type: any,
   title: string;
   defaultValues?: InsertStoreParentPayload;
+  fundaName: string;
   projectName: string;
   assigneeName: string;
   warehouseName?: string;
@@ -42,17 +45,28 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   onSubmit,
   orderID,
   assigneeName,
+  fundaName,
   projectName,
   warehouseName,
   contractName,
   customerName,
 }) => {
   // const [userKeyword, setUserKeyword] = useState(assigneeName);
-  const [departmentKeyword, setDepartmentKeyword] = useState(projectName);
+  const [departmentKeyword, setDepartmentKeyword] = useState("");
   const [contractKeyword, setContractKeyword] = useState("");
-  const [contactKeyword, setContactKeyword] = useState(customerName);
+  const [contactKeyword, setContactKeyword] = useState("");
+  const [fundaKeyword, setFundaKeyword] = useState("");
 
   const { closeModal } = useModal();
+
+  const {
+      list: listFundas,
+  } = useFunda({
+      params: { 
+        keyword: fundaKeyword
+      },
+      isFetchList: true
+  });
 
   const { listDepartments } = useQueryListDepartments({
     keyword: departmentKeyword,
@@ -74,6 +88,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     assignee: {},
     outin: Number(outin),
     type: Number(type),
+    funda: {},
     project: {},
     warehouse: {},
     customer: {},
@@ -125,6 +140,22 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
             <Form>
               <div className="px-5 pt-20 pb-4 flex flex-col space-y-2 overflow-scroll">
                 <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Nội dung (*)
+                  </p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="name"
+                      placeholder="Nhập nội dung"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div>
                   <p className="text-primary-gray text-[13px] mb-1">Ngày</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
                     <DatePicker
@@ -146,22 +177,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       type="text"
                       name="sign"
                       placeholder="Số hiệu..."
-                      className="w-full h-6 outline-none"
-                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                        handleBlur(e);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-[13px] text-primary-gray mb-1">
-                    Nội dung (*)
-                  </p>
-                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
-                    <Field
-                      type="text"
-                      name="name"
-                      placeholder="Nhập nội dung"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);
@@ -230,6 +245,38 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     )}
                     onchangeValue={(value) =>
                       setFieldValue("customerID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Cơ sở
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listFundas.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.funda}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setFundaKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("fundaID", value.id)
                     }
                   />
                 </div>

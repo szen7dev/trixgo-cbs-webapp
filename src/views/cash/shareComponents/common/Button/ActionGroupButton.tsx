@@ -27,12 +27,14 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
               orderID={record?._id}
               outin={record?.outin}
               type={record?.type}
+              fundaName={record?.funda?.name}
               projectName={record?.project?.name}
               assigneeName={record?.assignee?.fullname}
               contractName={record?.contract?.name}
               warehouseName={record?.warehouse?.name}
               customerName={record?.customer?.name}
               defaultValues={{
+                funda: record.funda,
                 project: record.project,
                 contract: record.contract,
                 customer: record.customer,
