@@ -71,6 +71,8 @@ export const DetailChildRow: FC<Props> = ({
   const { listAccount } = useQueryListAccount({
 		limit: LIMIT_DROPDOWN,
 		keyword: keywordAccount,
+    type: 2,
+    status: 1,
 	});
 
 	const { list: listSubType } = useDoctype({
