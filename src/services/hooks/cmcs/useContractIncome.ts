@@ -260,13 +260,15 @@ export const useQueryListBudgetWork = ({ limit, keyword }: any): any => {
     }
 }
 
-export const useQueryListAccount = ({ limit, keyword, option, arrNames }: any): any => {
+export const useQueryListAccount = ({ limit, keyword, option, arrNames, type, status }: any): any => {
     const res = useInfiniteQuery(
         [`list_account,${keyword}`, keyword],
         async ({ pageParam }: any) =>
             HumanRepository.fetchListAccount({
                 limit: limit || 10,
                 lastestID: pageParam || "",
+                type,
+                status,
                 keyword,
                 option,
                 arrNames

@@ -11,7 +11,9 @@ export const ModalCreateOrUpdateAccount: FC<ModalProps> = ({
   initialValues = {
     accountID: '',
     name: '',
-    description: ''
+    description: '',
+    type: '',
+    status: '',
   }
 }) => {
   const { closeModal } = useModal();
@@ -88,6 +90,19 @@ export const ModalCreateOrUpdateAccount: FC<ModalProps> = ({
       </header>
 
       <section className="px-10 py-2">
+        <p>Phân loại</p>
+        <input
+          type="text"
+          placeholder="Phân loại: 1-Thông thường|2-Phục vụ Quỹ"
+          name="type"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.type}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 py-2">
+        <p>Tên tài khoản</p>
         <input
           type="text"
           placeholder="Nhập nội dung"
@@ -99,12 +114,25 @@ export const ModalCreateOrUpdateAccount: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 mt-2">
+        <p>Mô tả tài khoản</p>
         <input
           type="text"
           placeholder="Nhập mô tả"
           name="description"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.description}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 py-2">
+        <p>Trạng thái</p>
+        <input
+          type="text"
+          placeholder="Trạng thái: 1-Hoạt động|2-Hủy"
+          name="status"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.status}
           onChange={onChange}
         />
       </section>

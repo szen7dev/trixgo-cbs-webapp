@@ -3,14 +3,13 @@ import { FC, useState, useCallback } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
-import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -35,6 +34,8 @@ export const ItemAccountPage: FC = () => {
         accountID: '',
         name: '',
         description: '',
+        type: '',
+        status: '',
     });
 
     const {
@@ -44,7 +45,11 @@ export const ItemAccountPage: FC = () => {
         fetchNextPage,
         totalRecord
     } = useAccount({
-        params: { keyword, isListParentOfListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
+        params: { 
+            keyword, 
+            isListParentOfListChilds: "1", 
+            parentID 
+        }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
         isFetchList: true
     });
 
@@ -55,6 +60,8 @@ export const ItemAccountPage: FC = () => {
             accountID: '',
             name: '',
             description: '',
+            type: '',
+            status: '',
         }))
     }
 
@@ -80,11 +87,13 @@ export const ItemAccountPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, description } = newListIDChecked[0];
+            const { _id, name, description, type, status } = newListIDChecked[0];
             setInitialValues({
                 accountID: _id,
                 name,
                 description: description || '',
+                type: type || '1',
+                status: status || '1',
             });
         } else {
             clearData();
@@ -121,12 +130,14 @@ export const ItemAccountPage: FC = () => {
                 accountID: '',
                 name: '',
                 description: '',
+                type: '',
+                status: '',
             };
         }
         
         openModal(
             <div
-                className={"inline-block w-[521px] h-[280px] my-8  text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                className={"inline-block w-[521px] h-[480px] my-8  text-left align-middle transition-all transform bg-primary-light shadow-xl"}
             >
                 <ModalCreateOrUpdateAccount
                     modalType={modalType}
@@ -199,6 +210,16 @@ export const ItemAccountPage: FC = () => {
                             Mô tả
                         </div>
                     </th>
+                    <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                        <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            Phân loại (1-Thông thường | 2-Quỹ)
+                        </div>
+                    </th>
+                    <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                        <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            Trạng thái (1-Hoạt động | 2-Tạm dừng)
+                        </div>
+                    </th>
                     <th className="w-1/12 py-1 font-normal">
                         <div className="border-r-2 border-gray-300 font-normal pl-2">
                             Cập nhật lần cuối
@@ -225,6 +246,8 @@ export const ItemAccountPage: FC = () => {
                             <p className="text-gray-500 text-[12px]"><i>{item._id}</i></p>
                         </td>
                         <td className="py-1 px-2">{item.description}</td>
+                        <td className="py-1 px-2">{item.type}</td>
+                        <td className="py-1 px-2">{item.status}</td>
                         <td className="py-1 px-2">
                         {item.modifyAt ? moment(item.modifyAt).format(' HH:mm - DD/MM/YYYY') : ''} - {item?.userUpdate?.bizfullname || "Anonymous"}
                         </td>
@@ -243,7 +266,5 @@ export const ItemAccountPage: FC = () => {
             </div>
         )}
     </main>
-  );
-};
-
-// export default ItemAccountPage;
+  )
+}

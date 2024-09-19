@@ -28,7 +28,7 @@ async function fetchListAccount(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/accounts`, {
         params: {
-            select: 'name description modifyAt userUpdate amountChilds',
+            select: 'name description type status modifyAt userUpdate amountChilds',
             populates: {
                 path: 'parent userUpdate',
                 select: 'name description bizfullname'

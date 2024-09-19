@@ -2,6 +2,8 @@ import type { QueryParam, APIResponse } from './commons';
 
 export interface Account {
     _id: string;
+    type?: string;
+    status?: string;
     name: string;
     modifyAt: string;
     description: string | null;
