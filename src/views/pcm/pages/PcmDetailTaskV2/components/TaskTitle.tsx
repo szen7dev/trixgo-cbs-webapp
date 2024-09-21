@@ -135,11 +135,16 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             text: "Tiếp tục theo dõi",
             color: "#5bc0de"
         },
-        // {
-        //     id: 7,
-        //     text: "Khóa đóng",
-        //     color: "#f6bb29"
-        // },
+        {
+            id: 7,
+            text: "Chưa đủ điều kiện duyệt",
+            color: "#f6bb29"
+        },
+        {
+            id: 8,
+            text: "Chất lượng kiểm không đạt",
+            color: "#ffb3b3"
+        },
     ];
 
     if
@@ -176,11 +181,16 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
                 text: "Tiếp tục theo dõi",
                 color: "#5bc0de"
             },
-            // {
-            //     id: 7,
-            //     text: "Khóa đóng",
-            //     color: "#f6bb29"
-            // },
+            {
+                id: 7,
+                text: "Chưa đủ điều kiện duyệt",
+                color: "#f6bb29"
+            },
+            {
+                id: 8,
+                text: "Chất lượng kiểm không đạt",
+                color: "#ffb3b3"
+            },
         ];
     }
 
