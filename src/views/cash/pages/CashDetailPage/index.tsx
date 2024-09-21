@@ -316,8 +316,25 @@ useEffect(() => {
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
+
+              style={{width: "25%"}}
             >
               Tài khoản tiền mặt/ngân hàng
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Giá trị
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+              style={{width: "15%"}}
+            >
+              Ghi chú
             </div>
             <div
               className={
@@ -335,13 +352,6 @@ useEffect(() => {
             </div>
             <div
               className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Giá trị
-            </div>
-            <div
-              className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 hidden"
               }
             >
@@ -352,22 +362,29 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Ngân sách
+              Cơ sở
             </div>
             <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Mã khách
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Ngân sách
+            </div>
+            {/* <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Tài khoản đối ứng
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Ghi chú
-            </div>
+            </div> */}
           </div>
           {storeInfo?._id && Array.isArray(listStoreChild) && (
             <DetailMainRow

@@ -68,6 +68,11 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
       isFetchList: true
   });
 
+  const { listContact } = useQueryListContact({
+		limit: LIMIT_DROPDOWN,
+		keyword: contactKeyword,
+	})
+
   const { listDepartments } = useQueryListDepartments({
     keyword: departmentKeyword,
   }, true);
@@ -75,11 +80,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 	const { listContract } = useQueryListContract({
 		limit: LIMIT_DROPDOWN,
 		keyword: contractKeyword,
-	});
-
-  const { listContact } = useQueryListContact({
-		limit: LIMIT_DROPDOWN,
-		keyword: contactKeyword,
 	});
 
   const initialValues = {

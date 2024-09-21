@@ -135,6 +135,7 @@ export type StoreChild = {
     goods?: Goods
     account?: any
     contra?: any
+    funda?: any
     assets?: Goods
     work: strinstring | null
     budgetWork: strinstring | null
