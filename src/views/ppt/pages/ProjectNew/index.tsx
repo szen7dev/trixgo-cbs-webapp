@@ -15,7 +15,7 @@ const ProjectNew: FC = () => {
     const dispatch = useDispatch();
     const { user } = useAuth();
 
-    const companiesOfAuthor = useAppSelector(state => state.dashboardV2.data.pcmMine.companiesOfAuthor);
+    // const companiesOfAuthor = useAppSelector(state => state.dashboardV2.data.pcmMine.companiesOfAuthor);
     const authorsID = useAppSelector(state => state.dashboardV2.data.pcmMine.authorsID);
     const projectsID = useAppSelector(state => state.dashboardV2.data.pcmMine.projectsID);
     const subtypes = useAppSelector(state => state.dashboardV2.data.pcmMine.subtypes);

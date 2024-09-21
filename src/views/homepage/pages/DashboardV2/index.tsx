@@ -20,6 +20,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { ModalZoomView } from "shareComponents/common";
 import { ModalConfirm } from "shareComponents/common";
 import { ModalErrorDetailItem } from "views/fnb/pages/FnbHomePage/components/ModalErrorDetailItem";
+import { PCM_STATUS_TASK, PCM_PROPOSAL_TASK } from "apis/localdb";
 
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -1301,6 +1302,10 @@ export const DashboardV2: FC<Props> = () => {
                   id: 6,
                   text: "Tiếp tục theo dõi",
                 },
+                {
+                  id: 7,
+                  text: "Chưa đủ điều kiện duyệt",
+                },
               ]}
             />
           )}
@@ -1648,6 +1653,11 @@ export const DashboardV2: FC<Props> = () => {
                               onMouseLeave={handlePopoverClose}
                             />
                           </div>
+                          {/* <div className="relative z-5 inline-block -translate-y-1">
+                            <button className={`text-[10px] text-white rounded px-1 py-0.5 mx-1 ${PCM_STATUS_TASK[item?.task?.status - 1]?.class}`}>
+                              {PCM_STATUS_TASK[item?.task?.status - 1]?.text}
+                              </button>
+                          </div> */}
                         </Link>
                       </td>
                       <td className={"w-[170px]"}>
@@ -1760,9 +1770,14 @@ export const DashboardV2: FC<Props> = () => {
                                 ? item.lastComment.author.fullname
                                 : item.author.fullname}
                             </p>
-                            <span className={"text-xs text-primary-gray py-2"}>
+                            <div className="relative z-5 inline-block -translate-y-1 mt-1">
+                              <button className={`text-[10px] text-white rounded px-1 py-0.5 mx-1 ${PCM_STATUS_TASK[item?.status - 1]?.class}`}>
+                                {PCM_STATUS_TASK[item?.status - 1]?.text}
+                              </button>
+                            </div>
+                            <div className={"text-xs text-primary-gray py-1"}>
                               {item.related.length} {t("homepage:relaled")}
-                            </span>
+                            </div>
                           </div>
                         </Link>
                       </td>

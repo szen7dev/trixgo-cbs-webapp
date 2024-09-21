@@ -54,6 +54,10 @@ const initialState: any = {
         {
           label: `${PCM_STATUS_TASK[5]?.text}`,
           id: 6,
+        },
+        {
+          label: `${PCM_STATUS_TASK[6]?.text}`,
+          id: 7,
         }
       ],
       subtypes: [],
