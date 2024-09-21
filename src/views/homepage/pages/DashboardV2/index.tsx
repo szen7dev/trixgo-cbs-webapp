@@ -1280,7 +1280,7 @@ export const DashboardV2: FC<Props> = () => {
               data={[
                 {
                   id: 1,
-                  text: "Khởi tạo, sắp triển khai",
+                  text: "Khởi tạo",
                 },
                 {
                   id: 2,
