@@ -56,8 +56,12 @@ const initialState: any = {
           id: 6,
         },
         {
-          label: `${PCM_STATUS_TASK[6]?.text}`,
+          label: `${PCM_STATUS_TASK[6]?.text}`, // Chưa đủ điều kiện duyệt
           id: 7,
+        },
+        {
+          label: `${PCM_STATUS_TASK[7]?.text}`, // Chất lượng kiểm không đạt
+          id: 8,
         }
       ],
       subtypes: [],

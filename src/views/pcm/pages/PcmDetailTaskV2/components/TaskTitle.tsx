@@ -140,6 +140,11 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             text: "Chưa đủ điều kiện duyệt",
             color: "#f6bb29"
         },
+        {
+            id: 8,
+            text: "Chất lượng kiểm không đạt",
+            color: "#ffb3b3"
+        },
     ];
 
     if
@@ -180,6 +185,11 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
                 id: 7,
                 text: "Chưa đủ điều kiện duyệt",
                 color: "#f6bb29"
+            },
+            {
+                id: 8,
+                text: "Chất lượng kiểm không đạt",
+                color: "#ffb3b3"
             },
         ];
     }

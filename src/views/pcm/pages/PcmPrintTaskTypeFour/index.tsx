@@ -299,6 +299,10 @@ const PcmPrintTaskTypeFour: FC = () => {
                                   id: 7,
                                   text: "Chưa đủ điều kiện duyệt",
                                 },
+                                {
+                                  id: 8,
+                                  text: "Chất lượng kiểm không đạt",
+                                },
                               ]}
                           />
                         </div>
