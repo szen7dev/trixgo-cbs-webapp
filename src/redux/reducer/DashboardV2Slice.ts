@@ -60,7 +60,7 @@ const initialState: any = {
           id: 7,
         },
         {
-          label: `${PCM_STATUS_TASK[7]?.text}`, // Chất lượng kiểm không đạt
+          label: `${PCM_STATUS_TASK[7]?.text}`, // Chất lượng kiểm tra không đạt
           id: 8,
         }
       ],

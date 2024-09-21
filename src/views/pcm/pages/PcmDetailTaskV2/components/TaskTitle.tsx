@@ -120,21 +120,21 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             text: "Đang triển khai",
             color: "#00aaff"
         },
-        {
-            id: 4,
-            text: "Treo lại",
-            color: "#8f1aac"
-        },
-        {
-            id: 5,
-            text: "Chờ người khác giải quyết",
-            color: "#4d4dff"
-        },
-        {
-            id: 6,
-            text: "Tiếp tục theo dõi",
-            color: "#5bc0de"
-        },
+        // {
+        //     id: 4,
+        //     text: "Treo lại",
+        //     color: "#8f1aac"
+        // },
+        // {
+        //     id: 5,
+        //     text: "Chờ người khác giải quyết",
+        //     color: "#4d4dff"
+        // },
+        // {
+        //     id: 6,
+        //     text: "Tiếp tục theo dõi",
+        //     color: "#5bc0de"
+        // },
         {
             id: 7,
             text: "Chưa đủ điều kiện duyệt",
@@ -142,11 +142,12 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
         },
         {
             id: 8,
-            text: "Chất lượng kiểm không đạt",
+            text: "Chất lượng kiểm tra không đạt",
             color: "#ffb3b3"
         },
-    ];
+    ]
 
+    // Hiển thị thanh trạng thái cho Phép ai được Bấm Hoàn Thành
     if
         (([0,1,4,6,7,7,9,10,11].includes(task?.subtype) && task?.author?._id === userId) ||
         ([2,3,5].includes(task?.subtype) && task?.assignee?._id === userId)) {
@@ -166,21 +167,21 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
                 text: "Hoàn thành",
                 color: "#5fba7d"
             },
-            {
-                id: 4,
-                text: "Treo lại",
-                color: "#8f1aac"
-            },
-            {
-                id: 5,
-                text: "Chờ người khác giải quyết",
-                color: "#4d4dff"
-            },
-            {
-                id: 6,
-                text: "Tiếp tục theo dõi",
-                color: "#5bc0de"
-            },
+            // {
+            //     id: 4,
+            //     text: "Treo lại",
+            //     color: "#8f1aac"
+            // },
+            // {
+            //     id: 5,
+            //     text: "Chờ người khác giải quyết",
+            //     color: "#4d4dff"
+            // },
+            // {
+            //     id: 6,
+            //     text: "Tiếp tục theo dõi",
+            //     color: "#5bc0de"
+            // },
             {
                 id: 7,
                 text: "Chưa đủ điều kiện duyệt",
@@ -188,7 +189,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             },
             {
                 id: 8,
-                text: "Chất lượng kiểm không đạt",
+                text: "Chất lượng kiểm tra không đạt",
                 color: "#ffb3b3"
             },
         ];
