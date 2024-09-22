@@ -32,6 +32,7 @@ export type StoreParent = {
     contract: Contract;
     note: string;
     sign: string;
+    link: Contract;
     createAt: string;
     modifyAt: string;
     date: string;
@@ -64,6 +65,7 @@ export type InsertStoreParentPayload = {
     warehouse: Warehouse;
     contract: Contract;
     customer: Contact;
+    link: Contract;
     outin: number;
     type: number;
     name: string;
