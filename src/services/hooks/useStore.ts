@@ -117,8 +117,12 @@ export const useQueryDetailStoreParent = (
     async () =>
         StoreParentRepository.fetchDetailStore({
         populates: {
-          path: "assignee project userCreate userUpdate members admins",
-          select: "_id fullname bizfullname name sign image",
+          path: "assignee project userCreate userUpdate members admins files",
+          select: "_id fullname bizfullname name sign image path nameOrg author createAt size",
+          populate: {
+            path: "author",
+            select: "_id fullname",
+          }
         },
         orderID,
       }),

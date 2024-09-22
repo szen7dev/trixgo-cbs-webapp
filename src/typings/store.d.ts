@@ -38,6 +38,7 @@ export type StoreParent = {
     date: string;
     convertFactor: number;
     budgetWork: strinstring | null
+    files: any
 }
 
 export type ListStorePayload = QueryParams & {

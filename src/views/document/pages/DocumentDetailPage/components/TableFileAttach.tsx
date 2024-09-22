@@ -20,7 +20,6 @@ export const TableFileAttach: FC<TableFileAttachProps> = ({
   documentID,
   ...props
 }) => {
-  // const [official, setOfficial] = useState(1);
   const {
     updateDocumentFileMutateAsync,
     refetch,

@@ -30,6 +30,9 @@ import { validateFiles } from 'validation/file';
 import { APP_KEY } from 'utils/constants';
 import { useMutationStoreParent } from "services/hooks/useStore";
 
+import fileIcon from "assets/images/icons8-attach.svg";
+import { formatNumberMoney } from "utils/converter";
+
 export const StoreDetailPage: FC = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
@@ -438,19 +441,45 @@ useEffect(() => {
           {permissions.hasPermissionCreateUpdate && (
             <CreateRow onInsert={handleCreateStore} />
           )}
+        </div>
 
-          <div className="flex flex-wrap mt-3">
+        <div className="flex flex-wrap mt-3">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
-              Tài liệu đính kèm hồ sơ
+              Tài liệu đính kèm
             </h3>
             <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
               <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
               <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
             </label>
           </div>
-
         </div>
-      </div>
+        <table className="w-full mt-3">
+          <tbody>
+            {storeInfo?.files.map((item: any) => (
+              <tr key={item._id}>
+                <td className="py-2">
+                  <div className="flex items-center">
+                    <img
+                      src={fileIcon}
+                      alt=""
+                      className="h-6 w-6 px-1 box-content"
+                    />
+                    <a className="text-primary" href={`${process.env.REACT_APP_URL_S3}${item?.path}`} target="_blank" rel="noreferrer"> {item?.nameOrg || "-"} </a>
+                  </div>
+                </td>
+                <td className="py-2 align-middle">
+                  {item?.author?.fullname || "-"}
+                </td>
+                <td className="py-2 align-middle">
+                  {moment(item.createAt).format('DD/MM/YYYY HH:mm')}
+                </td>
+                <td className="py-2 align-middle">
+                  {formatNumberMoney(Number(item?.size / 1024 || 0).toFixed(0))} KB
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
     </div>
   )
 }
