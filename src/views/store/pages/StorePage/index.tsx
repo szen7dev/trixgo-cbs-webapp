@@ -31,6 +31,7 @@ import {
 } from "services/hooks/cmcs/useContractIncome";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { useLocation } from "react-router-dom";
+import fileIcon from "assets/images/icons8-attach.svg";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface StoreHomePageProps {
@@ -458,6 +459,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 {Number(item.status) == 6 ? <div className="relative z-5 inline-block -translate-y-1"><button className="text-[10px] text-white rounded px-1 py-0.5 mx-1 bg-red-400">Phiếu hủy</button></div> : <></>}
                 <NavLink to={`${currentPathname}/${item._id}`} className="text-cbs-highlight-color font-bold text-medium">
                   {item.name}
+                  {item?.files?.length ? <span className="text-gray-500"><img src={fileIcon} alt="" className="h-6 w-6 px-1 inline"/>({item?.files?.length})</span> : <></>}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
                   {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
