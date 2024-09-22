@@ -47,8 +47,8 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
   const ref = React.useRef<PaginateHandle>(null);
   const accountRef = React.useRef<DropdownHandle>(null);
 
-  const [recordSelected, toggleRecord] = React.useState<any>({});
-  const [keyword, setKeyword] = React.useState("");
+  const [recordSelected, toggleRecord] =useState<any>({});
+  const [keyword, setKeyword] = useState("");
   const [pageIndex, setPageIndex] = useState(0);
 
   const [userID, setUserID] = useState<string | null>();
@@ -90,7 +90,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
     sortOption: 2,
     // fromDate: inputFilter.fromDate,
     // toDate: inputFilter.toDate,
-  });
+  })
 
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
@@ -468,6 +468,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item.sign}
+                {item?.link ? <p className="text-cbs-highlight-color"><i>{item?.link?.sign}.{item?.link?.name} | {moment(item?.link?.date).format(DATE_FORMAT)}</i></p>: <></> }
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {STORE_OUTIN[Number(item.outin - 1)].text}

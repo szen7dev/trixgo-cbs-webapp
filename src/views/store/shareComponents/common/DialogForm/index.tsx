@@ -18,6 +18,9 @@ import {
 	// useQueryListAccount,
 	// useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
+import {
+  useQueryListStoreParent,
+} from "services/hooks/useStore";
 
 import type { InsertStoreParentPayload } from "typings/store";
 interface CreateOrEditDialogProps {
@@ -53,6 +56,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   const [departmentKeyword, setDepartmentKeyword] = useState(projectName);
   const [warehouseKeyword, setWarehouseKeyword] = useState(warehouseName);
   const [contactKeyword, setContactKeyword] = useState(customerName);
+  const [keyword, setKeyword] = useState("");
 
   const { closeModal } = useModal();
 
@@ -68,7 +72,23 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   const { listContact } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
 		keyword: contactKeyword,
-	});
+	})
+
+  const {
+    data,
+    // refetch: refreshListStore,
+    // totalPages,
+    // totalRecord,
+    // fetchNextPage,
+    // fetchPrevPage,
+    // limit,
+    // loading,
+    // hasNextPage,
+  } = useQueryListStoreParent({
+    keyword, 
+    outin: 2, 
+    type, 
+  })
 
   const initialValues = {
     name: "",
@@ -80,6 +100,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     project: {},
     warehouse: {},
     customer: {},
+    link: {},
     note: "",
     status: "",
     ...defaultValues,
@@ -266,6 +287,38 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     )}
                     onchangeValue={(value) =>
                       setFieldValue("customerID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Link tới phiếu/lô
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={data.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.link}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("linkID", value.id)
                     }
                   />
                 </div>
