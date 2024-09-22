@@ -29,7 +29,6 @@ import { useUpload } from 'services/hooks/useUpload';
 import { validateFiles } from 'validation/file';
 import { APP_KEY } from 'utils/constants';
 import { useMutationStoreParent } from "services/hooks/useStore";
-
 import fileIcon from "assets/images/icons8-attach.svg";
 import { formatNumberMoney } from "utils/converter";
 
@@ -263,8 +262,6 @@ useEffect(() => {
   const { addFileToUpload } = useUpload({
     appID: APP_KEY.STORE,
     companyID: user?.company._id,
-    // projectID: storeInfo?.project?._id, // Sử dụng nếu có
-    // packageID: storeInfo?.package?._id, // Sử dụng nếu có
   })
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -427,6 +424,7 @@ useEffect(() => {
               Ghi chú
             </div>
           </div>
+
           {storeInfo?._id && Array.isArray(listStoreChild) && (
             <DetailMainRow
               storeParentInfo={storeInfo}
@@ -444,15 +442,15 @@ useEffect(() => {
         </div>
 
         <div className="flex flex-wrap mt-3">
-            <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
-              Tài liệu đính kèm
-            </h3>
-            <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
-              <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
-              <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
-            </label>
-          </div>
+          <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
+            Tài liệu đính kèm
+          </h3>
+          <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
+            <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
+            <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
+          </label>
         </div>
+
         <table className="w-full mt-3">
           <tbody>
             {storeInfo?.files.map((item: any) => (
@@ -480,6 +478,8 @@ useEffect(() => {
             ))}
           </tbody>
         </table>
+
+        </div>
     </div>
   )
 }
