@@ -120,21 +120,21 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             text: "Đang triển khai",
             color: "#00aaff"
         },
-        // {
-        //     id: 4,
-        //     text: "Treo lại",
-        //     color: "#8f1aac"
-        // },
-        // {
-        //     id: 5,
-        //     text: "Chờ người khác giải quyết",
-        //     color: "#4d4dff"
-        // },
-        // {
-        //     id: 6,
-        //     text: "Tiếp tục theo dõi",
-        //     color: "#5bc0de"
-        // },
+        {
+            id: 4,
+            text: "Treo lại",
+            color: "#8f1aac"
+        },
+        {
+            id: 5,
+            text: "Chờ người khác giải quyết",
+            color: "#4d4dff"
+        },
+        {
+            id: 6,
+            text: "Tiếp tục theo dõi",
+            color: "#5bc0de"
+        },
         {
             id: 7,
             text: "Chưa đủ điều kiện duyệt",
@@ -167,21 +167,21 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
                 text: "Hoàn thành",
                 color: "#5fba7d"
             },
-            // {
-            //     id: 4,
-            //     text: "Treo lại",
-            //     color: "#8f1aac"
-            // },
-            // {
-            //     id: 5,
-            //     text: "Chờ người khác giải quyết",
-            //     color: "#4d4dff"
-            // },
-            // {
-            //     id: 6,
-            //     text: "Tiếp tục theo dõi",
-            //     color: "#5bc0de"
-            // },
+            {
+                id: 4,
+                text: "Treo lại",
+                color: "#8f1aac"
+            },
+            {
+                id: 5,
+                text: "Chờ người khác giải quyết",
+                color: "#4d4dff"
+            },
+            {
+                id: 6,
+                text: "Tiếp tục theo dõi",
+                color: "#5bc0de"
+            },
             {
                 id: 7,
                 text: "Chưa đủ điều kiện duyệt",

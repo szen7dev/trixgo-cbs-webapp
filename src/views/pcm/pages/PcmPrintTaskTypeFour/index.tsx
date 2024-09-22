@@ -283,18 +283,18 @@ const PcmPrintTaskTypeFour: FC = () => {
                                   id: 3,
                                   text: "Hoàn thành",
                                 },
-                                // {
-                                //   id: 4,
-                                //   text: "Treo lại",
-                                // },
-                                // {
-                                //   id: 5,
-                                //   text: "Chờ người khác giải quyết",
-                                // },
-                                // {
-                                //   id: 6,
-                                //   text: "Tiếp tục theo dõi",
-                                // },
+                                {
+                                  id: 4,
+                                  text: "Treo lại",
+                                },
+                                {
+                                  id: 5,
+                                  text: "Chờ người khác giải quyết",
+                                },
+                                {
+                                  id: 6,
+                                  text: "Tiếp tục theo dõi",
+                                },
                                 {
                                   id: 7,
                                   text: "Chưa đủ điều kiện duyệt",
