@@ -32,5 +32,5 @@ export const useModal = (isManualClose = false): UseModal => {
     closeModal,
     isManualClose,
     modalContent: state.modalContent,
-  };
-};
+  }
+}

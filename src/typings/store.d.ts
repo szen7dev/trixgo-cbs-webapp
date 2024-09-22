@@ -87,7 +87,9 @@ export type InsertStoreParentResponse = {
 }
 
 export type UpdateStoreParentPayload = {
-    cashBookID: string;
+    orderID: string;
+    filesID: string[];
+    cashBookID?: string;
     members?: string[];
     membersRemove?: string[];
     admins?: string[];
