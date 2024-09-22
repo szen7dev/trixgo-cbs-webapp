@@ -158,13 +158,15 @@ const SalaryHomePage: FC = () => {
   }
 
   const handleConfirmSync = useCallback(async (param: any) => {
+    closeModal();
+
     const { data, status } = await API.post(
       `/api/timesheet/expert_salary/sync-data`, {
-      option: param.option,
-      salaryID: param.salaryID,
-    }
+        option: param.option,
+        salaryID: param.salaryID,
+      }
     )
-    closeModal();
+   
     if (status !== 200 || data.error) {
       return toast.warn('Đồng bộ thất bại')
     }

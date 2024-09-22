@@ -10,7 +10,6 @@ import { DropdownSearchableV2 } from "shareComponents/common";
 import { convertCurrency } from "utils/converter";
 
 import {
-  useQueryDetailStoreChild,
   useQueryListStoreChild,
   useMutationStoreChild,
 } from "services/hooks/useStoreProduct";
@@ -20,11 +19,16 @@ import {
 } from "services/hooks/useStore";
 
 import { useCashBook } from "services/hooks/financial/useCashBook";
-
-import { useAuth } from "services/hooks/auth/useAuth";
 import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
+
+import { useAuth } from "services/hooks/auth/useAuth";
+import iconUpload from "assets/images/icons8-upload-file-100 1.png";
+import { useUpload } from 'services/hooks/useUpload';
+import { validateFiles } from 'validation/file';
+import { APP_KEY } from 'utils/constants';
+import { useMutationStoreParent } from "services/hooks/useStore";
 
 export const StoreDetailPage: FC = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -248,6 +252,57 @@ useEffect(() => {
     }
 }, [JSON.stringify(dataImport)])
 
+  /**
+   *  Upload file
+   */
+  const { onUpdateStoreParentAsync } = useMutationStoreParent();
+
+  const { addFileToUpload } = useUpload({
+    appID: APP_KEY.STORE,
+    companyID: user?.company._id,
+    // projectID: storeInfo?.project?._id, // Sử dụng nếu có
+    // packageID: storeInfo?.package?._id, // Sử dụng nếu có
+  })
+
+  const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      // Đọc file từ Client
+      if (!event.target.files || !event.target.files.length) return;
+
+      const validation = await validateFiles(event.target.files);
+      if(validation.error) return toast.warn(validation.message);
+
+      const arrFileID: any = []
+
+      // Upload files to S3 và lưu DB file-core
+      for (const [, file] of Object.entries(event.target.files)) {
+        const { _id } = await addFileToUpload({
+          files: file as any,
+          fileType: 2,
+          useCompress: true
+        })
+        arrFileID.push(_id)
+      }
+
+      const { error, data } = await onUpdateStoreParentAsync({
+        orderID,
+        filesID: arrFileID,
+      });
+
+      if (error) {
+        return toast.warning(data?.message);
+      }
+
+      toast.success('Thêm file thành công');
+      refetch();
+    } catch (error) {
+      console.log({ error })
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  }
+
   if (!storeInfo || loading || !user)
     return <Loader className="border-primary" />;
 
@@ -383,6 +438,17 @@ useEffect(() => {
           {permissions.hasPermissionCreateUpdate && (
             <CreateRow onInsert={handleCreateStore} />
           )}
+
+          <div className="flex flex-wrap mt-3">
+            <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
+              Tài liệu đính kèm hồ sơ
+            </h3>
+            <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
+              <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
+              <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
+            </label>
+          </div>
+
         </div>
       </div>
     </div>
