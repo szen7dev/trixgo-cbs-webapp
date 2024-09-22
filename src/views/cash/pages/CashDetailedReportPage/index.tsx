@@ -396,51 +396,50 @@ export const CashDetailedReportPage: FC<Props> = () => {
             )}
             selectOneByOne={true}
           />  
-        <DropdownSearchableV2
-            ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Người tạo"}
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            data={listUser}
-            formatItem={{
-                id: "_id",
-                text: "fullname",
-            }}
-            onSearchInputChange={debounce(
-                (valueSearch) => setUserKeyword(valueSearch),
-                500
-            )}
-            onClearData={() => {
-              setUserID("");
-            }}
-            onchangeValue={item => {
-              setUserID(item._id);
-              setPageIndex(0);
-              ref.current&&ref.current.resetPaginate();
-            }}
-            renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
-            )}
-            selectOneByOne={true}
-        />
-
-       <PaginateV2
-          ref={ref}
-          totalRecord={totalRecord}
-          totalPages={totalPages}
-          hasNextPage={hasNextPage}
-          limit={limit}
-          isFetching={isFetchStoreChild}
-          nextPageAction={() => {
-            setPageIndex((oldState) => oldState + 1);
-            fetchNextPage();
-          }}
-          prevPageAction={() => {
-            setPageIndex((oldState) => oldState - 1);
-            fetchPrevPage();
-          }}
-        />
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-1 border border-primary-border rounded-lg"}
+              placeholder={"Người tạo"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={listUser}
+              formatItem={{
+                  id: "_id",
+                  text: "fullname",
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setUserKeyword(valueSearch),
+                  500
+              )}
+              onClearData={() => {
+                setUserID("");
+              }}
+              onchangeValue={item => {
+                setUserID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+          <PaginateV2
+              ref={ref}
+              totalRecord={totalRecord}
+              totalPages={totalPages}
+              hasNextPage={hasNextPage}
+              limit={limit}
+              isFetching={isFetchStoreChild}
+              nextPageAction={() => {
+                setPageIndex((oldState) => oldState + 1);
+                fetchNextPage();
+              }}
+              prevPageAction={() => {
+                setPageIndex((oldState) => oldState - 1);
+                fetchPrevPage();
+              }}
+            />
       </div>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">

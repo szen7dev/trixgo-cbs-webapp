@@ -7,7 +7,7 @@ import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
-import { LIMIT_DROPDOWN } from "apis/localdb/index";
+import { STORE_OUTIN, CASH_TYPES, LIMIT_DROPDOWN } from "apis/localdb";
 import {
 	useQueryListWarehouse,
 	useQueryListGood
@@ -17,13 +17,15 @@ import { STORE_TYPES } from "apis/localdb";
 import {
   useQueryListStoreChild,
 } from "services/hooks/useStoreProduct";
+import { useDoctype } from "services/hooks/items/useDoctype";
+import { useQueryListBudgetWork } from "services/hooks/cmcs/useContractIncome";
 
 interface Props {
     outin?: number
     // type?: number
 }
 
-export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {  
+export const StoreDetailedReportPage: FC<Props> = () => {  
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -31,12 +33,17 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
   const [pageIndex, setPageIndex] = useState(0);
 
   const [type, setType] = useState<string | null>();
+  const [outin, setOutin] = useState<string | null>();
   const [userID, setUserID] = useState<string | null>();
   const [projectID, setProjectID] = useState<string | null>();
   const [warehouseID, setWarehouseID] = useState<string | null>();
   const [goodsID, setGoodsID] = useState<string | null>();
   const [assetsID, setAssetsID] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
+  const [workID, setWorkID] = useState<string | null>();
+  const [subtypeID, setSubtypeID] = useState<string | null>();
+  const [keywordWork, setKeywordWork] = useState("");
+  const [keywordDoctype, setKeywordDoctype] = useState('');
 
   const {
     dataNotFilter: listDataWithPager,
@@ -58,6 +65,9 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
     customerID,
     goodsID,
     assetsID,
+    outin,
+    workID,
+    subtypeID,
     userCreateID: userID,
     sortKey: JSON.stringify(['date__1', 'createAt__1']),
   })
@@ -93,6 +103,20 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
 		keyword: goodsKeyword,
 	})
 
+  const { listBudgetWork } = useQueryListBudgetWork({
+		limit: LIMIT_DROPDOWN,
+		keyword: keywordWork,
+	})
+
+  const { list: listSubType } = useDoctype({
+		params: {
+			limit: LIMIT_DROPDOWN,
+			type: 23,
+			keyword: keywordDoctype
+		 },
+		isFetchList: true
+	})
+
   let inventoryQuantity = 0, inventory = 0
   
   return (
@@ -125,6 +149,33 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
               )}
               selectOneByOne={true}
           />
+          <DropdownSearchableV2
+                ref={accountRef}
+                className={"mr-1 border border-primary-border rounded-lg"}
+                placeholder={"Nhập xuất"}
+                isMultiple={false}
+                allowClearValueSingleInput={true}
+                data={STORE_OUTIN.map((item: any) => ({
+                  _id: item.value,
+                  name: item.text,
+                }))}
+                formatItem={{
+                    id: "_id",
+                    text: "name",
+                }}
+                onClearData={() => {
+                  setOutin("");
+                }}
+                onchangeValue={item => {
+                  setOutin(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+                }}
+                renderItem={(item) => (
+                    <p className={"min-w-[300px]"}>{item.text}</p>
+                )}
+                selectOneByOne={true}
+            />
           <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
@@ -218,7 +269,7 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Hàng hóa, vật tư, công cụ"}
+            placeholder={"Hàng hóa"}
             isMultiple={false}
             allowClearValueSingleInput={true}
             data={listGood}
@@ -246,7 +297,7 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Thuộc tài sản/thiết bị"}
+            placeholder={"Thiết bị"}
             isMultiple={false}
             allowClearValueSingleInput={true}
             data={listGood}
@@ -271,6 +322,68 @@ export const StoreDetailedReportPage: FC<Props> = ({ outin }) => {
             )}
             selectOneByOne={true}
         />
+         {/* <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Khoản mục"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listSubType.map((item: any) => ({
+              _id: item._id,
+              name: `${item.sign}.${item.name}`,
+            }))}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setKeywordDoctype(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setSubtypeID("");
+            }}
+            onchangeValue={item => {
+              setSubtypeID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+          />
+          <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Ngân sách"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listBudgetWork.map((item: any) => ({
+              _id: item._id,
+              name: `${item.sign}.${item.name}`,
+            }))}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setKeywordWork(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setWorkID("");
+            }}
+            onchangeValue={item => {
+              setWorkID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+          />   */}
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
