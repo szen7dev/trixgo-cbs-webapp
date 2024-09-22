@@ -13,7 +13,7 @@ import { LIMIT_DROPDOWN } from "apis/localdb/index";
 // 	useQueryListGood
 // } from "services/hooks/cmcs/useContractIncome";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import { STORE_TYPES, CASH_TYPES } from "apis/localdb";
+import { STORE_OUTIN, CASH_TYPES } from "apis/localdb";
 import {
   useQueryListStoreChild,
 } from "services/hooks/useStoreProduct";
@@ -29,7 +29,7 @@ interface Props {
     // type?: number
 }
 
-export const CashDetailedReportPage: FC<Props> = ({ outin }) => {  
+export const CashDetailedReportPage: FC<Props> = () => {  
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -37,6 +37,7 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
   const [pageIndex, setPageIndex] = useState(0);
 
   const [type, setType] = useState<string | null>();
+  const [outin, setOutin] = useState<string | null>();
   const [userID, setUserID] = useState<string | null>();
   const [projectID, setProjectID] = useState<string | null>();
   // const [warehouseID, setWarehouseID] = useState<string | null>();
@@ -69,6 +70,7 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
     customerID,
     // goodsID,
     // assetsID,
+    outin,
     workID,
     subtypeID,
     userCreateID: userID,
@@ -122,6 +124,7 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
   const { listAccount } = useQueryListAccount({
 		limit: LIMIT_DROPDOWN,
 		keyword: accountKeyword,
+    type: 2,
 	})
 
   // const { listGood } = useQueryListGood({
@@ -180,12 +183,43 @@ export const CashDetailedReportPage: FC<Props> = ({ outin }) => {
                 selectOneByOne={true}
             />
             <DropdownSearchableV2
+                ref={accountRef}
+                className={"mr-1 border border-primary-border rounded-lg"}
+                placeholder={"Nhập xuất"}
+                isMultiple={false}
+                allowClearValueSingleInput={true}
+                data={STORE_OUTIN.map((item: any) => ({
+                  _id: item.value,
+                  name: item.text,
+                }))}
+                formatItem={{
+                    id: "_id",
+                    text: "name",
+                }}
+                onClearData={() => {
+                  setOutin("");
+                }}
+                onchangeValue={item => {
+                  setOutin(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+                }}
+                renderItem={(item) => (
+                    <p className={"min-w-[300px]"}>{item.text}</p>
+                )}
+                selectOneByOne={true}
+            />
+            <DropdownSearchableV2
               ref={accountRef}
               className={"mr-1 border border-primary-border rounded-lg"}
               placeholder={"Tài khoản"}
               isMultiple={false}
               allowClearValueSingleInput={true}
-              data={listAccount}
+              // data={listAccount}
+              data={listAccount.map((item: any) => ({
+                _id: item._id,
+                name: `${item.name}.${item.description}`,
+              }))}
               formatItem={{
                   id: "_id",
                   text: "name",
