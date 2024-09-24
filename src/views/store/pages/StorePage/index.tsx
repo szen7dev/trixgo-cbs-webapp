@@ -477,7 +477,8 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 <p>{STORE_TYPES[Number(item.type - 1)].text}</p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item?.project?.name}
+                {item?.project?.sign}.{item?.project?.name}
+                <p className="text-cbs-highlight-color">{item?.package?.name}</p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item?.warehouse?.name}

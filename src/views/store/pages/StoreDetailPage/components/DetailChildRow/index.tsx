@@ -166,6 +166,10 @@ export const DetailChildRow: FC<Props> = ({
             })
           }
         />
+        {
+          rowData?.parentGoods ? <p className="text-cbs-highlight-color mt-2">{rowData?.parentGoods?.project?.sign}.{rowData?.parentGoods?.name}</p> : <></>
+        }
+        {/* <p className="text-cbs-highlight-color mt-2">{rowData?.parentGoods?.project?.sign}.{rowData?.parentGoods?.name}</p> */}
       </div>
       <div
         className={
