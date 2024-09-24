@@ -88,6 +88,8 @@ const ProjectStorePage: FC = () => {
         name: '',
         sign: '',
         unit: '',
+        quantity: 0,
+        weight: 0,
         unitprice: 0,
         sellingUnitprice: 0,
         unitPrice: 0,
@@ -151,7 +153,7 @@ const ProjectStorePage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, sign, unit, unitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, convertQuantity, status, usage } = newListIDChecked[0];
+            const { _id, type, name, sign, unit, quantity, weight, unitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, convertQuantity, status, usage } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 type,
@@ -160,6 +162,8 @@ const ProjectStorePage: FC = () => {
                 name,
                 sign,
                 unit,
+                quantity,
+                weight,
                 unitprice,
                 sellingUnitprice,
                 unitPrice,
@@ -212,6 +216,8 @@ const ProjectStorePage: FC = () => {
                 name: '',
                 sign: '',
                 unit: '',
+                quantity: 0,
+                weight: 0,
                 unitprice: 0,
                 sellingUnitprice: 0,
                 unitPrice: 0,
@@ -226,7 +232,7 @@ const ProjectStorePage: FC = () => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "800px",
+                    height: "650px",
                 }}
             >
                 <ModalCreateOrUpdateProjectGoods
@@ -429,6 +435,11 @@ const ProjectStorePage: FC = () => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Số lượng
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Đơn giá nhập
                             </div>
                         </th>
@@ -439,7 +450,7 @@ const ProjectStorePage: FC = () => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Trọng lượng (Kg)
+                                Trọng lượng đơn vị (Kg)
                             </div>
                         </th>
                         <th className="py-1">
@@ -481,6 +492,9 @@ const ProjectStorePage: FC = () => {
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.unit}</td>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.quantity)}
+                            </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.unitprice)}
                             </td>

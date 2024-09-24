@@ -37,6 +37,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
                 funda: record.funda,
                 project: record.project,
                 package: record.package,
+                toPackage: record.toPackage,
                 warehouse: record.warehouse,
                 contract: record.contract,
                 customer: record.customer,

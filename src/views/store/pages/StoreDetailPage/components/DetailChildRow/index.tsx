@@ -15,7 +15,7 @@ import type {
   StoreParent,
   UpdateStoreChildPayload,
 } from "typings/store";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 type Props = {
   parent?: StoreParent;
@@ -178,7 +178,6 @@ export const DetailChildRow: FC<Props> = ({
       >
         <p>{rowData?.goods?.unit}</p>
       </div>
-
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -235,6 +234,29 @@ export const DetailChildRow: FC<Props> = ({
           }
         >
           {convertCurrency(rowData.amount)}
+        </p>
+      </div>
+
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateStore({
+              ...rowData,
+              weight: `${value}`,
+            });
+          }}
+        >
+          {convertCurrency(rowData.weight)}
         </p>
       </div>
       

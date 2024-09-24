@@ -83,8 +83,8 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 	} = useDocumentPackage({
 		// departmentID: projectID,
 		isShowAll: "1",
-		keyword
-	}, true, false);
+		keyword: packageKeyword
+	}, true, false)
 
   const {
     data,
@@ -111,6 +111,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     funda: {},
     project: {},
     package: {},
+    toPackage: {},
     warehouse: {},
     customer: {},
     link: {},
@@ -134,7 +135,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "800px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "850px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center border-b bg-cbs-table-header p-2"}
@@ -161,7 +162,39 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
           return (
             <Form>
               <div className="px-5 pt-20 pb-4 flex flex-col space-y-2 overflow-scroll">
-              <div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Link tới phiếu/lô (áp dụng cho xuất đích danh)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={data.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.link}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("linkID", value.id)
+                    }
+                  />
+                </div>
+                <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Nội dung (*)
                   </p>
@@ -305,7 +338,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Gói thầu (*)
+                    Gói thầu giao (chỉ áp dụng cho giao dự án)
                   </p>
                   <DropdownSearchable
                     className={
@@ -337,7 +370,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Link tới phiếu/lô
+                    Gói thầu nhận (chỉ áp dụng cho giao dự án)
                   </p>
                   <DropdownSearchable
                     className={
@@ -349,21 +382,21 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     showTriangle
                     allowClearValueSingleInput
                     renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={data.map((item: any) => ({
+                    data={listDocumentPackage.map((item: any) => ({
                       _id: item._id,
                       name: `${item.sign}.${item.name}`,
                     }))}
-                    initialValue={defaultValues?.link}
+                    initialValue={defaultValues?.toPackage}
                     formatItem={{
                       id: "_id",
                       text: "name",
                     }}
                     onSearchInputChange={debounce(
-                      (value) => setKeyword(value),
+                      (value) => setPackageKeyword(value),
                       1000
                     )}
                     onchangeValue={(value) =>
-                      setFieldValue("linkID", value.id)
+                      setFieldValue("toPackageID", value.id)
                     }
                   />
                 </div>
