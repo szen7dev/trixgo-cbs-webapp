@@ -140,6 +140,7 @@ export type StoreChild = {
     contract?: Contract
     customer?: Contact
     goods?: Goods
+    parentGoods?: Goods
     account?: any
     contra?: any
     funda?: any
