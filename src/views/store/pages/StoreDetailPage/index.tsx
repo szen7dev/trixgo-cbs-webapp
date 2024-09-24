@@ -386,7 +386,7 @@ useEffect(() => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Khối lượng
+              Số lượng
             </div>
             <div
               className={
@@ -401,6 +401,13 @@ useEffect(() => {
               }
             >
               Thành tiền
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Trọng lượng (Kg)
             </div>
             <div
               className={

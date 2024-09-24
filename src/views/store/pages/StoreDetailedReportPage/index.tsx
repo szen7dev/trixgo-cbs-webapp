@@ -19,6 +19,7 @@ import {
 } from "services/hooks/useStoreProduct";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { useQueryListBudgetWork } from "services/hooks/cmcs/useContractIncome";
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 
 interface Props {
     outin?: number
@@ -38,12 +39,17 @@ export const StoreDetailedReportPage: FC<Props> = () => {
   const [projectID, setProjectID] = useState<string | null>();
   const [warehouseID, setWarehouseID] = useState<string | null>();
   const [goodsID, setGoodsID] = useState<string | null>();
+  const [parentGoodsID, setParentGoodsID] = useState<string | null>();
   const [assetsID, setAssetsID] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
   const [workID, setWorkID] = useState<string | null>();
   const [subtypeID, setSubtypeID] = useState<string | null>();
+  const [packageID, setPackageID] = useState<string | null>();
+  const [toPackageID, setToPackageID] = useState<string | null>();
+
   const [keywordWork, setKeywordWork] = useState("");
   const [keywordDoctype, setKeywordDoctype] = useState('');
+  const [packageKeyword, setPackageKeyword] = useState("");
 
   const {
     dataNotFilter: listDataWithPager,
@@ -61,9 +67,12 @@ export const StoreDetailedReportPage: FC<Props> = () => {
     type, 
     status: 5, // Hoàn thành
     projectID,
+    packageID,
+    toPackageID,
     warehouseID,
     customerID,
     goodsID,
+    parentGoodsID,
     assetsID,
     outin,
     workID,
@@ -116,6 +125,17 @@ export const StoreDetailedReportPage: FC<Props> = () => {
 		 },
 		isFetchList: true
 	})
+
+  const {
+		data: listDocumentPackage,
+		// fetchNextPage: fetchNextPageDocumentPackage,
+		// hasNextPage: hasNextPageDocumentPackage,
+		// totalRecord,
+	} = useDocumentPackage({
+		// departmentID: projectID,
+		isShowAll: "1",
+		keyword: packageKeyword
+	}, true, false)
 
   let inventoryQuantity = 0, inventory = 0
   
@@ -297,6 +317,34 @@ export const StoreDetailedReportPage: FC<Props> = () => {
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Nhóm Hàng hóa"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listGood}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setGoodsKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setParentGoodsID("");
+            }}
+            onchangeValue={item => {
+              setParentGoodsID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Thiết bị"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -322,6 +370,63 @@ export const StoreDetailedReportPage: FC<Props> = () => {
             )}
             selectOneByOne={true}
         />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Gói giao"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listDocumentPackage}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setPackageKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setPackageID("");
+            }}
+            onchangeValue={item => {
+              setPackageID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+
+          <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Gói nhận"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listDocumentPackage}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setPackageKeyword(valueSearch),
+                500
+            )}
+            onClearData={() => {
+              setToPackageID("");
+            }}
+            onchangeValue={item => {
+              setToPackageID(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />  
          {/* <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
@@ -470,7 +575,10 @@ export const StoreDetailedReportPage: FC<Props> = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                         <p className="text-primary-gray"><i>{item?.name}</i></p>
                         <p>{item?.goods?.name}</p>
-                        <p><i>{item?.assets?.name}</i></p>
+                        { item?.assets ?  <p><i>{item?.assets?.name}</i></p> : <></>}
+                        { item?.parentGoods ?  <p><i>{item?.parentGoods?.name}</i></p> : <></>}
+                        { item?.package ?  <p><i>{item?.package?.name}</i></p> : <></>}
+                        { item?.toPackage ?  <p><i>{item?.toPackage?.name}</i></p> : <></>}
                         <NavLink className="text-primary" to={`/store/home/${item?.order?._id}`}>
                           <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
                         </NavLink>
@@ -499,7 +607,10 @@ export const StoreDetailedReportPage: FC<Props> = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                         <p className="text-primary-gray"><i>{item?.name}</i></p>
                         <p>{item?.goods?.name}</p>
-                        <p><i>{item?.assets?.name}</i></p>
+                        { item?.assets ?  <p><i>{item?.assets?.name}</i></p> : <></>}
+                        { item?.parentGoods ?  <p><i>{item?.parentGoods?.name}</i></p> : <></>}
+                        { item?.package ?  <p><i>{item?.package?.name}</i></p> : <></>}
+                        { item?.toPackage ?  <p><i>{item?.toPackage?.name}</i></p> : <></>}
                         <NavLink className="text-primary" to={`/store/home/${item?.order?._id}`}>
                           <p className="text-primary-gray"><i>{item?.order?.name}</i></p>
                         </NavLink>

@@ -133,7 +133,7 @@ export const ModalCreateOrUpdateProjectGoods: FC<any> = ({
         />
       </header>
 
-      <section className="px-5 py-1">
+      {/* <section className="px-5 py-1">
         <p>Phân loại</p>
         <input
           type="number"
@@ -143,7 +143,7 @@ export const ModalCreateOrUpdateProjectGoods: FC<any> = ({
           defaultValue={formData?.type}
           onChange={onChange}
         />
-      </section>
+      </section> */}
 
       <section className="px-5 py-1">
         <p>Nội dung</p>
@@ -177,6 +177,30 @@ export const ModalCreateOrUpdateProjectGoods: FC<any> = ({
           name="unit"
           className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData?.unit}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Số lượng</p>
+        <input
+          type="number"
+          placeholder="Số lượng"
+          name="quantity"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.quantity}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Trọng lượng đơn vị (Kg)</p>
+        <input
+          type="number"
+          placeholder="Trọng lượng đơn vị (Kg)"
+          name="weight"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.weight}
           onChange={onChange}
         />
       </section>
@@ -229,7 +253,7 @@ export const ModalCreateOrUpdateProjectGoods: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-1">
+      {/* <section className="px-5 py-1">
         <p>Mục đích sử dụng</p>
         <input
           type="number"
@@ -239,9 +263,9 @@ export const ModalCreateOrUpdateProjectGoods: FC<any> = ({
           defaultValue={formData?.usage}
           onChange={onChange}
         />
-      </section>
+      </section> */}
 
-      <section className="px-5 py-1">
+      {/* <section className="px-5 py-1">
         <p>Link danh mục</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -283,8 +307,8 @@ export const ModalCreateOrUpdateProjectGoods: FC<any> = ({
             }}
             inlineSearch={true}
         />
-      </section>
-
+      </section> */}
+{/* 
       <section className="px-5 py-1">
         <p>Định mức chuyển đổi</p>
         <input
@@ -295,7 +319,7 @@ export const ModalCreateOrUpdateProjectGoods: FC<any> = ({
           defaultValue={formData?.convertQuantity}
           onChange={onChange}
         />
-      </section>
+      </section> */}
 
       <footer className="absolute right-0 bottom-3 px-5 py-1">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"

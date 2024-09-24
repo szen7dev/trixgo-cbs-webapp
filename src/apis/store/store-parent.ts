@@ -19,7 +19,7 @@ export async function fetchListStore<T>(params?: ListStorePayload): Promise<T> {
         `${STORE_URL}/orders`, {
         params: {
             populates: {
-                "path": "parent assignee project warehouse account customer contract goods assets work userCreate userUpdate",
+                "path": "parent assignee project package toPackage warehouse account customer contract goods assets work userCreate userUpdate",
                 "select": "_id fullname name sign phone unit date"
             },
             ...params,
