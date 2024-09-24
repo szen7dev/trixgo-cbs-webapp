@@ -496,6 +496,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                     <p>{item?.namecv}</p>
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                <p className="text-primary-gray text-[12px] text-cbs-highlight-color">{item?.project?.name}</p>
                                 <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
