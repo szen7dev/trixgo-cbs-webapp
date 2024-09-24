@@ -17,6 +17,7 @@ export interface Goods {
 export type GoodsQueryPayload = QueryParam & {
     companyID?: string;
     parentID?: string;
+    projectID?: string;
     isListParentOfListChilds?: string;
     goodsID?: string;
     // populates?: any;

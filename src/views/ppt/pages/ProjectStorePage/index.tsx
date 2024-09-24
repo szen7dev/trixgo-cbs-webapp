@@ -97,6 +97,7 @@ const ProjectStorePage: FC = () => {
         note: '',
         convert: '',
         convertQuantity: 1,
+        projectID: ''
     })
 
     const {
@@ -110,6 +111,7 @@ const ProjectStorePage: FC = () => {
             keyword, 
             isListParentOfListChilds: "1", 
             parentID,
+            projectID,
             // populates: JSON.stringify({
             //     path: 'parent',
             //     select: '_id name sign path'
@@ -166,7 +168,8 @@ const ProjectStorePage: FC = () => {
                 unitPrice4,
                 note,
                 convert,
-                convertQuantity
+                convertQuantity,
+                projectID
             });
         } else {
             clearData();
@@ -201,6 +204,7 @@ const ProjectStorePage: FC = () => {
             clearData();
             initValues = {
                 parentID,
+                projectID,
                 goodsID: '',
                 tpye: 1,
                 status: 1,
