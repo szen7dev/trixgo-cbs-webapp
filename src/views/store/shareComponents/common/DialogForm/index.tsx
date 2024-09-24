@@ -21,7 +21,7 @@ import {
 import {
   useQueryListStoreParent,
 } from "services/hooks/useStore";
-
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 import type { InsertStoreParentPayload } from "typings/store";
 interface CreateOrEditDialogProps {
   outin: any,
@@ -56,6 +56,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   const [departmentKeyword, setDepartmentKeyword] = useState(projectName);
   const [warehouseKeyword, setWarehouseKeyword] = useState(warehouseName);
   const [contactKeyword, setContactKeyword] = useState(customerName);
+  const [packageKeyword, setPackageKeyword] = useState("");
   const [keyword, setKeyword] = useState("");
 
   const { closeModal } = useModal();
@@ -73,6 +74,17 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 		limit: LIMIT_DROPDOWN,
 		keyword: contactKeyword,
 	})
+
+  const {
+		data: listDocumentPackage,
+		// fetchNextPage: fetchNextPageDocumentPackage,
+		// hasNextPage: hasNextPageDocumentPackage,
+		// totalRecord,
+	} = useDocumentPackage({
+		// departmentID: projectID,
+		isShowAll: "1",
+		keyword
+	}, true, false);
 
   const {
     data,
@@ -98,6 +110,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     type: Number(type),
     funda: {},
     project: {},
+    package: {},
     warehouse: {},
     customer: {},
     link: {},
@@ -121,7 +134,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "700px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "800px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center border-b bg-cbs-table-header p-2"}
@@ -287,6 +300,38 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     )}
                     onchangeValue={(value) =>
                       setFieldValue("customerID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Gói thầu (*)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listDocumentPackage.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.package}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setPackageKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("packageID", value.id)
                     }
                   />
                 </div>
