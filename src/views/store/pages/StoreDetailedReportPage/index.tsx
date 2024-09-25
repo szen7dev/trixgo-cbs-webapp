@@ -15,11 +15,15 @@ import {
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { STORE_TYPES } from "apis/localdb";
 import {
+  useProductCustom,
   useQueryListStoreChild,
 } from "services/hooks/useStoreProduct";
-import { useDoctype } from "services/hooks/items/useDoctype";
-import { useQueryListBudgetWork } from "services/hooks/cmcs/useContractIncome";
+// import { useDoctype } from "services/hooks/items/useDoctype";
+// import { useQueryListBudgetWork } from "services/hooks/cmcs/useContractIncome";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import { toast } from "react-toastify";
+import { createLinkAndClick } from "utils";
 
 interface Props {
     outin?: number
@@ -112,19 +116,59 @@ export const StoreDetailedReportPage: FC<Props> = () => {
 		keyword: goodsKeyword,
 	})
 
-  const { listBudgetWork } = useQueryListBudgetWork({
-		limit: LIMIT_DROPDOWN,
-		keyword: keywordWork,
-	})
+  // const { listBudgetWork } = useQueryListBudgetWork({
+	// 	limit: LIMIT_DROPDOWN,
+	// 	keyword: keywordWork,
+	// })
 
-  const { list: listSubType } = useDoctype({
-		params: {
-			limit: LIMIT_DROPDOWN,
-			type: 23,
-			keyword: keywordDoctype
-		 },
-		isFetchList: true
-	})
+  // const { list: listSubType } = useDoctype({
+	// 	params: {
+	// 		limit: LIMIT_DROPDOWN,
+	// 		type: 23,
+	// 		keyword: keywordDoctype
+	// 	 },
+	// 	isFetchList: true
+	// })
+
+  //_____Import, export excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  })
+  const { exportByFilterAsync } = useProductCustom();
+  const handleExportByFilter = async (param: any) => {
+    try {
+        setStateExport({ isExporting: true });
+        const { error, data } = await exportByFilterAsync({
+          option: param.option,
+          limit: 50,
+          type, 
+          status: 5, // Hoàn thành
+          projectID,
+          packageID,
+          toPackageID,
+          warehouseID,
+          customerID,
+          goodsID,
+          parentGoodsID,
+          assetsID,
+          outin,
+          workID,
+          subtypeID,
+          userCreateID: userID,
+          sortKey: JSON.stringify(['date__1', 'createAt__1']),
+        });
+
+        if(error) {
+            return toast.warn(data?.message);
+        }
+
+        data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+        toast.error(error.message)
+    } finally {
+        setStateExport({ isExporting: false });
+    }
+  }
 
   const {
 		data: listDocumentPackage,
@@ -317,7 +361,7 @@ export const StoreDetailedReportPage: FC<Props> = () => {
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Nhóm Hàng hóa"}
+            placeholder={"Nhóm"}
             isMultiple={false}
             allowClearValueSingleInput={true}
             data={listGood}
@@ -517,6 +561,9 @@ export const StoreDetailedReportPage: FC<Props> = () => {
             )}
             selectOneByOne={true}
         />
+        <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 2})}>
+            Download <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
+        </button>
 
        <PaginateV2
           ref={ref}

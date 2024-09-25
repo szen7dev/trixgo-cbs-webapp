@@ -18,9 +18,16 @@ import {
 } from "services/hooks/cmcs/useContractIncome";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import {
+  useProductCustom,
   useQueryListByPropertyStoreChild
 } from "services/hooks/useStoreProduct";
 import { STORE_TYPES } from "apis/localdb";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import { toast } from "react-toastify";
+import { createLinkAndClick } from "utils";
+// import {
+//   exportByFilterAsync
+// } from "services/hooks/useProductCustom";
 interface Props {
   outin?: number
   // type?: number
@@ -46,7 +53,6 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
     data,
   }: any = useQueryListByPropertyStoreChild({
     option: 1,
-    // outin, 
     type,
     projectID,
     warehouseID,
@@ -100,6 +106,37 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
     limit: LIMIT_DROPDOWN,
     keyword: goodsKeyword,
   })
+
+  //_____Import, export excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  })
+  const { exportByFilterAsync } = useProductCustom();
+  const handleExportByFilter = async (param: any) => {
+    try {
+        setStateExport({ isExporting: true });
+        const { error, data } = await exportByFilterAsync({
+          option: param.option,
+          type,
+          projectID,
+          warehouseID,
+          customerID,
+          goodsID,
+          assetsID,
+          userCreateID: userID
+        });
+
+        if(error) {
+            return toast.warn(data?.message);
+        }
+
+        data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+        toast.error(error.message)
+    } finally {
+        setStateExport({ isExporting: false });
+    }
+  }
 
   return (
     <div>
@@ -305,6 +342,9 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
           )}
           selectOneByOne={true}
         />
+        <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 2})}>
+            Download <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
+        </button>
       </div>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
