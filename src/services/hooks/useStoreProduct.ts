@@ -190,3 +190,21 @@ export const useMutationStoreChild = (): UseMutationStoreChild => {
     onDeleteStoreAsync: deleteMutation.mutateAsync,
   }
 }
+
+// Khai báo kiểu
+type UseProductCustom = {
+  exportByFilterAsync: (payload: any) => Promise<any>,
+}
+
+export const useProductCustom = () : UseProductCustom => {
+
+  // Export excel by filter
+  const { mutateAsync: exportByFilterAsync } =
+      useMutation((payload: any) =>
+        StoreChildRepository.exportByFilter(payload)
+  );
+
+  return {
+    exportByFilterAsync
+  }
+}

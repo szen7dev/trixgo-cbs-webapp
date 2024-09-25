@@ -55,6 +55,13 @@ export async function deleteStore<P, R>(payload: P): Promise<R> {
     return data;
 }
 
+async function exportByFilter<T>(params: any): Promise<T> {
+    const { data } = await API.post<any>(
+        `${STORE_URL}/order_products/export-excel-by-filter`, params
+    );
+    return data;
+}
+
 interface StoreChildRepository {
     fetchListStore: (params: ListStorePayload) => Promise<QueryStoreChildResponse>;
     fetchListByProperty: (params: any) => Promise<QueryStoreChildResponse>;
@@ -62,6 +69,7 @@ interface StoreChildRepository {
     insertStore: (payload: InsertStoreChildPayload) => Promise<InsertStoreChildResponse>;
     updateStore: (payload: UpdateStoreChildPayload) => Promise<UpdateStoreChildResponse>;
     deleteStore: (payload: DeleteStoreChildPayload) => Promise<DeleteStoreChildResponse>;
+    exportByFilter: (data: any) => Promise<any>;
 }
 
 export const storeChildRepository: StoreChildRepository = {
@@ -76,6 +84,9 @@ export const storeChildRepository: StoreChildRepository = {
     },
     insertStore: async (payload) => {
         return insertStore(payload)
+    },
+    exportByFilter: async (payload) => {
+        return exportByFilter(payload)
     },
     updateStore: (payload) => {
         return updateStore(payload);
