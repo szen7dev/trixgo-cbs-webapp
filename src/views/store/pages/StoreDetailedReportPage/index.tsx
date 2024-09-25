@@ -139,24 +139,26 @@ export const StoreDetailedReportPage: FC<Props> = () => {
     try {
         setStateExport({ isExporting: true });
         const { error, data } = await exportByFilterAsync({
-          option: param.option,
-          limit: 50,
-          type, 
-          status: 5, // Hoàn thành
-          projectID,
-          packageID,
-          toPackageID,
-          warehouseID,
-          customerID,
-          goodsID,
-          parentGoodsID,
-          assetsID,
-          outin,
-          workID,
-          subtypeID,
-          userCreateID: userID,
-          sortKey: JSON.stringify(['date__1', 'createAt__1']),
-        });
+          filterParams: {
+              option: param.option,
+              limit: 50,
+              type, 
+              status: 5, // Hoàn thành
+              projectID,
+              packageID,
+              toPackageID,
+              warehouseID,
+              customerID,
+              goodsID,
+              parentGoodsID,
+              assetsID,
+              outin,
+              workID,
+              subtypeID,
+              userCreateID: userID,
+              sortKey: JSON.stringify(['date__1', 'createAt__1']),
+          }
+        })
 
         if(error) {
             return toast.warn(data?.message);

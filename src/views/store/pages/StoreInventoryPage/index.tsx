@@ -116,14 +116,16 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
     try {
         setStateExport({ isExporting: true });
         const { error, data } = await exportByFilterAsync({
-          option: param.option,
-          type,
-          projectID,
-          warehouseID,
-          customerID,
-          goodsID,
-          assetsID,
-          userCreateID: userID
+          filterParams: {
+              option: param.option,
+              type,
+              projectID,
+              warehouseID,
+              customerID,
+              goodsID,
+              assetsID,
+              userCreateID: userID
+          }
         });
 
         if(error) {
