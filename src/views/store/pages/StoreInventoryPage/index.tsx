@@ -344,7 +344,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
           )}
           selectOneByOne={true}
         />
-        <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 2})}>
+        <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 1})}>
             Download <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
         </button>
       </div>
