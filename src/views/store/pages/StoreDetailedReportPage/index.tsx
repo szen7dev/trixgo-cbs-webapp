@@ -139,6 +139,7 @@ export const StoreDetailedReportPage: FC<Props> = () => {
     try {
         setStateExport({ isExporting: true });
         const { error, data } = await exportByFilterAsync({
+          option: param.option,
           filterParams: {
               option: param.option,
               limit: 50,
