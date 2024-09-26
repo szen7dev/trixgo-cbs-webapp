@@ -74,7 +74,7 @@ export type Task = {
   parent: Task | undefined,
   links: Task[],
   startTime: string,
-  subType: number,
+  approvalType: number,
   subtype: number,
   type: number,
   related: Array<User>;
@@ -142,6 +142,7 @@ export interface updateTaskPayload {
   priority?: number;
   ontime?: number;
   subType?: number;
+  approvalType?: number;
   quality?: number;
   judgement?: string;
   unit?: string;

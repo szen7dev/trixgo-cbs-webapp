@@ -294,7 +294,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
     }
 
     const isAssignee = useMemo(() => {
-        if (task.subtype === 4 && task.openedStatus === 0) {
+        if (task.subtype  === 4 && task.openedStatus === 0) {
             const currentTime = new Date().getTime();
             const actualFinishTime = new Date(task.actualFinishTime).getTime();
             // now(FE)<=infoTask.actualFinishTime và infoTask.openedStatus=0
@@ -307,7 +307,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         };
 
         return true;
-    }, [userId, task.subType, task.openedStatus, task.actualFinishTime, task.assignee, comment.official])
+    }, [userId, task.subtype , task.openedStatus, task.actualFinishTime, task.assignee, comment.official])
 
     if (!isAssignee || !comment) {
         return <></>

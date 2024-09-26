@@ -87,10 +87,10 @@ export const ActionTaskDetailBar: FC<Props> = ({ task, user, refetchTaskInfo, ha
                     <div className={"absolute top-full bg-primary-gray p-2 rounded w-[170px] text-left text-white transition-all " + (activeCopyTextTooltip ? "visible opacity-100" : "invisible opacity-0")}>Đã sao chép đường liên kết</div>
                 </button>
                 {
-                    (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> : <SendEmailNotification task={task} userId={user?._id} />
+                    (task.subtype  == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> : <SendEmailNotification task={task} userId={user?._id} />
                 }
                 {
-                    (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> :
+                    (task.subtype  == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> :
                         <button
                             className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}
                             onClick={() =>
@@ -115,10 +115,10 @@ export const ActionTaskDetailBar: FC<Props> = ({ task, user, refetchTaskInfo, ha
                 </Link>
                 {/* <SendToChat/> */}
                 {
-                    (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> : <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} />
+                    (task.subtype  == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> : <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} />
                 }
                 {
-                    (task.subtype == 4) ? <></> : 
+                    (task.subtype  == 4) ? <></> : 
                     <button
                         onClick={handleDownloadFiles}
                         className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3 relative"}
@@ -141,7 +141,7 @@ export const ActionTaskDetailBar: FC<Props> = ({ task, user, refetchTaskInfo, ha
             </button> */}
             {/* <TaskHistoryLog/> */}
             {
-                (task.subtype == 4) ? <></> :
+                (task.subtype  == 4) ? <></> :
                 <TaskHistoryLog task={task} userId={user?._id} refetchTaskInfo={refetchTaskInfo}/>
             }
             {/* <button className={"rounded bg-cbs-green-medium h-[36px] text-white flex items-center justify-center px-3 mx-3"}>

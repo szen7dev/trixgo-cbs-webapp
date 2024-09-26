@@ -82,7 +82,7 @@ export const SubtaskItem: FC<Props> = ({ task, userId, index }) => {
             <div className="mx-2 px-2 w-full">
                 <p className="text-[14px]">
                     
-                    {task.subtype == 12 ? (
+                    {task.subtype  == 12 ? (
                         <Link to={"/pcm/detail/" + task._id}>
                         {index + 1}. {task.name} | { task?.sign } | { task?.amount } 
                     </Link>

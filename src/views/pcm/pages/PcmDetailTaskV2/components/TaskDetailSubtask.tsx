@@ -36,7 +36,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
     }, [task.timeImportExcel])
 
     return (
-        (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> :
+        (task.subtype  == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> :
         <div className={"subtask mt-5 w-2/3"}>
             <div className={"flex items-center"}>
                 <div className={"flex items-center"}>
@@ -85,7 +85,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
                     className={"bg-cbs-form-input-bg rounded px-4 py-2 text-primary-gray mt-4 ml-6"}
                     onClick={() => setShowCreateNewSubTask(true)}
                 >
-                    {task.subtype == 12 ? "Thêm hóa đơn" : "Thêm việc con"}
+                    {task.subtype  == 12 ? "Thêm hóa đơn" : "Thêm việc con"}
                 </button>
             </div>
         </div>

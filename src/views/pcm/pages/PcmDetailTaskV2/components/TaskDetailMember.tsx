@@ -123,7 +123,7 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                     />
 
                     {
-                        (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> :
+                        (task.subtype  == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> :
                             <div
                                 className={"flex items-center flex-1 justify-start cursor-pointer"}
                                 onClick={openAddUserRelation}

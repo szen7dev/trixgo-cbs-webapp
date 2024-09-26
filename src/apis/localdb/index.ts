@@ -557,6 +557,15 @@ export const PCM_PROPOSAL_TASK = [
     { value: 17, text: 'Biểu mẫu', sign: 'TEMP', key: 'template' },
 ]
 
+export const PCM_APPROVAL_TYPE = [
+    { value: 1, text: 'Thông thường', sign: 'Tasks', key: 'task' },
+    { value: 2, text: 'Ngân sách', sign: 'RFis', key: 'rfi' },
+    { value: 3, text: 'Công nợ', sign: 'RFa', key: 'rfa' },
+    { value: 4, text: 'Báo giá', sign: 'CRFa', key: 'crfa' },
+    { value: 5, text: 'Sửa chữa', sign: 'BRFa', key: 'brfa' },
+    { value: 6, text: 'Nghỉ phép', sign: 'QRFa', key: 'inspection' },
+]
+
 // MỐC TIẾN ĐỘ
 export const PCM_MILESTONE = [
     { value: 0, text: 'Việc thông thường', sign: 'Tasks', key: 'task' },

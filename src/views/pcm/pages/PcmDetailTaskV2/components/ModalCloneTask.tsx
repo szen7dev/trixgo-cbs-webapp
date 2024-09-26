@@ -342,7 +342,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
         authorAttachs: [],
         relatedIDs: task.related.map(user => user._id),
         type: task.type,
-        subtype: task.subtype,
+        subtype: task.subtype ,
     };
 
     if(isCloning) {
