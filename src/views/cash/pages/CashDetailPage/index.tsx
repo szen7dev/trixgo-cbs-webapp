@@ -4,13 +4,12 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { read, utils } from 'xlsx';
 import { createLinkAndClick } from "utils";
-import { DetailMainRow, ModalShare } from "./components";
+import { DetailMainRow, SignatureDetail } from "./components";
 import { CreateRow } from "./components/Form";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import { convertCurrency } from "utils/converter";
 
 import {
-  useQueryDetailStoreChild,
   useQueryListStoreChild,
   useMutationStoreChild,
 } from "services/hooks/useStoreProduct";
@@ -32,10 +31,14 @@ import { APP_KEY } from 'utils/constants';
 import { useMutationStoreParent } from "services/hooks/useStore";
 import fileIcon from "assets/images/icons8-attach.svg";
 import { formatNumberMoney } from "utils/converter";
+import iconCheckmark from "assets/images/icons8-checkmark-yes-64.svg";
+import { ModalConfirm } from "shareComponents/common";
+import { useModal } from "services/hooks/useModal";
 
 export const CashDetailPage: FC = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+  const { openModal, closeModal } = useModal();
 
   const params = useParams<{ id: string }>();
   const [pageIndex, setPageIndex] = useState(0);
@@ -304,6 +307,47 @@ export const CashDetailPage: FC = () => {
     }
   }
 
+  const toggleModalOpenSign = () => {
+    openModal(
+        <div
+          className={
+            "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+          }
+        >
+          <ModalConfirm
+            title="Bạn có muốn xác nhận không?"
+            description="Thông tin xác nhận của bạn sẽ được hiển thị trong chi tiết"
+            onConfirm={handleConfirmSignature}
+            defaultText={false}
+            onCancel={closeModal}
+          />
+        </div>
+      );
+  };
+
+  const handleConfirmSignature = useCallback(async () => {
+    try {
+        const { error, data } = await onUpdateStoreParentAsync({
+          orderID,
+          isAddSignature: true
+        })
+
+        closeModal();
+        if (error) {
+            return toast.warning(data.message);
+        }
+        refetch()
+        toast.success('Ký xác nhận thành công');
+    } catch (error) {
+        closeModal();
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
+  }, [storeInfo?._id])
+
   if (!storeInfo || loading || !user)
     return <Loader className="border-primary" />;
 
@@ -333,6 +377,12 @@ export const CashDetailPage: FC = () => {
       </div>
 
       <div className="flex-1 flex items-center justify-end">
+      <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} 
+         onClick={toggleModalOpenSign}
+        >
+            <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
+            <span>Xác nhận</span>
+        </button>
         <PaginateV2
           ref={ref}
           totalRecord={totalRecord}
@@ -496,6 +546,10 @@ export const CashDetailPage: FC = () => {
             ))}
           </tbody>
         </table>
+
+        {
+            storeInfo?.signatures?.length ? <SignatureDetail task={storeInfo} />: <></>
+        }
 
       </div>
     </div>
