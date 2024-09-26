@@ -94,43 +94,19 @@ export const TaskHumanDetailSubmit:FC<Props> = ({ task, userId }) => {
                     }
                     <tbody className="text-small">
                         {(listSubmittals && listSubmittals.map((item, index) => {
-                            let strNotice = '', strColor = 'green'
-
-                            let quantityRetain = 0, amountRetain = 0, amountCheck = 0, quantityCheck = 0
-                            if(item?.work){
-                                quantityRetain = Number(item?.work?.quantity) - Number(item?.work?.impleQuantity)
-                                amountRetain = Number(item?.work?.amount) - Number(item?.work?.impleAmount)
-                                
-                                amountCheck = Number(amountRetain) - Number(item.amount)
-                                quantityCheck = Number(quantityRetain) - Number(item.quantity)
-                            }
-
-                            if(amountCheck <0){
-                                strNotice = strNotice + 'Vượt giá trị'
-                                strColor = 'red'
-                                
-                                if(quantityCheck <0){
-                                    strNotice = strNotice + '+Vượt khối lượng'
-                                }                                
-                            }else{
-                                if(quantityCheck <0){
-                                    strNotice = 'Vượt khối lượng'
-                                    strColor = 'orange'
-                                }
-                            }
-
                             return (
                                 <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5">{Number(index + 1)}</td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                                        {item?.name}
                                         <p onClick={() => toggleVisible({ option: 1, staffID: item?.staff?._id})} className="mt-2 text-cbs-highlight-color">
-                                            Nhân sự: {item?.staff?.fullname}-{item?.staff?.department?.name} | Số nghỉ phép lũy kế: ({item?.staff?.numberOnLeave}) | Số phép còn lại: 
-                                            <span className="text-red-500">{Number(new Date().getMonth() + 1) - Number(item?.staff?.numberOnLeave + 1) }</span>
+                                            Nhân sự: {item?.staff?.fullname}-{item?.staff?.department?.name}
+                                            <p>Số nghỉ phép lũy kế: ({item?.staff?.numberOnLeave}) - Số phép còn lại:  
+                                            <span className="text-red-500 text-bold"> {Number(new Date().getMonth() + 1) - Number(item?.staff?.numberOnLeave + 1) }</span></p>
                                         </p>
                                     </td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
                                         {item.note}
-                                        <p style={{color: strColor}}>{strNotice}</p>
                                     </td>
                                 </tr>
                             )
