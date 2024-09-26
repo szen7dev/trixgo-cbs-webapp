@@ -181,7 +181,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     authorAttachs: [],
     type: task.type,
     relatedIDs: task.related?.map(related => related._id),
-    subType: task.subtype,
+    subType: task.subtype ,
   };
 
   return (
@@ -478,9 +478,9 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                             text: "label",
                         }}
                         initialValue={{
-                            ...task.subtype && {
-                                value: task.subtype,
-                                label: PCM_PROPOSAL_TASK[task.subtype ?? 0].text
+                            ...task.subtype  && {
+                                value: task.subtype ,
+                                label: PCM_PROPOSAL_TASK[task.subtype  ?? 0].text
                             }
                         }}
                         inlineSearch={true}

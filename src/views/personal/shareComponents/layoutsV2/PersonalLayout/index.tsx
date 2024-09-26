@@ -9,7 +9,7 @@ import menuIcon from "assets/images/icon-mobile-menu-black.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
-import { PersonalLeftSideBar } from './components';
+import { PersonalLeftSideBar } from "./components";
 
 /*=====5.TYPINGS=====*/
 
@@ -42,15 +42,18 @@ export const PersonalLayoutV2: FC<Props> = ({ children }) => {
       })}
     >
       {/* Collapse menu button */}
-      <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2">
+      <button
+        title="Toggle left sidebar"
+        onClick={handleMenuEvent}
+        className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2"
+      >
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
-        <section className={"main-content-wrapper flex-1"}>
+        <section className={"main-content-wrapper flex-1 w-header"}>
           {/*  Main header */}
-          <MainHeaderV2 headerTitle={"Tài khoản"}>
-          </MainHeaderV2>
+          <MainHeaderV2 headerTitle={"Tài khoản"}></MainHeaderV2>
 
           <PersonalLeftSideBar />
 
@@ -58,7 +61,6 @@ export const PersonalLayoutV2: FC<Props> = ({ children }) => {
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
-
         </section>
       </div>
     </section>

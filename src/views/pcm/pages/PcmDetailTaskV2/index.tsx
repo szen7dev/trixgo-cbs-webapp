@@ -8,9 +8,10 @@ import { TaskDetailMember } from "./components/TaskDetailMember";
 import { TaskDetailSignature } from "./components/TaskDetailSignature";
 import { TaskDetailDescription } from "./components/TaskDetailDescription";
 import { TaskDetailSubtask } from "./components/TaskDetailSubtask";
-import { TaskDetailSubmit } from "./components/TaskDetailSubmit";
 import { TaskDetailRelatedTask } from "./components/TaskDetailRelatedTask";
 import { TaskDetailComment } from "./components/TaskDetailComment";
+import { TaskDetailSubmit } from "./components/TaskDetailSubmit"; // Cho ngân sách
+import { TaskHumanDetailSubmit } from "./components/TaskHumanDetailSubmit"; // Nghỉ phép nhân sự
 import { useTask } from 'services/hooks/useTask';
 import { Loader } from "shareComponents/common";
 import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
@@ -305,8 +306,12 @@ const PcmDetailTaskV2: FC = () => {
                         taskInfo?.linksDocs?.length ? <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} /> : <></>
                     }
                     {
-                        (taskInfo?.subtype == 2) ?
+                        ((taskInfo?.subtype == 2 && taskInfo?.approvalType == 1) || taskInfo?.subtype == 2 && taskInfo?.approvalType == 2) ?
                         <TaskDetailSubmit task={taskInfo} userId={user?._id} />: <></>
+                    }
+                    {
+                        (taskInfo?.subtype == 2 && taskInfo?.approvalType == 6) ?
+                        <TaskHumanDetailSubmit task={taskInfo} userId={user?._id} />: <></>
                     }
                 </div>
                 <CommentProvider>

@@ -2,13 +2,19 @@ import React, { FC, useState } from "react";
 // import iconStar from "assets/images/icon-star.svg";
 import InlineBadgeSelect from "./InlineBadgeSelect";
 import { Task } from "typings/task";
-import { PCM_STATUS_TASK, PCM_PRIORITY_TASK, PCM_PROPOSAL_TASK } from 'apis/localdb';
+import { PCM_STATUS_TASK, PCM_PRIORITY_TASK, PCM_PROPOSAL_TASK, PCM_APPROVAL_TYPE } from 'apis/localdb';
 import { useTask } from 'services/hooks/useTask';
 import { toast } from "react-toastify";
 
 const optionsSubtype = PCM_PROPOSAL_TASK.map(subtype => ({
     id: subtype.value,
     text: subtype.text,
+    color: '#DDDDDD'
+}))
+
+const optionsApprovalType = PCM_APPROVAL_TYPE.map((item: any) => ({
+    id: item.value,
+    text: item.text,
     color: '#DDDDDD'
 }))
 
@@ -82,6 +88,28 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
 
             refetchInfo?.();
             toast.success('Cập nhật tính chất thành công', { autoClose: 1500 })
+        } catch (error) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    }
+    
+    const handleChangeApprovalSubtype = async (value: any) => {
+        try {
+            const { error, message } = await updateTaskAsync({
+                taskID: task._id,
+                approvalType: value.id
+            });
+
+            if (error) {
+                return toast.warning(message);
+            }
+
+            refetchInfo?.();
+            toast.success('Cập nhật phân loại thành công', { autoClose: 1500 })
         } catch (error) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -214,7 +242,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
                 className={`text-[10px] text-white rounded px-1 py-0.5 mx-1 ${PCM_STATUS_TASK[currentStatus - 1]?.class}`}
                 defaultValue={task.status}
                 options={options}
-                placeholder={""}
+                placeholder={"Trạng thái: "}
                 onValueChange={handleChangeStatus}
             />
             <InlineBadgeSelect
@@ -244,10 +272,18 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             <InlineBadgeSelect
                 wrapperClassName={"-translate-y-1"}
                 className={`text-[10px] text-secondary-gray rounded px-1 py-0.5 mx-1`}
-                defaultValue={task.subtype}
+                defaultValue={task.subtype }
                 options={optionsSubtype}
                 placeholder={""}
                 onValueChange={handleChangeSubtype}
+            />
+           <InlineBadgeSelect
+                wrapperClassName={"-translate-y-1"}
+                className={`text-[10px] text-secondary-gray rounded px-1 py-0.5 mx-1`}
+                defaultValue={task?.approvalType}
+                options={optionsApprovalType}
+                placeholder={""}
+                onValueChange={handleChangeApprovalSubtype}
             />
         </div>
     )

@@ -311,7 +311,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                     <input
                                         name="name"
                                         className="w-full h-8 placeholder-gray-300 focus:outline-none"
-                                        placeholder={task.subtype == 12 ? "Hàng hóa" : "Nội dung công việc"}
+                                        placeholder={task.subtype  == 12 ? "Hàng hóa" : "Nội dung công việc"}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
@@ -360,7 +360,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                         onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}
                                         inputProps={{
                                             className: "outline-none h-full max-w-full",
-                                            placeholder: `${task.subtype == 12 ? "Ngày hóa đơn" : "Thời hạn"}`,
+                                            placeholder: `${task.subtype  == 12 ? "Ngày hóa đơn" : "Thời hạn"}`,
                                             readOnly: true,
                                         }}
                                     />
@@ -397,7 +397,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                             </div>
 
                             {/* Hóa đơn */}
-                            {task.subtype == 12 ? (
+                            {task.subtype  == 12 ? (
                                 <div className="flex w-full px-4 pt-4">
                                     <div className="w-3/6 mx-3 border-b">
                                         <DropdownSearchable

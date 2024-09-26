@@ -115,7 +115,7 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
                 <button onClick={() => setFilter(1)} className={"text-primary-gray text-[16px] " + (filter === 1 ? "font-bold border-b border-primary-gray" : "")}>
                     Phản hồi liên quan ({task.amountResponse || 0})
                 </button>
-                {((task.subType === 4 && task.openedStatus === 1) || task.assignee?._id === user?._id || task.subType !== 4) && (
+                {((task.subtype  === 4 && task.openedStatus === 1) || task.assignee?._id === user?._id || task.subtype  !== 4) && (
                     <button onClick={() => setFilter(2)} className={"text-primary-gray text-[16px] mx-4 " + (filter === 2 ? "font-bold border-b border-primary-gray" : "")}>
                         Nội dung chốt ({task.amountMarkedResponse || 0})
                     </button>

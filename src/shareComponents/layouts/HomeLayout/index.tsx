@@ -23,7 +23,7 @@ type Props = {
 };
 
 export const HomeLayout: FC<Props> = ({ children }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
@@ -44,7 +44,7 @@ export const HomeLayout: FC<Props> = ({ children }) => {
 
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
-        <section className={"main-content-wrapper flex-1"}>
+        <section className={"main-content-wrapper flex-1 w-header"}>
           {/*  Main header */}
           <MainHeaderV2 headerTitle={t("menu:subject")}>
             <HomeHeaderContent />

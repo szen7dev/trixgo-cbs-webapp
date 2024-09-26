@@ -11,7 +11,7 @@ import chevronUpIcon from "assets/images/icon-chevron-up.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
-import { ItemLeftSideBar } from './components';
+import { ItemLeftSideBar } from "./components";
 import { HomeRightSideBar } from "shareComponents/layouts";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
@@ -49,13 +49,17 @@ export const ItemLayout: FC<Props> = ({ children }) => {
       })}
     >
       {/* Collapse menu button */}
-      <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2">
+      <button
+        title="Toggle left sidebar"
+        onClick={handleMenuEvent}
+        className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2"
+      >
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
 
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
-        <section className={"main-content-wrapper flex-1"}>
+        <section className={"main-content-wrapper flex-1 w-header"}>
           {/*  Main header */}
           <MainHeaderV2 headerTitle={"Danh mục"}>
             <HomeHeaderContent />

@@ -250,7 +250,7 @@ export const TaskDetailFolder: FC<Props> = ({
                     <Link to={`/pm/project/${task?.project?._id}/folder/folder/${task?.group?._id}`}>
                         {/* {getGroupTitle(task?.group)} */}
                         {task?.group?.sign}.{task?.group?.name}{">"}{" "}
-                        {PCM_PROPOSAL_TASK[task.subtype]?.text}
+                        {PCM_PROPOSAL_TASK[task.subtype ]?.text}
                     </Link>
                     {/* <img src={PencilIcon} className="ml-3" alt="Pencil" /> */}
                     {/* {handleChangeStatus
@@ -261,7 +261,7 @@ export const TaskDetailFolder: FC<Props> = ({
                 </div>
             </div>
             <div className={"flex items-center"}>
-                {(task.subtype === 4) && hasPermissionOpenBidding && (
+                {(task.subtype  === 4) && hasPermissionOpenBidding && (
                     <button
                         className={"flex text-primary-gray items-center rounded bg-cbs-form-input-bg px-3 h-[30px] mr-2"}
                         onClick={toggleModalOpenBidding}
