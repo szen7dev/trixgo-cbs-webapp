@@ -84,6 +84,7 @@ const ProjectDashboardDebtBuyerInfoPage = lazy(() => import("views/ppt/pages/Pro
 const ProjectPhotoContractPageV2 = lazy(() => import("views/ppt/pages/ProjectPhotoContractPageV2"))
 const ProjectPhotoPage = lazy(() => import("views/ppt/pages/ProjectPhotoPage"))
 const ProjectDrawingPageV2 = lazy(() => import("views/ppt/pages/ProjectDrawingPageV2"))
+const ProjectStorePage = lazy(() => import("views/ppt/pages/ProjectStorePage"))
 const ProjectDirectoryPageV2 = lazy(() => import("views/ppt/pages/ProjectDirectoryPageV2"))
 const ProjectHomePageV2 = lazy(() => import("views/ppt/pages/ProjectHomePageV2"))
 const PcmGroupPage = lazy(() => import('views/pcm/pages/PcmGroup'));
@@ -497,6 +498,18 @@ const PCMRouter: FC = () => {
                   <Route path="/pm/project/:id/drawing">
                     <PmProjectLayout>
                       <ProjectDrawingPageV2 />
+                    </PmProjectLayout>
+                  </Route>
+
+                  <Route exact path="/pm/project/:id/store">
+                    <PmProjectLayout>
+                      <ProjectStorePage />
+                    </PmProjectLayout>
+                  </Route>
+
+                  <Route exact path="/pm/project/:id/store/:parentID">
+                    <PmProjectLayout>
+                      <ProjectStorePage />
                     </PmProjectLayout>
                   </Route>
 

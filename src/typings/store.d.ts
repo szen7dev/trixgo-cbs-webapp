@@ -27,6 +27,8 @@ export type StoreParent = {
     assignee: User;
     funda: Funda;
     project: Project;
+    package: Project;
+    toPackage: Project;
     warehouse: Warehouse;
     customer: Contact;
     contract: Contract;
@@ -62,6 +64,8 @@ export type QueryDetailStoreParentResponse = APIResponse & {
 export type InsertStoreParentPayload = {
     funda: Funda;
     project: Project;
+    package: Project;
+    toPackage: Project;
     assignee: User;
     warehouse: Warehouse;
     contract: Contract;
@@ -120,6 +124,7 @@ export type StoreChild = {
     outin: number;
     type: number;
     quantity: number;
+    weight: number;
     unitPrice: number;
     amount: number;
     status: number;
@@ -138,6 +143,7 @@ export type StoreChild = {
     contract?: Contract
     customer?: Contact
     goods?: Goods
+    parentGoods?: Goods
     account?: any
     contra?: any
     funda?: any

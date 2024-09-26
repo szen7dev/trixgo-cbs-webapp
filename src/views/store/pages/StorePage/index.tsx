@@ -32,6 +32,7 @@ import {
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { useLocation } from "react-router-dom";
 import fileIcon from "assets/images/icons8-attach.svg";
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface StoreHomePageProps {
@@ -56,6 +57,8 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
   const [projectID, setProjectID] = useState<string | null>();
   const [warehouseID, setWarehouseID] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
+  const [packageID, setPackageID] = useState<string | null>();
+  const [toPackageID, setToPackageID] = useState<string | null>();
 
   const { openModal, closeModal } = useModal();
 
@@ -84,6 +87,8 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
     projectID,
     warehouseID,
     customerID,
+    packageID,
+    toPackageID,
     userCreateID: userID,
     keyword, 
     outin, 
@@ -97,6 +102,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
   const [projectKeyword, setProjectKeyword] = useState("");
   const [warehouseKeyword, setWarehouseKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
+  const [packageKeyword, setPackageKeyword] = useState("");
 
   const { list: listCustomer } = useContact({
     params: { keyword: contactKeyword, limit: 10 },
@@ -117,6 +123,17 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
 		limit: LIMIT_DROPDOWN,
 		keyword: warehouseKeyword,
 	});
+
+  const {
+		data: listDocumentPackage,
+		// fetchNextPage: fetchNextPageDocumentPackage,
+		// hasNextPage: hasNextPageDocumentPackage,
+		// totalRecord,
+	} = useDocumentPackage({
+		// departmentID: projectID,
+		isShowAll: "1",
+		keyword: packageKeyword
+	}, true, false)
   
   const {
     onCreateStoreParentAsync,
@@ -265,6 +282,62 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
               }}
               onchangeValue={item => {
                   setCustomerID(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-1 border border-primary-border rounded-lg"}
+              placeholder={"Gói thầu giao"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={listDocumentPackage}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setPackageKeyword(valueSearch),
+                  500
+              )}
+              onClearData={() => {
+                setPackageID("");
+              }}
+              onchangeValue={item => {
+                setPackageID(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-1 border border-primary-border rounded-lg"}
+              placeholder={"Gói thầu nhận"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={listDocumentPackage}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setPackageKeyword(valueSearch),
+                  500
+              )}
+              onClearData={() => {
+                setToPackageID("");
+              }}
+              onchangeValue={item => {
+                setToPackageID(item._id);
                   setPageIndex(0);
                   ref.current&&ref.current.resetPaginate();
               }}
@@ -477,7 +550,9 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 <p>{STORE_TYPES[Number(item.type - 1)].text}</p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {item?.project?.name}
+                {item?.project?.sign}.{item?.project?.name}
+                { item?.package ? <p className="text-cbs-highlight-color">Gói giao: {item?.package?.name}</p> : <></>}
+                { item?.package ? <p className="text-cbs-highlight-color">Gói nhận: {item?.toPackage?.name}</p> : <></>}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item?.warehouse?.name}

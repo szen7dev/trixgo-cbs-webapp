@@ -12,11 +12,13 @@ export interface Goods {
     unitprice: string | null;
     userUpdate: string | null;
     convertQuantity: number
+    project?: any
 }
 
 export type GoodsQueryPayload = QueryParam & {
     companyID?: string;
     parentID?: string;
+    projectID?: string;
     isListParentOfListChilds?: string;
     goodsID?: string;
     // populates?: any;

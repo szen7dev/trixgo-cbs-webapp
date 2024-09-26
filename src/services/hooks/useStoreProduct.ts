@@ -33,8 +33,12 @@ export const useQueryListStoreChild = (
     async ({ pageParam }: any) =>
         StoreChildRepository.fetchListStore({
         populates: {
-          path: "account contra goods assets funda customer work budgetWork userCreate userUpdate order project contract subtype parentSubtype",
-          select: "name sign phone unit note fullname description",
+          path: "account contra goods parentGoods assets funda customer work budgetWork userCreate userUpdate order project package toPackage contract subtype parentSubtype",
+          select: "name sign phone unit note fullname description project",
+          populate: {
+            path: 'project',
+            select: 'name sign'
+          }
         },
         limit,
         lastestID: pageParam,
@@ -184,5 +188,23 @@ export const useMutationStoreChild = (): UseMutationStoreChild => {
     onCreateStoreAsync: insertMutation.mutateAsync,
     onUpdateStoreAsync: updateMutation.mutateAsync,
     onDeleteStoreAsync: deleteMutation.mutateAsync,
+  }
+}
+
+// Khai báo kiểu
+type UseProductCustom = {
+  exportByFilterAsync: (payload: any) => Promise<any>,
+}
+
+export const useProductCustom = () : UseProductCustom => {
+
+  // Export excel by filter
+  const { mutateAsync: exportByFilterAsync } =
+      useMutation((payload: any) =>
+        StoreChildRepository.exportByFilter(payload)
+  );
+
+  return {
+    exportByFilterAsync
   }
 }
