@@ -60,7 +60,7 @@ const BiddingLayout: FC<Props> = ({ children }) => {
 
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
-        <section className={"main-content-wrapper flex-1"}>
+        <section className={"main-content-wrapper flex-1 w-header"}>
           {/*  Main header */}
           <MainHeaderV2 headerTitle={"Thầu"}>
             <HomeHeaderContent />

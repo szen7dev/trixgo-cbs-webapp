@@ -9,7 +9,7 @@ import menuIcon from "assets/images/icon-mobile-menu-black.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
-import { OwnerLeftSideBar } from './components';
+import { OwnerLeftSideBar } from "./components";
 
 /*=====5.TYPINGS=====*/
 
@@ -24,11 +24,11 @@ type Props = {
 export const OwnerLayoutV2: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
-  const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false)
+  const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
 
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
-  }
+  };
 
   return (
     <section
@@ -38,26 +38,25 @@ export const OwnerLayoutV2: FC<Props> = ({ children }) => {
         "collapse-header": isHeaderCollapse,
       })}
     >
-      <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2">
+      <button
+        title="Toggle left sidebar"
+        onClick={handleMenuEvent}
+        className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2"
+      >
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
 
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
-        <section className={"main-content-wrapper flex-1"}>
-
-          <MainHeaderV2 headerTitle={"Quản trị viên"}>
-
-          </MainHeaderV2>
+        <section className={"main-content-wrapper flex-1 w-header"}>
+          <MainHeaderV2 headerTitle={"Quản trị viên"}></MainHeaderV2>
           <OwnerLeftSideBar />
 
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
-
         </section>
       </div>
-
     </section>
-  )
-}
+  );
+};

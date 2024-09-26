@@ -7,8 +7,8 @@ import cn from "classnames";
 /*=====3.ICONS=====*/
 
 /*=====4.PAGES/COMPONENTS=====*/
-import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
-import { PmLeftMenuContent} from "./components";
+import { LeftMenu, MainHeaderV2, LeftNavigate } from "../../common";
+import { PmLeftMenuContent } from "./components";
 
 /*=====5.TYPINGS=====*/
 
@@ -46,18 +46,14 @@ export const PmLayout: FC<Props> = ({ children }) => {
       {/* Collapse menu button */}
 
       <div className={"flex"}>
-        <LeftNavigate handleMenuEvent={handleMenuEvent}/>
-        <section className={"main-content-wrapper flex-1"}>
+        <LeftNavigate handleMenuEvent={handleMenuEvent} />
+        <section className={"main-content-wrapper flex-1 w-header"}>
           {/*  Main header */}
-          <MainHeaderV2
-            headerTitle={"Dự án"}
-          >
-            
-          </MainHeaderV2>
+          <MainHeaderV2 headerTitle={"Dự án"}></MainHeaderV2>
 
           {/* Left navigation */}
           <LeftMenu>
-            <PmLeftMenuContent/>
+            <PmLeftMenuContent />
           </LeftMenu>
 
           {/* Content area */}

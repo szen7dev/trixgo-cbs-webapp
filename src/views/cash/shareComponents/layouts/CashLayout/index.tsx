@@ -2,7 +2,7 @@ import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
-import {CashLeftSideBar } from "../CashLeftSideBar";
+import { CashLeftSideBar } from "../CashLeftSideBar";
 
 type Props = {
   children: ReactNode;
@@ -33,8 +33,7 @@ export const CashLayout: FC<Props> = ({ children }) => {
 
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
-        <section className={"main-content-wrapper flex-1"}>
-
+        <section className={"main-content-wrapper flex-1 w-header"}>
           <MainHeaderV2 headerTitle={"Sổ quỹ"}>
             {/* <HomeHeaderContent /> */}
           </MainHeaderV2>
@@ -44,10 +43,8 @@ export const CashLayout: FC<Props> = ({ children }) => {
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
-
         </section>
       </div>
-
     </section>
-  )
-}
+  );
+};

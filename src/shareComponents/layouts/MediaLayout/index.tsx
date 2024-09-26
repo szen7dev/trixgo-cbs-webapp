@@ -7,8 +7,8 @@ import cn from "classnames";
 /*=====3.ICONS=====*/
 
 /*=====4.PAGES/COMPONENTS=====*/
-import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
-import {MediaHeaderContent, MediaLeftMenuContent} from "./components";
+import { LeftMenu, MainHeaderV2, LeftNavigate } from "../../common";
+import { MediaHeaderContent, MediaLeftMenuContent } from "./components";
 // import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
 
 /*=====5.TYPINGS=====*/
@@ -47,18 +47,16 @@ export const MediaLayout: FC<Props> = ({ children }) => {
       {/* Collapse menu button */}
 
       <div className={"flex"}>
-        <LeftNavigate handleMenuEvent={handleMenuEvent}/>
-        <section className={"main-content-wrapper flex-1"}>
+        <LeftNavigate handleMenuEvent={handleMenuEvent} />
+        <section className={"main-content-wrapper flex-1 w-header"}>
           {/*  Main header */}
-          <MainHeaderV2
-            headerTitle={"Chủ đề"}
-          >
-            <MediaHeaderContent/>
+          <MainHeaderV2 headerTitle={"Chủ đề"}>
+            <MediaHeaderContent />
           </MainHeaderV2>
 
           {/* Left navigation */}
           <LeftMenu>
-            <MediaLeftMenuContent/>
+            <MediaLeftMenuContent />
           </LeftMenu>
 
           {/* Content area */}
