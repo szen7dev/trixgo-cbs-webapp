@@ -335,13 +335,13 @@ export const FnbReportPage: FC = () => {
 							<div className="text-[20px] font-bold" style={{ fontSize: "20px" }}>{formatNumberMoney(totalAmount)} đ</div>
 						</div>
 					</div>
-					<div className="flex gap-2 w-1/5 items-start	">
+					{/* <div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
 							<div className="text-primary text-[14px]">Tiền thuế</div>
 							<div className="text-[20px] font-bold" style={{ fontSize: "20px" }}>{formatNumberMoney(totalVatAmount)} đ</div>
 						</div>
-					</div>
+					</div> */}
 				</div>
 
 				<div className="flex gap-5 mx-5 my-5 ">
