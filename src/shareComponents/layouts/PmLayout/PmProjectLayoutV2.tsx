@@ -7,9 +7,9 @@ import cn from "classnames";
 /*=====3.ICONS=====*/
 
 /*=====4.PAGES/COMPONENTS=====*/
-import {LeftMenu, LeftNavigate} from "../../common";
-import {PmTabHeaderContent, PmProjectLeftMenuContent} from "./components";
-import {MainHeaderPm} from "./components/shared/MainHeaderPm";
+import { LeftMenu, LeftNavigate } from "../../common";
+import { PmTabHeaderContent, PmProjectLeftMenuContent } from "./components";
+import { MainHeaderPm } from "./components/shared/MainHeaderPm";
 
 /*=====5.TYPINGS=====*/
 
@@ -38,15 +38,15 @@ export const PmProjectLayoutV2: FC<Props> = ({ children, headerSearch }) => {
       {/* Collapse menu button */}
 
       <div className={"flex"}>
-        <LeftNavigate handleMenuEvent={handleMenuEvent}/>
-        <section className={"main-content-wrapper flex-1"}>
+        <LeftNavigate handleMenuEvent={handleMenuEvent} />
+        <section className={"main-content-wrapper flex-1 w-header"}>
           {/*  Main header */}
           <MainHeaderPm>
-            <PmTabHeaderContent/>
+            <PmTabHeaderContent />
           </MainHeaderPm>
 
           <LeftMenu>
-            <PmProjectLeftMenuContent/>
+            <PmProjectLeftMenuContent />
           </LeftMenu>
 
           {/* Content area */}
@@ -56,5 +56,5 @@ export const PmProjectLayoutV2: FC<Props> = ({ children, headerSearch }) => {
         </section>
       </div>
     </section>
-  )
-}
+  );
+};

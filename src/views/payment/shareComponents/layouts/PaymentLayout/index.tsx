@@ -33,8 +33,7 @@ export const PaymentLayout: FC<Props> = ({ children }) => {
 
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
-        <section className={"main-content-wrapper flex-1"}>
-
+        <section className={"main-content-wrapper flex-1 w-header"}>
           <MainHeaderV2 headerTitle={"Thanh toán"}>
             {/* <HomeHeaderContent /> */}
           </MainHeaderV2>
@@ -44,10 +43,8 @@ export const PaymentLayout: FC<Props> = ({ children }) => {
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
-
         </section>
       </div>
-
     </section>
-  )
-}
+  );
+};

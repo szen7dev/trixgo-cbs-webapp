@@ -30,27 +30,20 @@ export const CmcsLayout: FC<Props> = ({ children }) => {
         "collapse-header": isHeaderCollapse,
       })}
     >
-      <div
-        className={"flex"}
-      >
+      <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEventNav} />
-        <section
-          className={"main-content-wrapper flex-1"}
-        >
+        <section className={"main-content-wrapper flex-1 w-header"}>
           <MainHeaderV2 headerTitle={"Tài chính"}>
             <HomeHeaderContent />
           </MainHeaderV2>
 
           <CmcsLeftSideBar />
 
-          <main 
-          className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content"
-          >
+          <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content">
             {children}
           </main>
-
         </section>
       </div>
     </section>
-  )
-}
+  );
+};
