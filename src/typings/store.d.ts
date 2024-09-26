@@ -18,6 +18,7 @@ export type StoreParent = {
     status: number;
     timeApproved: string | null;
     author: User;
+    signatures?: any;
     admins: User[];
     members: User[];
     userCreate: User;
@@ -93,12 +94,13 @@ export type InsertStoreParentResponse = {
 
 export type UpdateStoreParentPayload = {
     orderID: string;
-    filesID: string[];
+    filesID?: string[];
     cashBookID?: string;
     members?: string[];
     membersRemove?: string[];
     admins?: string[];
     adminsRemove?: string[];
+    isAddSignature?: boolean
 }
 
 export type UpdateStoreParentResponse = InsertStoreParentResponse;
