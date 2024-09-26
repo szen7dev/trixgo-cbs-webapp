@@ -376,10 +376,10 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {info?.note}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
-                
+                Số ngày tối đa được nghỉ phép năm
               </td>
               <td className="border w-2/6 pl-4">
-                
+                {info?.numberOnLeave}
               </td>
             </tr>
             <tr className="border h-7 leading-7">

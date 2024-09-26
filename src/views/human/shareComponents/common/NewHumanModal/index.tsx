@@ -1471,9 +1471,18 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
 
                     <div className="w-1/5 flex items-center">
-                      <span className="w-4/12 text-primary-gray">
-                        #
+                    <span className="w-4/12 text-primary-gray">
+                        Số ngày tối đa được nghỉ phép năm
                       </span>
+                      <Field
+                        type="text"
+                        name="numberOnLeave"
+                        placeholder="Số ngày tối đa được nghỉ phép năm"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
                     </div>
 
                   </div>

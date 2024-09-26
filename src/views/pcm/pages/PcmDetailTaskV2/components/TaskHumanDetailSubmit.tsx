@@ -31,10 +31,10 @@ export const TaskHumanDetailSubmit:FC<Props> = ({ task, userId }) => {
         params: {
             populates: JSON.stringify({
                 path: "work staff contact goods assets",
-                select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount numberOnLeave department",
+                select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount numberOnLeave department contacts",
                 populate: {
-                    path: "department",
-                    select: "name"
+                    path: "department contacts",
+                    select: "name numberOnLeave"
                 }
             }),
             taskID: task?._id
@@ -100,9 +100,19 @@ export const TaskHumanDetailSubmit:FC<Props> = ({ task, userId }) => {
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
                                         {item?.name}
                                         <p onClick={() => toggleVisible({ option: 1, staffID: item?.staff?._id})} className="mt-2 text-cbs-highlight-color">
-                                            Nhân sự: {item?.staff?.fullname}-{item?.staff?.department?.name}
-                                            <p>Số nghỉ phép lũy kế: ({item?.staff?.numberOnLeave}) - Số phép còn lại:  
-                                            <span className="text-red-500 text-bold"> {Number(new Date().getMonth() + 1) - Number(item?.staff?.numberOnLeave + 1) }</span></p>
+                                            Nhân sự: {item?.staff?.fullname} | {item?.staff?.department?.name}
+                                            <p className="text-primary-gray">
+                                                <p>
+                                                    Bắt đầu làm việc từ tháng: <span className="font-bold">{Number(12 - item?.staff?.contacts[0]?.numberOnLeave + 1)}</span> |
+                                                    Số phép tối đa trong năm: <span className="text-green-500 font-bold"> {item?.staff?.contacts[0]?.numberOnLeave}</span> | 
+                                                    Tổng số phép được nghỉ tới hiện tại: <span className="font-bold">{Number(new Date().getMonth()) - Number(12 - item?.staff?.contacts[0]?.numberOnLeave)}</span>
+                                                </p>
+                                                Số phép đã nghỉ: <span className="font-bold">{item?.staff?.numberOnLeave}</span> | 
+                                                Số phép còn lại tới hiện tại:  
+                                                <span className="text-red-500 font-bold ml-2"> 
+                                                    {Number(new Date().getMonth() + 1) - Number(item?.staff?.numberOnLeave + 1) - (12 - Number(item?.staff?.contacts[0]?.numberOnLeave))}
+                                                </span>
+                                            </p>
                                         </p>
                                     </td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
