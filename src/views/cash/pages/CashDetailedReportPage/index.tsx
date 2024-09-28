@@ -77,6 +77,8 @@ export const CashDetailedReportPage: FC<Props> = () => {
     sortKey: JSON.stringify(['date__1', 'createAt__1']),
   })
 
+  console.log(listDataWithPager)
+
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
   // const [warehouseKeyword, setWarehouseKeyword] = useState("");
@@ -185,7 +187,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
             <DropdownSearchableV2
                 ref={accountRef}
                 className={"mr-1 border border-primary-border rounded-lg"}
-                placeholder={"Nhập xuất"}
+                placeholder={"Thu chi"}
                 isMultiple={false}
                 allowClearValueSingleInput={true}
                 data={STORE_OUTIN.map((item: any) => ({
@@ -482,7 +484,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         <p className="text-primary-gray"><i>{item?.name}</i></p>
-                        <p className="text-cbs-highlight-color">{item?.account?.name}</p>
+                        <p className="text-cbs-highlight-color">{item?.account?.name}-{item?.account?.description}</p>
                         <NavLink className="" to={`/cash/home/${item?.order?._id}`}>
                           <p className="">{item?.order?.name}</p>
                         </NavLink>
@@ -512,7 +514,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                       <p className="text-primary-gray"><i>{item?.name}</i></p>
-                      <p className="text-cbs-highlight-color">{item?.account?.name}</p>
+                      <p className="text-cbs-highlight-color">{item?.account?.name}-{item?.account?.description}</p>
                         <NavLink className="" to={`/cash/home/${item?.order?._id}`}>
                         <p className="">{item?.order?.name}</p>
                         </NavLink>
