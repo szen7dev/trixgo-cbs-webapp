@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 // import iconStar from "assets/images/icon-star.svg";
 import InlineBadgeSelect from "./InlineBadgeSelect";
 import { Task } from "typings/task";
@@ -96,7 +96,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             }
         }
     }
-    
+ 
     const handleChangeApprovalSubtype = async (value: any) => {
         try {
             const { error, message } = await updateTaskAsync({

@@ -21,7 +21,7 @@ const InlineBadgeSelect:FC<Props> = ({defaultValue, options, placeholder, onValu
 
     useEffect(() => {
         setValue(defaultValue);
-    }, [])
+    }, [defaultValue])
 
     const itemSelected = useCallback(() => {
         return options.find(option => option.id === value);
