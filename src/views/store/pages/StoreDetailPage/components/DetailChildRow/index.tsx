@@ -99,6 +99,7 @@ export const DetailChildRow: FC<Props> = ({
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
+        style={{width:"15%"}}
       >
         <p
           contentEditable={"true"}
@@ -143,9 +144,9 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: "100px",
+                // minWidth: "100px",
                 // width: "150px",
-                // whiteSpace: "nowrap",
+                // whiteSpace: "normal",
                 // width: "125px",
                 whiteSpace: "normal",
                 overflow: "hidden",
@@ -284,7 +285,7 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: "100px",
+                // minWidth: "75px",
                 // width: "125px",
                 whiteSpace: "normal",
                 overflow: "hidden",
@@ -293,7 +294,7 @@ export const DetailChildRow: FC<Props> = ({
               {item.text}
             </p>
           )}
-          initialValue={rowData?.work}
+          initialValue={rowData?.budgetWork}
           data={listBudgetWork}
           formatItem={{
             id: "_id",
@@ -327,9 +328,9 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: "100px",
+                // minWidth: "100px",
                 // width: "150px",
-                whiteSpace: "nowrap",
+                whiteSpace: "normal",
                 overflow: "hidden",
               }}
             >
