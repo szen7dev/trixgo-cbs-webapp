@@ -3,7 +3,7 @@ import React, { FC, useState } from "react";
 import debounce from "lodash/debounce";
 import { convertCurrency } from "utils/converter";
 import moment from "moment";
-import { DropdownSearchable } from "shareComponents/common";
+import { DropdownSearchable, DropdownSearchableV2 } from "shareComponents/common";
 // import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useQueryListBudgetWork } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
@@ -179,7 +179,7 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: "100px",
+                minWidth: "75px",
                 // width: "150px",
                 // whiteSpace: "nowrap",
                 // width: "125px",
@@ -190,11 +190,16 @@ export const DetailChildRow: FC<Props> = ({
               {item.text}
             </p>
           )}
-          data={listAccount}
+          // data={listAccount}
+          data={listAccount.map((item: any) => ({
+            _id: item._id,
+            name: `${item.name}-${item.description}`,
+          }))}
           initialValue={rowData?.account}
           formatItem={{
             id: "_id",
             text: "name",
+            description: "description",
           }}
           onSearchInputChange={debounce(
             (value) => setKeywordAccount(value),
@@ -207,6 +212,7 @@ export const DetailChildRow: FC<Props> = ({
             })
           }
         />
+          <p className="mt-2">{rowData?.account?.name}-{rowData?.account?.description}</p>
       </div>
 
       <div
@@ -285,8 +291,8 @@ export const DetailChildRow: FC<Props> = ({
             <p
               style={{
                 textOverflow: "ellipsis",
-                maxWidth: "100%",
-                minWidth: "100px",
+                // maxWidth: "100%",
+                // minWidth: "100px",
                 // width: "150px",
                 // whiteSpace: "nowrap",
                 // width: "125px",
@@ -355,8 +361,8 @@ export const DetailChildRow: FC<Props> = ({
             <p
               style={{
                 textOverflow: "ellipsis",
-                maxWidth: "100%",
-                minWidth: "100px",
+                // maxWidth: "100%",
+                // minWidth: "100px",
                 // width: "150px",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
