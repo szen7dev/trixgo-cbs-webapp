@@ -498,7 +498,7 @@ export const StoreDetailPage: FC<Props> = () => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Kiểm duyệt
+              Check
             </div>
           </div>
 

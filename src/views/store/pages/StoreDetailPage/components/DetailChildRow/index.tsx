@@ -376,6 +376,7 @@ export const DetailChildRow: FC<Props> = ({
         className={
           "table-cell relative box-border border border-gray-300 bg-white align-middle text-center"
         }
+        style={{width: "30px"}}
       >
         <input
           className="form-check-input"
@@ -391,5 +392,5 @@ export const DetailChildRow: FC<Props> = ({
         />
       </div>
     </div>
-  );
-};
+  )
+}
