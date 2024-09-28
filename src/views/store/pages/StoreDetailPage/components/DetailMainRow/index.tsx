@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { map as _map } from "lodash";
-import { convertCurrency } from "utils/converter";
+// import { convertCurrency } from "utils/converter";
 import { Loader } from "shareComponents/common/Loader";
 import { DetailChildRow } from "../DetailChildRow";
 
@@ -42,5 +42,5 @@ export const DetailMainRow: FC<Props> = ({
         />
       ))}
     </>
-  )
-}
+  );
+};
