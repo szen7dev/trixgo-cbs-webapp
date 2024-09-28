@@ -1,13 +1,13 @@
 import React, { FC } from "react";
-import DayPickerInput from "react-day-picker/DayPickerInput";
+// import DayPickerInput from "react-day-picker/DayPickerInput";
 import debounce from "lodash/debounce";
 import { convertCurrency } from "utils/converter";
 import moment from "moment";
 import { DropdownSearchable } from "shareComponents/common";
-import { useUserSystem } from "services/hooks/users/useUserSystem";
+// import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useQueryListBudgetWork } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
-import { useAuth } from "services/hooks/auth/useAuth";
+// import { useAuth } from "services/hooks/auth/useAuth";
 import { useGoods } from "services/hooks/items/useGoods";
 
 import type {
@@ -35,27 +35,24 @@ export const DetailChildRow: FC<Props> = ({
   hasPermission,
   onUpdatedStoreChild,
 }) => {
-  const { user } = useAuth();
-  const [keywordWoods, setKeywordWoods] = React.useState('');
+  // const { user } = useAuth();
+  const [keywordWoods, setKeywordWoods] = React.useState("");
   const [keywordWork, setKeywordWork] = React.useState(
     rowData.work?.name || ""
-	);
+  );
 
-  const {
-    list: listGoods
-  } = useGoods({
-      params: { 
-          // companyID,
-          keyword: keywordWoods 
-      },
-      isFetchList: true
-  })
-  // console.log(listGoods)
+  const { list: listGoods } = useGoods({
+    params: {
+      // companyID,
+      keyword: keywordWoods,
+    },
+    isFetchList: true,
+  });
 
   const { listBudgetWork } = useQueryListBudgetWork({
-		limit: LIMIT_DROPDOWN,
-		keyword: keywordWork,
-	});
+    limit: LIMIT_DROPDOWN,
+    keyword: keywordWork,
+  });
 
   const handleClickUpdateStore = React.useCallback(
     (value) => {
@@ -117,8 +114,16 @@ export const DetailChildRow: FC<Props> = ({
         >
           {rowData.name}
         </p>
-        <p className="text-gray-400 px-2"><i>{rowData?.userUpdate?.fullname ? rowData?.userUpdate?.fullname : rowData?.userCreate?.fullname}</i></p>
-        <p className="text-gray-400 px-2"><i>{moment(rowData?.modifyAt).format("DD/MM/YYYY HH:mm")}</i></p>
+        <p className="text-gray-400 px-2">
+          <i>
+            {rowData?.userUpdate?.fullname
+              ? rowData?.userUpdate?.fullname
+              : rowData?.userCreate?.fullname}
+          </i>
+        </p>
+        <p className="text-gray-400 px-2">
+          <i>{moment(rowData?.modifyAt).format("DD/MM/YYYY HH:mm")}</i>
+        </p>
       </div>
       <div
         className={
@@ -155,10 +160,7 @@ export const DetailChildRow: FC<Props> = ({
             id: "_id",
             text: "name",
           }}
-          onSearchInputChange={debounce(
-            (value) => setKeywordWoods(value),
-            500
-          )}
+          onSearchInputChange={debounce((value) => setKeywordWoods(value), 500)}
           onchangeValue={(value) =>
             handleClickUpdateStore({
               ...rowData,
@@ -166,9 +168,13 @@ export const DetailChildRow: FC<Props> = ({
             })
           }
         />
-        {
-          rowData?.parentGoods ? <p className="text-cbs-highlight-color mt-2">{rowData?.parentGoods?.project?.sign}.{rowData?.parentGoods?.name}</p> : <></>
-        }
+        {rowData?.parentGoods ? (
+          <p className="text-cbs-highlight-color mt-2">
+            {rowData?.parentGoods?.project?.sign}.{rowData?.parentGoods?.name}
+          </p>
+        ) : (
+          <></>
+        )}
         {/* <p className="text-cbs-highlight-color mt-2">{rowData?.parentGoods?.project?.sign}.{rowData?.parentGoods?.name}</p> */}
       </div>
       <div
@@ -259,7 +265,7 @@ export const DetailChildRow: FC<Props> = ({
           {convertCurrency(rowData.weight)}
         </p>
       </div>
-      
+
       <div
         className={
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
@@ -293,10 +299,7 @@ export const DetailChildRow: FC<Props> = ({
             id: "_id",
             text: "name",
           }}
-          onSearchInputChange={debounce(
-            (value) => setKeywordWork(value),
-            500
-          )}
+          onSearchInputChange={debounce((value) => setKeywordWork(value), 500)}
           onchangeValue={(value) =>
             handleClickUpdateStore({
               ...rowData,
@@ -339,10 +342,7 @@ export const DetailChildRow: FC<Props> = ({
             id: "_id",
             text: "name",
           }}
-          onSearchInputChange={debounce(
-            (value) => setKeywordWoods(value),
-            500
-          )}
+          onSearchInputChange={debounce((value) => setKeywordWoods(value), 500)}
           onchangeValue={(value) =>
             handleClickUpdateStore({
               ...rowData,
@@ -371,6 +371,25 @@ export const DetailChildRow: FC<Props> = ({
         >
           {rowData.note}
         </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 bg-white align-middle text-center"
+        }
+        style={{width: "30px"}}
+      >
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={rowData.checked === 2}
+          onChange={(e) => {
+            const isChecked = e.target.checked ? 2 : 1;
+            handleClickUpdateStore({
+              ...rowData,
+              checked: isChecked,
+            });
+          }}
+        />
       </div>
     </div>
   )
