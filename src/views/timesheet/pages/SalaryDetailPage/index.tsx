@@ -761,7 +761,7 @@ const SalaryDetailPage: FC = () => {
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Phụ cấp/truy lĩnh/thưởng lễ tết
+                Phụ cấp
               </div>
               <div
                 className={
