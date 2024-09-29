@@ -9,6 +9,7 @@ import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2
 import { ModalConfirm } from "shareComponents/common";
 import API from "apis/repository";
 import iconRefresh from "assets/images/icons8-refresh.png";
+import iconCopy from "assets/images/icons8-copy-96.svg";
 import { convertCurrency } from "utils/converter";
 import { useAuth } from "services/hooks/auth/useAuth";
 
@@ -381,6 +382,12 @@ const SalaryHomePage: FC = () => {
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.note}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 4, salaryID: salaryParent._id })}>
+                  <img src={iconCopy} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
+                  <span>Sao chép</span>
+                </button>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, salaryID: salaryParent._id })}>
