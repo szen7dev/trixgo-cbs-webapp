@@ -422,10 +422,8 @@ export const CashDetailPage: FC = () => {
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
-
-              style={{width: "25%"}}
             >
-              Tài khoản tiền mặt/ngân hàng
+              Tài khoản
             </div>
             <div
               className={
@@ -438,7 +436,6 @@ export const CashDetailPage: FC = () => {
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
-              style={{width: "15%"}}
             >
               Ghi chú
             </div>
@@ -491,6 +488,13 @@ export const CashDetailPage: FC = () => {
             >
               Tài khoản đối ứng
             </div> */}
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Check
+            </div>
           </div>
 
           {storeInfo?._id && Array.isArray(listStoreChild) && (

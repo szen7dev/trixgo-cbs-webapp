@@ -142,7 +142,7 @@ export const DetailChildRow: FC<Props> = ({
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
-        style={{width: "25%"}}
+        style={{width: "20%"}}
       >
         <p
           contentEditable={"true"}
@@ -179,9 +179,9 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: "75px",
+                // minWidth: "75px",
                 // width: "150px",
-                // whiteSpace: "nowrap",
+                // whiteSpace: "normal",
                 // width: "125px",
                 whiteSpace: "normal",
                 overflow: "hidden",
@@ -256,7 +256,7 @@ export const DetailChildRow: FC<Props> = ({
         className={
           "table-cell relative box-border border border-gray-300 bg-white"
         }
-        style={{width: "15%"}}
+        style={{width: "12%"}}
       >
         <p
           contentEditable={"true"}
@@ -294,7 +294,7 @@ export const DetailChildRow: FC<Props> = ({
                 // maxWidth: "100%",
                 // minWidth: "100px",
                 // width: "150px",
-                // whiteSpace: "nowrap",
+                // whiteSpace: "normal",
                 // width: "125px",
                 whiteSpace: "normal",
                 overflow: "hidden",
@@ -364,7 +364,7 @@ export const DetailChildRow: FC<Props> = ({
                 // maxWidth: "100%",
                 // minWidth: "100px",
                 // width: "150px",
-                whiteSpace: "nowrap",
+                whiteSpace: "normal",
                 overflow: "hidden",
               }}
             >
@@ -408,9 +408,9 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: "100px",
+                // minWidth: "100px",
                 // width: "150px",
-                whiteSpace: "nowrap",
+                whiteSpace: "normal",
                 overflow: "hidden",
               }}
             >
@@ -454,7 +454,7 @@ export const DetailChildRow: FC<Props> = ({
               style={{
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
-                minWidth: "100px",
+                // minWidth: "100px",
                 // width: "125px",
                 whiteSpace: "normal",
                 overflow: "hidden",
@@ -502,7 +502,7 @@ export const DetailChildRow: FC<Props> = ({
                 maxWidth: "100%",
                 minWidth: "100px",
                 // width: "150px",
-                whiteSpace: "nowrap",
+                whiteSpace: "normal",
                 overflow: "hidden",
               }}
             >
@@ -527,6 +527,26 @@ export const DetailChildRow: FC<Props> = ({
           }
         />
       </div> */}
+
+    <div
+        className={
+          "table-cell relative box-border border border-gray-300 bg-white align-middle text-center"
+        }
+        style={{width: "30px"}}
+      >
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={rowData.checked === 2}
+          onChange={(e) => {
+            const isChecked = e.target.checked ? 2 : 1;
+            handleClickUpdateStore({
+              ...rowData,
+              checked: isChecked,
+            });
+          }}
+        />
+      </div>
     </div>
   )
 }
