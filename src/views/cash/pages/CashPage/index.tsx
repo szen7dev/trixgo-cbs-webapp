@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
-import { STORE_OUTIN, STORE_TYPES } from "apis/localdb";
+import { CASH_OUTIN, STORE_TYPES } from "apis/localdb";
 import { convertCurrency } from "utils/converter";
 import { useModal } from "services/hooks/useModal";
 import { toast } from "react-toastify";
@@ -472,7 +472,7 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 {item.sign}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {STORE_OUTIN[Number(item.outin - 1)].text}
+                {CASH_OUTIN[Number(item.outin - 1)].text}
                 <p>{STORE_TYPES[Number(item.type - 1)].text}</p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>

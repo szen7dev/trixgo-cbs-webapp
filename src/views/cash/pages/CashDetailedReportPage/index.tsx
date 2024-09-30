@@ -13,7 +13,7 @@ import { LIMIT_DROPDOWN } from "apis/localdb/index";
 // 	useQueryListGood
 // } from "services/hooks/cmcs/useContractIncome";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import { STORE_OUTIN, CASH_TYPES } from "apis/localdb";
+import { CASH_OUTIN, CASH_TYPES } from "apis/localdb";
 import {
   useQueryListStoreChild,
 } from "services/hooks/useStoreProduct";
@@ -143,11 +143,11 @@ export const CashDetailedReportPage: FC<Props> = () => {
   let tongNhap = 0, tongXuat = 0
   {
     (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {
-      if(item?.outin == 2){
+      if(item?.outin == 1){
         tongNhap = Number(tongNhap) + Number(item?.amount)
       }
   
-      if(item?.outin == 1){
+      if(item?.outin == 2){
         tongXuat = Number(tongXuat) + Number(item?.amount)
       }
     })
@@ -190,7 +190,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
                 placeholder={"Thu chi"}
                 isMultiple={false}
                 allowClearValueSingleInput={true}
-                data={STORE_OUTIN.map((item: any) => ({
+                data={CASH_OUTIN.map((item: any) => ({
                   _id: item.value,
                   name: item.text,
                 }))}
@@ -474,7 +474,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
               (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {
                 const jsx = [];
 
-                if(item?.outin == 2){
+                if(item?.outin == 1){
                   inventory = Number(inventory) + Number(item?.amount)
 
                   jsx.push(
@@ -504,7 +504,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
                   )
                 }
 
-                if(item?.outin == 1){
+                if(item?.outin == 2){
                   inventory = Number(inventory) - Number(item?.amount)
 
                   jsx.push(
