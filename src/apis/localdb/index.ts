@@ -641,6 +641,11 @@ export const STORE_OUTIN = [
     { value: 2, text: 'Nhập' },
 ]
 
+export const CASH_OUTIN = [
+    { value: 1, text: 'Thu' },
+    { value: 2, text: 'Chi' },
+]
+
 export const STORE_TYPES = [
     { value: 1, text: 'Chung' },
     { value: 2, text: 'Vật tư chính' },
