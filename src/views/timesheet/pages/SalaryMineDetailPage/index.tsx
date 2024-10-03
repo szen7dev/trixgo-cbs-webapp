@@ -283,6 +283,7 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                     </tr>
                   </tbody>
                 </table>
+                <p>Ghi chú: {item?.note}</p>
                 <p className={"mt-1 text-gray-500 text-[10px]"}>
                   <i>Cre: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}</i>
                 </p>
