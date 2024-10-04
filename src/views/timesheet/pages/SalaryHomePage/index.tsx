@@ -323,13 +323,13 @@ const SalaryHomePage: FC = () => {
             >
               Đồng bộ dữ liệu
             </div>
-            {/* <div
+            <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Xóa dữ liệu
-            </div> */}
+            </div>
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((salaryParent) => (
             <div className={"body-table table-row"} key={salaryParent._id}>
@@ -408,11 +408,11 @@ const SalaryHomePage: FC = () => {
                   <span>Đồng bộ dữ liệu</span>
                 </button>
               </div>
-              {/* <div className={"px-2 py-2 table-cell box-border border-b"}>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSignReset({ option: 3, salaryID: salaryParent._id })}>
                   <span style={{ "color": "red" }}>Xóa dữ liệu</span>
                 </button>
-              </div> */}
+              </div>
             </div>
           ))}
         </div>
