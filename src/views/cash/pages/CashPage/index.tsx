@@ -7,6 +7,8 @@ import { CASH_OUTIN, STORE_TYPES } from "apis/localdb";
 import { convertCurrency } from "utils/converter";
 import { useModal } from "services/hooks/useModal";
 import { toast } from "react-toastify";
+import iconCopy from "assets/images/icons8-copy-96.svg";
+import { ModalConfirm } from "shareComponents/common";
 import {
     useQueryListStoreParent,
     useMutationStoreParent,
@@ -32,6 +34,7 @@ import {
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { useLocation } from "react-router-dom";
 import fileIcon from "assets/images/icons8-attach.svg";
+import API from "apis/repository";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface StoreHomePageProps {
@@ -168,6 +171,42 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
   //     setInputFilter((value) => ({ ...value, fromDate: date }))
   //   }
   //   }, [])
+  
+  const toggleModalCopy = (param: any) => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title="Bạn có muốn xác nhận Copy phiếu không"
+          description= "Dữ liệu phiếu cũ sẽ được Copy sang phiếu mới"
+          onConfirm={() => handleConfirmSync({ option: param.option, orderID: param.orderID })}
+          defaultText={false}
+          onCancel={closeModal}
+        />
+      </div>
+    )
+  }
+
+  const handleConfirmSync = useCallback(async (param: any) => {
+    closeModal();
+
+    const { data, status } = await API.post(
+      `/api/timesheet/expert_salary/sync-data`, {
+        option: param.option,
+        orderID: param.orderID,
+      }
+    )
+   
+    if (status !== 200 || data.error) {
+      return toast.warn('Đồng bộ thất bại')
+    }
+
+    refreshListStore();
+    return toast.success('Đồng bộ thành công')
+  }, [])
 
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
@@ -425,6 +464,11 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
             >
               Ghi chú
             </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            ></div>
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((item: any) => (
             <div className={"body-table table-row"} key={item._id}>
@@ -494,6 +538,12 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item.note}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalCopy({ option: 5, orderID: item?._id })}>
+                  <img src={iconCopy} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
+                  <span>Sao chép</span>
+                </button>
               </div>
             </div>
           ))}

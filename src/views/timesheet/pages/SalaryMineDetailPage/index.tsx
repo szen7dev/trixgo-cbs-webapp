@@ -6,6 +6,10 @@ import { convertCurrency } from "utils/converter";
 import {
   useQueryListSalaryParent,
 } from "services/hooks/useSalary";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import { useCashBook } from "services/hooks/financial/useCashBook";
+import { createLinkAndClick } from "utils";
+import { toast } from "react-toastify";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface TimesheetHomePageProps {
@@ -35,6 +39,33 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
         select: 'name date fullname'
     },
    })
+
+    //_____Import, export excel
+    const [, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+    });
+
+    const { downloadTemplateExcelAsync } = useCashBook({});
+
+    const handleDownloadExcel = async (param: any) => {
+      try {
+        setStateExport({ isExporting: true });
+        const { error, data } = await downloadTemplateExcelAsync({
+          salaryID: param.salaryID,
+          option: param.option,
+        });
+
+        if (error) {
+          return toast.warn(data?.message);
+        }
+
+        data && createLinkAndClick(data, "_self");
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setStateExport({ isExporting: false });
+      }
+    };
 
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
@@ -290,6 +321,9 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                 <p className={"mt-1 text-gray-500 text-[10px]"}>
                   <i>Mod: {item?.userUpdate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}</i>
                 </p>
+                <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 4, salaryID: item?._id})}>
+                  Tải phiếu lương: <img src={downloadIcon} className="max-w-full" />
+                </button>
               </div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.salary)}</div>
               <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.onLeaveSalary)}</div>
