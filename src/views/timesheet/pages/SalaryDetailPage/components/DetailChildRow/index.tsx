@@ -138,6 +138,7 @@ export const DetailChildRow: FC<Props> = ({
         </NavLink>
         <p className="text-gray-400 text-[10px]"><i>{rowData?.project?.name}</i></p>
         <p className="text-gray-400 text-[10px]"><i>{rowData?.position?.name}</i></p>
+        {/* <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p> */}
         <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
         <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
       </div>
