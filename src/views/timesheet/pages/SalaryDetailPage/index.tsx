@@ -276,7 +276,8 @@ const SalaryDetailPage: FC = () => {
               if(!data.error){
                   return toast.success("Import thành công");
               }
-              return toast.error(data.message);
+
+              return toast.error(data?.data?.message);
           }
           fetchData();
       }
