@@ -201,11 +201,11 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
     )
    
     if (status !== 200 || data.error) {
-      return toast.warn('Đồng bộ thất bại')
+      return toast.warn('Sao chép thất bại')
     }
 
     refreshListStore();
-    return toast.success('Đồng bộ thành công')
+    return toast.success('Sao chép thành công')
   }, [])
 
   return (
