@@ -978,7 +978,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     }
                                     label={<span className="text-[13px]">Gojek</span>}
                                   />
-                                  <FormControlLabel
+                                  {/* <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="5"
                                     control={
@@ -995,8 +995,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       />
                                     }
                                     label={<span className="text-[13px]">Baemin</span>}
-                                  />
-                                  <FormControlLabel
+                                  /> */}
+                                  {/* <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="6"
                                     control={
@@ -1013,9 +1013,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       />
                                     }
                                     label={<span className="text-[13px]">Loship</span>}
-                                  />
+                                  /> */}
                                   <FormControlLabel
-                                    className="border-r mr-1.5"
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="7"
                                     control={
@@ -1034,7 +1033,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     label={<span className="text-[13px] mr-1.5">Bee</span>}
                                   />
 
-                                  <FormControlLabel
+                                  {/* <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
                                     title="Sàn TikTok Shop"
                                     value="8"
@@ -1091,8 +1090,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       />
                                     }
                                     label={<span className="text-[13px]">Lazada</span>}
-                                  />
-                                  
+                                  /> */}
+{/*                                   
                                   <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
                                     title="Sàn Reels"
@@ -1111,7 +1110,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       />
                                     }
                                     label={<span className="text-[13px]">Reels</span>}
-                                  />
+                                  /> */}
 
                                 </RadioGroup>
                               </FormControl>
