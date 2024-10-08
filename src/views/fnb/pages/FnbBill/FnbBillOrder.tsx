@@ -102,7 +102,7 @@ export const FnbBillOrder: FC = () => {
             <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between">
                 <div>
                     <div className="">
-                        <img src={getResult('user?.company?._id.toString()')} alt="ZaloOA" className="items-center"/>
+                        <img src={getResult(user?.company?._id.toString())} alt="ZaloOA" className="items-center"/>
                     </div>
                     <div className="text-center py-1">
                         <Link to ={`/fnb/home`}>
