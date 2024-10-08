@@ -145,13 +145,13 @@ const FnbPage: FC = () => {
 
     return (
         <div className="p-2 relative transition-all duration-500 ease-out overflow-auto" style={{ height: "100vh" }}>
-            <img alt="Next" src={logo} className="w-16 mb-2" />
+            {/* <img alt="Next" src={logo} className="w-16 mb-2" /> */}
             <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2 absolute top-2 right-2" onClick={toggleModalQRCode}>
                 <p className="mr-2">QR giới thiệu bạn</p>
                 <img className="w-[36px] h-[36px]" alt="icon" src={QRCodeIcon} />
             </button>
 
-            <p><b className="text-base">Trà sữa Winggo xin chào {info?.name}</b></p>
+            <p><b className="text-base">Xin chào {info?.name}</b></p>
             <div className="relative">
                 <p>Tổng thanh toán</p>
                 <p className="absolute top-0 right-0"><b>{formatNumberMoney(Number(info?.purchasedValue))}</b></p>
@@ -187,7 +187,7 @@ const FnbPage: FC = () => {
                 <img src={voucherIcon} alt="icon" className="w-6 h-6" />
                 <p className="px-1"><b>Danh sách voucher của bạn ({totalVoucher})</b></p>
             </div>
-            <p className="text-primary-gray"><i>Voucher và Tích điểm chỉ áp dụng với đơn hàng Mua tại quán hoặc đặt qua Hotline. Vui lòng đọc mã Voucher và số điện thoại cho nhân viên để hưởng ưu đãi. Cảm ơn bạn đã lựa chọn Winggo</i></p>
+            <p className="text-primary-gray"><i>Voucher và Tích điểm chỉ áp dụng với đơn hàng Mua tại quán hoặc đặt qua Hotline. Vui lòng đọc mã Voucher và số điện thoại cho nhân viên để hưởng ưu đãi. Cảm ơn bạn đã lựa chọn!</i></p>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             {
                 listVouchers.map((item: any, i: any) => (

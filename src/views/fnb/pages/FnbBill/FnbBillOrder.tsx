@@ -3,11 +3,13 @@ import { FC, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
-import zaloOA from "assets/images/WinggoZaloOA.png";
+import WinggoZaloOA from "assets/images/WinggoZaloOA.png";
+import momychiGGMap from "assets/images/momychiGGMap.png";
 
 import API from "apis/repository";
 import { convertObToUrl } from "utils"
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
 import { FNB_CHANNEL, FNB_PAYMENT, FNB_SIZE } from "apis/localdb";
@@ -15,7 +17,35 @@ import { FNB_CHANNEL, FNB_PAYMENT, FNB_SIZE } from "apis/localdb";
 export const FnbBillOrder: FC = () => {
     const { orderID } = useParams<{ orderID: string }>()
     const [orderProducts, setOrderProducts] = useState([]);
+    const { user } = useAuth();
 
+    let brandName = '', hotLine = '', channel = '', condition
+    if(user?.company?._id.toString() === '6046bedeb55525368b11c5c3'){
+        brandName = 'Winggo'
+        hotLine = '0985692022'
+        channel = 'Zalo OA Trà sữa Winggo'
+    }
+    else if(user?.company?._id.toString() === '6046bf25b55525368b11d311'){
+        brandName = 'Momychi'
+        hotLine = '0868312661'
+        channel = 'Fanpage Trà sữa Momychi - FB/TraSuaMomyChi'
+    }else{
+        brandName = 'BrandName'
+        hotLine = 'Hotline'
+        channel = 'Channel'
+    }
+
+    function getResult(condition: any) {
+        if( condition === '6046bedeb55525368b11c5c3'){
+            return WinggoZaloOA;
+        }
+        else if(condition === '6046bf25b55525368b11d311'){
+            return momychiGGMap;
+        }else{
+            return WinggoZaloOA;
+        }
+      }
+        
     const { info, refetch } = useFnbOrder(
         { 
             params: { 
@@ -72,7 +102,7 @@ export const FnbBillOrder: FC = () => {
             <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between">
                 <div>
                     <div className="">
-                        <img src={zaloOA} alt="ZaloOA" className="items-center"/>
+                        <img src={getResult('user?.company?._id.toString()')} alt="ZaloOA" className="items-center"/>
                     </div>
                     <div className="text-center py-1">
                         <Link to ={`/fnb/home`}>
@@ -84,8 +114,8 @@ export const FnbBillOrder: FC = () => {
                         </Link>
                         <div className="text-[12px]">Số: <b>{info?.sign}</b> | Mã đơn app: <b>{FNB_CHANNEL[Number(info?.salesChannel)-1]?.sign}{info?.appOrderSign}</b></div>
                         <div className="text-[12px]">
-                            <p><i>Nếu có điều chưa hài lòng về sản phẩm dịch vụ của Winggo, xin bạn vui lòng liên hệ tới Hotline <b>0985692022</b> hoặc kênh Zalo OA <b>Trà sữa Winggo</b> để được hỗ trợ, trước khi đánh giá số Sao (*) trên <b>Food App</b></i></p>
-                            <p>Thời gian tiếp nhận đặt hàng trên các nền tảng Food App: TP. Hà Nội 8h00-23h15. TP. HCM 8h00-22h15. Quý khách vui lòng đặt hàng trong khoảng thời gian trên</p>
+                            <p><i>Nếu có điều chưa hài lòng về sản phẩm dịch vụ của {brandName}, xin bạn vui lòng liên hệ tới Hotline <b>{hotLine}</b> hoặc kênh <b>{channel}</b> để được hỗ trợ, trước khi đánh giá số Sao (*) trên <b>Food App</b></i></p>
+                            <p>Thời gian tiếp nhận đặt hàng trên các nền tảng Food App: TP. Hà Nội 8h00-23h30. TP. HCM 8h00-22h30. Quý khách vui lòng đặt hàng trong khoảng thời gian trên</p>
                         </div>
                     </div>
 
@@ -218,12 +248,11 @@ export const FnbBillOrder: FC = () => {
                     <div className="text-center italic text-[12px] border-cbs-border mx-4 py-1 ">{info?.funda?.bankAccount}</div>
                     <hr className="border-cbs-border" />
                     <div className="text-[12px] text-center mt-3">
-                        <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG VÀ LỰA CHỌN WINGGO</b></p>
-                        <p className="">Quét mã QR ở trên cùng và bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>20.000đ</b></p>
+                        <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG VÀ LỰA CHỌN <span className="uppercase">{brandName}</span></b></p>
+                        <p className="">Quét mã QR ở trên cùng và bấm quan tâm Zalo OA hoặc gửi Đánh giá trên Google Map <b>Trà sữa {brandName}</b> để nhận Vocuher ưu đãi <b>200.000đ</b></p>
 
                         <hr className="border-cbs-border"/>
-                        <p className="text-center mt-3"><i>Nếu Quý khách yêu quý Winggo vui lòng giới thiệu Winggo tới bạn bè để nhận 02 Vocuher <b>20.000đ và 35%/</b> 01 bạn bè mới</i></p>
-                        <p><i>Thông tin ưu đãi: https://winggo.vn/uu-dai</i></p>
+                        <p className="text-center mt-3"><i>Nếu Quý khách yêu quý {brandName} vui lòng giới thiệu {brandName} tới bạn bè để nhận 02 Vocuher <b>20.000đ và 35%/</b> 01 bạn bè mới</i></p>
                     </div>
                 </div>
                 <div className="w-full h-[100px]"></div>
