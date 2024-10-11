@@ -257,11 +257,11 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                       <td className="text-right">{convertCurrency(item?.subAllowance8)}</td>
                     </tr>
                     <tr>
-                      <td>Phụ cấp truy lĩnh:</td>
+                      <td>Truy lĩnh:</td>
                       <td className="text-right">{convertCurrency(item?.subAllowance9)}</td>
                     </tr>
                     <tr>
-                      <td>Phụ cấp thưởng tết:</td>
+                      <td>Thưởng lễ, tết:</td>
                       <td className="text-right">{convertCurrency(item?.subAllowance10)}</td>
                     </tr>
                     <tr>
@@ -293,7 +293,7 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                       <td className="text-right">-{convertCurrency(item?.subAllowance17)}</td>
                     </tr>
                     <tr>
-                      <td>BHXH phải nộp:</td>
+                      <td>Truy thu BHXH:</td>
                       <td className="text-right">-{convertCurrency(item?.subAllowance18)}</td>
                     </tr>
                     <tr>
