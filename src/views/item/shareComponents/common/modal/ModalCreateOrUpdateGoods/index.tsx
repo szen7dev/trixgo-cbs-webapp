@@ -17,6 +17,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     sign: '',
     unit: '',
     unitprice: 0,
+    listedUnitprice: 0,
     sellingUnitprice: 0,
     unitPrice: 0,
     unitPrice2: 0,
@@ -66,6 +67,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       unitPrice2: +formData.unitPrice2, 
       unitPrice3: +formData.unitPrice3, 
       unitPrice4: +formData.unitPrice4, 
+      listedUnitprice: +formData.listedUnitprice, 
       sellingUnitprice: +formData.sellingUnitprice, 
       convertQuantity: +formData.convertQuantity,
     }
@@ -201,6 +203,18 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
           name="sellingUnitprice"
           className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData?.sellingUnitprice}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Đơn giá bán niêm yết</p>
+        <input
+          type="number"
+          placeholder="Đơn bán niêm yết"
+          name="listedUnitprice"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.listedUnitprice}
           onChange={onChange}
         />
       </section>
