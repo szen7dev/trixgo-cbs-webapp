@@ -84,6 +84,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         sign: '',
         unit: '',
         unitprice: 0,
+        listedUnitprice: 0,
         sellingUnitprice: 0,
         unitPrice: 0,
         unitPrice2: 0,
@@ -144,7 +145,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, sign, unit, unitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, convertQuantity, status, usage } = newListIDChecked[0];
+            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, convertQuantity, status, usage } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 type,
@@ -154,6 +155,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 sign,
                 unit,
                 unitprice,
+                listedUnitprice,
                 sellingUnitprice,
                 unitPrice,
                 unitPrice2,
@@ -204,6 +206,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 sign: '',
                 unit: '',
                 unitprice: 0,
+                listedUnitprice: 0,
                 sellingUnitprice: 0,
                 unitPrice: 0,
                 unitPrice2: 0,
@@ -217,7 +220,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1050px",
+                    height: "1100px",
                 }}
             >
                 <ModalCreateOrUpdateGoods
@@ -506,6 +509,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.sellingUnitprice)}
+                                <p><i>{formatNumberMoney(item?.listedUnitprice)}</i></p>
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.unitPrice)}
