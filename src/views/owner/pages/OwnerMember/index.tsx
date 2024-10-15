@@ -302,7 +302,7 @@ export const OwnerMemberPage: FC = () => {
               <td className="py-1 px-2">
                 {item.fullname}
                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
-                <p className="text-primary-gray text-[12px]"><i>{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}</i></p>
+                <p className="text-primary-gray text-[12px]"><i>Tạo: {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}</i></p>
               </td>
               <td className="py-1 px-2">{item.email}</td>
               <td className="py-1 px-2">{item.department?.name}</td>
