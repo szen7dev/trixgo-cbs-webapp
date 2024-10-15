@@ -74,6 +74,7 @@ export type UserSystemProps = {
     lang: string,
     imgUrl?: string;
     storageUse?: number;
+    createAt?: any
 }
 
 interface ModalProps {
