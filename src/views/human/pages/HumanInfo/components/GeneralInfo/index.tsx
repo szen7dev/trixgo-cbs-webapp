@@ -1,10 +1,11 @@
-import { FC, memo } from "react";
+import { FC, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { formatNumberMoney, convertDisplayDate } from "utils/cmcs";
 import type { Human } from 'typings/human';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { ACCESS_SALARY_TEMP } from "apis/localdb";
+import { ModalHumanInformation } from 'shareComponents/common/ModalHumanInformation';
 
 type Props = {
   info: Human
@@ -26,10 +27,20 @@ export enum INSURANCE_STATUS {
 }
 
 export const GeneralInfo: FC<Props> = memo((props) => {
+  const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
+	const [optionPopup, setOptionPopup] = useState();
+  const [staffPopup, setStaffPopup] = useState();
+
   const { user } = useAuth();
   const { t: i18n } = useTranslation(["human"]);
   const { info } = props;
   // console.log(user)
+
+  const toggleVisible = ({ option, staffID, contactID, goodsID, assetsID }: any) => {
+		setVisibleDrawer(!visibleDrawer)
+    setOptionPopup(option)
+		setStaffPopup(staffID)
+	}
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
@@ -412,7 +423,23 @@ export const GeneralInfo: FC<Props> = memo((props) => {
             </tr>
           </tbody>
         </table>
+          <div onClick={() => toggleVisible({ option: 1, staffID: info?.linkUser?._id})} className="mt-5 text-cbs-highlight-color cursor-pointer">
+            <p className="text-primary-gray">
+                <p>
+                    Bắt đầu làm việc từ tháng: <span className="font-bold">{Number(12 - info.numberOnLeave + 1)}</span> |
+                    Số phép tối đa trong năm: <span className="text-green-500 font-bold"> {info.numberOnLeave}</span> | 
+                    Tổng số phép được nghỉ tới hiện tại: <span className="font-bold">{Number(new Date().getMonth()) - Number(12 - info.numberOnLeave)}</span>
+                </p>
+                Số phép đã nghỉ: <span className="font-bold">{info?.linkUser?.numberOnLeave}</span> | 
+                Số phép còn lại tới hiện tại:  
+                <span className="text-red-500 font-bold ml-2"> 
+                    {Number(new Date().getMonth() + 1) - Number(info?.linkUser?.numberOnLeave + 1) - (12 - Number(info.numberOnLeave))}
+                </span>
+            </p>
+          </div>
       </div>
+
+      <ModalHumanInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ optionPopup, staffPopup }}/>
     </div>
   );
 });

@@ -658,7 +658,11 @@ const SalaryDetailPage: FC = () => {
             placeholder={"Template"}
             isMultiple={false}
             allowClearValueSingleInput={true}
-            data={listFilesPcm}
+            // data={listFilesPcm}
+            data={listFilesPcm.map((item) => ({
+                _id: item._id,
+                name: `${item?.name} | ${item?.comment?.content}`,
+            }))}
             formatItem={{
                 id: "_id",
                 text: "name",

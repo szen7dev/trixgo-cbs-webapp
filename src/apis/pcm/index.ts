@@ -117,8 +117,8 @@ const PcmRepository = {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_files?${convertObToUrl({
                 populates: JSON.stringify({
-                    path: "project task author",
-                    select: "_id name sign bizfullname"
+                    path: "project task comment author",
+                    select: "_id name sign bizfullname content"
                 }),
                 ...payload
             })}`

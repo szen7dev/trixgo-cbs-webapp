@@ -146,6 +146,7 @@ export type PcmFile = {
   author: User,
   type: number,
   createAt: string
+  comment: any
 }
 
 export type ListFilesPcmPayload = {
