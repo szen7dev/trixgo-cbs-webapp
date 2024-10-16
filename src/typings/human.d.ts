@@ -165,7 +165,7 @@ export type Human = {
     major?: Major[];
     other?: Other;
     workingStatus?: WorkingStatus;
-    linkUser?: linkUser;
+    linkUser?: any;
     userCreate?: userCreate;
     userUpdate?: userUpdate;
     contractType?: ContractType;
