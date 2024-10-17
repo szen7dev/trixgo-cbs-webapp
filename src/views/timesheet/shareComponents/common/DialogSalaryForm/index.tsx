@@ -119,6 +119,21 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
 
                 <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Phân loại</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="type"
+                      placeholder="1-Quản lý | 2-Sản xuất/công nhân"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div>
                   <p className="text-primary-gray text-[13px] mb-1">Ngày tháng ghi nhận lương</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
                     <DatePicker

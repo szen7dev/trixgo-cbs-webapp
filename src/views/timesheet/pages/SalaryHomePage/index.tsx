@@ -361,6 +361,7 @@ const SalaryHomePage: FC = () => {
                 <NavLink to={`/timesheet/salary/${salaryParent._id}`}>
                   {salaryParent.name}
                 </NavLink>
+                <p><i>{salaryParent?.type == 1 ? 'Khối quản lý' : 'Khối trực tiếp'} ({salaryParent?.type})</i></p>
                 <p className={"mt-1 text-gray-500"}>
                   Tạo: {salaryParent?.userCreate?.fullname} {moment(salaryParent.createAt).format(DATE_FORMAT)}
                 </p>
