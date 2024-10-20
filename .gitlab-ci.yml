@@ -5,6 +5,8 @@ include:
 build-docker-staging:
   extends: .build-docker-multiple-stage-template
   before_script:
+    - _DOCKER_CACHE_IMAGE_TAG=`echo $CI_COMMIT_REF_NAME | sed -E 's/[^a-z0-9._-]+/__/g'`
+    - _DOCKER_RELEASE_IMAGE_TAG="$_DOCKER_CACHE_IMAGE_TAG-`printf %010d $CI_PIPELINE_ID`-$CI_COMMIT_SHORT_SHA"
     - |
       cat <<EOF > .env
       HTTPS=http
@@ -38,6 +40,8 @@ build-docker-staging:
 build-docker-prod:
   extends: .build-docker-multiple-stage-template
   before_script:
+    - _DOCKER_CACHE_IMAGE_TAG=`echo $CI_COMMIT_REF_NAME | sed -E 's/[^a-z0-9._-]+/__/g'`
+    - _DOCKER_RELEASE_IMAGE_TAG="$_DOCKER_CACHE_IMAGE_TAG-`printf %010d $CI_PIPELINE_ID`-$CI_COMMIT_SHORT_SHA"
     - |
       cat <<EOF > .env
       HTTPS=http
