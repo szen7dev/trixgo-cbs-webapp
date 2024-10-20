@@ -27,6 +27,7 @@ import {
   AccountingDebtDetailPage2,
   AccountingVatInPage,
   AccountingVatOutPage,
+  AccountingBalance,
   AccountingReportFinancePage,
   AccountingSupportToolsPage,
 } from "views/accounting/pages";
@@ -224,6 +225,11 @@ const AccountingRouter: FC = () => {
         exact
         path="/accounting/vatout"
         component={AccountingVatOutPage}
+      />
+      <ProtectedRoute
+        exact
+        path="/accounting/financial-balance"
+        component={AccountingBalance}
       />
       <ProtectedRoute
         exact
