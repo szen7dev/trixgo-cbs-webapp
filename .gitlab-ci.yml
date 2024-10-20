@@ -70,4 +70,4 @@ build-docker-prod:
     - docker-xlarge
   only:
     refs:
-      - master
+      - main
