@@ -13,6 +13,7 @@ export * from './AccountingDebtDetailPage1';
 export * from './AccountingDebtDetailPage2';
 export * from './AccountingVatInPage';
 export * from './AccountingVatOutPage';
+export * from './AccountingBalance';
 export * from './AccountingReportFinancePage';
 export * from './AccountingSupportToolsPage';
 export * from './AccountingAdminPage';
