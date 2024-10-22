@@ -10,14 +10,14 @@ import { SearchInput } from "shareComponents/common";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import { toast } from "react-toastify";
 import {
-  FilterDateGroup
-} from "views/accounting/shareComponents/common";
-import {
-  DialogForm,
+  DialogForm, ActionGroupButton
 } from "views/accounting/shareComponents/common";
 import {
   useReportList, useMutationDocument
 } from "services/hooks/accounting/useReport";
+import iconRefresh from "assets/images/icons8-refresh.png";
+import { ModalConfirm } from "shareComponents/common";
+import API from "apis/repository";
 
 interface AccountingTicketsPageProps {
   type?: number
@@ -27,7 +27,7 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
   const { openModal, closeModal } = useModal();
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
-
+  const [recordSelected, toggleRecord] = React.useState<any>({});
   const history = useHistory();
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -52,13 +52,6 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useReportList({
     params: {
-        // type,
-        // fundaID,
-        // customerID,
-        // userCreateID: userID,
-        // keyword: inputFilter.keyword,
-        // fromDate: inputFilter.fromDate,
-        // toDate: inputFilter.toDate,
         limit: 20,
     },
     isFetchList: true
@@ -88,46 +81,97 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
     [closeModal, insertDocumentAsync, refetch]
   );
 
+  const handleUpdateReport = React.useCallback(
+    async (values) => {
+      try {
+        const isUpdated = await updateDocumentAsync(values);
+        if (!isUpdated.error) {
+          toast.success('Cập nhật thành công');
+          refetch();
+          closeModal();
+          return null;
+        }
+        toast.error(isUpdated?.data?.message);
+        throw new Error("Can not update!");
+      } catch (err) {
+        return null;
+      }
+    },
+    [closeModal, updateDocumentAsync, refetch]
+  );
+
+  const handleConfirmSync = useCallback(async (param: any) => {
+    closeModal();
+
+    const { data, status } = await API.post(
+      `/api/accounting/reports/sync-data`, {
+        option: param.option,
+        reportID: param.reportID,
+      }
+    )
+   
+    if (status !== 200 || data.error) {
+      return toast.warn('Đồng bộ thất bại')
+    }
+
+    refetch();
+    return toast.success('Đồng bộ thành công')
+  }, [])
+
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputFilter((value) => ({ ...value, keyword: event.target.value }))
   }, 500);
 
-  const handleOnChangeDate = useCallback((date, input) => {
-    if (input) {
-      setInputFilter((value) => ({ ...value, toDate: date }))
-    } else {
-      setInputFilter((value) => ({ ...value, fromDate: date }))
-    }
-  }, [])
+  const toggleModalOpenSign = (param: any) => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title="Bạn có muốn xác nhận Đồng bộ không?"
+          description= "Dữ liệu từ các bút toán sẽ được cập nhật về bảng này"
+          onConfirm={() => handleConfirmSync({ option: param.option, reportID: param.reportID })}
+          defaultText={false}
+          onCancel={closeModal}
+        />
+      </div>
+    )
+  }
 
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
-        <SearchInput classNameWrapper={"mr-1"} onChange={onChangeSearch} />
-        <div className="flex items-center">
-          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          <button
-          className={"bg-green-success h-[32px] text-white rounded px-5"}
-          onClick={() =>
-            openModal(
-              <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
-                <DialogForm
-                  title="Tạo mới"
-                  onSubmit={handleCreateReport}
-                  // outin={Number(outin)}
-                  // type={Number(type)}
-                  // fundaName={""}
-                  // projectName={""}
-                  // assigneeName={""}
-                  // warehouseName={""}
-                  // customerName={""}
-                />
-              </div>
-            )
-          }
-        >
-          Tạo mới
-        </button>
+        
+        <div className="filter-bar flex flex-wrap px-4 py-1">
+          <SearchInput classNameWrapper={"mr-1"} onChange={onChangeSearch} />
+          {Object.keys(recordSelected).length > 1 && (
+            <>
+              <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
+              <ActionGroupButton
+                recordSelected={recordSelected}
+                onUpdateStore={handleUpdateReport}
+              />
+            </>
+          )}
+        </div>
+
+        <button
+            className={"bg-green-success h-[32px] text-white rounded px-5"}
+            onClick={() =>
+              openModal(
+                <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
+                  <DialogForm
+                    title="Tạo mới"
+                    onSubmit={handleCreateReport}
+                  />
+                </div>
+              )
+            }
+          >
+            Tạo mới
+          </button>
           <div className="absolute right-0">
             <PaginateV2
                 ref={ref}
@@ -145,17 +189,19 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
                 }}
             />
           </div>
-        </div>
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
-            <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "3%"}}>
+            <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "5%"}}>
             TT
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
             Nội dung
+            </th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
+            Số cơ sở
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
             Từ ngày
@@ -173,6 +219,9 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
             Lợi nhuận
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
+            Đồng bộ dữ liệu
+            </th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
             Ghi chú
             </th>
           </tr>
@@ -180,8 +229,25 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
         <tbody className="">
           {listDataWithPager[pageIndex] && listDataWithPager[pageIndex].map((item: any, index: any) => (
             <tr key={item._id}  className="border-b border-primary-border">
-                <td className="py-1 px-2 border-r border-primary-border">{index + 1}</td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  <input
+                    className="form-check-input mr-2"
+                    type="checkbox"
+                    id="flexCheckDefault"
+                    checked={recordSelected?._id === item._id}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        toggleRecord(item);
+                        return null;
+                      }
+                      toggleRecord({});
+                      return null;
+                    }}
+                  />
+                  {index + 1}
+                </td>
                 <td className="py-1 px-2 border-r border-primary-border">{item.name}</td>
+                <td className="py-1 px-2 border-r border-primary-border">{item?.childs?.length}</td>
                 <td className="py-1 px-2 border-r border-primary-border">{moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</td>
                 <td className="py-1 px-2 border-r border-primary-border">{moment(item.toDate).format('DD/MM/YYYY HH:mm')}</td>
                 <td className="py-1 px-2 border-r border-primary-border text-right">
@@ -192,6 +258,12 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-right">
                   {formatNumberMoney(item.profit)}
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, reportID: item._id })}>
+                    <img src={iconRefresh} title={'Đồng bộ dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
+                    <span>Đồng bộ dữ liệu</span>
+                  </button>
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border">{item.note}</td>
             </tr>

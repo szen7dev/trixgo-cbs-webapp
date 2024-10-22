@@ -10,7 +10,7 @@ interface CreateOrEditDialogProps {
 //   outin: any,
 //   type: any,
   title: string;
-  defaultValues?: InsertStoreParentPayload;
+  defaultValues?: any;
 //   fundaName: string;
 //   projectName: string;
 //   assigneeName: string;
