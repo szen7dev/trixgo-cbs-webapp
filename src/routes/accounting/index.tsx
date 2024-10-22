@@ -236,6 +236,11 @@ const AccountingRouter: FC = () => {
         path="/accounting/financial-report"
         component={AccountingReportFinancePage}
       />
+      <ProtectedRoute
+        exact
+        path="/accounting/financial-report/:parentID"
+        component={AccountingReportFinancePage}
+      />
       <Route path="/accounting/*" component={ErrorPage} />
     </Switch>
   )
