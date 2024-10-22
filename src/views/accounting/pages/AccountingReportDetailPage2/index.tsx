@@ -1,14 +1,13 @@
 import React, { FC, useCallback, useState } from "react";
 import { NavLink, useHistory, useLocation, useParams } from "react-router-dom";
 import moment from "moment";
-import { useModal } from "services/hooks/useModal";
 import { formatNumberMoney } from "utils/cmcs";
-import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-import { DropdownSearchableV2 } from "shareComponents/common";
 import {
   useReportList, useReportByProperty
 } from "services/hooks/accounting/useReport";
 import { VOUCHER_TYPES } from "apis/localdb/index";
+import cn from "classnames";
+import styles from 'views/accounting/styles/styles.module.css';
 
 interface AccountingTicketsPageProps {
     option?: number
@@ -109,7 +108,10 @@ export const AccountingReportDetailPage2: FC<AccountingTicketsPageProps> = ({opt
                 <td className="py-1 px-2 border-r border-primary-border">{item?.note}</td>
               </tr>
           ))}
-           <tr className="border-b border-primary-border font-bold styles_bgFooterYellow__2PorF">
+           <tr className={cn(
+            "border-b border-primary-border font-bold",
+            styles.bgFooterYellow
+          )}>
               <td className="py-1 px-2 border-r border-primary-border">
                 
               </td>
