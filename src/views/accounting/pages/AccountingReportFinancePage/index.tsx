@@ -236,24 +236,17 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
                     {index + 1}
                   </td>
                   <td className="py-1 px-2 border-r border-primary-border">
-                    {/* <NavLink to={`/accounting/financial-report/funda/${item._id}`}>
+                     <NavLink to={`/accounting/financial-report/funda/${item._id}`} className="text-cbs-highlight-color">
                       {item?.funda?.name}
-                    </NavLink> */}
-                    {item?.funda?.name}
+                    </NavLink>
                   </td>
                   <td className="py-1 px-2 border-r border-primary-border">{moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</td>
                   <td className="py-1 px-2 border-r border-primary-border">{moment(item.toDate).format('DD/MM/YYYY HH:mm')}</td>
                   <td className="py-1 px-2 border-r border-primary-border text-right">
-                    {/* {formatNumberMoney(item.revenue)} */}
-                    <NavLink to={`/accounting/financial-report/funda/revenue/${item._id}`} className="text-cbs-highlight-color">
-                      {formatNumberMoney(item.revenue)}
-                    </NavLink>
+                  {formatNumberMoney(item.revenue)}
                   </td>
                   <td className="py-1 px-2 border-r border-primary-border text-right">
-                    {/* {formatNumberMoney(item.expense)} */}
-                    <NavLink to={`/accounting/financial-report/funda/expense/${item._id}`} className="text-cbs-highlight-color">
-                      {formatNumberMoney(item.expense)}
-                    </NavLink>
+                  {formatNumberMoney(item.expense)}
                   </td>
                   <td className="py-1 px-2 border-r border-primary-border text-right">
                     {formatNumberMoney(item.profit)}
