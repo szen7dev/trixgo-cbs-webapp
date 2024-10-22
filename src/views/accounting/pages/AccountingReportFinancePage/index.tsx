@@ -197,7 +197,7 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
             <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "5%"}}>
             TT
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
+            <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "20%"}}>
             Nội dung
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
@@ -246,7 +246,10 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
                   />
                   {index + 1}
                 </td>
-                <td className="py-1 px-2 border-r border-primary-border">{item.name}</td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  {item.name}
+                    {/* <p className="text-small"><i>{item._id}</i></p> */}
+                </td>
                 <td className="py-1 px-2 border-r border-primary-border">{item?.childs?.length}</td>
                 <td className="py-1 px-2 border-r border-primary-border">{moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</td>
                 <td className="py-1 px-2 border-r border-primary-border">{moment(item.toDate).format('DD/MM/YYYY HH:mm')}</td>
@@ -262,7 +265,7 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
                 <td className="py-1 px-2 border-r border-primary-border text-right">
                   <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, reportID: item._id })}>
                     <img src={iconRefresh} title={'Đồng bộ dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
-                    <span>Đồng bộ dữ liệu</span>
+                    <span>Đồng bộ</span>
                   </button>
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border">{item.note}</td>
