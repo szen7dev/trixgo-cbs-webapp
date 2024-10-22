@@ -4,10 +4,8 @@ import moment from "moment";
 import { useModal } from "services/hooks/useModal";
 import { formatNumberMoney } from "utils/cmcs";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-import TriangleDown from "assets/icons/TriangleDown";
 import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
-import { DropdownSearchableV2 } from "shareComponents/common";
 import { toast } from "react-toastify";
 import {
   DialogForm, ActionGroupButton
@@ -25,20 +23,12 @@ interface AccountingTicketsPageProps {
 
 export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () => {
   const { openModal, closeModal } = useModal();
-  const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const history = useHistory();
-  const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
-  const fundaIDParams = searchParams.get("fundaID")
   const { parentID } = useParams<{ parentID: string }>();
-  console.log(parentID)
-
-  const [pageParam, setPageParam] = useState('');
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
   const [keyword, setKeyword] = React.useState("")
 

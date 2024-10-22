@@ -14,22 +14,8 @@ interface AccountingTicketsPageProps {
 }
 
 export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({option}) => {
-  const { openModal, closeModal } = useModal();
-  const [showOption, setShowOption] = useState(false)
-  const [pageIndex, setPageIndex] = useState(0)
-  const [recordSelected, toggleRecord] = React.useState<any>({});
   const history = useHistory();
-  const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
-  const fundaIDParams = searchParams.get("fundaID")
   const { reportID } = useParams<{ reportID: string }>();
-
-  const [pageParam, setPageParam] = useState('');
-
-  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
-  const ref = React.useRef<PaginateHandle>(null);
-  const [keyword, setKeyword] = React.useState("")
 
   const { listJournalByProperty } = useReportByProperty({
     params: {
@@ -38,8 +24,6 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
     },
     isFetchList: true
   })
-
-  console.log(listJournalByProperty)
 
   return (
     <main className="h-full">
@@ -66,6 +50,12 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
                     />
                 </svg>
             </button>
+            <p className="text-lg mr-5">
+              {listJournalByProperty?.infoReport?.name} - {listJournalByProperty?.infoReport?.funda?.name} 
+              {option == 1 ? ' - Doanh thu ' : ' - Chi phí '}
+              | Từ {moment(listJournalByProperty?.infoReport?.fromDate).format('DD/MM/YYYY')} 
+              - Đến {moment(listJournalByProperty?.infoReport?.toDate).format('DD/MM/YYYY')} 
+              </p>
         </div>
       </header>
 
@@ -79,13 +69,10 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
               Nội dung
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Ngày
+              Doanh thu/Giảm trừ chi phí
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Doanh thu
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Chi phí
+              Chi phí/Giảm trừ doanh thu
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
               Ghi chú
@@ -93,7 +80,75 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
           </tr>
         </thead>
         <tbody className="">
-          
+        {listJournalByProperty?.listData1[0]._credit.map((item: any, index: any) => (
+          <tr key={item._id}  className="border-b border-primary-border">
+              <td className="py-1 px-2 border-r border-primary-border">
+                {index + 1}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border">
+                {item?._id?.account?.name} - {item?._id?.account?.description}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(item.amount)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border">
+               
+              </td>
+            </tr>
+        ))}
+        {listJournalByProperty?.listData1[0]._debit.map((item: any, index: any) => (
+          <tr key={item._id}  className="border-b border-primary-border">
+              <td className="py-1 px-2 border-r border-primary-border">
+                {index + 1}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border">
+                {item?._id?.account?.name} - {item?._id?.account?.description}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(item.amount)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border">
+               
+              </td>
+            </tr>
+        ))}
+
+        {listJournalByProperty?.listData2[0]._debit.map((item: any, index: any) => (
+          <tr key={item._id}  className="border-b border-primary-border">
+              <td className="py-1 px-2 border-r border-primary-border">
+                {index + 1}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border">
+                {item?._id?.account?.name} - {item?._id?.account?.description}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(item.amount)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border">
+               
+              </td>
+            </tr>
+        ))}
+        {listJournalByProperty?.listData2[0]._credit.map((item: any, index: any) => (
+          <tr key={item._id}  className="border-b border-primary-border">
+              <td className="py-1 px-2 border-r border-primary-border">
+                {index + 1}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border">
+                {item?._id?.account?.name} - {item?._id?.account?.description}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(item.amount)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border">
+               
+              </td>
+            </tr>
+        ))}
         </tbody>
       </table>
 
