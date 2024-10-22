@@ -17,3 +17,4 @@ export * from './AccountingBalance';
 export * from './AccountingReportFinancePage';
 export * from './AccountingSupportToolsPage';
 export * from './AccountingAdminPage';
+export * from './AccountingReportDetailPage';

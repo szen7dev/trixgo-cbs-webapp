@@ -122,10 +122,10 @@ export const useReportList = ({ params = {},  isFetchList = false }: any): UseQu
     }
 }
 
-export const useVoucherByProperty = ({ params = {},  isFetchList = false }: any): any => {
+export const useReportByProperty = ({ params = {},  isFetchList = false }: any): any => {
 
     const { data: detailData, isLoading, refetch } =
-    useQuery([`voucher_by_property`,{...params, isFetchList }],() => ReportRepository.fetchListByProperty(params), {
+    useQuery([`report_by_property`,{...params, isFetchList }],() => ReportRepository.fetchListByProperty(params), {
         refetchOnWindowFocus: false,
         enabled: isFetchList,
     });
