@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from "react";
-import { NavLink, useHistory, useLocation } from "react-router-dom";
+import { NavLink, useHistory, useLocation, useParams } from "react-router-dom";
 import moment from "moment";
 import { useModal } from "services/hooks/useModal";
 import { formatNumberMoney } from "utils/cmcs";
@@ -23,7 +23,7 @@ interface AccountingTicketsPageProps {
   type?: number
 }
 
-export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ type = 1 }) => {
+export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () => {
   const { openModal, closeModal } = useModal();
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
@@ -32,26 +32,19 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
   const fundaIDParams = searchParams.get("fundaID")
+  const { parentID } = useParams<{ parentID: string }>();
 
   const [pageParam, setPageParam] = useState('');
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
-  const accountRef = React.useRef<DropdownHandle>(null);
-
-  const [fundaID, setFundaID] = useState<string | null>(fundaIDParams);
-  const [customerID, setCustomerID] = useState<string | null>();
-  const [userID, setUserID] = useState<string | null>();
-
-  const [inputFilter, setInputFilter] = useState({
-    keyword: '',
-    fromDate: new Date(new Date().getFullYear(), 0, 1),
-    toDate: new Date(new Date().getFullYear(), 11, 31)
-  });
+  const [keyword, setKeyword] = React.useState("")
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useReportList({
     params: {
+        keyword,
+        parentID,
         limit: 20,
     },
     isFetchList: true
@@ -118,10 +111,6 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
     return toast.success('Đồng bộ thành công')
   }, [])
 
-  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputFilter((value) => ({ ...value, keyword: event.target.value }))
-  }, 500);
-
   const toggleModalOpenSign = (param: any) => {
     openModal(
       <div
@@ -145,7 +134,12 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
       <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
         
         <div className="filter-bar flex flex-wrap px-4 py-1">
-          <SearchInput classNameWrapper={"mr-1"} onChange={onChangeSearch} />
+          <SearchInput
+              classNameWrapper={"mr-2"}
+              onChange={debounce((e) => {
+                setKeyword(e.target.value);
+              }, 1000)}
+            />
           {Object.keys(recordSelected).length > 1 && (
             <>
               <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
@@ -195,82 +189,110 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = ({ ty
         <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
             <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "5%"}}>
-            TT
+              TT
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "20%"}}>
-            Nội dung
+              Nội dung
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-            Số cơ sở
+              Từ ngày
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-            Từ ngày
+              Đến ngày
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-            Đến ngày
+              Doanh thu
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-            Doanh thu
+              Chi phí
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-            Chi phí
+              Lợi nhuận
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-            Lợi nhuận
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-            Đồng bộ dữ liệu
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-            Ghi chú
+              Ghi chú
             </th>
           </tr>
         </thead>
         <tbody className="">
-          {listDataWithPager[pageIndex] && listDataWithPager[pageIndex].map((item: any, index: any) => (
-            <tr key={item._id}  className="border-b border-primary-border">
-                <td className="py-1 px-2 border-r border-primary-border">
-                  <input
-                    className="form-check-input mr-2"
-                    type="checkbox"
-                    id="flexCheckDefault"
-                    checked={recordSelected?._id === item._id}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        toggleRecord(item);
+          {listDataWithPager[pageIndex] && listDataWithPager[pageIndex].map((item: any, index: any) => {
+            if(item?.funda){
+              return (
+                <tr key={item._id}  className="border-b border-primary-border">
+                  <td className="py-1 px-2 border-r border-primary-border">
+                    {index + 1}
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border">
+                    <NavLink to={`/accounting/financial-report/funda/${item._id}`}>
+                      {item?.funda?.name}
+                    </NavLink>
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border">{moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</td>
+                  <td className="py-1 px-2 border-r border-primary-border">{moment(item.toDate).format('DD/MM/YYYY HH:mm')}</td>
+                  <td className="py-1 px-2 border-r border-primary-border text-right">
+                    {formatNumberMoney(item.revenue)}
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border text-right">
+                    {formatNumberMoney(item.expense)}
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border text-right">
+                    {formatNumberMoney(item.profit)}
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border">
+                    {item.note}
+                  </td>
+                </tr>
+              )
+            }else{
+              return (
+                <tr key={item._id}  className="border-b border-primary-border">
+                  <td className="py-1 px-2 border-r border-primary-border">
+                    <input
+                      className="form-check-input mr-2"
+                      type="checkbox"
+                      id="flexCheckDefault"
+                      checked={recordSelected?._id === item._id}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          toggleRecord(item);
+                          return null;
+                        }
+                        toggleRecord({});
                         return null;
-                      }
-                      toggleRecord({});
-                      return null;
-                    }}
-                  />
-                  {index + 1}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                  {item.name}
-                    {/* <p className="text-small"><i>{item._id}</i></p> */}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">{item?.childs?.length}</td>
-                <td className="py-1 px-2 border-r border-primary-border">{moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</td>
-                <td className="py-1 px-2 border-r border-primary-border">{moment(item.toDate).format('DD/MM/YYYY HH:mm')}</td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(item.revenue)}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(item.expense)}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(item.profit)}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, reportID: item._id })}>
-                    <img src={iconRefresh} title={'Đồng bộ dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
-                    <span>Đồng bộ</span>
-                  </button>
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">{item.note}</td>
-            </tr>
-            ))}
+                      }}
+                    />
+                    {index + 1}
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border">
+                    <NavLink to={`/accounting/financial-report/${item._id}`}>
+                      {item?.name} | {item?.childs?.length} cơ sở
+                    </NavLink>
+                      {/* <p className="text-small"><i>{item._id}</i></p> */}
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border">{moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</td>
+                  <td className="py-1 px-2 border-r border-primary-border">{moment(item.toDate).format('DD/MM/YYYY HH:mm')}</td>
+                  <td className="py-1 px-2 border-r border-primary-border text-right">
+                    {formatNumberMoney(item.revenue)}
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border text-right">
+                    {formatNumberMoney(item.expense)}
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border text-right">
+                    {formatNumberMoney(item.profit)}
+                  </td>
+                  <td className="py-1 px-2 border-r border-primary-border">
+                    {item.note}
+                    <div>
+                      <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, reportID: item._id })}>
+                        <img src={iconRefresh} title={'Đồng bộ dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
+                        <span>Đồng bộ</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )
+            }
+          })}
         </tbody>
       </table>
 

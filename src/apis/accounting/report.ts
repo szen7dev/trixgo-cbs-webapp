@@ -26,7 +26,7 @@ async function fetchListReport(params : any) {
     const { data } = await API.get(`${ACCOUNTING_REPORT}`, {
         params: {
             populates: {
-                "path": "userCreate",
+                "path": "userCreate funda",
                 "select": "name sign phone taxid address fullname",
             },
             ...params,
