@@ -33,6 +33,7 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
   const searchParams = new URLSearchParams(location.search)
   const fundaIDParams = searchParams.get("fundaID")
   const { parentID } = useParams<{ parentID: string }>();
+  console.log(parentID)
 
   const [pageParam, setPageParam] = useState('');
 
@@ -133,9 +134,31 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
         
-        <div className="filter-bar flex flex-wrap px-4 py-1">
+        <div className="filter-bar flex flex-wrap px-2 py-1">
+          {
+            parentID != undefined ?  <button
+              type="button"
+              className="p-2 rounded-3xl"
+              onClick={() => history.goBack()}
+              >
+              <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+              >
+                  <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+              </svg>
+          </button>: <></>
+          }
           <SearchInput
-              classNameWrapper={"mr-2"}
+              classNameWrapper={""}
               onChange={debounce((e) => {
                 setKeyword(e.target.value);
               }, 1000)}
@@ -223,17 +246,24 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
                     {index + 1}
                   </td>
                   <td className="py-1 px-2 border-r border-primary-border">
-                    <NavLink to={`/accounting/financial-report/funda/${item._id}`}>
+                    {/* <NavLink to={`/accounting/financial-report/funda/${item._id}`}>
                       {item?.funda?.name}
-                    </NavLink>
+                    </NavLink> */}
+                    {item?.funda?.name}
                   </td>
                   <td className="py-1 px-2 border-r border-primary-border">{moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</td>
                   <td className="py-1 px-2 border-r border-primary-border">{moment(item.toDate).format('DD/MM/YYYY HH:mm')}</td>
                   <td className="py-1 px-2 border-r border-primary-border text-right">
-                    {formatNumberMoney(item.revenue)}
+                    {/* {formatNumberMoney(item.revenue)} */}
+                    <NavLink to={`/accounting/financial-report/funda/revenue/${item._id}`} className="text-cbs-highlight-color">
+                      {formatNumberMoney(item.revenue)}
+                    </NavLink>
                   </td>
                   <td className="py-1 px-2 border-r border-primary-border text-right">
-                    {formatNumberMoney(item.expense)}
+                    {/* {formatNumberMoney(item.expense)} */}
+                    <NavLink to={`/accounting/financial-report/funda/expense/${item._id}`} className="text-cbs-highlight-color">
+                      {formatNumberMoney(item.expense)}
+                    </NavLink>
                   </td>
                   <td className="py-1 px-2 border-r border-primary-border text-right">
                     {formatNumberMoney(item.profit)}
