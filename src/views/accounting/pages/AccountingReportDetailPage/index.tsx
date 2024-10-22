@@ -25,6 +25,21 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
     isFetchList: true
   })
 
+  let revenue = 0, expense = 0
+  {listJournalByProperty?.listData1[0]._credit.map((item: any, index: any) => (
+    revenue = Number(revenue) + item.amount
+  ))}
+  {listJournalByProperty?.listData1[0]._debit.map((item: any, index: any) => (
+    revenue = Number(revenue) - item.amount
+  ))}
+
+  {listJournalByProperty?.listData2[0]._credit.map((item: any, index: any) => (
+    expense = Number(expense) - item.amount
+  ))}
+  {listJournalByProperty?.listData2[0]._debit.map((item: any, index: any) => (
+    expense = Number(expense) + item.amount
+  ))}
+
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
@@ -75,6 +90,9 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
               Chi phí/Giảm trừ chi phí
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
+              Lợi nhuận
+            </th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Ghi chú
             </th>
           </tr>
@@ -86,11 +104,14 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
                 {index + 1}
               </td>
               <td className="py-1 px-2 border-r border-primary-border">
-                {item?._id?.account?.name} - {item?._id?.account?.description}
+              <NavLink to={`/accounting/financial-report/funda/${reportID}/${item?._id?.account?._id}`} className="text-cbs-highlight-color">
+                  {item?._id?.account?.name} - {item?._id?.account?.description}
+                </NavLink>
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(item.amount)}
               </td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
             </tr>
@@ -101,11 +122,14 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
                 {index + 1}
               </td>
               <td className="py-1 px-2 border-r border-primary-border">
-                {item?._id?.account?.name} - {item?._id?.account?.description}
+              <NavLink to={`/accounting/financial-report/funda/${reportID}/${item?._id?.account?._id}`} className="text-cbs-highlight-color">
+                  {item?._id?.account?.name} - {item?._id?.account?.description}
+                </NavLink>
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 -{formatNumberMoney(item.amount)}
               </td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
             </tr>
@@ -117,12 +141,15 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
                 {index + 1}
               </td>
               <td className="py-1 px-2 border-r border-primary-border">
-                {item?._id?.account?.name} - {item?._id?.account?.description}
+              <NavLink to={`/accounting/financial-report/funda/${reportID}/${item?._id?.account?._id}`} className="text-cbs-highlight-color">
+                  {item?._id?.account?.name} - {item?._id?.account?.description}
+                </NavLink>
               </td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(item.amount)}
               </td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
             </tr>
         ))}
@@ -132,15 +159,36 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
                 {index + 1}
               </td>
               <td className="py-1 px-2 border-r border-primary-border">
-                {item?._id?.account?.name} - {item?._id?.account?.description}
+              <NavLink to={`/accounting/financial-report/funda/${reportID}/${item?._id?.account?._id}`} className="text-cbs-highlight-color">
+                  {item?._id?.account?.name} - {item?._id?.account?.description}
+                </NavLink>
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right"></td>
               <td className="py-1 px-2 border-r border-primary-border">
                 -{formatNumberMoney(item.amount)}
               </td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
             </tr>
         ))}
+         <tr className="border-b border-primary-border font-bold styles_bgFooterYellow__2PorF">
+              <td className="py-1 px-2 border-r border-primary-border">
+                
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border">
+                Tổng
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+              {formatNumberMoney(revenue)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(expense)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(revenue - expense)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+        </tr>
         </tbody>
       </table>
 
