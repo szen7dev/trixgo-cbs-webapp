@@ -45,7 +45,7 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
     params: {
         keyword,
         parentID,
-        limit: 20,
+        limit: 50,
     },
     isFetchList: true
   })
@@ -171,7 +171,7 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
                 ref={ref}
                 totalRecord={totalRecord}
                 totalPages={totalPage}
-                limit={20}
+                limit={50}
                 hasNextPage={hasNextPage}
                 isFetching={isLoading}
                 nextPageAction={() => {
