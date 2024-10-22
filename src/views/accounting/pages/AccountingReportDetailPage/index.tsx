@@ -69,13 +69,10 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
               Nội dung
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Doanh thu/Giảm trừ chi phí
+              Doanh thu/Giảm trừ doanh thu
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Chi phí/Giảm trừ doanh thu
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Ghi chú
+              Chi phí/Giảm trừ chi phí
             </th>
           </tr>
         </thead>
@@ -92,9 +89,6 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
                 {formatNumberMoney(item.amount)}
               </td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
-              <td className="py-1 px-2 border-r border-primary-border">
-               
-              </td>
             </tr>
         ))}
         {listJournalByProperty?.listData1[0]._debit.map((item: any, index: any) => (
@@ -105,13 +99,10 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
               <td className="py-1 px-2 border-r border-primary-border">
                 {item?._id?.account?.name} - {item?._id?.account?.description}
               </td>
-              <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(item.amount)}
+                -{formatNumberMoney(item.amount)}
               </td>
-              <td className="py-1 px-2 border-r border-primary-border">
-               
-              </td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
             </tr>
         ))}
 
@@ -127,9 +118,6 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(item.amount)}
               </td>
-              <td className="py-1 px-2 border-r border-primary-border">
-               
-              </td>
             </tr>
         ))}
         {listJournalByProperty?.listData2[0]._credit.map((item: any, index: any) => (
@@ -140,12 +128,9 @@ export const AccountingReportDetailPage: FC<AccountingTicketsPageProps> = ({opti
               <td className="py-1 px-2 border-r border-primary-border">
                 {item?._id?.account?.name} - {item?._id?.account?.description}
               </td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(item.amount)}
-              </td>
-              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border text-right"></td>
               <td className="py-1 px-2 border-r border-primary-border">
-               
+                -{formatNumberMoney(item.amount)}
               </td>
             </tr>
         ))}
