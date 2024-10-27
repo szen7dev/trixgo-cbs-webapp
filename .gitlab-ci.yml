@@ -26,7 +26,7 @@ build-docker-staging:
       REACT_APP_ONESIGNAL_APP_ID_LOCAL=21ce042a-1b27-4072-b719-98a78e75b0ba
       REACT_APP_PLATFORM=1
       REACT_APP_DOMAIN=https://staging.cbs.trixgo.com
-      REACT_APP_TINYMCE_API_KEY=l9vlfallhfhjga6t76qo8ew2g0584isuf7r38ukrde7jf6xz
+      REACT_APP_TINYMCE_API_KEY=3jwwbts50j3tdinz6rxvmr7aegzkjz7vw5kgi12hwdp5bcum
       REACT_APP_SENTRY_DSN=https://a6b2135ab06543f58500130a5ea06d09@o1167997.ingest.sentry.io/6294307
       EOF
   tags:
@@ -59,7 +59,7 @@ build-docker-prod:
       REACT_APP_ONESIGNAL_APP_ID_STAGING=8d5db406-1628-4a23-bf40-8bb53bf582ba
       REACT_APP_PLATFORM=1
       REACT_APP_DOMAIN=https://app.trixgo.com
-      REACT_APP_TINYMCE_API_KEY=l9vlfallhfhjga6t76qo8ew2g0584isuf7r38ukrde7jf6xz
+      REACT_APP_TINYMCE_API_KEY=3jwwbts50j3tdinz6rxvmr7aegzkjz7vw5kgi12hwdp5bcum
       REACT_APP_SENTRY_DSN=https://a6b2135ab06543f58500130a5ea06d09@o1167997.ingest.sentry.io/6294307
       EOF
   tags:
