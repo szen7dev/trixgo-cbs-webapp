@@ -14,7 +14,6 @@ interface CertificateProps {
 }
 
 export const Onleave: FC<CertificateProps> = memo((props) => {
-    // console.log(props)
     const { openModal, closeModal } = useModal();
     const { humanId, companyID, linkUserID } = props;
     const [pageIndex, setPageIndex] = useState(0);
@@ -31,7 +30,6 @@ export const Onleave: FC<CertificateProps> = memo((props) => {
         loading,
         hasNextPage,
     } = useQueryListTimeSheetParent({ humanID: linkUserID, sortOption: 2, type: 3, subtype: 2 });
-    // console.log(dataNotFilter)
 
     const handleClickAddNew = useCallback(() => {
         openModal(
