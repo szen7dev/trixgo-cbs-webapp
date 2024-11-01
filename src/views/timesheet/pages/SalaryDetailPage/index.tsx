@@ -19,7 +19,7 @@ import { APP_ID } from "apis/localdb";
 
 import { DetailMainRow, ModalShare } from "./components";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
-import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
+import { InputWidthAdjust, DialogSalaryAddUser } from "views/timesheet/shareComponents/common";
 import { setFilterDropdown } from "redux/reducer/DocumentProjectSlice";
 import { usePcmFile } from "services/hooks/pcm/usePcm";
 import { Loader, ModalConfirm, DropdownSearchableV2 } from "shareComponents/common";
@@ -29,6 +29,7 @@ import {
   useQueryDetailSalaryParent,
   useQueryListSalaryChild,
   useMutationSalaryChild,
+  useMutationSalaryParent
 } from "services/hooks/useSalary";
 
 import { useModal } from "services/hooks/useModal";
@@ -334,6 +335,28 @@ const SalaryDetailPage: FC = () => {
     }
   }
 
+  const {
+    onCreateSalaryParentAsync,
+  } = useMutationSalaryParent();
+
+  const handleCreateSalary = React.useCallback(
+    async (values) => {
+      try {
+        const isCreated = await onCreateSalaryParentAsync(values);
+        if (!isCreated.error) {
+          onRefreshSalaryChild();
+          closeModal();
+          return null;
+        } else {
+          return toast.error(isCreated.data.message)
+        }
+      } catch (err) {
+        return null;
+      }
+    },
+    [closeModal, onCreateSalaryParentAsync, onRefreshSalaryChild]
+  );
+
   const openDeleteModal = () => {
     openModal(
       <div
@@ -413,7 +436,7 @@ const SalaryDetailPage: FC = () => {
           <DropdownSearchableV2
               ref={datahubRef}
               className={"mr-1 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Dự án/Phòng ban"}
+              placeholder={"Phòng ban"}
               isMultiple={true}
               allowClearValueSingleInput={true}
               data={listProjectsUserIsMember}
@@ -690,6 +713,24 @@ const SalaryDetailPage: FC = () => {
   						<img src={TrashIcon} alt="Trash" />
   					</div>
           )}
+
+          <button
+            className={"bg-green-success h-[32px] text-white rounded px-2 mb-2"}
+            onClick={() =>
+              openModal(
+                <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
+                  <DialogSalaryAddUser
+                    title="Thêm nhân sự"
+                    onSubmit={handleCreateSalary}
+                    projectName={""}
+                    assigneeName={""}
+                  />
+                </div>
+              )
+            }
+          >
+            Thêm nhân sự
+          </button>
 
           <PaginateV2
             ref={ref}
