@@ -123,7 +123,6 @@ export const Review: FC<CertificateProps> = memo((props) => {
 
   const handleFinishFormUpdate = useCallback(
     async (values) => {
-      console.log(values)
       const res = await updateContractDocumentAsync({
         ...values,
         contactID: humanId,

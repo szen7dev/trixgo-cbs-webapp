@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useRef } from "react";
+import React, { FC, useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -6,6 +6,7 @@ import { debounce } from "lodash";
 import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
 import { TIMESHEET_SUBTYPES, CHECK_SALLARY } from "apis/localdb/index";
+import API from "apis/repository";
 
 /**
  * Components, Assets
@@ -19,7 +20,7 @@ import { APP_ID } from "apis/localdb";
 
 import { DetailMainRow, ModalShare } from "./components";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
-import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
+import { InputWidthAdjust, DialogSalaryAddUser } from "views/timesheet/shareComponents/common";
 import { setFilterDropdown } from "redux/reducer/DocumentProjectSlice";
 import { usePcmFile } from "services/hooks/pcm/usePcm";
 import { Loader, ModalConfirm, DropdownSearchableV2 } from "shareComponents/common";
@@ -151,7 +152,6 @@ const SalaryDetailPage: FC = () => {
     },
     isFetch: true
   })
-  // console.log(listFilesPcm)
 
   const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
   const { data: listPosition } = usePosition({ keyword: positionKeyword }, true);
@@ -334,6 +334,25 @@ const SalaryDetailPage: FC = () => {
     }
   }
 
+  const handleConfirmSync = useCallback(async (param: any) => {
+    closeModal();
+
+    const { data, status } = await API.post(
+      `/api/timesheet/expert_salary/sync-data`, {
+        option: 1,
+        salaryID: salaryParentID,
+        arrUser: [param.assigneeID]
+      }
+    )
+   
+    if (status !== 200 || data.error) {
+      return toast.warn('Cập nhật thất bại')
+    }
+
+    onRefreshSalaryChild();
+    return toast.success('Cập nhật thành công')
+  }, [])
+
   const openDeleteModal = () => {
     openModal(
       <div
@@ -413,7 +432,7 @@ const SalaryDetailPage: FC = () => {
           <DropdownSearchableV2
               ref={datahubRef}
               className={"mr-1 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Dự án/Phòng ban"}
+              placeholder={"Phòng ban"}
               isMultiple={true}
               allowClearValueSingleInput={true}
               data={listProjectsUserIsMember}
@@ -658,7 +677,6 @@ const SalaryDetailPage: FC = () => {
             placeholder={"Template"}
             isMultiple={false}
             allowClearValueSingleInput={true}
-            // data={listFilesPcm}
             data={listFilesPcm.map((item) => ({
                 _id: item._id,
                 name: `${item?.name} | ${item?.comment?.content}`,
@@ -690,6 +708,24 @@ const SalaryDetailPage: FC = () => {
   						<img src={TrashIcon} alt="Trash" />
   					</div>
           )}
+
+          <button
+            className={"bg-green-success h-[32px] text-white rounded px-2 mb-2"}
+            onClick={() =>
+              openModal(
+                <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
+                  <DialogSalaryAddUser
+                    title="Thêm nhân sự"
+                    onSubmit={handleConfirmSync}
+                    projectName={""}
+                    assigneeName={""}
+                  />
+                </div>
+              )
+            }
+          >
+            Thêm nhân sự
+          </button>
 
           <PaginateV2
             ref={ref}
