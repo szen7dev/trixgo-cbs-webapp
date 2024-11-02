@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useRef } from "react";
+import React, { FC, useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -6,6 +6,7 @@ import { debounce } from "lodash";
 import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
 import { TIMESHEET_SUBTYPES, CHECK_SALLARY } from "apis/localdb/index";
+import API from "apis/repository";
 
 /**
  * Components, Assets
@@ -29,7 +30,6 @@ import {
   useQueryDetailSalaryParent,
   useQueryListSalaryChild,
   useMutationSalaryChild,
-  useMutationSalaryParent
 } from "services/hooks/useSalary";
 
 import { useModal } from "services/hooks/useModal";
@@ -152,7 +152,6 @@ const SalaryDetailPage: FC = () => {
     },
     isFetch: true
   })
-  // console.log(listFilesPcm)
 
   const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
   const { data: listPosition } = usePosition({ keyword: positionKeyword }, true);
@@ -335,27 +334,24 @@ const SalaryDetailPage: FC = () => {
     }
   }
 
-  const {
-    onCreateSalaryParentAsync,
-  } = useMutationSalaryParent();
+  const handleConfirmSync = useCallback(async (param: any) => {
+    closeModal();
 
-  const handleCreateSalary = React.useCallback(
-    async (values) => {
-      try {
-        const isCreated = await onCreateSalaryParentAsync(values);
-        if (!isCreated.error) {
-          onRefreshSalaryChild();
-          closeModal();
-          return null;
-        } else {
-          return toast.error(isCreated.data.message)
-        }
-      } catch (err) {
-        return null;
+    const { data, status } = await API.post(
+      `/api/timesheet/expert_salary/sync-data`, {
+        option: 1,
+        salaryID: salaryParentID,
+        arrUser: [param.assigneeID]
       }
-    },
-    [closeModal, onCreateSalaryParentAsync, onRefreshSalaryChild]
-  );
+    )
+   
+    if (status !== 200 || data.error) {
+      return toast.warn('Cập nhật thất bại')
+    }
+
+    onRefreshSalaryChild();
+    return toast.success('Cập nhật thành công')
+  }, [])
 
   const openDeleteModal = () => {
     openModal(
@@ -681,7 +677,6 @@ const SalaryDetailPage: FC = () => {
             placeholder={"Template"}
             isMultiple={false}
             allowClearValueSingleInput={true}
-            // data={listFilesPcm}
             data={listFilesPcm.map((item) => ({
                 _id: item._id,
                 name: `${item?.name} | ${item?.comment?.content}`,
@@ -721,7 +716,7 @@ const SalaryDetailPage: FC = () => {
                 <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
                   <DialogSalaryAddUser
                     title="Thêm nhân sự"
-                    onSubmit={handleCreateSalary}
+                    onSubmit={handleConfirmSync}
                     projectName={""}
                     assigneeName={""}
                   />

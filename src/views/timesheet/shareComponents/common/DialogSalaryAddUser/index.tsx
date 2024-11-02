@@ -1,15 +1,13 @@
 import React, { FC, useState, UIEvent } from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import debounce from "lodash/debounce";
 import Close from "assets/icons/Close";
 import { useModal } from "services/hooks/useModal";
-import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { DropdownSearchable } from "shareComponents/common";
 import type { InsertTimeSheetParentPayload } from "typings/time-sheet";
-
+import { useAuth } from 'services/hooks/auth/useAuth';
 interface CreateOrEditDialogProps {
   title: string;
   defaultValues?: InsertTimeSheetParentPayload;
@@ -26,7 +24,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   expertSalaryID,
 }) => {
   const [searchAssigneeStr, setSearchAssigneeStr] = useState();
-
+  const { user } = useAuth();
   const { closeModal } = useModal();
 
   const handleScrollAssginee = (e: UIEvent<HTMLDivElement>) => {
@@ -43,17 +41,11 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     hasNextPage: hasNextPageUsersSystem,
     fetchNextPage: fetchNextPageUsersSystem
   } = useUserSystem({
+    companyID: user?.company?._id,
     keyword: searchAssigneeStr
   }, true);
 
   const initialValues = {
-    name: "",
-    assignee: {},
-    type: "",
-    project: {},
-    convertFactor: "",
-    note: "",
-    date: null,
     ...defaultValues,
   };
 
@@ -61,7 +53,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     (values) => {
       const formatData = {
         ...values,
-        type: `${values.type}`,
       };
       if (expertSalaryID) {
         formatData.expertSalaryID = expertSalaryID;
