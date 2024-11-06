@@ -96,52 +96,12 @@ export const CashDetailPage: FC = () => {
   const { onUpdateStoreAsync, onCreateStoreAsync } =
     useMutationStoreChild();
 
-  useEffect(() => {
-    if (!storeInfo || !user || loading) return;
-
-    const usersShared = [...storeInfo?.admins, ...storeInfo?.members];
-    const adminsID = storeInfo.admins.map((item) => item._id);
-    const membersID = storeInfo.members.map((item) => item._id);
-
-    const usersIDShared = [...adminsID, ...membersID];
-    let authorID = "";
-
-    if (typeof storeInfo.userCreate === "string") {
-      authorID = storeInfo.userCreate;
-    } else {
-      authorID = storeInfo.userCreate?._id;
-    }
-    usersIDShared.push(authorID);
-
-    const hasPermissionCreateUpdate =
-      adminsID.includes(user._id) || authorID === user._id;
-    const hasPermissionShare = authorID === user._id;
-    const onlyView =
-      membersID.includes(user._id) &&
-      !adminsID.includes(user._id) &&
-      authorID !== user._id;
-
-    setPermissions({
-      usersShared,
-      onlyView,
-      hasPermissionCreateUpdate,
-      hasPermissionShare,
-    });
-  }, [JSON.stringify(storeInfo), JSON.stringify(user)]);
-
   const handleUpdatedStore = React.useCallback(
     async (values) => {
       try {
         const isUpdated = await onUpdateStoreAsync({
           ...values,
           orderProductID: values._id,
-          // hours: `${values.hours}`,
-          // amount: `${values.amount}`,
-          // state: `${values.state}`,
-          // unitprice: `${values.unitprice}`,
-          // subtype: `${values.subtype}`,
-          // type: `${values.type}`,
-          // status: `${values.status}`,
         });
         if (!isUpdated.error) {
           onRefreshStoreChild();
@@ -184,11 +144,6 @@ export const CashDetailPage: FC = () => {
     ]
   );
 
-  const toggleModalShare = (
-    modalType: "admins" | "members",
-    users: User[] | undefined
-  ) => setModalShare({ isShow: !modalShare.isShow, users, modalType });
-
   //_____Import, export excel
   const [, setStateExport] = useState<{ isExporting: boolean }>({
     isExporting: false,
@@ -217,30 +172,6 @@ export const CashDetailPage: FC = () => {
   };
 
   const [dataImport, setDataImport] = useState([]);
-
-  //   const handleImport = ($event: any) => {
-  //     const files = $event.target.files;
-  //     if (files.length) {
-  //         const file = files[0];
-  //         const reader = new FileReader();
-  //         reader.onload = (event: any) => {
-  //             const wb = read(event.target.result);
-  //             const sheets = wb.SheetNames;
-
-  //             if (sheets.length) {
-  //                 const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-
-  //                 // Set data để Import
-  //                 setDataImport(rows)
-  //             }
-  //         }
-
-  //         reader.readAsArrayBuffer(file);
-  //     }
-
-  //     // Đọc xong thì xóa value trong Input đi
-  //     $event.target.value = null;
-  // }
 
   // Gọi tới API để đẩy data lên
   useEffect(() => {
@@ -508,9 +439,7 @@ export const CashDetailPage: FC = () => {
             />
           )}
 
-          {permissions.hasPermissionCreateUpdate && (
-            <CreateRow onInsert={handleCreateStore} />
-          )}
+          <CreateRow onInsert={handleCreateStore} />
         </div>
 
         <div className="flex flex-wrap mt-3">
