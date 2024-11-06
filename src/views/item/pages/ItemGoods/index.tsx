@@ -92,6 +92,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         unitPrice4: 0,
         note: '',
         convert: '',
+        category: '',
         convertQuantity: 1,
     })
 
@@ -145,7 +146,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, convertQuantity, status, usage } = newListIDChecked[0];
+            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, category, convertQuantity, status, usage } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 type,
@@ -163,6 +164,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 unitPrice4,
                 note,
                 convert,
+                category,
                 convertQuantity
             });
         } else {
@@ -220,7 +222,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1100px",
+                    height: "1200px",
                 }}
             >
                 <ModalCreateOrUpdateGoods
@@ -499,7 +501,8 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                     <p>{item?.namecv}</p>
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
-                                <p className="text-primary-gray text-[12px] text-cbs-highlight-color">{item?.project?.name}</p>
+                                <p className="text-primary-gray text-[12px] text-cbs-highlight-color font-bold">{item?.project?.name}</p>
+                                <p className="text-primary-gray text-[14px] text-cbs-highlight-color font-bold">{item?.category?.name}</p>
                                 <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
