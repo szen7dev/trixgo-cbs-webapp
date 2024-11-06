@@ -1,9 +1,10 @@
-import React, { UIEvent, FC, useState } from "react";
+import React, { UIEvent, FC, useState, useEffect } from "react";
 import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
 import { useGoods } from "services/hooks/items/useGoods";
 import { toast } from "react-toastify";
 import { DropdownSearchable } from "shareComponents/common";
+import API from "../../../../../../apis/repository";
 
 export const ModalCreateOrUpdateGoods: FC<any> = ({
   modalType,
@@ -25,6 +26,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     unitPrice4: 0,
     note: '',
     convert: '',
+    category: '',
     convertQuantity: 1,
   }
 }) => {
@@ -39,6 +41,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       fetchNextPage();
   }
 
+  const [menus, setMenus] = useState([]);
   const [keyword, setKeyword] = useState('');
 
   const {
@@ -53,6 +56,29 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       params: { keyword },
       isFetchList: true
   })
+
+  useEffect(() => {
+    const menuData = async () => {
+      try {
+        const data = await API
+          .get('/api/medias/menu', {
+            params: {
+
+            },
+          })
+          .then((res) => res.data?.data);
+  
+        if (!data || !data.listRecords) {
+          return alert("Can't get list menu");
+        }
+  
+        setMenus(data.listRecords);
+      } catch (error) {
+        console.error({ error });
+      }
+    };
+    menuData();
+  }, []);
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -304,7 +330,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       </section>
 
       <section className="px-5 py-1">
-        <p>Link danh mục</p>
+        <p>Link</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
                 setFormData((previous: any) => ({
@@ -338,6 +364,50 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
             initialValue={{
               label: `${initialValues?.convert?.name}`,
               value: initialValues?.convert?._id
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Phân loại chuyên mục</p>
+        <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    categoryID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    categoryID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeyword(value), 600)}
+            onScroll={handleScroll}
+            className="w-full mt-2 rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Tìm kiếm"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={menus.map((item: any) => ({
+                label: `${item.name}`,
+                value: item._id,
+            }))}
+            initialValue={{
+              label: `${initialValues?.category?.name}`,
+              value: initialValues?.category?._id
             }}
             formatItem={{
                 id: "value",
