@@ -252,6 +252,11 @@ export const OwnerMemberPage: FC = () => {
                 />
               </div>
             </th>
+            <th style={{width: "5%"}}>
+              <div className="border-r-2 border-gray-300 font-normal pl-2">
+                Ảnh đại diện
+              </div>
+            </th>
             <th className="w-1/6 py-1">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Họ và tên
@@ -297,6 +302,13 @@ export const OwnerMemberPage: FC = () => {
                   type="checkbox"
                   checked={getStateChecked(item._id)}
                   onChange={() => onClickCheckButton(item)}
+                />
+              </td>
+              <td className="py-1 px-2">
+                <img
+                  src={`${process.env.REACT_APP_URL_S3_USER}/${item?.image}`}
+                  alt="User Avatar"
+                  className="w-14 h-14 rounded-full"
                 />
               </td>
               <td className="py-1 px-2">
