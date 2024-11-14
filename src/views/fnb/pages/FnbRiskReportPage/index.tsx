@@ -70,6 +70,7 @@ export const FnbRiskReportPage: FC = () => {
 		try {
 		  setStateExport({ isExporting: true });
 		  const { error, data } = await exportOrderAsync({
+			option: 1,
 			filterParams: {
 			}
 		  });
