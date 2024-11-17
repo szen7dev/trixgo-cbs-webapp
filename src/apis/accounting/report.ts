@@ -65,6 +65,6 @@ async function importFromExcel(data: any) {
 }
 
 async function exportExcel(data: any) {
-    const { data: result } = await API.post(`${ACCOUNTING_REPORT}/export-voucher`, data);
+    const { data: result } = await API.post(`${ACCOUNTING_REPORT}/export-excel`, data);
     return result
 }
