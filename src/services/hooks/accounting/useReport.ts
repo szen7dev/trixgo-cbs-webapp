@@ -50,7 +50,7 @@ export const useMutationDocument = (): UseMutationDocument => {
 
     return {
         insertDocumentAsync,
-        updateDocumentAsync
+        updateDocumentAsync,
     }
 }
 
@@ -118,7 +118,7 @@ export const useReportList = ({ params = {},  isFetchList = false }: any): UseQu
         refetch,
         fetchNextPage,
         fetchPreviousPage,
-        isFetching
+        isFetching,
     }
 }
 
