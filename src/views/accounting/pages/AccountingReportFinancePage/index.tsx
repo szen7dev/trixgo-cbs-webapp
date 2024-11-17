@@ -251,12 +251,6 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
               Lợi nhuận
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Đồng bộ
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Download
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Ghi chú
             </th>
           </tr>
@@ -329,21 +323,19 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
                   </td>
                   <td className="py-1 px-2 border-r border-primary-border">
                     <div>
-                      <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, reportID: item._id })}>
+                      <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg h-[30px]"} onClick={() => toggleModalOpenSign({ option: 1, reportID: item._id })}>
                         <img src={iconRefresh} title={'Đồng bộ dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
                         <span>Đồng bộ</span>
                       </button>
                     </div>
-                  </td>
-                  <td className="py-1 px-2 border-r border-primary-border">
-                    <button
-                      className={"mr-2 text-primary"}
-                      onClick={() => handleDownloadExcel({ option: 1, parentID: item._id })}
-                    >
-                      Tải excel Phiếu
-                    </button>
-                  </td>
-                  <td className="py-1 px-2 border-r border-primary-border">
+                    <div>
+                      <button
+                        className={"mr-2 text-primary"}
+                        onClick={() => handleDownloadExcel({ option: 1, parentID: item._id })}
+                      >
+                        Tải excel Phiếu
+                      </button>
+                    </div>
                     {item.note}
                   </td>
                 </tr>
