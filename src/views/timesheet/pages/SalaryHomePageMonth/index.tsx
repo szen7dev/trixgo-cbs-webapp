@@ -1,0 +1,223 @@
+import React, { FC, useRef, useState, useEffect, useCallback } from "react";
+import { NavLink, useHistory, useParams } from 'react-router-dom';
+import { APP_ID } from "apis/localdb";
+import { toast } from "react-toastify";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import moment from "moment";
+import { convertCurrency } from "utils/converter";
+import { useAuth } from "services/hooks/auth/useAuth";
+
+import {
+  DialogSalaryForm,
+} from "views/timesheet/shareComponents/common";
+
+import { useModal } from "services/hooks/useModal";
+import {
+  useByProperty,
+  useMutationSalaryParent,
+} from "services/hooks/useSalary";
+
+const SalaryHomePageMonth: FC = () => {
+    const params = useParams<{ year: string }>();
+    const year = Number(params["year"]);
+  const { user } = useAuth();
+  const history = useHistory()
+  const { hasPermission } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
+  useEffect(() => {
+    if (!hasPermission) {
+      toast.error("Bạn không có quyền truy cập chức năng này");
+      history.push("/")
+    }
+  }, [hasPermission])
+
+  const { openModal, closeModal } = useModal();
+
+  const {
+    onCreateSalaryParentAsync,
+  } = useMutationSalaryParent();
+  
+  const currentYear = new Date().getFullYear()
+  let yearFilter = new Date().getFullYear()
+  if(year && !isNaN(year)){
+      yearFilter = Number(year)
+  }
+  const items = [currentYear-2, currentYear-1, currentYear, currentYear+1];
+
+  const { listByProperty, refetchListByProperty } = useByProperty({
+    params: {
+        year: yearFilter
+    },
+    isFetchList: true
+  })
+
+  const handleCreateSalary = React.useCallback(
+    async (values) => {
+      try {
+        const isCreated = await onCreateSalaryParentAsync(values);
+        if (!isCreated.error) {
+          refetchListByProperty();
+          closeModal();
+          return null;
+        } else {
+          return toast.error(isCreated.data.message)
+        }
+      } catch (err) {
+        return null;
+      }
+    },
+    [closeModal, onCreateSalaryParentAsync, refetchListByProperty]
+  );
+
+  return (
+    <div className={"financial-cashflow-listing paginate-wrapper relative"}>
+      <div
+        className={
+          "financial-cashflow-listing-heading flex items-center border-b py-2 px-6"
+        }
+      >
+        <div className={"flex items-center flex-1"}>
+          <div>
+            {items?.map((item: any, index: any) => (
+              <NavLink className="mr-3 px-2 py-2" to={`/timesheet/salary/${item}`} key={item}>
+                Năm {item}
+              </NavLink>
+            ))}
+          </div>
+          <span className="text-primary">Bảng lương năm {yearFilter}</span>
+        </div>
+
+        <button
+          className={"bg-green-success h-[32px] text-white rounded px-5"}
+          onClick={() =>
+            openModal(
+              <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
+                <DialogSalaryForm
+                  title="Tạo mới bảng lương"
+                  onSubmit={handleCreateSalary}
+                  projectName={""}
+                  assigneeName={""}
+                />
+              </div>
+            )
+          }
+        >
+          Tạo mới
+        </button>
+      </div>
+
+      <div className={"financial-cashflow-table"}>
+        <div className={"relative table border-collapse w-full"}>
+          <div className={"header table-row sticky z-10"}>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle"
+              }
+              style={{width: "10px"}}
+            >
+                TT
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+              }
+            >
+              Tháng
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+              }
+            >
+             Ghi nhận lương
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+              }
+            >
+              Đã trả
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+              }
+            >
+              
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+              }
+            >
+              Còn lại
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+              }
+            >
+              
+            </div>
+          </div>
+          {listByProperty?.map((item: any, index: any) => (
+            <div className={"body-table table-row"} key={item._id?.month}>
+             <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+               {index + 1}
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                <NavLink to={`/timesheet/salary/${yearFilter}/${item._id?.month}`}>
+                  Tháng {item._id?.month}/{yearFilter}
+                </NavLink>
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                {convertCurrency(Number(item?.salary))}
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                {convertCurrency(Number(item?.paid))}
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                <p><i>{Number(100*(item?.paid / item?.salary)).toFixed(0)}%</i></p>
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                {convertCurrency(Number(item?.salary - item?.paid))}
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                <p><i>{Number(100*((item?.salary - item?.paid) / item?.salary)).toFixed(0)}%</i></p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SalaryHomePageMonth;

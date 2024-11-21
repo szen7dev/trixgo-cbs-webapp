@@ -1,5 +1,5 @@
 import React, { FC, useRef, useState, useEffect, useCallback } from "react";
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory, useParams } from 'react-router-dom';
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
@@ -30,7 +30,11 @@ import { SALARY_RESET_PERMISSION } from "apis/localdb";
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 
 const SalaryHomePage: FC = () => {
+  const params = useParams<{ year: string, month: string }>();
+  const year = Number(params["year"]);
+  const month = Number(params["month"]);
   const { user } = useAuth();
+
   const history = useHistory()
   const { hasPermission } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
   useEffect(() => {
@@ -39,8 +43,6 @@ const SalaryHomePage: FC = () => {
       history.push("/")
     }
   }, [hasPermission])
-
-  // console.log(user)
 
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
@@ -60,7 +62,11 @@ const SalaryHomePage: FC = () => {
     fetchPrevPage,
     loading,
     hasNextPage,
-  } = useQueryListSalaryParent({ keyword })
+  } = useQueryListSalaryParent({ 
+    keyword,
+    year,
+    month
+  })
 
   const {
     onCreateSalaryParentAsync,
@@ -88,7 +94,6 @@ const SalaryHomePage: FC = () => {
 
   const handleUpdateSalary = React.useCallback(
     async (values) => {
-      // console.log(values)
 
       try {
         const isUpdated = await onUpdateSalaryParentAsync(values);
@@ -99,7 +104,6 @@ const SalaryHomePage: FC = () => {
         }
         throw new Error("Can not create!");
       } catch (err) {
-        // console.error(err);
         return null;
       }
     },
@@ -176,6 +180,27 @@ const SalaryHomePage: FC = () => {
     return toast.success('Đồng bộ thành công')
   }, [])
 
+  const currentYear = new Date().getFullYear()
+  let yearFilter = new Date().getFullYear()
+  if(year && !isNaN(year)){
+      yearFilter = Number(year)
+  }else{
+      yearFilter = Number(currentYear)
+  }
+  const items = [currentYear-2, currentYear-1, currentYear, currentYear+1];
+
+  let salary = 0, paid = 0, remaining = 0, human = 0
+  if(dataNotFilter && dataNotFilter.length){
+    for(const item of dataNotFilter[0]){
+      salary = Number(salary) + Number(item?.salary + item?.onLeaveSalary + item?.overtimeSalary + item?.revenueBonus + item?.reward + item?.mealAllowance - item?.punishment - item?.insurance - item?.pitax - item?.union - item?.share - item?.other)
+  
+      paid = Number(paid) + Number(item?.paid + item?.advance)
+  
+      human = Number(human) + Number(item?.numberOfHuman)
+    }
+    remaining = Number(remaining) + Number(salary - paid)
+  }
+
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
@@ -184,7 +209,6 @@ const SalaryHomePage: FC = () => {
         }
       >
         <div className={"flex items-center flex-1"}>
-          <div className={"text-lg"}>Bảng lương</div>
           <SearchInput
             classNameWrapper={"ml-4"}
             onChange={debounce((e) => {
@@ -201,7 +225,17 @@ const SalaryHomePage: FC = () => {
               />
             </>
           )}
+          
+          <div>
+            {items?.map((item: any, index: any) => (
+              <NavLink className="mr-3 px-2 py-2" to={`/timesheet/salary/${item}`} key={item}>
+                Năm {item}
+              </NavLink>
+            ))}
+          </div>
+          <span className="text-primary">Bảng lương năm {yearFilter}</span>
         </div>
+
         <button
           className={"bg-green-success h-[32px] text-white rounded px-5"}
           onClick={() =>
@@ -258,34 +292,6 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Quyền Admin
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Quyền xem
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Ngày ghi nhận
-            </div>
-            {/* <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Hệ số chuyển đổi KPI sang giá trị
-            </div> */}
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
               Số nhân sự
             </div>
             <div
@@ -293,7 +299,21 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Tổng thanh toán
+              Ghi nhận lương
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Đã trả
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Còn lại
             </div>
             <div
               className={
@@ -309,13 +329,6 @@ const SalaryHomePage: FC = () => {
             >
               Sao chép
             </div>
-            {/* <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Cập nhật nhân sự
-            </div> */}
             <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
@@ -331,8 +344,8 @@ const SalaryHomePage: FC = () => {
               Xóa dữ liệu
             </div>
           </div>
-          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((salaryParent) => (
-            <div className={"body-table table-row"} key={salaryParent._id}>
+          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((item: any) => (
+            <div className={"body-table table-row"} key={item._id}>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b align-middle w-3"
@@ -342,10 +355,10 @@ const SalaryHomePage: FC = () => {
                   className="form-check-input"
                   type="checkbox"
                   id="flexCheckDefault"
-                  checked={recordSelected?._id === salaryParent._id}
+                  checked={recordSelected?._id === item._id}
                   onChange={(e) => {
                     if (e.target.checked) {
-                      toggleRecord(salaryParent);
+                      toggleRecord(item);
                       return null;
                     }
                     toggleRecord({});
@@ -358,64 +371,113 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b align-middle"
                 }
               >
-                <NavLink to={`/timesheet/salary/${salaryParent._id}`}>
-                  {salaryParent.name}
+                <NavLink to={`/timesheet/salary_detail/${item._id}`}>
+                  {item.name}
                 </NavLink>
-                <p><i>{salaryParent?.type == 1 ? 'Khối quản lý' : 'Khối trực tiếp'} ({salaryParent?.type})</i></p>
+                <p><i>{item?.type == 1 ? 'Khối quản lý' : 'Khối trực tiếp'} ({item?.type})</i></p>
+                <p><i>Ngày ghi nhận:  {moment(item.date).format('DD/MM/YYYY')}</i></p>
+                <p><i>Admin: {item.admins.length} | Member: {item.members.length}</i></p>
                 <p className={"mt-1 text-gray-500"}>
-                  Tạo: {salaryParent?.userCreate?.fullname} {moment(salaryParent.createAt).format(DATE_FORMAT)}
+                  Tạo: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
                 </p>
                 <p className={"mt-1 text-gray-500"}>
-                  Cập nhật: {salaryParent?.userUpdate?.fullname} {moment(salaryParent.modifyAt).format(DATE_FORMAT)}
+                  Cập nhật: {item?.userUpdate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {salaryParent.admins.length}
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {salaryParent.members.length}
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {moment(salaryParent.date).format('DD/MM/YYYY')}
-              </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {salaryParent.numberOfHuman}
+                {item.numberOfHuman}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(Number(salaryParent?.remaining))}
+                {convertCurrency(Number(item?.salary + item?.onLeaveSalary + item?.overtimeSalary + item?.revenueBonus + item?.reward + item?.mealAllowance - item?.punishment - item?.insurance - item?.pitax - item?.union - item?.share - item?.other))}
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                {convertCurrency(Number(item?.paid + item?.advance))}
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                {convertCurrency(Number(item?.remaining))}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {salaryParent.note}
+                {item.note}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 4, salaryID: salaryParent._id })}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 4, salaryID: item._id })}>
                   <img src={iconCopy} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
                   <span>Sao chép</span>
                 </button>
               </div>
-              {/* <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, salaryID: salaryParent._id })}>
-                  <img src={iconRefresh} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
-                  <span>Cập nhật nhân sự</span>
-                </button>
-              </div> */}
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 2, salaryID: salaryParent._id })}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 2, salaryID: item._id })}>
                   <img src={iconRefresh} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
                   <span>Đồng bộ dữ liệu</span>
                 </button>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSignReset({ option: 3, salaryID: salaryParent._id })}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSignReset({ option: 3, salaryID: item._id })}>
                   <span style={{ "color": "red" }}>Xóa dữ liệu</span>
                 </button>
               </div>
             </div>
           ))}
+
+          <div className={"body-table table-row font-bold"}>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b align-middle w-3"
+                }
+              >
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b align-middle"
+                }
+              >
+                Tổng
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {convertCurrency(Number(human))}
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                {convertCurrency(Number(salary))}
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                {convertCurrency(Number(paid))}
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right"
+                }
+              >
+                {convertCurrency(Number(remaining))}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+              </div>
+            </div>
         </div>
       </div>
     </div>

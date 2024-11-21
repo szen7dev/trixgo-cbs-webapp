@@ -29,6 +29,17 @@ export async function fetchListSalary<T>(
   return data;
 }
 
+export async function fetchListByProperty<T>(
+  params?: any
+): Promise<T> {
+  const { data } = await API.get(`${TIME_SHEET_URL}/expert_salary/get-list-by-property`, {
+    params: {
+      ...params,
+    },
+  })
+  return data;
+}
+
 export async function insertSalary<P, R>(payload: P): Promise<R> {
   const { data } = await API.post(`${TIME_SHEET_URL}/expert_salary`, payload);
   return data;
@@ -50,6 +61,9 @@ interface SalaryParentRepository {
   fetchListSalary: (
     params: ListSalaryPayload
   ) => Promise<QuerySalaryParentResponse>;
+  fetchListByProperty: (
+    params: ListSalaryPayload
+  ) => Promise<any>;
   fetchDetailSalary: (
     params: ListSalaryPayload
   ) => Promise<QueryDetailSalaryParentResponse>;
@@ -67,6 +81,9 @@ interface SalaryParentRepository {
 export const salaryParentRepository: SalaryParentRepository = {
   fetchListSalary: async (params) => {
     return fetchListSalary(params);
+  },
+  fetchListByProperty: async (params) => {
+    return fetchListByProperty(params);
   },
   fetchDetailSalary: async (params) => {
     return fetchListSalary(params);
