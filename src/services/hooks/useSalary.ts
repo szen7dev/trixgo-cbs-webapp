@@ -16,12 +16,7 @@ import type {
   UpdateSalaryChildResponse,
   DeleteSalaryChildPayload,
   DeleteSalaryChildResponse,
-  // DownloadPayload,
-  // ImportPayload,
-  // ExportManyPayload,
 } from "typings/salary";
-
-// Time Sheet Parent
 interface UseQueryListSalaryParent {
   loading: boolean;
   data: SalaryParent[];
@@ -33,15 +28,12 @@ interface UseQueryListSalaryParent {
   refetch: () => void;
   fetchNextPage: () => void;
   fetchPrevPage: () => void;
-  // insertAsync: (payload: DownloadPayload) => Promise<SalaryParent>;
-  // updateAsync: (payload: ImportPayload) => Promise<SalaryParent>;
-  // deleteManyAsync: (params: ExportManyPayload) => Promise<any>;
 }
 
 export const useQueryListSalaryParent = (
   params?: any,
   limit = 50
-): UseQueryListSalaryParent => {
+): any => {
   const result = useInfiniteQuery(
     [`list_salary.parent`, params],
     async ({ pageParam }: any) =>
@@ -85,22 +77,6 @@ export const useQueryListSalaryParent = (
   const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
   const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
-  // // Tải mẫu import excel
-  // const { mutateAsync: downloadTemplateExcelAsync } =
-  //     useMutation((payload: DownloadPayload ) => SalaryChildRepository.downloadTemplateExcel(payload)
-  // );
-
-  // // Import excel
-  // const { mutateAsync: importExcelAsync } =
-  //     useMutation((payload: ImportPayload) => SalaryChildRepository.importExcel(payload)
-  // );
-
-  // // Export excel
-  // const { mutateAsync: exportExcelAsync } =
-  //     useMutation((payload: ExportManyPayload) =>
-  //     SalaryChildRepository.exportExcel(payload)
-  // );
-
   return {
     loading: isLoading,
     data: listSalary,
@@ -111,12 +87,26 @@ export const useQueryListSalaryParent = (
     totalRecord,
     refetch,
     fetchNextPage,
-    fetchPrevPage,
-    // downloadTemplateExcelAsync,
-    // importExcelAsync,
-    // exportExcelAsync
+    fetchPrevPage
   };
 };
+
+export const useByProperty = ({ params = {},  isFetchList = false }: any): any => {
+
+  const { data: detailData, isLoading: listByPropertyIsLoading, refetch: refetchListByProperty } =
+  useQuery([`fetchListByProperty`,{...params, isFetchList }],() => SalaryParentRepository.fetchListByProperty(params), {
+      refetchOnWindowFocus: false,
+      enabled: isFetchList,
+  });
+  
+  const listByProperty = detailData?.data;
+
+  return {
+      listByProperty,
+      listByPropertyIsLoading,
+      refetchListByProperty
+  }
+}
 
 interface UseQueryDetailSalaryParent {
   loading: boolean;

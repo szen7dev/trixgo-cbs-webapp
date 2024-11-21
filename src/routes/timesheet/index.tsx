@@ -7,7 +7,16 @@ import { TimesheetLayout } from "views/timesheet/shareComponents/layouts";
 import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary';
 
 /*=====PAGES=====*/
-import { TimesheetHomePage, TimesheetDetailPage, SalaryHomePage, SalaryDetailPage, TimesheetMineDetailPage, TimesheetDashboardPage, SalaryMineDetailPage } from "views/timesheet/pages";
+import { 
+  TimesheetHomePage, 
+  TimesheetDetailPage, 
+  SalaryHomePage, 
+  SalaryHomePageMonth,
+  SalaryDetailPage, 
+  TimesheetMineDetailPage, 
+  TimesheetDashboardPage, 
+  SalaryMineDetailPage 
+} from "views/timesheet/pages";
 import TimesheetAdminFunctionalTab from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminFunctionalTab";
 import TimesheetAdminDetail from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminDetail";
 import TimesheetAdminAuthorTab from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminAuthorTab";
@@ -51,11 +60,21 @@ const TimesheetAppRouter: FC = () => {
           <ProtectedRoute
             exact
             path="/timesheet/salary"
+            component={SalaryHomePageMonth}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/salary/:year"
+            component={SalaryHomePageMonth}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/salary/:year/:month"
             component={SalaryHomePage}
           />
           <ProtectedRoute
             exact
-            path={"/timesheet/salary/:id"}
+            path={"/timesheet/salary_detail/:id"}
             component={SalaryDetailPage}
           />
 
