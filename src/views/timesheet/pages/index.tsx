@@ -5,4 +5,5 @@ export {default as SalaryHomePageMonth } from './SalaryHomePageMonth';
 export {default as SalaryDetailPage} from './SalaryDetailPage';
 export {default as TimesheetMineDetailPage} from './TimesheetMineDetailPage';
 export {default as SalaryMineDetailPage} from './SalaryMineDetailPage';
+export {default as TimesheetHumanDetailPage} from './TimesheetHumanDetailPage';
 export {TimesheetDashboardPage} from './TimesheetDashboardPage';
