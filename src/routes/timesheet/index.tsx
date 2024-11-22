@@ -54,6 +54,11 @@ const TimesheetAppRouter: FC = () => {
           />
           <ProtectedRoute
             exact
+            path="/timesheet/human_detail/:id/:year/:month"
+            component={() => <TimesheetMineDetailPage type={3} />}
+          />
+          <ProtectedRoute
+            exact
             path="/timesheet/mysalary"
             component={() => <SalaryMineDetailPage type={2} />}
           />
