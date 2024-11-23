@@ -62,12 +62,9 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
   };
 
   return (
-    <div className={"financial-cashflow-listing paginate-wrapper relative"}>
-      <div
-        className={
-          "financial-cashflow-listing-heading flex items-center border-b py-2"
-        }
-      >
+    <div className={"financial-planning-detail"}>
+      
+      <div className={"financial-planning-header flex p-4 sticky top-0 z-10 bg-white"}>
         <div className={"flex items-center flex-1"}>
           <div className={"text-lg"}>Chi tiết chấm công</div>
         </div>
@@ -89,47 +86,47 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
         />
       </div>
 
-      <div className={"financial-cashflow-table"}>
+      <div className={"financial-planning-table"}>
         <div className={"relative table border-collapse w-full"}>
           <div className={"header table-row sticky z-10"}>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b align-middle w-3"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-3"
               }
             >
                 TT
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500 w-1/3"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 text-gray-500 w-1/3"
               }
             >
               Nội dung
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 text-gray-500"
               }
             >
               Dự án/phòng ban
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 text-gray-500"
               }
             >
               Khối lượng
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 text-gray-500"
               }
             >
               Giá trị
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500  w-1/3"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 text-gray-500  w-1/3"
               }
             >
               Ghi chú
@@ -139,7 +136,7 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
             <div className={"body-table table-row"} key={item._id}>
               <div
                 className={
-                  "px-2 py-2 table-cell box-border border-b align-middle w-3"
+                  "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-3"
                 }
               >
                 {Number(index + 1)}

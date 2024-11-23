@@ -81,11 +81,8 @@ const TimesheetHumanDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
 
   return (
     <div className={"financial-planning-detail"}>
-      <div
-        className={
-          "financial-planning-header flex p-4 sticky top-0 z-10 bg-white"
-        }
-      >
+      
+      <div className={"financial-planning-header flex p-4 sticky top-0 z-10 bg-white"}>
         <div className={"flex items-center flex-1"}>
           <div className={"text-lg"}>Chi tiết chấm công Tháng {month} Năm {year}</div>
           <button className={"ml-5 text-primary"} onClick={() => handleDownloadExcel({option: 1})}>
