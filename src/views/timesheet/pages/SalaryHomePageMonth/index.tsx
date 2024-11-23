@@ -110,67 +110,50 @@ const SalaryHomePageMonth: FC = () => {
           <div className={"header table-row sticky z-10"}>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b align-middle"
-              }
-              style={{width: "10px"}}
-            >
-                TT
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+                "px-2 py-2 table-cell box-border border-b text-gray-500"
               }
             >
               Tháng
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+                "px-2 py-2 table-cell box-border border-b text-right text-gray-500"
               }
             >
              Ghi nhận lương
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+                "px-2 py-2 table-cell box-border border-b text-right text-gray-500"
               }
             >
               Đã trả
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+                "px-2 py-2 table-cell box-border border-b text-right text-gray-500"
               }
             >
-              
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+                "px-2 py-2 table-cell box-border border-b text-right text-gray-500"
               }
             >
               Còn lại
             </div>
             <div
               className={
-                "px-2 py-2 table-cell box-border border-b  text-right text-gray-500"
+                "px-2 py-2 table-cell box-border border-b text-right text-gray-500"
               }
             >
-              
             </div>
           </div>
           {listByProperty?.map((item: any, index: any) => (
             <div className={"body-table table-row"} key={item._id?.month}>
-             <div
-                className={
-                  "px-2 py-2 table-cell box-border border-b text-right"
-                }
-              >
-               {index + 1}
-              </div>
               <div
                 className={
-                  "px-2 py-2 table-cell box-border border-b text-right"
+                  "px-2 py-2 table-cell box-border border-b"
                 }
               >
                 <NavLink to={`/timesheet/salary/${yearFilter}/${item._id?.month}`}>
