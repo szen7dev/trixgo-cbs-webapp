@@ -301,7 +301,7 @@ useEffect(() => {
           "financial-planning-header flex p-2 sticky top-0 z-10 bg-white"
         }
       >
-        <FileColorIcon />
+        {/* <FileColorIcon /> */}
         <div className="w-auto">
           <div className={"flex"}>
             <InputWidthAdjust
@@ -318,7 +318,7 @@ useEffect(() => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
-        <button className={"mr-2"} onClick={() => handleDownloadExcel({option: 4})}>
+          <button className={"mr-2"} onClick={() => handleDownloadExcel({option: 4})}>
             Check
           </button>
           <button className={"mr-2"} onClick={() => handleDownloadExcel({option: 3})}>
@@ -330,11 +330,6 @@ useEffect(() => {
           <button className={"mr-2"} onClick={() => handleDownloadExcel({option: 2})}>
             Tải ngân sách
           </button>
-          {/* <button className={"flex items-center justify-center mr-2"}>
-              <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-              accept=".xlsx, .xlsm, .xls, .csv"/>
-              <label className="custom-file-label" htmlFor="inputGroupFile">Cập nhật từ Excel</label>
-          </button> */}
           <button
             className="text-gray-400 mr-2"
             onClick={() => {
