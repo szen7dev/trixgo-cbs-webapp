@@ -52,7 +52,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 
     const [collapseComment, setCollapseComment] = useState(!isLastComment);
     const [openReply, setOpenReply] = useState(false);
-    const [isOfficial, setIsOfficial] = useState(comment.official);
+    const [isChecked, setIsChecked] = useState(comment.official);
     const [amountReply, setAmountReply] = useState(
         comment?.amountCommentReply > 0 ? comment?.amountCommentReply - 1 : 0
     );
@@ -66,8 +66,6 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
             bottomPageRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     };
-
-    // useOnClickOutside(detailRef, () => setShowDetail(false));
 
     const { state, dispatch } = useContext(CommentContext);
 
@@ -127,22 +125,23 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         return comment.receivers.map(receiver => receiver.bizfullname).join(', ');
     }, [comment.receivers]);
 
-    const handleCheckOfficial = async () => {
+    const handleCheckboxChange  = async (event: any) => {
         try {
+            setIsChecked(event.target.checked);
+            
             const dataUpdate: any = {
                 taskID: comment.task?._id,
                 commentID: comment._id,
-                isOfficial: true,
+                isOfficial: event.target.checked,
             }
 
             const { error, data } = await updateCommentAsync(dataUpdate);
-
             if (error) {
                 return toast.warn(data?.message || 'Đánh dấu chính thức thất bại')
             }
 
-            setIsOfficial(true);
-            onConfirmUpdate?.();
+            // setIsChecked(event.target.checked);
+            // onConfirmUpdate?.();
         } catch (error) {
             captureException(error);
             if (typeof error === "string") {
@@ -436,9 +435,10 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                                 <input
                                     className="form-check-input mx-4"
                                     type="checkbox"
-                                    disabled={isOfficial}
-                                    defaultChecked={isOfficial}
-                                    onChange={handleCheckOfficial}
+                                    checked={isChecked}
+                                    // disabled={isChecked}
+                                    // defaultChecked={isChecked}
+                                    onChange={handleCheckboxChange }
                                 />
                             )}
                             {
