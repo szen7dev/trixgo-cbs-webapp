@@ -187,7 +187,7 @@ const SalaryHomePage: FC = () => {
   }else{
       yearFilter = Number(currentYear)
   }
-  const items = [currentYear-2, currentYear-1, currentYear, currentYear+1];
+  const items = [yearFilter-2, yearFilter-1, yearFilter, yearFilter+1];
 
   let salary = 0, paid = 0, remaining = 0, human = 0
   if(dataNotFilter && dataNotFilter.length){
@@ -228,7 +228,7 @@ const SalaryHomePage: FC = () => {
           
           <div>
             {items?.map((item: any, index: any) => (
-              <NavLink className="mr-3 px-2 py-2" to={`/timesheet/salary/${item}`} key={item}>
+              <NavLink className="px-2 py-2" to={`/timesheet/salary/${item}`} key={item}>
                 Năm {item}
               </NavLink>
             ))}

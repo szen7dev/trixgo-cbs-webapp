@@ -31,6 +31,7 @@ interface UseQueryListTimeSheetParent {
   refetch: () => void;
   fetchNextPage: () => void;
   fetchPrevPage: () => void;
+  exportExcelAsync: (payload: any) => Promise<any>;
 }
 
 export const useQueryListTimeSheetParent = (
@@ -90,11 +91,11 @@ export const useQueryListTimeSheetParent = (
   //     useMutation((payload: ImportPayload) => TimeSheetChildRepository.importExcel(payload)
   // );
 
-  // // Export excel
-  // const { mutateAsync: exportExcelAsync } =
-  //     useMutation((payload: ExportManyPayload) =>
-  //     TimeSheetChildRepository.exportExcel(payload)
-  // );
+  // Export excel
+  const { mutateAsync: exportExcelAsync } =
+      useMutation((payload: any) =>
+        TimeSheetParentRepository.exportExcel(payload)
+  );
 
   return {
     loading: isLoading,
@@ -107,9 +108,26 @@ export const useQueryListTimeSheetParent = (
     refetch,
     fetchNextPage,
     fetchPrevPage,
+    exportExcelAsync,
   };
 };
 
+export const useByProperty = ({ params = {},  isFetchList = false }: any): any => {
+
+  const { data: detailData, isLoading: listByPropertyIsLoading, refetch: refetchListByProperty } =
+  useQuery([`fetchListByProperty`,{...params, isFetchList }],() => TimeSheetParentRepository.fetchListByProperty(params), {
+      refetchOnWindowFocus: false,
+      enabled: isFetchList,
+  });
+  
+  const listByProperty = detailData?.data;
+
+  return {
+      listByProperty,
+      listByPropertyIsLoading,
+      refetchListByProperty
+  }
+}
 interface UseQueryDetailTimeSheetParent {
   loading: boolean;
   data?: TimeSheetParent;

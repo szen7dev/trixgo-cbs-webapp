@@ -30,6 +30,17 @@ export async function fetchListTimeSheet<T>(params?: ListTimeSheetPayload): Prom
     return data;
 }
 
+export async function fetchListByProperty<T>(
+    params?: any
+  ): Promise<T> {
+    const { data } = await API.get(`${TIME_SHEET_URL}/expert_timesheets/get-list-by-property`, {
+      params: {
+        ...params,
+      },
+    })
+    return data;
+  }
+
 export async function insertTimeSheet<P, R>(payload: P): Promise<R> {
     const { data } = await API.post(`${TIME_SHEET_URL}/expert_timesheets`, payload);
     return data;
@@ -47,18 +58,30 @@ export async function deleteTimeSheet<P, R>(payload: P): Promise<R> {
     return data;
 }
 
+async function exportExcel(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+        `${TIME_SHEET_URL}/expert_timesheets/export-excel?${convertObToUrl(payload)}`
+    )
+    return data
+}
+
 interface TimeSheetParentRepository {
     fetchListTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryTimeSheetParentResponse>;
+    fetchListByProperty: (params: any) => Promise<any>;
     fetchDetailTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryDetailTimeSheetParentResponse>;
     insertTimeSheet: (payload: InsertTimeSheetParentPayload) => Promise<InsertTimeSheetParentResponse>;
     updateTimeSheet: (payload: UpdateTimeSheetParentPayload) => Promise<UpdateTimeSheetParentResponse>;
     deleteTimeSheet: (payload: DeleteTimeSheetParentPayload) => Promise<DeleteTimeSheetParentResponse>;
+    exportExcel: (payload: any) => Promise<any>;
 }
 
 export const timeSheetParentRepository: TimeSheetParentRepository = {
     fetchListTimeSheet: async (params) => {
         return fetchListTimeSheet(params)
     },
+    fetchListByProperty: async (params) => {
+        return fetchListByProperty(params);
+      },
     fetchDetailTimeSheet: async (params) => {
         return fetchListTimeSheet(params)
     },
@@ -70,5 +93,8 @@ export const timeSheetParentRepository: TimeSheetParentRepository = {
     },
     deleteTimeSheet: (payload) => {
         return deleteTimeSheet(payload);
+    },
+    exportExcel: (payload) => {
+        return exportExcel(payload);
     }
 }

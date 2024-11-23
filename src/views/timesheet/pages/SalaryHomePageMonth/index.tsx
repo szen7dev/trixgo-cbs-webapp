@@ -41,7 +41,7 @@ const SalaryHomePageMonth: FC = () => {
   if(year && !isNaN(year)){
       yearFilter = Number(year)
   }
-  const items = [currentYear-2, currentYear-1, currentYear, currentYear+1];
+  const items = [yearFilter-2, yearFilter-1, yearFilter, yearFilter+1];
 
   const { listByProperty, refetchListByProperty } = useByProperty({
     params: {
@@ -78,7 +78,7 @@ const SalaryHomePageMonth: FC = () => {
         <div className={"flex items-center flex-1"}>
           <div>
             {items?.map((item: any, index: any) => (
-              <NavLink className="mr-3 px-2 py-2" to={`/timesheet/salary/${item}`} key={item}>
+              <NavLink className="px-2 py-2" to={`/timesheet/salary/${item}`} key={item}>
                 Năm {item}
               </NavLink>
             ))}
