@@ -431,16 +431,12 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                                     </button>
                                 )
                             }
-                            {userId === comment.author?._id && (
-                                <input
-                                    className="form-check-input mx-4"
-                                    type="checkbox"
-                                    checked={isChecked}
-                                    // disabled={isChecked}
-                                    // defaultChecked={isChecked}
-                                    onChange={handleCheckboxChange }
-                                />
-                            )}
+                            <input
+                                className="form-check-input mx-4"
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={handleCheckboxChange }
+                            />
                             {
                                 (!collapseComment && userId === comment.author?._id) && (
                                     <OptionsComment
