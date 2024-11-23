@@ -16,7 +16,8 @@ import {
   TimesheetMineDetailPage, 
   TimesheetDashboardPage, 
   SalaryMineDetailPage,
-  TimesheetHumanDetailPage
+  TimesheetHumanDetailPage,
+  TimesheetBudgetPage
 } from "views/timesheet/pages";
 import TimesheetAdminFunctionalTab from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminFunctionalTab";
 import TimesheetAdminDetail from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminDetail";
@@ -37,6 +38,11 @@ const TimesheetAppRouter: FC = () => {
             exact
             path="/timesheet/home"
             component={() => <TimesheetHomePage type={1} />}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/budget"
+            component={TimesheetBudgetPage}
           />
           <ProtectedRoute
             exact

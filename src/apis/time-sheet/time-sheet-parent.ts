@@ -47,12 +47,20 @@ export async function deleteTimeSheet<P, R>(payload: P): Promise<R> {
     return data;
 }
 
+async function exportExcel(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+        `${TIME_SHEET_URL}/expert_timesheets/export-excel?${convertObToUrl(payload)}`
+    )
+    return data
+}
+
 interface TimeSheetParentRepository {
     fetchListTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryTimeSheetParentResponse>;
     fetchDetailTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryDetailTimeSheetParentResponse>;
     insertTimeSheet: (payload: InsertTimeSheetParentPayload) => Promise<InsertTimeSheetParentResponse>;
     updateTimeSheet: (payload: UpdateTimeSheetParentPayload) => Promise<UpdateTimeSheetParentResponse>;
     deleteTimeSheet: (payload: DeleteTimeSheetParentPayload) => Promise<DeleteTimeSheetParentResponse>;
+    exportExcel: (payload: any) => Promise<any>;
 }
 
 export const timeSheetParentRepository: TimeSheetParentRepository = {
@@ -70,5 +78,8 @@ export const timeSheetParentRepository: TimeSheetParentRepository = {
     },
     deleteTimeSheet: (payload) => {
         return deleteTimeSheet(payload);
+    },
+    exportExcel: (payload) => {
+        return exportExcel(payload);
     }
 }
