@@ -3,17 +3,12 @@ import { NavLink, useHistory, useParams } from 'react-router-dom';
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import moment from "moment";
+import moment, { months } from "moment";
 import { convertCurrency } from "utils/converter";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { createLinkAndClick } from "utils";
-
-import { useModal } from "services/hooks/useModal";
 import {
-  useByProperty,
-  useMutationSalaryParent,
-} from "services/hooks/useSalary";
-import {
+    useByProperty,
     useQueryListTimeSheetParent
   } from "services/hooks/useTimeSheet";
 
@@ -29,12 +24,6 @@ const TimesheetBudgetPage: FC = () => {
       history.push("/")
     }
   }, [hasPermission])
-
-  const { openModal, closeModal } = useModal();
-
-  const {
-    onCreateSalaryParentAsync,
-  } = useMutationSalaryParent();
   
   const currentYear = new Date().getFullYear()
   let yearFilter = new Date().getFullYear()
@@ -45,6 +34,7 @@ const TimesheetBudgetPage: FC = () => {
 
   const { listByProperty, refetchListByProperty } = useByProperty({
     params: {
+        option: 8,
         year: yearFilter
     },
     isFetchList: true
@@ -62,8 +52,8 @@ const TimesheetBudgetPage: FC = () => {
       setStateExport({ isExporting: true });
       const { error, data } = await exportExcelAsync({
         option: param.option,
-        // year,
-        // month
+        year: param.year,
+        month: param.month,
       });
 
       if (error) {
@@ -129,23 +119,21 @@ const TimesheetBudgetPage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b"
                 }
               >
-                <NavLink to={`/timesheet/salary/${yearFilter}/${item._id?.month}`}>
-                  Tháng {item._id?.month}/{yearFilter}
-                </NavLink>
+                Tháng {item._id?.month}/{yearFilter}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(Number(0))}
+                {convertCurrency(Number(item?.amount).toFixed(0))}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                <button className={"ml-5 text-primary"} onClick={() => handleDownloadExcel({option: 1})}>
+                <button className={"ml-5 text-primary"} onClick={() => handleDownloadExcel({option: 1, year: yearFilter, month: item._id?.month})}>
                     Tải dữ liệu
                 </button>
               </div>

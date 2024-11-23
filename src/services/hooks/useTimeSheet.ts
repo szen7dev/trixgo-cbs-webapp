@@ -112,6 +112,22 @@ export const useQueryListTimeSheetParent = (
   };
 };
 
+export const useByProperty = ({ params = {},  isFetchList = false }: any): any => {
+
+  const { data: detailData, isLoading: listByPropertyIsLoading, refetch: refetchListByProperty } =
+  useQuery([`fetchListByProperty`,{...params, isFetchList }],() => TimeSheetParentRepository.fetchListByProperty(params), {
+      refetchOnWindowFocus: false,
+      enabled: isFetchList,
+  });
+  
+  const listByProperty = detailData?.data;
+
+  return {
+      listByProperty,
+      listByPropertyIsLoading,
+      refetchListByProperty
+  }
+}
 interface UseQueryDetailTimeSheetParent {
   loading: boolean;
   data?: TimeSheetParent;
