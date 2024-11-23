@@ -133,7 +133,11 @@ export const DetailChildRow: FC<Props> = ({
           "px-[2px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
-        <NavLink to={`/timesheet/mine/${rowData?.human?._id}`}>
+        {/* <NavLink to={`/timesheet/mine/${rowData?.human?._id}`}>
+          {rowData?.human?.fullname}
+        </NavLink> */}
+        <NavLink to={`/timesheet/human_detail/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>
+          {/* <p><i>Chi tiết lương</i></p> */}
           {rowData?.human?.fullname}
         </NavLink>
         <p className="text-gray-400 text-[10px]"><i>{rowData?.project?.name}</i></p>

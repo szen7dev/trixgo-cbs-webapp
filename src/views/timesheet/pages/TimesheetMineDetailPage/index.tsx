@@ -4,6 +4,9 @@ import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2
 import { NavLink, useParams } from "react-router-dom";
 import { useQueryListTimeSheetParent } from "services/hooks/useTimeSheet";
 import { DAYOFWEEKS } from "apis/localdb/index";
+import { createLinkAndClick } from "utils";
+import { toast } from "react-toastify";
+import { useCashBook } from "services/hooks/financial/useCashBook";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface TimesheetHomePageProps {
@@ -28,6 +31,35 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
     loading,
     hasNextPage,
   } = useQueryListTimeSheetParent({ keyword, type, humanID, sortOption: 2 });
+
+  //_____Import, export excel
+  const [, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  });
+
+  const { exportExcelAsync } = useCashBook({});
+
+  const handleDownloadExcel = async (param: any) => {
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportExcelAsync({
+        option: param.option,
+        // parentID: timeSheetParentID,
+        // fromDate: inputFilter.fromDate,
+        // toDate: inputFilter.toDate,
+      });
+
+      if (error) {
+        return toast.warn(data?.message);
+      }
+
+      data && createLinkAndClick(data, "_self");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+  };
 
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>

@@ -36,9 +36,9 @@ interface UseCashBook {
     refetchInfo: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
-    downloadTemplateExcelAsync: (payload: CashBookDownloadPayload) => Promise<any>;
-    importExcelAsync: (payload: CashBookImportPayload) => Promise<any>;
-    exportExcelAsync: (payload: CashBookExportManyPayload) => Promise<any>;
+    downloadTemplateExcelAsync: (payload: any) => Promise<any>;
+    importExcelAsync: (payload: any) => Promise<any>;
+    exportExcelAsync: (payload: any) => Promise<any>;
 }
 
 type UseCashBookProps = {
