@@ -176,18 +176,18 @@ export const ItemLeftSideBar: FC = () => {
           <NavLink
             to="/item/home/14"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Phân loại chứng chỉ"
+            title="Loại chứng chỉ"
           >
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
-            <span className={"flex-1 ml-2 text-left text-[13px]"}>HR-Phân loại chứng chỉ</span>
+            <span className={"flex-1 ml-2 text-left text-[13px]"}>HR-Loại chứng chỉ</span>
           </NavLink>
           <NavLink
             to="/item/home/15"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Nội dung chứng chỉ nhân sự"
+            title="HR-Nội dung chứng chỉ"
           >
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
-            <span className={"flex-1 ml-2 text-left text-[13px]"}>HR-Chứng chỉ nhân sự</span>
+            <span className={"flex-1 ml-2 text-left text-[13px]"}>HR-Nội dung chứng chỉ</span>
           </NavLink>
           <NavLink
             to="/item/home/16"

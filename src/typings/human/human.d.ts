@@ -47,6 +47,11 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
     joinedDate: any;
     dataSource: any;
     files: any;
+    educationalBackground2: any;
+    field2: any;
+    certificateType: any;
+    certificateName: any;
+    certificateGrade: any;
 }
 
 interface HumanInsertPayload {
