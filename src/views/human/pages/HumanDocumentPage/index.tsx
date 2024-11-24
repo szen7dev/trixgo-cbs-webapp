@@ -9,7 +9,7 @@ import {
 } from "shareComponents/common";
 
 // ========== Utils ========== //
-import { GENDER_TYPES } from 'apis/localdb';
+import { GENDER_TYPES, CONTACT_DOCUMENT_GRADES, CONTACT_DOCUMENT_TYPES } from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import TriangleDown from "assets/icons/TriangleDown";
@@ -24,6 +24,7 @@ import { humanFileSize } from 'utils/converter';
 // ========== Hooks ========== //
 import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useDocumentHuman";
 import {useProjectCustom} from "services/hooks/items/useProject";
+import { useDoctype } from "services/hooks/items/useDoctype";
 
 export const HumanDocumentPage: FC = () => {
     const [keyword, setKeyword] = useState('');
@@ -61,7 +62,14 @@ export const HumanDocumentPage: FC = () => {
     });
 
     const [genders, setGenders] = useState<string[]>([]);
+    const [keywordDoctype, setKeywordDoctype] = useState('');
+    const [projectKeyword, setProjectKeyword] = useState("");
     const [departmentsID, setDepartmentsID] = useState<string[]>([]);
+    const [educationalBackground2sID, setEducationalBackground2sID] = useState<string[]>([]);
+    const [field2sID, setField2sID] = useState<string[]>([]);
+    const [certificateTypesID, setCertificateTypesID] = useState<string[]>([]);
+    const [certificateNamesID, setCertificateNamesID] = useState<string[]>([]);
+    const [certificateGradesID, setCertificateGradesID] = useState<string[]>([]);
 
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
 
@@ -70,12 +78,65 @@ export const HumanDocumentPage: FC = () => {
             ...fromToDate,
             genders,
             departmentsID,
+            educationalBackground2sID,
+            field2sID,
+            certificateTypesID,
+            certificateNamesID,
+            certificateGradesID,
             keyword,
-            types: ['5']
+            // types: ['5']
         },
         isFetchList: true
-    });
-    // console.log(listHumanWithPager)
+    })
+
+    const { listProjectsUserIsMember } = useProjectCustom({
+        paramsProjectsUserIsMember: { keyword: projectKeyword },
+        isFetchProjectsUserIsMember: true
+    })
+
+    const {
+        list: listDoctype6s,
+    } = useDoctype({
+        params: {
+            type: 6,
+            keyword: keywordDoctype,
+            isShowParentAndChild: 1,
+        },
+        isFetchList: true
+    })
+
+    const {
+        list: listDoctype7s,
+    } = useDoctype({
+        params: {
+            type: 7,
+            keyword: keywordDoctype,
+            isShowParentAndChild: 1,
+        },
+        isFetchList: true
+    })
+
+    const {
+        list: listDoctype14s,
+    } = useDoctype({
+        params: {
+            type: 14,
+            keyword: keywordDoctype,
+            isShowParentAndChild: 1,
+        },
+        isFetchList: true
+    })
+
+    const {
+        list: listDoctype15s,
+    } = useDoctype({
+        params: {
+            type: 15,
+            keyword: keywordDoctype,
+            isShowParentAndChild: 1,
+        },
+        isFetchList: true
+    })
 
     const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
         setKeyword(event.target.value)
@@ -120,52 +181,10 @@ export const HumanDocumentPage: FC = () => {
                         <div className="relative flex items-center">
                             <input 
                             placeholder="Tìm kiếm" 
-                            className="pl-3 pr-3 mr-1 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
+                            className="pl-3 pr-3 mr-1 w-[250px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
                             onChange={onChangeSearch}
                             />
                         </div>
-                        {/* <DropdownSearchableV2
-                            ref={typeRef}
-                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Giới tính"}
-                            isMultiple={true}
-                            disableSearch={true}
-                            allowClearValueSingleInput={true}
-                            data={GENDER_TYPES}
-                            formatItem={{
-                                "id": "value"
-                            }}
-                            onchangeValue={item => {
-                                const cloneIDs = [...genders];
-                                cloneIDs.push(item.value);
-                                setGenders(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "genders", dataFilter: cloneIDs}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onClearData={() => {
-                                setGenders([]);
-                                dispatch(setFilterDropdown({keyFilter: "genders", dataFilter: []}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={id => {
-                                const cloneIDs = [...genders];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setGenders(newList);
-                                dispatch(setFilterDropdown({keyFilter: "genders", dataFilter: newList}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
-                            selectOneByOne={true}
-                        />
-
                         <DropdownSearchableV2
                             ref={datahubRef}
                             className={"mr-1 border border-primary-border rounded-lg mb-2"}
@@ -210,7 +229,233 @@ export const HumanDocumentPage: FC = () => {
                                 <p className={"min-w-[300px]"}>{item.text}</p>
                             )}
                             selectOneByOne={true}
-                        /> */}
+                        />
+                        
+                        <DropdownSearchableV2
+                            ref={datahubRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Trình độ"}
+                            isMultiple={true}
+                            allowClearValueSingleInput={true}
+                            data={listDoctype6s}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(
+                                (valueSearch) => setKeywordDoctype(valueSearch),
+                                500
+                            )}
+                            onchangeValue={item => {
+                                const cloneIDs = [...educationalBackground2sID];
+                                cloneIDs.push(item._id);
+                                setEducationalBackground2sID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "educationalBackground2sID", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setEducationalBackground2sID([]);
+                                dispatch(setFilterDropdown({keyFilter: "educationalBackground2sID", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...educationalBackground2sID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setEducationalBackground2sID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "educationalBackground2sID", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+
+                        <DropdownSearchableV2
+                            ref={datahubRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Chuyên ngành"}
+                            isMultiple={true}
+                            allowClearValueSingleInput={true}
+                            data={listDoctype7s}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(
+                                (valueSearch) => setKeywordDoctype(valueSearch),
+                                500
+                            )}
+                            onchangeValue={item => {
+                                const cloneIDs = [...field2sID];
+                                cloneIDs.push(item._id);
+                                setField2sID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "field2sID", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setField2sID([]);
+                                dispatch(setFilterDropdown({keyFilter: "field2sID", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...field2sID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setField2sID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "field2sID", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+
+                        <DropdownSearchableV2
+                            ref={datahubRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Loại"}
+                            isMultiple={true}
+                            allowClearValueSingleInput={true}
+                            data={listDoctype14s}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(
+                                (valueSearch) => setKeywordDoctype(valueSearch),
+                                500
+                            )}
+                            onchangeValue={item => {
+                                const cloneIDs = [...certificateTypesID];
+                                cloneIDs.push(item._id);
+                                setCertificateTypesID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "certificateTypesID", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setCertificateTypesID([]);
+                                dispatch(setFilterDropdown({keyFilter: "certificateTypesID", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...certificateTypesID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setCertificateTypesID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "certificateTypesID", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+
+                        <DropdownSearchableV2
+                            ref={datahubRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Nội dung"}
+                            isMultiple={true}
+                            allowClearValueSingleInput={true}
+                            data={listDoctype15s}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(
+                                (valueSearch) => setKeywordDoctype(valueSearch),
+                                500
+                            )}
+                            onchangeValue={item => {
+                                const cloneIDs = [...certificateNamesID];
+                                cloneIDs.push(item._id);
+                                setCertificateNamesID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "certificateNamesID", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setCertificateNamesID([]);
+                                dispatch(setFilterDropdown({keyFilter: "certificateNamesID", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...certificateNamesID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setCertificateNamesID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "certificateNamesID", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+
+                        <DropdownSearchableV2
+                            ref={typeRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Hạng"}
+                            isMultiple={true}
+                            disableSearch={true}
+                            allowClearValueSingleInput={true}
+                            data={CONTACT_DOCUMENT_GRADES}
+                            formatItem={{
+                                "id": "value"
+                            }}
+                            onchangeValue={item => {
+                                const cloneIDs = [...certificateGradesID];
+                                cloneIDs.push(item.value);
+                                setCertificateGradesID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "certificateGradesID", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setCertificateGradesID([]);
+                                dispatch(setFilterDropdown({keyFilter: "certificateGradesID", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...certificateGradesID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setCertificateGradesID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "certificateGradesID", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
 
                         <TimeRangeDropdown
                             ref={fromToRef}
@@ -327,7 +572,7 @@ export const HumanDocumentPage: FC = () => {
                         </tr>
                         </thead>
                         <tbody className="">
-                        {listHumanWithPager[pageIndex].map((document, index) => {
+                        {listHumanWithPager[pageIndex].map((document: any, index: any) => {
                             let linkRef;
                             if(location.pathname.includes("/human/document/")){
                                 linkRef = `/human/home/hid=${document?.contact?._id}`
@@ -344,9 +589,14 @@ export const HumanDocumentPage: FC = () => {
                                     </td>
                                     <td className="px-2 py-2.5 border-b border-cbs-border">
                                         <Link to={linkRef}>
-                                            {`${document.name}`}
+                                            {document.name ? `${document.name}` : CONTACT_DOCUMENT_TYPES[Number(document?.type - 1)].text}
                                             {/* <p><i>{document._id}</i></p> */}
                                         </Link>
+                                        <p className="text-primary-gray text-xs"><i>Trình độ: {document?.educationalBackground2?.name}</i></p>
+                                        <p className="text-primary-gray text-xs"><i>Chuyên ngành: {document?.field2?.name}</i></p>
+                                        <p className="text-primary-gray text-xs"><i>Loại: {document?.certificateType?.name}</i></p>
+                                        <p className="text-primary-gray text-xs"><i>Nội dung: {document?.certificateName?.name}</i></p>
+                                        <p className="text-primary-gray text-xs"><i>Hạng: {document?.certificateGrade}</i></p>
                                         {!!document?.files?.length && (
                                             <div className={"comment-attach mt-2"}>
                                                 {document?.files.map((file: any) => (
@@ -370,13 +620,13 @@ export const HumanDocumentPage: FC = () => {
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.sign}
                                     </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24">
+                                    <td className="py-2.5 border-b border-cbs-border px-2">
                                         {moment(document.fromDate).isValid() && moment(document.fromDate).format("DD/MM/YYYY")}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.place}
                                     </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24">
+                                    <td className="py-2.5 border-b border-cbs-border px-2">
                                         {moment(document.toDate).isValid() && moment(document.toDate).format("DD/MM/YYYY")}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">

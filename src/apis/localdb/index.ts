@@ -197,6 +197,16 @@ export const CONTACT_DOCUMENT_STATUS = [
     { value: 2, text: 'Hết hiệu lực', color: 'red' },
 ]
 
+// PHÂN LOẠI HỒ SƠ NHÂN SỰ
+export const CONTACT_DOCUMENT_TYPES = [
+    { value: 1, text: 'Lịch sử làm việc ở các đơn vị' },
+    { value: 2, text: 'Kinh nghiệm thực tế tham gia tại các Dự án' },
+    { value: 3, text: 'Lịch sử làm việc theo các Quyết định bổ nhiệm' },
+    { value: 4, text: 'Trình độ học vấn/Chuyên ngành đào tạo' },
+    { value: 5, text: 'Bằng cấp chứng chỉ/Hồ sơ khác' },
+    { value: 6, text: 'Đánh giá nhân sự' },
+]
+
 // PHÂN HẠNG CHỨNG CHỈ
 export const CONTACT_DOCUMENT_GRADES = [
     { value: 1, text: 'Hạng 1' },

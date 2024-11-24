@@ -15,7 +15,7 @@ interface documentHumanRepository {
     insert: (data: HumanInsertPayload) => Promise<HumanInsertResponse>;
     update: (data: HumanUpdatePayload) => Promise<HumanUpdateResponse>;
     fetchList: (data: any) => Promise<HumanQueryResponse>;
-    fetchFilterList: (data: any) => Promise<HumanQueryResponse>;
+    fetchFilterList: (data: any) => Promise<any>;
     downloadTemplateImportExcelHuman: (data: any) => Promise<HumanExportResponse>;
     importHumanFromExcel: (data: any) => Promise<HumanExportResponse>;
     exportHuman: (data: any) => Promise<HumanExportResponse>;
@@ -58,9 +58,9 @@ async function fetchListHuman(params : any) {
 async function fetchFilterListHuman(params : any) {
     const { data } = await API.get(`${CONTACT_DOCUMENT_URL}/filter`, {
         params: {
-            select: 'name contact sign fromDate toDate place note userCreate',
+            select: 'type name contact sign fromDate toDate place note userCreate educationalBackground2 field2 certificateType certificateName certificateGrade',
             populates: {
-                "path": "userCreate contact files",
+                "path": "userCreate contact files educationalBackground2 field2 certificateType certificateName",
                 "select": "fullname sign image name parent path author nameOrg createAt",
                 populate: {
                     "path": "author",

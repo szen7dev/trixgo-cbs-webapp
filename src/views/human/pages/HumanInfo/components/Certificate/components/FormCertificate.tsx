@@ -25,8 +25,8 @@ interface FormCertificateProps {
     sign: string; // ký hiệu
     fromDate: string; // ngày tháng
     toDate: string; // ngày hết hạn
-    certificateType: CertificateType; // loại chứng chỉ
-    certificateName: CertificateName; // lĩnh vực chứng chỉ
+    certificateType: CertificateType; // Loại chứng chỉ
+    certificateName: CertificateName; // Nội dung chứng chỉ
     certificateGrade: number; // hạng chứng chỉ
     number: number; // số lượng
     store: string; // vị trí lưu trữ
@@ -65,8 +65,8 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
       sign: "", // ký hiệu
       fromDate: "", // ngày tháng
       toDate: "", // ngày hết hạn
-      // certificateType: {}, // loại chứng chỉ
-      // certificateName: {}, // lĩnh vực chứng chỉ
+      // certificateType: {}, // Loại chứng chỉ
+      // certificateName: {}, // Nội dung chứng chỉ
       certificateGrade: 1, // hạng chứng chỉ
       number: 0, // số lượng
       store: "", // vị trí lưu trữ
@@ -206,7 +206,7 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                     </div>
                     <div className="w-1/4 flex items-center">
                       <span className="w-7/12 text-primary-gray text-left">
-                        Loại chứng chỉ
+                        Loại
                       </span>
                       <DropdownSearchable
                         onchangeValue={(value) =>
@@ -242,7 +242,7 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                     </div>
                     <div className="w-1/4 flex items-center">
                       <span className="w-7/12 text-primary-gray text-left">
-                        Lĩnh vực chứng chỉ
+                        Nội dung
                       </span>
                       <DropdownSearchable
                         onchangeValue={(value) =>
@@ -278,7 +278,7 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                     </div>
                     <div className="w-1/4 flex items-center">
                       <span className="w-7/12 text-primary-gray text-left">
-                        Hạng chứng chỉ
+                        Hạng
                       </span>
                       <DropdownSearchable
                         onchangeValue={(value) =>

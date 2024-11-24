@@ -80,7 +80,7 @@ export interface UseQueryListHuman {
     isFetching: boolean;
 }
 
-export const useListFilterHuman = ({ params = {},  isFetchList = false }: HumanQueryPayload): UseQueryListHuman => {
+export const useListFilterHuman = ({ params = {},  isFetchList = false }: any): UseQueryListHuman => {
 
     const res = useInfiniteQuery(
         [`list_filter_Document_Human`, { params }],
