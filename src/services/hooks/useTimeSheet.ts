@@ -31,7 +31,6 @@ interface UseQueryListTimeSheetParent {
   refetch: () => void;
   fetchNextPage: () => void;
   fetchPrevPage: () => void;
-  exportExcelAsync: (payload: any) => Promise<any>;
 }
 
 export const useQueryListTimeSheetParent = (
@@ -81,22 +80,6 @@ export const useQueryListTimeSheetParent = (
   const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
   const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
-  // // Tải mẫu import excel
-  // const { mutateAsync: downloadTemplateExcelAsync } =
-  //     useMutation((payload: DownloadPayload ) => TimeSheetChildRepository.downloadTemplateExcel(payload)
-  // );
-
-  // // Import excel
-  // const { mutateAsync: importExcelAsync } =
-  //     useMutation((payload: ImportPayload) => TimeSheetChildRepository.importExcel(payload)
-  // );
-
-  // Export excel
-  const { mutateAsync: exportExcelAsync } =
-      useMutation((payload: any) =>
-        TimeSheetParentRepository.exportExcel(payload)
-  );
-
   return {
     loading: isLoading,
     data: listTimeSheet,
@@ -108,9 +91,37 @@ export const useQueryListTimeSheetParent = (
     refetch,
     fetchNextPage,
     fetchPrevPage,
-    exportExcelAsync,
-  };
-};
+  }
+}
+
+export const useTimesheetCustom = ({
+  params = {}
+}: any) : any => {
+
+  // // Tải mẫu import excel
+  // const { mutateAsync: downloadTemplateExcelAsync } =
+  //     useMutation((payload: any ) =>
+  //       TimeSheetParentRepository.downloadTemplateExcel(payload)
+  // );
+
+  // // Import excel
+  // const { mutateAsync: importFromExcelAsync } =
+  //     useMutation((payload: { projectID?: string, dataImport: string }) =>
+  //       TimeSheetParentRepository.importFromExcel(payload)
+  // );
+
+  // Export excel
+  const { mutateAsync: exportExcelAsync } =
+      useMutation((payload: any) =>
+        TimeSheetParentRepository.exportExcel(payload)
+  );
+
+  return {
+      // downloadTemplateExcelAsync,
+      // importFromExcelAsync,
+      exportExcelAsync
+  }
+}
 
 export const useByProperty = ({ params = {},  isFetchList = false }: any): any => {
 
