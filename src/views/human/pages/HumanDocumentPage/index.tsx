@@ -620,13 +620,13 @@ export const HumanDocumentPage: FC = () => {
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.sign}
                                     </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24">
+                                    <td className="py-2.5 border-b border-cbs-border px-2">
                                         {moment(document.fromDate).isValid() && moment(document.fromDate).format("DD/MM/YYYY")}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.place}
                                     </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24">
+                                    <td className="py-2.5 border-b border-cbs-border px-2">
                                         {moment(document.toDate).isValid() && moment(document.toDate).format("DD/MM/YYYY")}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
