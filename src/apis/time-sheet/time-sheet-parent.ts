@@ -58,7 +58,7 @@ export async function deleteTimeSheet<P, R>(payload: P): Promise<R> {
     return data;
 }
 
-async function exportExcel(payload: any): Promise<any> {
+export async function exportExcel(payload: any): Promise<any> {
     const { data } = await API.get<any>(
         `${TIME_SHEET_URL}/expert_timesheets/export-excel?${convertObToUrl(payload)}`
     )

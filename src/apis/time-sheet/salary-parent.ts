@@ -1,6 +1,7 @@
 import API from "../repository";
 
 import { TIME_SHEET_URL } from ".";
+import { convertObToUrl } from "utils";
 
 import type {
   ListSalaryPayload,
@@ -57,6 +58,13 @@ export async function deleteSalary<P, R>(payload: P): Promise<R> {
   return data;
 }
 
+export async function exportExcel(payload: any): Promise<any> {
+  const { data } = await API.get<any>(
+      `${TIME_SHEET_URL}/expert_salary/export-excel?${convertObToUrl(payload)}`
+  )
+  return data
+}
+
 interface SalaryParentRepository {
   fetchListSalary: (
     params: ListSalaryPayload
@@ -76,6 +84,7 @@ interface SalaryParentRepository {
   deleteSalary: (
     payload: DeleteSalaryParentPayload
   ) => Promise<DeleteSalaryParentResponse>;
+  exportExcel: (payload: any) => Promise<any>;
 }
 
 export const salaryParentRepository: SalaryParentRepository = {
@@ -97,4 +106,7 @@ export const salaryParentRepository: SalaryParentRepository = {
   deleteSalary: (payload) => {
     return deleteSalary(payload);
   },
+  exportExcel: (payload) => {
+    return exportExcel(payload);
+  }
 };

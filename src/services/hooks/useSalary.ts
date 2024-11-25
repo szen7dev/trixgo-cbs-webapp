@@ -91,6 +91,35 @@ export const useQueryListSalaryParent = (
   };
 };
 
+export const useSalaryCustom = ({
+  params = {}
+}: any) : any => {
+
+  // // Tải mẫu import excel
+  // const { mutateAsync: downloadTemplateExcelAsync } =
+  //     useMutation((payload: any ) =>
+  //       SalaryParentRepository.downloadTemplateExcel(payload)
+  // );
+
+  // // Import excel
+  // const { mutateAsync: importFromExcelAsync } =
+  //     useMutation((payload: { projectID?: string, dataImport: string }) =>
+  //       SalaryParentRepository.importFromExcel(payload)
+  // );
+
+  // Export excel
+  const { mutateAsync: exportExcelAsync } =
+      useMutation((payload: any) =>
+        SalaryParentRepository.exportExcel(payload)
+  );
+
+  return {
+      // downloadTemplateExcelAsync,
+      // importFromExcelAsync,
+      exportExcelAsync
+  }
+}
+
 export const useByProperty = ({ params = {},  isFetchList = false }: any): any => {
 
   const { data: detailData, isLoading: listByPropertyIsLoading, refetch: refetchListByProperty } =

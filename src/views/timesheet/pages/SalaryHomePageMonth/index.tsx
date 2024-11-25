@@ -15,7 +15,10 @@ import { useModal } from "services/hooks/useModal";
 import {
   useByProperty,
   useMutationSalaryParent,
+  useSalaryCustom,
 } from "services/hooks/useSalary";
+
+import { createLinkAndClick } from "utils";
 
 const SalaryHomePageMonth: FC = () => {
     const params = useParams<{ year: string }>();
@@ -68,6 +71,34 @@ const SalaryHomePageMonth: FC = () => {
     [closeModal, onCreateSalaryParentAsync, refetchListByProperty]
   );
 
+  //_____Import, export excel
+  const [, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  });
+
+  const { exportExcelAsync } = useSalaryCustom({});
+
+  const handleDownloadExcel = async (param: any) => {
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportExcelAsync({
+        option: param.option,
+        year: param.year,
+        month: param.month,
+      });
+
+      if (error) {
+        return toast.warn(data?.message);
+      }
+
+      data && createLinkAndClick(data, "_self");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+  };
+  
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
@@ -148,6 +179,13 @@ const SalaryHomePageMonth: FC = () => {
               }
             >
             </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b text-gray-500"
+              }
+            >
+              Tải báo cáo tổng hợp
+            </div>
           </div>
           {listByProperty?.map((item: any, index: any) => (
             <div className={"body-table table-row"} key={item._id?.month}>
@@ -195,6 +233,15 @@ const SalaryHomePageMonth: FC = () => {
               >
                 <p><i>{Number(100*((item?.salary - item?.paid) / item?.salary)).toFixed(0)}%</i></p>
               </div>
+              <div
+                  className={
+                    "px-2 py-2 table-cell box-border border-b"
+                  }
+                >
+                  <button className={"text-primary"} onClick={() => handleDownloadExcel({option: 1, year: yearFilter, month: item._id?.month})}>
+                      Tải dữ liệu
+                  </button>
+                </div>
             </div>
           ))}
         </div>
