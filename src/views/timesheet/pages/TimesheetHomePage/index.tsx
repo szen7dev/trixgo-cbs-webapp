@@ -20,11 +20,8 @@ import {
 } from "services/hooks/useTimeSheet";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
-interface TimesheetHomePageProps {
-  type?: number
-}
 
-const TimeSheetHomePage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
+const TimeSheetHomePage: FC = () => {
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);
@@ -43,7 +40,10 @@ const TimeSheetHomePage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
     limit,
     loading,
     hasNextPage,
-  } = useQueryListTimeSheetParent({ keyword, type, sortOption: 2 });
+  } = useQueryListTimeSheetParent({ 
+    keyword, 
+    sortOption: 2 
+  });
 
   const {
     onCreateTimeSheetParentAsync,

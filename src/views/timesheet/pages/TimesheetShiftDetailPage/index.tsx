@@ -1,5 +1,5 @@
 import React, { FC, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
@@ -21,10 +21,13 @@ import {
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface TimesheetHomePageProps {
-  type?: number
+  typeTimesheet?: number
 }
 
-const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
+const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet }) => {
+  const params = useParams<{ year: string, month: string }>();
+  const year = Number(params["year"]);
+  const month = Number(params["month"]);
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);
@@ -43,7 +46,13 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
     limit,
     loading,
     hasNextPage,
-  } = useQueryListTimeSheetParent({ keyword, type, sortOption: 2 });
+  } = useQueryListTimeSheetParent({ 
+    keyword, 
+    typeTimesheet, 
+    year,
+    month,
+    sortOption: 2 
+  })
 
   const {
     onCreateTimeSheetParentAsync,

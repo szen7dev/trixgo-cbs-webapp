@@ -39,7 +39,7 @@ const TimesheetAppRouter: FC = () => {
           <ProtectedRoute
             exact
             path="/timesheet/home"
-            component={() => <TimesheetHomePage type={1} />}
+            component={TimesheetHomePage}
           />
           <ProtectedRoute
             exact
@@ -54,7 +54,7 @@ const TimesheetAppRouter: FC = () => {
           <ProtectedRoute
             exact
             path="/timesheet/shift/:year/:month"
-            component={TimesheetShiftDetailPage}
+            component={() => <TimesheetShiftDetailPage typeTimesheet={2} />}
           />
           <ProtectedRoute
             exact
