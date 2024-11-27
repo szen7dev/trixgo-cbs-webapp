@@ -151,7 +151,7 @@ const SalaryHomePageMonth: FC = () => {
                 "px-2 py-2 table-cell box-border border-b text-right text-gray-500"
               }
             >
-             Ghi nhận lương
+             Tổng lương - Thu hộ
             </div>
             <div
               className={

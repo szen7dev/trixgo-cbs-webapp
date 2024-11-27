@@ -299,7 +299,7 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Ghi nhận lương
+              Tổng lương - Thu hộ
             </div>
             <div
               className={
@@ -413,15 +413,29 @@ const SalaryHomePage: FC = () => {
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 4, salaryID: item._id })}>
-                  <img src={iconCopy} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
+                  <img src={iconCopy} title={'Sao chép'} className={"w-[24px] h-[24px] mr-3"} />
                   <span>Sao chép</span>
                 </button>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 2, salaryID: item._id })}>
-                  <img src={iconRefresh} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
-                  <span>Đồng bộ dữ liệu</span>
-                </button>
+                <div className="mb-3">
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 2, salaryID: item._id })}>
+                    <img src={iconRefresh} title={'Đồng bộ tổng hợp'} className={"w-[24px] h-[24px] mr-3"} />
+                    <span>Đồng bộ Tổng hợp</span>
+                  </button>
+                </div>
+                <div className="mb-3">
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 6, salaryID: item._id })}>
+                    <img src={iconRefresh} title={'Đồng bộ tổng hợp'} className={"w-[24px] h-[24px] mr-3"} />
+                    <span>Đồng bộ theo Cơ sở</span>
+                  </button>
+                </div>
+                <div>
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: item._id })}>
+                    <img src={iconRefresh} title={'Đồng bộ tổng hợp'} className={"w-[24px] h-[24px] mr-3"} />
+                    <span>Đồng bộ theo Khoản mục</span>
+                  </button>
+                </div>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSignReset({ option: 3, salaryID: item._id })}>
