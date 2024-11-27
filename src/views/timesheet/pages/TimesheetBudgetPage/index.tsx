@@ -81,7 +81,7 @@ const TimesheetBudgetPage: FC = () => {
           <div className={"flex items-center flex-1"}>
             <div>
               {items?.map((item: any, index: any) => (
-                <NavLink className="px-2 py-2" to={`/timesheet/salary/${item}`} key={item}>
+                <NavLink className="px-2 py-2" to={`/timesheet/budget/${item}`} key={item}>
                   Năm {item}
                 </NavLink>
               ))}
