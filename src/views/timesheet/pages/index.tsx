@@ -7,4 +7,6 @@ export {default as TimesheetMineDetailPage} from './TimesheetMineDetailPage';
 export {default as SalaryMineDetailPage} from './SalaryMineDetailPage';
 export {default as TimesheetHumanDetailPage} from './TimesheetHumanDetailPage';
 export {default as TimesheetBudgetPage} from './TimesheetBudgetPage';
+export {default as TimesheetShiftPage} from './TimesheetShiftPage';
+export {default as TimesheetShiftDetailPage} from './TimesheetShiftDetailPage';
 export {TimesheetDashboardPage} from './TimesheetDashboardPage';
