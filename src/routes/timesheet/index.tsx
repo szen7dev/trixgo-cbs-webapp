@@ -17,7 +17,9 @@ import {
   TimesheetDashboardPage, 
   SalaryMineDetailPage,
   TimesheetHumanDetailPage,
-  TimesheetBudgetPage
+  TimesheetShiftPage,
+  TimesheetBudgetPage,
+  TimesheetShiftDetailPage,
 } from "views/timesheet/pages";
 import TimesheetAdminFunctionalTab from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminFunctionalTab";
 import TimesheetAdminDetail from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminDetail";
@@ -37,11 +39,31 @@ const TimesheetAppRouter: FC = () => {
           <ProtectedRoute
             exact
             path="/timesheet/home"
-            component={() => <TimesheetHomePage type={1} />}
+            component={TimesheetHomePage}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/shift"
+            component={TimesheetShiftPage}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/shift/:year"
+            component={TimesheetShiftPage}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/shift/:year/:month"
+            component={() => <TimesheetShiftDetailPage typeTimesheet={2} />}
           />
           <ProtectedRoute
             exact
             path="/timesheet/budget"
+            component={TimesheetBudgetPage}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/budget/:year"
             component={TimesheetBudgetPage}
           />
           <ProtectedRoute
