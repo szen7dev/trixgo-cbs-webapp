@@ -119,7 +119,7 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
         }
       >
         <div className={"flex items-center flex-1"}>
-          <div className={"text-lg"}>Bảng chấm công</div>
+          <div className={"text-lg"}>Bảng chấm công tháng {month} năm {year}</div>
           <SearchInput
             classNameWrapper={"ml-4"}
             onChange={debounce((e) => {
@@ -206,7 +206,7 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Dự án/phòng ban
+              Dự án/phòng ban/Cơ sở
             </div>
             <div
               className={
@@ -275,6 +275,7 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {timeSheetParent?.project?.name}
+                <p className="text-cbs-highlight-color"><i>{timeSheetParent?.funda ? `Cơ sở: ${timeSheetParent?.funda?.name}` : ''}</i></p>
               </div>
               <div
                 className={
