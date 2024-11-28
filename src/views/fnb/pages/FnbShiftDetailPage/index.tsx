@@ -345,6 +345,7 @@ export const FnbShiftDetailPage: FC = () => {
 								<hr />
 								<p className="text-cbs-subtext text-[12px]"><i>Đơn giá ca chính: <b>{formatNumberMoney(item?.officialStaffSalar)}</b></i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Đơn giá ca phụ: <b>{formatNumberMoney(item?.trialStaffSalary)}</b></i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Tổng chi phí: <b>{formatNumberMoney(item?.staffSalaryTotal)}</b></i></p>
 								<hr />
 								<p className="text-cbs-subtext text-[12px]"><i>Size M: <b>{item?.numberOfSizeM}</b>
 								<p>- Tồn đầu-Tồn cuối: {item?.numberOfOpeningSizeM}-{item?.numberOfEotSizeM}={Number(item?.numberOfOpeningSizeM-item?.numberOfEotSizeM)}</p>
