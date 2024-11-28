@@ -5,17 +5,17 @@ import moment from "moment";
 import debounce from "lodash/debounce";
 import { read, utils } from 'xlsx';
 
-import FileColorIcon from "assets/icons/FileColor";
+// import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { createLinkAndClick } from "utils";
 import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
-import { TIMESHEET_SUBTYPES } from "apis/localdb/index";
-import {
-  FilterDateGroup
-} from "views/accounting/shareComponents/common";
+import { TIMESHEET_SUBTYPES, TIMESHEET_SHIFT_TYPES } from "apis/localdb/index";
+// import {
+//   FilterDateGroup
+// } from "views/accounting/shareComponents/common";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
 
@@ -46,6 +46,7 @@ const TimeSheetDetailPage: FC = () => {
 
   const [userID, setUserID] = useState<string | null>();
   const [subtype, setSubtype] = useState<string | null>();
+  const [shiftType, setShiftType] = useState<string | null>();
   const [userKeyword, setUserKeyword] = useState("");  
   const [keyword, setKeyword] = useState('');
 
@@ -53,10 +54,10 @@ const TimeSheetDetailPage: FC = () => {
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
   const currentMonth = new Date().getMonth()
 
-  const [inputFilter, setInputFilter] = useState({
-    fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
-    toDate: lastDayOfMonth
-  });
+  // const [inputFilter, setInputFilter] = useState({
+  //   fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+  //   toDate: lastDayOfMonth
+  // });
 
   const { user } = useAuth();
 
@@ -109,6 +110,7 @@ const TimeSheetDetailPage: FC = () => {
     keyword,
     humanID: userID,
     subtype,
+    shiftType,
     limit: 50
   });
 
@@ -279,13 +281,13 @@ useEffect(() => {
     }
 }, [JSON.stringify(dataImport)])
 
-  const handleOnChangeDate = useCallback((date, input) => {
-    if (input) {
-      setInputFilter((value) => ({ ...value, toDate: date }))
-    } else {
-      setInputFilter((value) => ({ ...value, fromDate: date }))
-    }
-  }, [])
+  // const handleOnChangeDate = useCallback((date, input) => {
+  //   if (input) {
+  //     setInputFilter((value) => ({ ...value, toDate: date }))
+  //   } else {
+  //     setInputFilter((value) => ({ ...value, fromDate: date }))
+  //   }
+  // }, [])
 
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value)
@@ -404,6 +406,30 @@ useEffect(() => {
                 setSubtype(item._id);
                 setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Ca làm việc"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={TIMESHEET_SHIFT_TYPES}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onClearData={() => {
+              setShiftType("");
+            }}
+            onchangeValue={item => {
+              setShiftType(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
             }}
             renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>

@@ -9,7 +9,7 @@ import { useUserSystem } from "services/hooks/users/useUserSystem";
 import {
 	useQueryListBudgetWork,
 } from "services/hooks/cmcs/useContractIncome";
-import { LIMIT_DROPDOWN, TIMESHEET_SUBTYPES, DAYOFWEEKS } from "apis/localdb/index";
+import { LIMIT_DROPDOWN, TIMESHEET_SUBTYPES, DAYOFWEEKS, TIMESHEET_SHIFT_TYPES } from "apis/localdb/index";
 import { useAuth } from "services/hooks/auth/useAuth";
 
 import type {
@@ -118,6 +118,7 @@ export const DetailChildRow: FC<Props> = ({
         >
           {rowData.name}
         </p>
+        <p className="text-cbs-highlight-color ml-3"><i>{rowData?.shiftType ? TIMESHEET_SHIFT_TYPES[rowData?.shiftType - 1].name : ''}</i></p>
       </div>
       <div
         className={
