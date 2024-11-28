@@ -621,6 +621,11 @@ export const TIMESHEET_SHIFT_TYPES = [
     { _id: 2, name: 'Ca đêm'},
 ]
 
+export const TIMESHEET_OFFICIAL = [
+    { _id: 1, name: 'Chính thức' },
+    { _id: 2, name: 'Thử việc'},
+]
+
 export const TIMESHEET_SUBTYPES = [
     { _id: 1, name: 'Thông thường' },
     { _id: 2, name: 'Nghỉ phép'},

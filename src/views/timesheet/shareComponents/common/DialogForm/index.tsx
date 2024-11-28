@@ -52,6 +52,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     date: null,
     assignee: {},
     type: "",
+    official: "",
     project: {},
     note: "",
     ...defaultValues,
@@ -71,6 +72,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
       const formatData = {
         ...values,
         type: `${values.type}`,
+        official: `${values.official}`,
       };
       if (expertTimesheetID) {
         formatData.expertTimesheetID = expertTimesheetID;
@@ -183,27 +185,34 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                   <p className="text-[13px] text-primary-gray mb-1">
                     Phân loại
                   </p>
-                  <DropdownSearchable
-                    showTriangle
-                    inlineSearch
-                    className={
-                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
-                    }
-                    focusedClass={"border-b border-primary"}
-                    maxWidthInput={"max-w-none"}
-                    renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={TIMESHEET_TYPES}
-                    initialValue={TIMESHEET_TYPES.filter(
-                      (elm) => elm.value === defaultValues?.type
-                    )}
-                    formatItem={{
-                      id: "value",
-                      text: "text",
-                    }}
-                    onchangeValue={(value) =>
-                      setFieldValue("type", value.value)
-                    }
-                  />
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="type"
+                      placeholder="1-Quản lý | 2-Sản xuất/Trực tiếp"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Chính thức/Thử việc
+                  </p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="official"
+                      placeholder="1-Chính thức | 2-Thử việc"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
                 </div>
 
                 <div>
