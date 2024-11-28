@@ -1,10 +1,14 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useRef, useState, useCallback } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { TIMESHEET_TYPES } from "apis/localdb";
 import { convertCurrency } from "utils/converter";
+import { ModalConfirm } from "shareComponents/common";
+import API from "apis/repository";
+import { toast } from "react-toastify";
+import iconRefresh from "assets/images/icons8-refresh.png";
 
 import {
   SearchInput,
@@ -88,7 +92,7 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
         }
         throw new Error("Can not create!");
       } catch (err) {
-        // console.error(err);
+        console.error(err);
         return null;
       }
     },
@@ -110,6 +114,43 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
     },
     [onDeleteTimeSheetParentAsync, refreshListTimeSheet, openDeleteConfirm]
   );
+
+  const toggleModalOpen = (param: any) => {
+      openModal(
+          <div
+          className={
+              "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+          }
+          >
+          <ModalConfirm
+              title="Bạn có muốn xác nhận Đồng bộ không?"
+              description= "Dữ liệu từ Bảng chấm công ca làm việc sẽ được đồng bộ"
+              onConfirm={() => handleConfirmSync({ option: param.option, timesheetID: param.timesheetID })}
+              defaultText={false}
+              onCancel={closeModal}
+          />
+          </div>
+      )
+  }
+
+  const handleConfirmSync = useCallback(async (param: any) => {
+      closeModal();
+
+      const { data, status } = await API.post(
+          `/api/timesheet/expert_timesheets/sync-data`, {
+              option: param.option,
+              timesheetID: param.timesheetID,
+          }
+      )
+      
+      if (status !== 200 || data.error) {
+          return toast.warn('Đồng bộ thất bại')
+      }
+
+      refreshListTimeSheet();
+      
+      return toast.success('Đồng bộ thành công')
+  }, [])
 
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
@@ -230,8 +271,8 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
               Ghi chú
             </div>
           </div>
-          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((timeSheetParent: any) => (
-            <div className={"body-table table-row"} key={timeSheetParent._id}>
+          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((item: any) => (
+            <div className={"body-table table-row"} key={item._id}>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b align-middle w-3"
@@ -241,10 +282,10 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
                   className="form-check-input"
                   type="checkbox"
                   id="flexCheckDefault"
-                  checked={recordSelected?._id === timeSheetParent._id}
+                  checked={recordSelected?._id === item._id}
                   onChange={(e) => {
                     if (e.target.checked) {
-                      toggleRecord(timeSheetParent);
+                      toggleRecord(item);
                       return null;
                     }
                     toggleRecord({});
@@ -253,46 +294,47 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
                 />
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {moment(timeSheetParent.date).format('DD/MM/YYYY')}
+                {moment(item.date).format('DD/MM/YYYY')}
               </div>
               <div
                 className={
                   "px-1 py-2 table-cell box-border border-b align-middle w-2/12"
                 }
               >
-                <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
-                  {timeSheetParent.name}
+                <NavLink to={`/timesheet/home/${item._id}`}>
+                  {item.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  Tạo: {timeSheetParent?.userCreate?.fullname} {moment(timeSheetParent.createAt).format(DATE_FORMAT)}
+                  Tạo: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
                 </p>
                 <p className={"mt-1 text-gray-500"}>
-                  Cập nhật: {timeSheetParent?.userUpdate?.fullname} {moment(timeSheetParent.modifyAt).format(DATE_FORMAT)}
+                  Cập nhật: {item?.userUpdate?.fullname} {moment(item.modifyAt).format(DATE_FORMAT)}
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {TIMESHEET_TYPES[Number(timeSheetParent.type - 1)].text}
+                {TIMESHEET_TYPES[Number(item.type - 1)].text}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {timeSheetParent?.project?.name}
-                <p className="text-cbs-highlight-color"><i>{timeSheetParent?.funda ? `Cơ sở: ${timeSheetParent?.funda?.name}` : ''}</i></p>
+                {item?.project?.name}
+                <p className="text-cbs-highlight-color"><i>{item?.funda ? `Cơ sở: ${item?.funda?.name}` : ''}</i></p>
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(timeSheetParent?.hours)}
+                {convertCurrency(item?.hours)}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(timeSheetParent?.amount)}
+                {convertCurrency(item?.amount)}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {timeSheetParent.note}
+                {item.note}
+                {item?.funda ? <div><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ option: 1, timesheetID: item?._id })}><img src={iconRefresh} title={'Đồng bộ chấm công'} className={"w-[24px] h-[24px]"} /><span>Kết chuyển chấm công từ Ca làm việc</span></button></div> : <></>}
               </div>
             </div>
           ))}
