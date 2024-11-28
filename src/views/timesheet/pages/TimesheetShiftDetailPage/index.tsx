@@ -146,6 +146,9 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
       if (status !== 200 || data.error) {
           return toast.warn('Đồng bộ thất bại')
       }
+
+      refreshListTimeSheet();
+      
       return toast.success('Đồng bộ thành công')
   }, [])
 
