@@ -157,7 +157,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
                                 </div>
-                                <div className="ml-3">
+                                {/* <div className="ml-3">
                                     <span className="text-[13px] text-primary-gray">Phân loại mùa trong năm</span>
                                     <div  className="my-5">
                                         <FormControl sx={{ marginTop: "-5px" }} >
@@ -222,7 +222,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="ml-3">
                                     <span className="text-[13px] text-primary-gray">Phân loại ca trong ngày</span>
                                     <div className="my-5">
@@ -271,6 +271,19 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                         />
                                                     }
                                                     label={<span className="text-[13px]">Tối</span>}
+                                                />
+                                                 <FormControlLabel
+                                                    sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
+                                                    value="4"
+                                                    onChange={() => setFieldValue('shiftType', 4)}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Đêm</span>}
                                                 />
                                             </RadioGroup>
                                         </FormControl>

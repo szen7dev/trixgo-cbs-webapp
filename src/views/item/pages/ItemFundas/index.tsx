@@ -12,13 +12,13 @@ import { APP_ID } from "apis/localdb";
 import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
-import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateFunda, ModalConfirm } from '../../shareComponents/common';
+import { ModalCreateOrUpdateFunda } from '../../shareComponents/common';
+import { convertCurrency } from "utils/converter";
 
 /*=====5.TYPINGS=====*/
 import { Storage } from "typings/items";
@@ -362,7 +362,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Lương chính thức/giờ
+                                Lương chính thức/Ca đêm/giờ
                             </div>
                         </th>
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
@@ -407,8 +407,11 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">{item?.description}</td>
                             <td className="py-1 px-2">{item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}</td>
                             <td className="py-1 px-2">{moment(item.initialDay).format('L')}</td>
-                            <td className="py-1 px-2">{item?.trialStaffSalary}</td>
-                            <td className="py-1 px-2">{item?.officialStaffSalar}</td>
+                            <td className="py-1 px-2">{convertCurrency(Number(item?.trialStaffSalary).toFixed(0))}</td>
+                            <td className="py-1 px-2">
+                                {convertCurrency(Number(item?.officialStaffSalar).toFixed(0))}
+                                <p><i>Ca đêm: {convertCurrency(Number(item?.nightShiftStaffSalary).toFixed(0))}</i></p>
+                            </td>
                             {/* <td className="py-1 px-2">{CAMPAIGN_CONSTANT[item?.campaign-1]}</td> */}
                             <td className="py-1 px-2">
                                 <p>{INTERNAL_CONSTANT[item?.internal-1]}</p>
