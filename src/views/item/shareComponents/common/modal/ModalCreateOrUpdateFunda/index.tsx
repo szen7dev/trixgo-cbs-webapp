@@ -26,6 +26,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     platform: 1,
     trialStaffSalary: 0,
     officialStaffSalar: 0,
+    nightShiftStaffSalary: 0,
   }
 }) => {
   const { closeModal } = useModal();
@@ -258,6 +259,20 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
             defaultValue={Number(formData?.officialStaffSalar)}
             onChange={onChange}
             name = "officialStaffSalar"
+        ></input>
+      </section>
+
+      <section className="px-10 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtNightShiftStaffSalary">
+          Lương ca đêm/giờ
+        </label>
+        <input
+            type="number"
+            placeholder={"Lương ca đêm/giờ"}
+            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={Number(formData?.nightShiftStaffSalary)}
+            onChange={onChange}
+            name = "nightShiftStaffSalary"
         ></input>
       </section>
 
