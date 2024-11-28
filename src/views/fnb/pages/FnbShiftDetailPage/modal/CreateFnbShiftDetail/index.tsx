@@ -224,7 +224,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                     </div>
                                 </div> */}
                                 <div className="ml-3">
-                                    <span className="text-[13px] text-primary-gray">Phân loại ca trong ngày</span>
+                                    <span className="text-[13px] text-primary-gray">Phân loại ca trong ngày*** <span className="color-red">(!!!chọn đúng ca để đúng tiền lương)</span></span>
                                     <div className="my-5">
                                         <FormControl sx={{ marginTop: "-5px" }} >
                                             <RadioGroup
@@ -322,7 +322,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
                                 </div>
-                                <div className="ml-3">
+                                {/* <div className="ml-3">
                                     <span className="text-[13px] text-primary-gray">Tình trạng nộp tiền</span>
                                     <div className="my-5">
                                         <FormControl sx={{ marginTop: "-5px" }} >
@@ -361,7 +361,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="mb-4">
                                     <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNote">
                                         Ghi chú
