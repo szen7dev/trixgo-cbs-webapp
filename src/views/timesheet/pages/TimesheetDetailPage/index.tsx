@@ -42,7 +42,7 @@ const TimeSheetDetailPage: FC = () => {
   const timeSheetParentID = params["id"];
   const accountRef = React.useRef<DropdownHandle>(null);
 
-  const history = useHistory();
+  // const history = useHistory();
 
   const [userID, setUserID] = useState<string | null>();
   const [subtype, setSubtype] = useState<string | null>();
@@ -221,8 +221,8 @@ const TimeSheetDetailPage: FC = () => {
       const { error, data } = await exportExcelAsync({
         option: param.option,
         parentID: timeSheetParentID,
-        fromDate: inputFilter.fromDate,
-        toDate: inputFilter.toDate,
+        // fromDate: inputFilter.fromDate,
+        // toDate: inputFilter.toDate,
       });
 
       if (error) {
@@ -410,7 +410,7 @@ useEffect(() => {
             )}
             selectOneByOne={true}
         />
-        <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+        {/* <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} /> */}
         <PaginateV2
           ref={ref}
           totalRecord={totalRecord}
