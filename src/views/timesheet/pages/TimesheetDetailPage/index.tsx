@@ -12,7 +12,7 @@ import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { createLinkAndClick } from "utils";
 import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
-import { TIMESHEET_SUBTYPES, TIMESHEET_SHIFT_TYPES } from "apis/localdb/index";
+import { TIMESHEET_SUBTYPES, TIMESHEET_SHIFT_TYPES, TIMESHEET_OFFICIAL } from "apis/localdb/index";
 // import {
 //   FilterDateGroup
 // } from "views/accounting/shareComponents/common";
@@ -47,12 +47,13 @@ const TimeSheetDetailPage: FC = () => {
   const [userID, setUserID] = useState<string | null>();
   const [subtype, setSubtype] = useState<string | null>();
   const [shiftType, setShiftType] = useState<string | null>();
+  const [official, setOfficial] = useState<string | null>();
   const [userKeyword, setUserKeyword] = useState("");  
   const [keyword, setKeyword] = useState('');
 
   const today = new Date();
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-  const currentMonth = new Date().getMonth()
+  // const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  // const currentMonth = new Date().getMonth()
 
   // const [inputFilter, setInputFilter] = useState({
   //   fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
@@ -111,6 +112,7 @@ const TimeSheetDetailPage: FC = () => {
     humanID: userID,
     subtype,
     shiftType,
+    official,
     limit: 50
   });
 
@@ -428,6 +430,30 @@ useEffect(() => {
             }}
             onchangeValue={item => {
               setShiftType(item._id);
+              setPageIndex(0);
+              ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Chính thức/Thử việc"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={TIMESHEET_OFFICIAL}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onClearData={() => {
+              setOfficial("");
+            }}
+            onchangeValue={item => {
+              setOfficial(item._id);
               setPageIndex(0);
               ref.current&&ref.current.resetPaginate();
             }}

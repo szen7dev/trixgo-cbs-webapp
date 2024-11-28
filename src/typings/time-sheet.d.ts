@@ -8,6 +8,7 @@ import { Contact } from "./items/contact";
 export type TimeSheetParent = {
     _id: string;
     type: 1;
+    official: 1;
     hours: number;
     unitprice: number;
     amount: number;
@@ -53,6 +54,7 @@ export type InsertTimeSheetParentPayload = {
     name: string;
     assignee: User;
     type: 1;
+    official: 1;
     project: Project;
     note: string;
     date: string;
@@ -98,6 +100,7 @@ export type TimeSheetChild = {
     status: number;
     subtype: any | null
     shiftType: any | null
+    official: any | null
     timeApproved: string | null;
     state: 1;
     name: string;

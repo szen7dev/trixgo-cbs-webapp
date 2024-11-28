@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
-import { TIMESHEET_TYPES } from "apis/localdb";
+import { TIMESHEET_TYPES, TIMESHEET_OFFICIAL } from "apis/localdb";
 import { convertCurrency } from "utils/converter";
 
 import {
@@ -263,6 +263,7 @@ const TimeSheetHomePage: FC = () => {
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {TIMESHEET_TYPES[Number(timeSheetParent.type - 1)].text}
+                <p><i>{timeSheetParent?.official ? TIMESHEET_OFFICIAL[Number(timeSheetParent?.official - 1)].name : ''}</i></p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {timeSheetParent?.project?.name}

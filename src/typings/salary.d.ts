@@ -7,6 +7,7 @@ import { Project } from "./items/project";
 export type SalaryParent = {
     _id: string;
     type: 1;
+    official: 1;
     status: number;
     timeApproved: string | null;
     author: User;

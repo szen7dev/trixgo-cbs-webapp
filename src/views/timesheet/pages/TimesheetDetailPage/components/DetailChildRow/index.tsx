@@ -9,7 +9,7 @@ import { useUserSystem } from "services/hooks/users/useUserSystem";
 import {
 	useQueryListBudgetWork,
 } from "services/hooks/cmcs/useContractIncome";
-import { LIMIT_DROPDOWN, TIMESHEET_SUBTYPES, DAYOFWEEKS, TIMESHEET_SHIFT_TYPES } from "apis/localdb/index";
+import { LIMIT_DROPDOWN, TIMESHEET_SUBTYPES, DAYOFWEEKS, TIMESHEET_SHIFT_TYPES, TIMESHEET_OFFICIAL } from "apis/localdb/index";
 import { useAuth } from "services/hooks/auth/useAuth";
 
 import type {
@@ -294,6 +294,44 @@ export const DetailChildRow: FC<Props> = ({
           }
         />
         <p>{TIMESHEET_SUBTYPES[Number(rowData?.subtype)-1].name}</p>
+
+        <hr />
+        <DropdownSearchable
+          id="ticket-creator"
+          className={"w-full pl-0 outline-none text-gray-400"}
+          bordered
+          isMultiple={false}
+          allowClearValueSingleInput
+          showTriangle
+          placeholder="Khác"
+          renderSelectedItem={(item) => (
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+                minWidth: 0,
+                width: "100px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+              }}
+            >
+              {item.text}
+            </p>
+          )}
+          data={TIMESHEET_OFFICIAL}
+          initialValue={rowData?.official}
+          formatItem={{
+            id: "_id",
+            text: "name",
+          }}
+          onchangeValue={(value) =>
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              official: value.id,
+            })
+          }
+        />
+        <p>{rowData?.official ? TIMESHEET_OFFICIAL[Number(rowData?.official)-1].name : ''}</p>
       </div>
 
       <div

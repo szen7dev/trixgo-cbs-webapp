@@ -34,6 +34,7 @@ const ActionGroupButton2: FC<ActionGroupButtonProps> = (props) => {
                 note: record.note,
                 project: record.project,
                 type: record.type,
+                official: record.official,
                 convertFactor: record.convertFactor,
                 date: record.date,
               }}
