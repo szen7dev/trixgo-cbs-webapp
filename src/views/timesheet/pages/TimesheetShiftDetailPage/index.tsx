@@ -312,7 +312,7 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {TIMESHEET_TYPES[Number(item.type - 1)].text}
+                {TIMESHEET_TYPES[Number(item?.type - 1)].text}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item?.project?.name}

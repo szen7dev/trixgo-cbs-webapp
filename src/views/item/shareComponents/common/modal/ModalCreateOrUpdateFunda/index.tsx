@@ -141,7 +141,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
 
   return (
     <main className="relative h-full">
-      <header className="px-10 py-5 flex items-center justify-between">
+      <header className="px-10 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
           {modalType === 'create' ? 'Tạo mới' : 'Cập nhật'}
         </p>
@@ -161,13 +161,13 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           type="text"
           placeholder="Nhập nội dung"
           name="name"
-          className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+          className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
           defaultValue={formData.name}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtSign">
           Mã hiệu
         </label>
@@ -175,13 +175,13 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           type="text"
           placeholder="Nhập mã hiệu"
           name="sign"
-          className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+          className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
           defaultValue={formData?.sign}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Mô tả
         </label>
@@ -189,107 +189,107 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           type="text"
           placeholder="Mô tả"
           name="description"
-          className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+          className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
           defaultValue={formData?.description}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtAddress">
           Địa chỉ
         </label>
         <input
             placeholder={"Địa chỉ"}
-            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
             defaultValue={formData?.address}
             onChange={onChange}
             name = "address"
         ></input>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtPhone">
           Điện thoại
         </label>
         <input
             placeholder={"Điện thoại"}
-            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
             defaultValue={formData?.phone}
             onChange={onChange}
             name = "phone"
         ></input>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtBankAccount">
           Tài khoản ngân hàng
         </label>
         <input
             placeholder={"Tài khoản ngân hàng"}
-            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
             defaultValue={formData?.bankAccount}
             onChange={onChange}
             name = "bankAccount"
         ></input>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtTrialStaffSalary">
           Lương thử việc/giờ
         </label>
         <input
             type="number"
             placeholder={"Lương thử việc/giờ"}
-            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
             defaultValue={Number(formData?.trialStaffSalary)}
             onChange={onChange}
             name = "trialStaffSalary"
         ></input>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtOfficialStaffSalar">
           Lương chính thức/giờ
         </label>
         <input
             type="number"
             placeholder={"Lương chính thức/giờ"}
-            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
             defaultValue={Number(formData?.officialStaffSalar)}
             onChange={onChange}
             name = "officialStaffSalar"
         ></input>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtNightShiftStaffSalary">
           Lương ca đêm/giờ
         </label>
         <input
             type="number"
             placeholder={"Lương ca đêm/giờ"}
-            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
             defaultValue={Number(formData?.nightShiftStaffSalary)}
             onChange={onChange}
             name = "nightShiftStaffSalary"
         ></input>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtBankAccount">
           Tỷ lệ tích điểm (%)
         </label>
         <input
             placeholder={"Tỷ lệ tích điểm % (mặc định 10%)"}
-            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
             defaultValue={formData?.loyaltyPointsRate}
             onChange={onChange}
             name = "loyaltyPointsRate"
         ></input>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
             Khu vực
           </label>
@@ -308,7 +308,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
             }}
             onSearchInputChange={debounce((value: any) => setKeywordArea(value), 600)}
             onScroll={handleScroll}
-            className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+            className="w-full rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
             placeholder="Tìm kiếm khu vực"
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -335,7 +335,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
             Ngày bắt đầu
           </label>
@@ -343,13 +343,13 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           type="date"
           placeholder="Ngày bắt đầu"
           name="initialDay"
-          className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+          className="w-full rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={moment(formData.initialDay).format('YYYY-MM-DD')}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtPlatform">
             Phân loại mảng hoạt động
           </label>
@@ -381,7 +381,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           </div>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtCampaign">
             Chiến dịch quảng cáo
           </label>
@@ -413,7 +413,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           </div>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInternal">
             Phân loại
           </label>
@@ -445,7 +445,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           </div>
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtCampaign">
             Chiến dịch đang hoạt động
           </label>
