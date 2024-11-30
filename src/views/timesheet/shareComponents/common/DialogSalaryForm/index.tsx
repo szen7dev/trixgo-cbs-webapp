@@ -124,7 +124,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     <Field
                       type="text"
                       name="type"
-                      placeholder="1-Quản lý | 2-Sản xuất/công nhân"
+                      placeholder="1-Quản lý | 2-Trực tiếp/Sản xuất"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);

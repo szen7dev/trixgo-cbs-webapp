@@ -79,7 +79,7 @@ const TimesheetShiftPage: FC = () => {
             >
             <ModalConfirm
                 title="Bạn có muốn xác nhận Đồng bộ không?"
-                description= "Dữ liệu từ Bảng chấm công ca làm việc sẽ được đồng bộ"
+                description= "Dữ liệu từ Bảng chấm công ca làm việc sẽ được đồng bộ về bảng chấm công tháng"
                 onConfirm={() => handleConfirmSync({ option: param.option, year: param.year, month: param.month })}
                 defaultText={false}
                 onCancel={closeModal}
@@ -188,8 +188,8 @@ const TimesheetShiftPage: FC = () => {
                       }
                     >
                       <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ year: yearFilter, month: item})}>
-                          <img src={iconRefresh} title={'Đồng bộ chấm công'} className={"w-[24px] h-[24px]"} />
-                          <span>Đồng bộ chấm công</span>
+                          <img src={iconRefresh} title={'Khởi tạo bảng chấm công tháng'} className={"w-[24px] h-[24px]"} />
+                          <span>Khởi tạo bảng chấm công tháng</span>
                       </button>
                     </div>
                     <div

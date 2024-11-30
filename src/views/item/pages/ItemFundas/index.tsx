@@ -55,6 +55,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         area1: '', 
         area2: '',
         area3: '',
+        project: '',
         initialDay: new Date(),
         campaign: 1,
         internal: 1,
@@ -77,12 +78,13 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             keyword, 
             isListParentOfListChilds: "1", 
             populates: { 
-                "path": "area1 area2 area3 warehouse contact images",
+                "path": "area1 area2 area3 warehouse contact images project",
+                // "select": "name sign",
             }, 
             parentID 
         },
         isFetchList: true
-    });
+    })
 
     // Reset form
     const clearData = () => {
@@ -116,7 +118,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, activeCampaign, trialStaffSalary, officialStaffSalar } = newListIDChecked[0];
+            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, project, activeCampaign, trialStaffSalary, officialStaffSalar } = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
@@ -133,6 +135,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 area1, 
                 area2,
                 area3,
+                project,
                 activeCampaign,
                 trialStaffSalary: Number(trialStaffSalary),
                 officialStaffSalar: Number(officialStaffSalar),
@@ -159,30 +162,6 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             setItemsChecked(listFunda);
         }
     };
-
-    // Xóa 1 hoặc nhiều mẩu tin
-    const handleConfirmDelete = async () => {
-        try {
-            const ids = itemsChecked.map(item => item._id);
-            const { error, data } = await deleteAsync(ids);
-
-            if (error) {
-                return toast.warn(data?.message);
-            }
-
-            toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
-            closeModal();
-            clearData();
-            refetch();
-            setItemsChecked([]);
-        } catch (error) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    }
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
 
@@ -405,7 +384,10 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.description}</td>
-                            <td className="py-1 px-2">{item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}</td>
+                            <td className="py-1 px-2">
+                                {item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}
+                                <p className="text-primary"><i>Dự án: {item?.project?.name}</i></p>
+                            </td>
                             <td className="py-1 px-2">{moment(item.initialDay).format('L')}</td>
                             <td className="py-1 px-2">{convertCurrency(Number(item?.trialStaffSalary).toFixed(0))}</td>
                             <td className="py-1 px-2">
