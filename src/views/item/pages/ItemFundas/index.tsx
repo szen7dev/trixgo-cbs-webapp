@@ -79,7 +79,11 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             isListParentOfListChilds: "1", 
             populates: { 
                 "path": "area1 area2 area3 warehouse contact images project",
-                // "select": "name sign",
+                "select": "name sign path funda",
+                populate: {
+                    "path": 'funda',
+                    "select": "name sign path",
+                }
             }, 
             parentID 
         },
@@ -387,6 +391,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 {item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}
                                 <p className="text-primary"><i>Dự án: {item?.project?.name}</i></p>
+                                <p className="text-primary"><i>Link cơ sở: {item?.project?.funda?.name}</i></p>
                             </td>
                             <td className="py-1 px-2">{moment(item.initialDay).format('L')}</td>
                             <td className="py-1 px-2">{convertCurrency(Number(item?.trialStaffSalary).toFixed(0))}</td>

@@ -39,8 +39,8 @@ export const useQueryListSalaryParent = (
     async ({ pageParam }: any) =>
       SalaryParentRepository.fetchListSalary({
         populates: {
-          path: "assignee project userCreate userUpdate",
-          select: "fullname name",
+          path: "assignee project funda userCreate userUpdate",
+          select: "fullname name sign",
         },
         limit,
         lastestID: pageParam,

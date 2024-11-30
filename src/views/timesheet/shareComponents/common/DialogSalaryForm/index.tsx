@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { Formik, Form, Field } from "formik";
-
+import debounce from "lodash/debounce";
+import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import { useModal } from "services/hooks/useModal";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
@@ -29,9 +30,9 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 
   const { closeModal } = useModal();
 
-  // const { listDepartments } = useQueryListDepartments({
-  //   keyword: searchhDepartmentStr,
-  // }, true);
+  const { listDepartments } = useQueryListDepartments({
+    keyword: searchhDepartmentStr,
+  }, true);
 
   const initialValues = {
     name: "",
@@ -158,7 +159,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                   </div>
                 </div>
 
-                {/* <div>
+                <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Dự án, phòng ban
                   </p>
@@ -172,9 +173,9 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     showTriangle
                     allowClearValueSingleInput
                     renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={listDepartments.map((department) => ({
-                      _id: department._id,
-                      name: `${department.sign}.${department.name}`,
+                    data={listDepartments.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
                     }))}
                     initialValue={defaultValues?.project}
                     formatItem={{
@@ -189,7 +190,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       setFieldValue("projectID", value.id)
                     }
                   />
-                </div> */}
+                </div>
 
                 <div>
                   <p className="text-primary-gray text-[13px] mb-1">Ghi chú</p>
