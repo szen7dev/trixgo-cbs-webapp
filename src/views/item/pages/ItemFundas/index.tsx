@@ -79,7 +79,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             isListParentOfListChilds: "1", 
             populates: { 
                 "path": "area1 area2 area3 warehouse contact images project",
-                "select": "name sign",
+                // "select": "name sign",
             }, 
             parentID 
         },
