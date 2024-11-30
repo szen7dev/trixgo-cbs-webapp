@@ -264,7 +264,7 @@ export const OwnerMemberPage: FC = () => {
             </th>
             <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Email
+                Email/Phone
               </div>
             </th>
             <th className="w-1/12 py-1 font-normal">
@@ -316,7 +316,10 @@ export const OwnerMemberPage: FC = () => {
                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                 <p className="text-primary-gray text-[12px]"><i>Tạo: {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}</i></p>
               </td>
-              <td className="py-1 px-2">{item.email}</td>
+              <td className="py-1 px-2">
+                {item.email}
+                <p>{item?.phone}</p>
+              </td>
               <td className="py-1 px-2">{item.department?.name}</td>
               <td className="py-1 px-2">{item.position?.name}</td>
               <td className={cn('py-1 px-2', item.level === 0 ? 'text-primary' : '')}>
