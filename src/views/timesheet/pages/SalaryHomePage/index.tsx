@@ -68,6 +68,8 @@ const SalaryHomePage: FC = () => {
     month
   })
 
+  console.log(dataNotFilter)
+
   const {
     onCreateSalaryParentAsync,
     onUpdateSalaryParentAsync,
@@ -377,6 +379,8 @@ const SalaryHomePage: FC = () => {
                 <p><i>{item?.type == 1 ? 'Khối quản lý' : 'Khối trực tiếp'} ({item?.type})</i></p>
                 <p><i>Ngày ghi nhận:  {moment(item.date).format('DD/MM/YYYY')}</i></p>
                 <p><i>Admin: {item.admins.length} | Member: {item.members.length}</i></p>
+                <p className="text-primary"><i>Dự án/Phòng ban: {item?.project?.name}</i></p>
+                <p className="text-primary"><i>Cơ sở: {item?.funda?.name}</i></p>
                 <p className={"mt-1 text-gray-500"}>
                   Tạo: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
                 </p>

@@ -31,6 +31,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     nightShiftStaffSalary: 0,
   }
 }) => {
+  // console.log(initialValues)
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
   const { insertAsync, updateAsync } = useFunda({});
@@ -131,7 +132,6 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     }))
   }
 
-  const handleSearchArea = debounce((value) => setKeywordArea(value), 500);
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
