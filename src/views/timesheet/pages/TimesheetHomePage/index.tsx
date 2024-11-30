@@ -262,7 +262,7 @@ const TimeSheetHomePage: FC = () => {
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {timeSheetParent?.type ? TIMESHEET_TYPES[Number(timeSheetParent.type - 1)].text : ''}
+                {timeSheetParent?.type ? TIMESHEET_TYPES[Number(timeSheetParent?.type - 1)].text : ''}
                 <p><i>{timeSheetParent?.official ? TIMESHEET_OFFICIAL[Number(timeSheetParent?.official - 1)].name : ''}</i></p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
