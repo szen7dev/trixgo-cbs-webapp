@@ -78,8 +78,8 @@ const TimesheetShiftPage: FC = () => {
             }
             >
             <ModalConfirm
-                title="Bạn có muốn xác nhận Đồng bộ không?"
-                description= "Dữ liệu từ Bảng chấm công ca làm việc sẽ được đồng bộ về bảng chấm công tháng"
+                title="Bạn có muốn xác nhận không?"
+                description= "Hệ thống sẽ tạo các bảng chấm công theo từng Cơ sở"
                 onConfirm={() => handleConfirmSync({ option: param.option, year: param.year, month: param.month })}
                 defaultText={false}
                 onCancel={closeModal}
