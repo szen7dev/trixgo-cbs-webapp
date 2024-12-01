@@ -9,6 +9,7 @@ import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2
 import { ModalConfirm } from "shareComponents/common";
 import API from "apis/repository";
 import iconRefresh from "assets/images/icons8-refresh.png";
+import iconCreate from "assets/images/icons8-create.png";
 import iconCopy from "assets/images/icons8-copy-96.svg";
 import { convertCurrency } from "utils/converter";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -67,8 +68,6 @@ const SalaryHomePage: FC = () => {
     year,
     month
   })
-
-  console.log(dataNotFilter)
 
   const {
     onCreateSalaryParentAsync,
@@ -138,7 +137,7 @@ const SalaryHomePage: FC = () => {
         <ModalConfirm
           title="Bạn có muốn xác nhận Cập nhật/Đồng bộ không?"
           description= "Dữ liệu từ Bảng chấm công, KPI sẽ được đồng bộ sang Bảng lương này"
-          onConfirm={() => handleConfirmSync({ option: param.option, salaryID: param.salaryID })}
+          onConfirm={() => handleConfirmSync({ option: param.option, salaryID: param.salaryID, fundaID: param.fundaID })}
           defaultText={false}
           onCancel={closeModal}
         />
@@ -171,6 +170,7 @@ const SalaryHomePage: FC = () => {
       `/api/timesheet/expert_salary/sync-data`, {
         option: param.option,
         salaryID: param.salaryID,
+        fundaID: param.fundaID,
       }
     )
    
@@ -429,15 +429,15 @@ const SalaryHomePage: FC = () => {
                   </button>
                 </div>
                 <div className="mb-3">
-                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 6, salaryID: item._id })}>
-                    <img src={iconRefresh} title={'Đồng bộ tổng hợp'} className={"w-[24px] h-[24px] mr-3"} />
-                    <span>Đồng bộ theo Cơ sở</span>
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: item._id, fundaID: item?.funda?._id })}>
+                    <img src={iconCreate} title={'Thêm nhân sự cơ sở vào Bảng lương'} className={"w-[24px] h-[24px] mr-3"} />
+                    <span>Thêm nhân sự cơ sở vào Bảng lương</span>
                   </button>
                 </div>
                 <div>
-                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: item._id })}>
-                    <img src={iconRefresh} title={'Đồng bộ tổng hợp'} className={"w-[24px] h-[24px] mr-3"} />
-                    <span>Đồng bộ theo Khoản mục</span>
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 8, salaryID: item._id, fundaID: item?.funda?._id })}>
+                    <img src={iconRefresh} title={'Đồng bộ theo Cơ sở'} className={"w-[24px] h-[24px] mr-3"} />
+                    <span>Đồng bộ theo Cơ sở</span>
                   </button>
                 </div>
               </div>

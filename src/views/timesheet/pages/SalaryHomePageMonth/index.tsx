@@ -6,19 +6,19 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import moment from "moment";
 import { convertCurrency } from "utils/converter";
 import { useAuth } from "services/hooks/auth/useAuth";
-
+import iconCreate from "assets/images/icons8-create.png";
+import { useModal } from "services/hooks/useModal";
+import { ModalConfirm } from "shareComponents/common";
+import { createLinkAndClick } from "utils";
+import API from "apis/repository";
 import {
   DialogSalaryForm,
 } from "views/timesheet/shareComponents/common";
-
-import { useModal } from "services/hooks/useModal";
 import {
   useByProperty,
   useMutationSalaryParent,
   useSalaryCustom,
 } from "services/hooks/useSalary";
-
-import { createLinkAndClick } from "utils";
 
 const SalaryHomePageMonth: FC = () => {
     const params = useParams<{ year: string }>();
@@ -97,8 +97,43 @@ const SalaryHomePageMonth: FC = () => {
     } finally {
       setStateExport({ isExporting: false });
     }
-  };
-  
+  }
+
+  const toggleModalOpen = (param: any) => {
+      openModal(
+          <div
+          className={
+              "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+          }
+          >
+          <ModalConfirm
+              title="Bạn có muốn xác nhận Đồng bộ không?"
+              description= "Dữ liệu từ Bảng chấm công ca làm việc sẽ được đồng bộ về bảng chấm công tháng"
+              onConfirm={() => handleConfirmSync({ option: param.option, year: param.year, month: param.month })}
+              defaultText={false}
+              onCancel={closeModal}
+          />
+          </div>
+      )
+  }
+
+  const handleConfirmSync = useCallback(async (param: any) => {
+      closeModal();
+
+      const { data, status } = await API.post(
+          `/api/timesheet/expert_salary/sync-data`, {
+              option: param.option,
+              year: param.year,
+              month: param.month,
+          }
+      )
+      
+      if (status !== 200 || data.error) {
+          return toast.warn('Đồng bộ thất bại')
+      }
+      return toast.success('Đồng bộ thành công')
+  }, [])
+
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
@@ -184,6 +219,13 @@ const SalaryHomePageMonth: FC = () => {
                 "px-2 py-2 table-cell box-border border-b text-gray-500"
               }
             >
+              Hành động
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b text-gray-500"
+              }
+            >
               Tải báo cáo tổng hợp
             </div>
           </div>
@@ -232,6 +274,16 @@ const SalaryHomePageMonth: FC = () => {
                 }
               >
                 <p><i>{Number(100*((item?.salary - item?.paid) / item?.salary)).toFixed(0)}%</i></p>
+              </div>
+              <div
+                    className={
+                      "px-2 py-2 table-cell box-border border-b text-right"
+                    }
+                  >
+                    <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ option: 6, year: yearFilter, month: item._id?.month })}>
+                        <img src={iconCreate} title={'Tạo bảng lương theo cơ sở'} className={"w-[24px] h-[24px]"} />
+                        <span>Tạo bảng lương theo cơ sở</span>
+                    </button>
               </div>
               <div
                   className={

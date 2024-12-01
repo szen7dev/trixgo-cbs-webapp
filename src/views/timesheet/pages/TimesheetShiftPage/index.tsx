@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { convertCurrency } from "utils/converter";
 import { createLinkAndClick } from "utils";
-import iconRefresh from "assets/images/icons8-refresh.png";
+import iconCreate from "assets/images/icons8-create.png";
 import {
     useByProperty,
     useTimesheetCustom
@@ -78,8 +78,8 @@ const TimesheetShiftPage: FC = () => {
             }
             >
             <ModalConfirm
-                title="Bạn có muốn xác nhận Đồng bộ không?"
-                description= "Dữ liệu từ Bảng chấm công ca làm việc sẽ được đồng bộ về bảng chấm công tháng"
+                title="Bạn có muốn xác nhận không?"
+                description= "Hệ thống sẽ tạo các bảng chấm công theo từng Cơ sở"
                 onConfirm={() => handleConfirmSync({ option: param.option, year: param.year, month: param.month })}
                 defaultText={false}
                 onCancel={closeModal}
@@ -188,8 +188,8 @@ const TimesheetShiftPage: FC = () => {
                       }
                     >
                       <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ year: yearFilter, month: item})}>
-                          <img src={iconRefresh} title={'Khởi tạo bảng chấm công tháng'} className={"w-[24px] h-[24px]"} />
-                          <span>Khởi tạo bảng chấm công tháng</span>
+                          <img src={iconCreate} title={'Tạo bảng chấm công theo cơ sở'} className={"w-[24px] h-[24px]"} />
+                          <span>Tạo bảng chấm công theo cơ sở</span>
                       </button>
                     </div>
                     <div
