@@ -428,13 +428,13 @@ const SalaryHomePage: FC = () => {
                   </button>
                 </div>
                 <div className="mb-3">
-                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 6, salaryID: item._id, fundaID: item?.funda?._id })}>
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: item._id, fundaID: item?.funda?._id })}>
                     <img src={iconRefresh} title={'Đồng bộ tổng hợp'} className={"w-[24px] h-[24px] mr-3"} />
                     <span>Đồng bộ theo Cơ sở</span>
                   </button>
                 </div>
                 <div>
-                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: item._id })}>
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 8, salaryID: item._id, fundaID: item?.funda?._id })}>
                     <img src={iconRefresh} title={'Đồng bộ tổng hợp'} className={"w-[24px] h-[24px] mr-3"} />
                     <span>Đồng bộ theo Khoản mục</span>
                   </button>
