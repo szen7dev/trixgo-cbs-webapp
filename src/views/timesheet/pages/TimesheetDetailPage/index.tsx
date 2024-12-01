@@ -4,8 +4,6 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import { read, utils } from 'xlsx';
-
-// import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
@@ -13,9 +11,7 @@ import { createLinkAndClick } from "utils";
 import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
 import { TIMESHEET_SUBTYPES, TIMESHEET_SHIFT_TYPES, TIMESHEET_OFFICIAL } from "apis/localdb/index";
-// import {
-//   FilterDateGroup
-// } from "views/accounting/shareComponents/common";
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
 
@@ -42,8 +38,6 @@ const TimeSheetDetailPage: FC = () => {
   const timeSheetParentID = params["id"];
   const accountRef = React.useRef<DropdownHandle>(null);
 
-  // const history = useHistory();
-
   const [userID, setUserID] = useState<string | null>();
   const [subtype, setSubtype] = useState<string | null>();
   const [shiftType, setShiftType] = useState<string | null>();
@@ -52,13 +46,13 @@ const TimeSheetDetailPage: FC = () => {
   const [keyword, setKeyword] = useState('');
 
   const today = new Date();
-  // const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-  // const currentMonth = new Date().getMonth()
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  const currentMonth = new Date().getMonth()
 
-  // const [inputFilter, setInputFilter] = useState({
-  //   fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
-  //   toDate: lastDayOfMonth
-  // });
+  const [inputFilter, setInputFilter] = useState({
+    fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+    toDate: lastDayOfMonth
+  });
 
   const { user } = useAuth();
 
@@ -217,16 +211,15 @@ const TimeSheetDetailPage: FC = () => {
     isExporting: false,
   });
 
-  const { exportExcelAsync, importExcelAsync } = useCashBook({});
-
+  const { exportExcelAsync } = useCashBook({});
   const handleDownloadExcel = async (param: any) => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportExcelAsync({
         option: param.option,
         parentID: timeSheetParentID,
-        // fromDate: inputFilter.fromDate,
-        // toDate: inputFilter.toDate,
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
       });
 
       if (error) {
@@ -239,57 +232,15 @@ const TimeSheetDetailPage: FC = () => {
     } finally {
       setStateExport({ isExporting: false });
     }
-  };
+  }
 
-  const [dataImport, setDataImport] = useState([]);
-
-  const handleImport = ($event: any) => {
-    const files = $event.target.files;
-    if (files.length) {
-        const file = files[0];
-        const reader = new FileReader();
-        reader.onload = (event: any) => {
-            const wb = read(event.target.result);
-            const sheets = wb.SheetNames;
-
-            if (sheets.length) {
-                const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-
-                // Set data để Import
-                setDataImport(rows)
-            }
-        }
-
-        reader.readAsArrayBuffer(file);
+  const handleOnChangeDate = useCallback((date, input) => {
+    if (input) {
+      setInputFilter((value) => ({ ...value, toDate: date }))
+    } else {
+      setInputFilter((value) => ({ ...value, fromDate: date }))
     }
-
-    // Đọc xong thì xóa value trong Input đi
-    $event.target.value = null;
-}
-
-// Gọi tới API để đẩy data lên
-useEffect(() => {
-    if(dataImport.length){
-        const fetchData = async () => {
-            const data = await importExcelAsync({ option: "2", parentID: timeSheetParentID, dataImport: JSON.stringify(dataImport) });
-            setDataImport([]);
-
-            if(!data.error){
-                return toast.success("Import thành công");
-            }
-            return toast.error(data.message);
-        }
-        fetchData();
-    }
-}, [JSON.stringify(dataImport)])
-
-  // const handleOnChangeDate = useCallback((date, input) => {
-  //   if (input) {
-  //     setInputFilter((value) => ({ ...value, toDate: date }))
-  //   } else {
-  //     setInputFilter((value) => ({ ...value, fromDate: date }))
-  //   }
-  // }, [])
+  }, [])
 
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value)
@@ -462,7 +413,7 @@ useEffect(() => {
             )}
             selectOneByOne={true}
         />
-        {/* <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} /> */}
+        <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
         <PaginateV2
           ref={ref}
           totalRecord={totalRecord}
