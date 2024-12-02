@@ -31,7 +31,7 @@ const TimesheetAppRouter: FC = () => {
     <>
       <TimesheetLayout>
         <Switch>
-        <ProtectedRoute
+          <ProtectedRoute
             exact
             path="/timesheet/dashboard"
             component={TimesheetDashboardPage}
@@ -43,13 +43,28 @@ const TimesheetAppRouter: FC = () => {
           />
           <ProtectedRoute
             exact
+            path="/timesheet/indirect"
+            component={() => <TimesheetShiftPage type={1} />}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/indirect/:year"
+            component={() => <TimesheetShiftPage type={1} />}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/indirect/:year/:month"
+            component={() => <TimesheetShiftDetailPage typeTimesheet={1} />}
+          />
+          <ProtectedRoute
+            exact
             path="/timesheet/shift"
-            component={TimesheetShiftPage}
+            component={() => <TimesheetShiftPage type={2} />}
           />
           <ProtectedRoute
             exact
             path="/timesheet/shift/:year"
-            component={TimesheetShiftPage}
+            component={() => <TimesheetShiftPage type={2} />}
           />
           <ProtectedRoute
             exact

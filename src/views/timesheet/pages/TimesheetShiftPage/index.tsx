@@ -13,9 +13,21 @@ import {
 import { useModal } from "services/hooks/useModal";
 import { ModalConfirm } from "shareComponents/common";
 import API from "apis/repository";
+interface TimesheetHomePageProps {
+  type?: number
+}
 
-const TimesheetShiftPage: FC = () => {
+const TimesheetShiftPage: FC<TimesheetHomePageProps> = ({type}) => {
     const params = useParams<{ year: string }>();
+
+    let url: any
+    const pathname = window.location.pathname;
+    if(pathname.includes('indirect')){
+      url = 'indirect'
+    }else{
+      url = 'shift'
+    }
+
     const year = Number(params["year"]);
     const history = useHistory()
     const { hasPermission } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
@@ -36,7 +48,7 @@ const TimesheetShiftPage: FC = () => {
 
     const { listByProperty } = useByProperty({
       params: {
-          type: 2,
+          type,
           year: yearFilter
       },
       isFetchList: true
@@ -116,7 +128,7 @@ const TimesheetShiftPage: FC = () => {
           <div className={"flex items-center flex-1"}>
             <div>
               {items?.map((item: any, index: any) => (
-                <NavLink className="px-2 py-2" to={`/timesheet/shift/${item}`} key={item}>
+                <NavLink className="px-2 py-2" to={`/timesheet/${url}/${item}`} key={item}>
                   Năm {item}
                 </NavLink>
               ))}
@@ -171,7 +183,7 @@ const TimesheetShiftPage: FC = () => {
                         "px-2 py-2 table-cell box-border border-b"
                       }
                     >
-                        <NavLink to={`/timesheet/shift/${yearFilter}/${item}`}>
+                        <NavLink to={`/timesheet/${url}/${yearFilter}/${item}`}>
                             Tháng {item}/{yearFilter}
                         </NavLink>
                     </div>
