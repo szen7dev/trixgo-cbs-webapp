@@ -1,4 +1,5 @@
 export type UpdateUser = {
+    userID?: string,
     email?: string,
     phone?: string,
     birthDay?: string,

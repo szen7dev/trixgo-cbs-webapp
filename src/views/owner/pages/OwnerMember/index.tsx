@@ -9,8 +9,6 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useUpload } from 'services/hooks/useUpload';
 import CameraIcon from "assets/images/camera-icon.svg";
 import PersonalLogo from "assets/images/personal-logo.svg";
-import { validateFiles } from 'validation/file';
-import API from "apis/repository";
 
 /**
  * Components
@@ -28,7 +26,6 @@ import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { UserSystemProps } from "typings/users/userSystem";
 
 export const OwnerMemberPage: FC = () => {
-  const [avatar, setAvatar] = useState(PersonalLogo);
   const currentUser = localStorage.getItem("currentUser") ?? "{}";
   const profile = JSON.parse(currentUser);
   const LIMIT_PER_PAGE_USER = 20;
@@ -198,11 +195,9 @@ export const OwnerMemberPage: FC = () => {
       typeUpload: 'user'
     });
 
-    const [avatarName, setAvatarName] = useState("");
-    const { dataUserInfo, refetchDataUserInfo } = useAuth();
-    const { updateUser, updatePasswordUser } = useUser();
+    const { updateUser } = useUser();
 
-    const handleChangeAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
+    const handleChangeAvatar = async (event: ChangeEvent<HTMLInputElement>, param: any) => {
       const files = event.target.files;
       if(!files || !files.length) return toast.warning("Vui lòng chọn ảnh đại diện");
   
@@ -210,27 +205,13 @@ export const OwnerMemberPage: FC = () => {
         files: files[0] as any,
         fileType: 1,
         useCompress: true
-      });
-  
+      })
+
       if(name){
-        setAvatarName(name);
+        updateUser({ image: name, userID: param })
+        refetchUser()
       }
     }
-
-    useEffect(() => {
-          if(avatarName) {
-        updateUser({ image: avatarName })
-        setTimeout(() => {
-          refetchUser();
-        }, 500);
-          }
-    }, [avatarName])
-
-    useEffect(() => {
-          if(dataUserInfo && dataUserInfo?.data?.image) {
-        setAvatar(dataUserInfo.data.image)
-          }
-    }, [dataUserInfo])
 
   return (
     <main className="relative h-full">
@@ -364,7 +345,7 @@ export const OwnerMemberPage: FC = () => {
 											alt="Camera"
 											className="w-[15px] h-[13px]"
 											/>
-											<input type="file" name="files" id="file" className="hidden" accept="image/*" onChange={handleChangeAvatar} />
+											<input type="file" name="files" id="file" className="hidden" accept="image/*" onChange={(event)=>handleChangeAvatar(event, item._id)} />
                   </div>
                 </label>
               </div>
