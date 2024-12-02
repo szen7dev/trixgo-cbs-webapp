@@ -335,10 +335,15 @@ const TimesheetShiftDetailPage: FC<TimesheetHomePageProps> = ({ typeTimesheet })
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item.note}
-                {(item?.funda && item.convert == 2) ? <div><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ option: 1, timesheetID: item?._id })}><img src={iconRefresh} title={'Đồng bộ chấm công'} className={"w-[24px] h-[24px]"} /><span>Kết chuyển chấm công từ Ca làm việc</span></button></div> : <></>
+                {(item?.funda && item.official == 1) ? <div><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ option: 1, timesheetID: item?._id })}><img src={iconRefresh} title={'Đồng bộ chấm công'} className={"w-[24px] h-[24px]"} /><span>Kết chuyển chấm công từ Ca làm việc</span></button></div> : <></>
+                }
+                {(item?.funda && item.official == 1) ? <div><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ option: 2, timesheetID: item?._id })}><img src={iconDelete} title={'Xóa dữ liệu'} className={"w-[24px] h-[24px]"} /><span>Xóa dữ liệu</span></button></div> : <></>
+                }
+
+{               /* {(item?.funda && item.convert == 2) ? <div><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ option: 1, timesheetID: item?._id })}><img src={iconRefresh} title={'Đồng bộ chấm công'} className={"w-[24px] h-[24px]"} /><span>Kết chuyển chấm công từ Ca làm việc</span></button></div> : <></>
                 }
                 {(item?.funda && item.convert == 2) ? <div><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ option: 2, timesheetID: item?._id })}><img src={iconDelete} title={'Xóa dữ liệu'} className={"w-[24px] h-[24px]"} /><span>Xóa dữ liệu</span></button></div> : <></>
-                }
+                } */}
               </div>
             </div>
           ))}
