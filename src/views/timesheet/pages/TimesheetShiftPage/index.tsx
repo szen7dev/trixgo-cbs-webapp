@@ -199,10 +199,10 @@ const TimesheetShiftPage: FC<TimesheetHomePageProps> = ({type}) => {
                         "px-2 py-2 table-cell box-border border-b text-right"
                       }
                     >
-                      <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ year: yearFilter, month: item})}>
+                      {(url.toString() === 'shift') ? <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ year: yearFilter, month: item})}>
                           <img src={iconCreate} title={'Tạo bảng chấm công theo cơ sở'} className={"w-[24px] h-[24px]"} />
                           <span>Tạo bảng chấm công theo cơ sở</span>
-                      </button>
+                      </button> : <></>}
                     </div>
                     <div
                       className={
