@@ -11,7 +11,7 @@ type UseUser = {
 export const useUser = (params?: any, pageParam = '' ) : UseUser => {
     const { mutateAsync: updateUserAsync } =
         useMutation((payload: UpdateUser) =>
-        UserRepository.updateUser(payload)
+            UserRepository.updateUser(payload)
         );
 
     const { mutateAsync: updatePasswordUserAsync } =

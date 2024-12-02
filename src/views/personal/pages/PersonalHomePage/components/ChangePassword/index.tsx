@@ -1,7 +1,5 @@
 /*=====1.LIBRARY=====*/
 import { FC, useEffect, useState, memo, ChangeEvent } from "react";
-// import { Link } from "react-router-dom";
-// import { useTranslation } from "react-i18next";
 import SwiperCore, { Pagination } from 'swiper';
 import cn from "classnames";
 import { Form, Formik } from "formik";
@@ -113,7 +111,6 @@ export const ChangePassword: FC = () => {
 				  alt="Camera"
 				  className="w-[15px] h-[13px]"
 				/>
-
 				<input type="file" name="files" id="file" className="hidden" accept="image/*" onChange={handleChangeAvatar} />
 			  </div>
 			  </label>

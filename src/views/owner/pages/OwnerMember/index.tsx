@@ -1,9 +1,14 @@
-import { FC, useEffect, useState, useCallback } from "react";
+import { FC, useEffect, useState, useCallback, ChangeEvent, useRef } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
+import { useUser } from 'services/hooks/personal/useUser';
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useUpload } from 'services/hooks/useUpload';
+import CameraIcon from "assets/images/camera-icon.svg";
+import PersonalLogo from "assets/images/personal-logo.svg";
 
 /**
  * Components
@@ -186,6 +191,28 @@ export const OwnerMemberPage: FC = () => {
         }
     }, [dataImport])
 
+    const { addFileToUpload } = useUpload({
+      typeUpload: 'user'
+    });
+
+    const { updateUser } = useUser();
+
+    const handleChangeAvatar = async (event: ChangeEvent<HTMLInputElement>, param: any) => {
+      const files = event.target.files;
+      if(!files || !files.length) return toast.warning("Vui lòng chọn ảnh đại diện");
+  
+      const { name } = await addFileToUpload({
+        files: files[0] as any,
+        fileType: 1,
+        useCompress: true
+      })
+
+      if(name){
+        updateUser({ image: name, userID: param })
+        refetchUser()
+      }
+    }
+
   return (
     <main className="relative h-full">
       <header className="sticky top-0 bg-primary-light z-10">
@@ -310,6 +337,18 @@ export const OwnerMemberPage: FC = () => {
                   alt="User Avatar"
                   className="w-14 h-14 rounded-full"
                 />
+              <div className="bg-primary-light relative bottom-10 left-8 h-9 w-9 rounded-full flex items-center justify-center">
+                <label>
+                  <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
+                    <img
+											src={CameraIcon}
+											alt="Camera"
+											className="w-[15px] h-[13px]"
+											/>
+											<input type="file" name="files" id="file" className="hidden" accept="image/*" onChange={(event)=>handleChangeAvatar(event, item._id)} />
+                  </div>
+                </label>
+              </div>
               </td>
               <td className="py-1 px-2">
                 {item.fullname}
