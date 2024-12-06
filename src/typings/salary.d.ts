@@ -103,6 +103,10 @@ export type SalaryChild = {
     _id: string;
     type: 1;
     status: number;
+    hours1: number;
+    hours2: number;
+    hours3: number;
+    hours4: number;
     timeApproved: string | null;
     state: 1;
     name: string;
