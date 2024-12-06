@@ -4,41 +4,28 @@ import { useHistory, useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
-
-/*=====2.CSS=====*/
-
-/*=====3.ICONS=====*/
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
-
-/*=====4.PAGES/COMPONENTS=====*/
+import pencilIcon from "assets/images/icons8-pencil-96.svg";
 import { SearchInput } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { ModalZoomView } from "shareComponents/common";
-
-/*=====5.TYPINGS=====*/
 import { ImageProps } from "typings/common";
-import { User } from "typings/user";
-
-/*=====6.HOOKS/APIS=====*/
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
-
-/*=====7.OTHER=====*/
-
+import { useModal } from "services/hooks/useModal";
+import { ModalKpiUpdateItem } from "views/fnb/pages/FnbHomePage/components/ModalKpiUpdateItem";
 const TYPE_MISTAKE = [
 	"Hệ thống phát hiện", "Khách hàng phát hiện"
 ]
 const STATUS_MISTAKE = [
 	"Đã xử lý", "Chưa xử lý"
 ]
+
 export const FnbRiskReportDetailPage: FC = () => {
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();
-	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-
+	const { openModal, closeModal } = useModal();
 	const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
-
 	const [defaultState, setDefaultState] = useState({
 	    mediaID: '',
 	    images: [] as ImageProps[],
@@ -53,18 +40,13 @@ export const FnbRiskReportDetailPage: FC = () => {
 			keyword: keyword, 
 			fundasID: [fundaID],
 			populates: JSON.stringify({
-				path: 'userCreate mistake executor funda files',
+				path: 'userCreate userUpdate mistake executor funda files',
 				populate: {
 					path: 'author',
 					select: 'fullname bizfullname image'
 				}
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
-
-	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
-	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
-
-	const [initialValues, setInitialValues] = useState(null);
 
 	useEffect(() => {
 		document.title = "Trixgo | Báo cáo KPI";
@@ -90,28 +72,6 @@ export const FnbRiskReportDetailPage: FC = () => {
 							500
 						)}
 					/>
-					{(idsChecked && idsChecked.length) ? (
-						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{idsChecked.length == 1 ?
-								<>
-								<div
-									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-									onClick={() => {
-										const item = listWithPager[pageIndex].find((e: any) => e._id == idsChecked[0]);
-										setInitialValues({
-											...item,
-											startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
-											expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
-										});
-										toggleModalCreateShiftDetail();
-									}}
-								>
-									<img src={PencilIcon} alt="Pencil" />
-								</div>
-							</> : <></>
-							}
-						</div>
-					) : <></>}
 				</div>
 				<PaginateV2
 					ref={ref}
@@ -135,7 +95,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 					<tr className="text-left text-sm text-primary-gray text-[14px]">
 						<th className="pb-1 pt-1 w-[50px] font-normal">
 							<div className="pl-2">
-								TT
+								
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -188,11 +148,30 @@ export const FnbRiskReportDetailPage: FC = () => {
 				{
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-cente"}>{i+1}</td>
+							<td className={"p-2 border-0.5 border-primary-border text-cente"}>
+								<button
+									className="text-cbs-schedule-nextweek"
+									onClick={() =>
+									openModal(
+										<div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+											<ModalKpiUpdateItem 
+												defaultValues={{ mistakeID: item._id }} 
+												refetch={refetch}
+											/>
+										</div>
+									)
+									}
+								>
+									<img className="w-[24px] h-[24px]" alt="icon" src={pencilIcon}/>
+								</button>
+							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.mistake?.name}
-								<p className=" text-[13px] text-gray-500"><i>Người ghi nhận: {item?.userCreate?.fullname}</i></p>
-								<p className=" text-[13px] text-gray-500"><i>Thời gian: {moment(item.createAt).format('DD/MM/YYYY HH:mm')}</i></p>
+								{item?.mistake?.name}ô
+								{/* <p className=" text-[13px] text-gray-500"><i>{item?._id}</i></p> */}
+								<p className=" text-[13px] text-gray-500"><i>Ghi nhận: {item?.userCreate?.fullname}</i></p>
+								<p className=" text-[13px] text-gray-500"><i>Ngày: {item?.date ? moment(item?.date).format('DD/MM/YYYY') : moment(item?.createAt).format('DD/MM/YYYY')}</i></p>
+								<hr />
+								<p className=" text-[13px] text-gray-500"><i>Cập nhật: {item?.userUpdate?.fullname ? `${item?.userUpdate?.fullname} - ${moment(item?.modifyAt).format('DD/MM/YYYY HH:mm')}` : ''}</i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border "}>
 								{item?.executor?.fullname}
