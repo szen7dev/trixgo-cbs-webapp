@@ -39,7 +39,7 @@ export const ModalKpiUpdateItem: FC<Props> = ({ defaultValues = {}, refetch }) =
             );
 
             if (status !== 200 || data.error) {
-                return toast.warning('Gán lỗi thất bại');
+                return toast.warning(data?.data?.message);
             }
 
             toast.success('Cập nhật thành công');
