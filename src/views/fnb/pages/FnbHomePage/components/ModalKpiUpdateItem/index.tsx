@@ -99,7 +99,7 @@ export const ModalKpiUpdateItem: FC<Props> = ({ defaultValues = {}, refetch }) =
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className={"flex py-2"}>
+                                                {/* <div className={"flex py-2"}>
                                                     <div className={"w-full flex items-center"}>
                                                         <div className={"h-full text-left flex items-center px-1 "}>
                                                             <span className="text-primary-gray font-bold pr-3">Điểm vi phạm</span>
@@ -118,7 +118,7 @@ export const ModalKpiUpdateItem: FC<Props> = ({ defaultValues = {}, refetch }) =
                                                             />
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div className="my-3">
                                                 <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNote">
