@@ -133,16 +133,16 @@ export const DetailChildRow: FC<Props> = ({
           "px-[2px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
-        {/* <NavLink to={`/timesheet/mine/${rowData?.human?._id}`}>
-          {rowData?.human?.fullname}
-        </NavLink> */}
         <NavLink to={`/timesheet/human_detail/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>
-          {/* <p><i>Chi tiết lương</i></p> */}
           {rowData?.human?.fullname}
         </NavLink>
         <p className="text-gray-400 text-[10px]"><i>{rowData?.project?.name}</i></p>
         <p className="text-gray-400 text-[10px]"><i>{rowData?.position?.name}</i></p>
-        <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p>
+        {/* <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p> */}
+        <hr className="text-gray-400"/>
+        <p className="text-gray-400 text-[10px]"><i>Giờ chính thức: {rowData?.hours1} ({rowData?.hours1 > 0 ? convertCurrency(Number(rowData?.salary/rowData?.hours1).toFixed(0)) : 0 })</i></p>
+        <p className="text-gray-400 text-[10px]"><i>Giờ thử việc: {rowData?.hours4} ({rowData?.hours4 > 0 ? convertCurrency(Number(rowData?.mealAllowance/rowData?.hours4).toFixed(0)) : 0})</i></p>
+        <hr className="text-gray-400"/>
         <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
         <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
       </div>
