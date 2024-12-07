@@ -151,15 +151,22 @@ export const FnbRiskReportDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border text-cente"}>
 								<button
 									className="text-cbs-schedule-nextweek"
-									onClick={() =>
-									openModal(
-										<div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
-											<ModalKpiUpdateItem 
-												defaultValues={{ mistakeID: item._id }} 
-												refetch={refetch}
-											/>
-										</div>
-									)
+									onClick={() => {
+											openModal(
+												<div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+													<ModalKpiUpdateItem 
+														defaultValues={{ 
+															mistakeID: item._id,
+															bonus:  item.bonus,
+															amount:  item.amount,
+															date: moment(item.date).format('YYYY-MM-DD'),
+															status:  item.status,
+														}} 
+														refetch={refetch}
+													/>
+												</div>
+											)
+										}										
 									}
 								>
 									<img className="w-[24px] h-[24px]" alt="icon" src={pencilIcon}/>
