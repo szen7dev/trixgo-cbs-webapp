@@ -17,7 +17,7 @@ const TYPE_MISTAKE = [
 	"Hệ thống phát hiện", "Khách hàng phát hiện"
 ]
 const STATUS_MISTAKE = [
-	"Đã xử lý", "Chưa xử lý"
+	"Hoàn thành", "Hủy"
 ]
 
 export const FnbRiskReportDetailPage: FC = () => {
@@ -190,7 +190,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 								{TYPE_MISTAKE[item?.type-1]}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{STATUS_MISTAKE[item?.status-1]}
+								{item?.status == 1 ? <span style={{color: 'green'}}>{STATUS_MISTAKE[item?.status-1]}</span> : <span style={{color: 'red'}}>{STATUS_MISTAKE[item?.status-1]}</span> }
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.bonus||0)}
