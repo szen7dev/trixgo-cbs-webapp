@@ -377,11 +377,6 @@ const SalaryHomePage: FC = () => {
                   {item.name}
                 </NavLink>
                 <p><i>{item?.type == 1 ? 'Khối quản lý' : 'Khối trực tiếp'} ({item?.type})</i></p>
-                <hr className="text-gray-500"/>
-                <NavLink to={`/timesheet/subsalary_detail/${item._id}`}>
-                  <p className="text-cbs-highlight-color"><i>Xem Phụ cấp và Trả khác</i></p>
-                </NavLink>
-                <hr className="text-gray-500"/>
                 <p><i>Ngày ghi nhận:  {moment(item.date).format('DD/MM/YYYY')}</i></p>
                 <p><i>Admin: {item.admins.length} | Member: {item.members.length}</i></p>
                 <p className="text-primary"><i>Dự án/Phòng ban: {item?.project?.name}</i></p>
