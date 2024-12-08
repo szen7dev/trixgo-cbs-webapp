@@ -66,7 +66,6 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
     });
 
     const {
-        deleteAsync,
         list: listFunda,
         hasNextPage,
         refetch,
@@ -74,6 +73,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         totalRecord
     } = useFunda({
         params: { 
+            option: 1,
             limit: 50,
             keyword, 
             isListParentOfListChilds: "1", 
