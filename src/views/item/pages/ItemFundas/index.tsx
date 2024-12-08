@@ -56,6 +56,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         area2: '',
         area3: '',
         project: '',
+        manager: '',
         initialDay: new Date(),
         campaign: 1,
         internal: 1,
@@ -78,8 +79,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             keyword, 
             isListParentOfListChilds: "1", 
             populates: { 
-                "path": "area1 area2 area3 warehouse contact images project",
-                "select": "name sign path funda",
+                "path": "area1 area2 area3 warehouse contact images project manager",
+                "select": "name sign path funda fullname",
                 populate: {
                     "path": 'funda',
                     "select": "name sign path",
@@ -122,7 +123,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, project, activeCampaign, trialStaffSalary, officialStaffSalar } = newListIDChecked[0];
+            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, project, activeCampaign, trialStaffSalary, officialStaffSalar, manager } = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
@@ -140,6 +141,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 area2,
                 area3,
                 project,
+                manager,
                 activeCampaign,
                 trialStaffSalary: Number(trialStaffSalary),
                 officialStaffSalar: Number(officialStaffSalar),
@@ -199,7 +201,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[300px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1050px",
+                    height: "1100px",
                 }}
             >
                 <ModalCreateOrUpdateFunda
@@ -383,6 +385,9 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                 </Link>
                                 <p className="text-primary "><i>{item?.warehouse?.name}</i></p>
                                 <p className="text-primary "><i>{item?.contact?.name}</i></p>
+                                <hr />
+                                <p className="text-primary "><i>Quản lý: {item?.manager?.fullname}</i></p>
+                                <hr />
                                 <p>TKNH: <b>{item?.bankAccount}</b></p>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>

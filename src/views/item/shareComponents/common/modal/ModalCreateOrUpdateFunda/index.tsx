@@ -8,7 +8,8 @@ import { useArea } from "services/hooks/items/useArea";
 import debounce from 'lodash/debounce';
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import department from "views/ppt/constants/department";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useUserSystem } from 'services/hooks/users/useUserSystem';
 
 export const ModalCreateOrUpdateFunda: FC<any> = ({
   modalType,
@@ -31,17 +32,25 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     nightShiftStaffSalary: 0,
   }
 }) => {
-  // console.log(initialValues)
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
   const { insertAsync, updateAsync } = useFunda({});
   const [keywordArea, setKeywordArea] = useState('');
   const [searchhDepartmentStr, setSearchDepartmentSrt] = useState();
+  const [userKeyword, setUserKeyword] = useState("");  
 
   const { listDepartments } = useQueryListDepartments({
     keyword: searchhDepartmentStr,
     select: 'name sign'
   }, true);
+
+  const { user } = useAuth();
+  const { data: listUser } = useUserSystem({
+    companyID: user?.company?._id,
+    keyword: userKeyword,
+    limit: 10,
+    isFetch: true
+  }, true)
 
   const { listAreas, nextPageList: nextPageListArea } = useArea({
     params: {
@@ -296,6 +305,52 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
             onChange={onChange}
             name = "loyaltyPointsRate"
         ></input>
+      </section>
+
+      <section className="px-10">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
+            Quản lý cơ sở
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    manager: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    manager: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setUserKeyword(value), 600)}
+            onScroll={handleScroll}
+            className="w-full rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Tìm kiếm"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listUser.map((item:any) => ({
+              label: `${item.fullname}`,
+              value: item._id,
+            }))}
+            initialValue={{
+              value: formData?.manager?.id, 
+              label: formData?.manager && `${formData?.manager?.fullname}` || "Chọn nhân sự"
+            }}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            inlineSearch={true}
+          />
       </section>
 
       <section className="px-10">

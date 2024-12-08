@@ -14,18 +14,16 @@ import { TIMESHEET_SUBTYPES, TIMESHEET_SHIFT_TYPES, TIMESHEET_OFFICIAL } from "a
 import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
-
 import {
   useQueryDetailTimeSheetParent,
   useQueryListTimeSheetChild,
   useMutationTimeSheetChild,
 } from "services/hooks/useTimeSheet";
 import { useCashBook } from "services/hooks/financial/useCashBook";
-
 import { useAuth } from "services/hooks/auth/useAuth";
 import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
-import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 
 const TimeSheetDetailPage: FC = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -61,7 +59,7 @@ const TimeSheetDetailPage: FC = () => {
     keyword: userKeyword,
     limit: 10,
     isFetch: true
-}, true)
+  }, true)
 
   const [modalShare, setModalShare] = useState<{
     isShow: boolean;
