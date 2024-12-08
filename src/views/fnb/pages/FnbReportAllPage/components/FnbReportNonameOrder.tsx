@@ -166,7 +166,7 @@ export const FnbReportNonameOrder: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border text-cente"}>{i+1}</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.mistake?.name}
-								<p className=" text-[13px] text-gray-500"><i>Người ghi nhận: {item?.userCreate?.fullname}</i></p>
+								<p className=" text-[13px] text-gray-500"><i>Tạo: {item?.userCreate?.fullname}</i></p>
 								<p className=" text-[13px] text-gray-500"><i>Thời gian: {moment(item.createAt).format('DD/MM/YYYY HH:mm')}</i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border "}>

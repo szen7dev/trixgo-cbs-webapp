@@ -35,7 +35,8 @@ export const FnbRiskReportDetailPage: FC = () => {
 			keyword: keyword, 
 			fundasID: [fundaID],
 			populates: JSON.stringify({
-				path: 'userCreate userUpdate mistake executor funda files',
+				path: 'userCreate userUpdate mistake executor funda files manager',
+				select: 'name sign fullname path createAt grade',
 				populate: {
 					path: 'author',
 					select: 'fullname bizfullname image'
@@ -172,7 +173,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 								<p className="text-cbs-highlight-color text-[12px]"><i>Cấp độ: {item?.grade ? GRADE_MISTAKE[Number(item?.grade) - 1].text : ''}</i></p>
 								<hr />
 								{/* <p className=" text-[13px] text-gray-500"><i>{item?._id}</i></p> */}
-								<p className=" text-[13px] text-gray-500"><i>Ghi nhận: {item?.userCreate?.fullname}</i></p>
+								<p className=" text-[13px] text-gray-500"><i>Tạo: {item?.userCreate?.fullname}</i></p>
 								<p className=" text-[13px] text-gray-500"><i>Ngày: {item?.date ? moment(item?.date).format('DD/MM/YYYY') : moment(item?.createAt).format('DD/MM/YYYY')}</i></p>
 								<hr />
 								<p className=" text-[13px] text-gray-500"><i>Cập nhật: {item?.userUpdate?.fullname ? `${item?.userUpdate?.fullname} - ${moment(item?.modifyAt).format('DD/MM/YYYY HH:mm')}` : ''}</i></p>
@@ -182,6 +183,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border "}>
 								{item?.funda?.name}
+								<p className="text-cbs-highlight-color text-[12px]"><i>QL: {item?.manager?.fullname}</i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{TYPE_MISTAKE[item?.type-1].text}
