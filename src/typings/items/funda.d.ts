@@ -10,6 +10,7 @@ export interface Funda {
 }
 
 export type FundaQueryPayload = QueryParam & {
+    option?: number;
     companyID?: string;
     parentID?: string;
     populates?: any;
