@@ -645,6 +645,13 @@ export const CHECK_SALLARY = [
     { _id: 2, name: 'Không'},
 ]
 
+export const GRADE_MISTAKE = [
+    { _id: 1, text: 'Nhẹ' },
+    { _id: 2, text: 'Cơ bản' },
+    { _id: 3, text: 'Nặng' },
+    { _id: 4, text: 'Nghiêm trọng' },
+]
+
 export const TYPE_MISTAKE = [
     { _id: 1, text: 'Hệ thống phát hiện' },
     { _id: 2, text: 'Khách hàng phát hiện' },

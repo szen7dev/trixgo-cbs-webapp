@@ -13,7 +13,7 @@ import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
 import { useModal } from "services/hooks/useModal";
 import { ModalKpiUpdateItem } from "views/fnb/pages/FnbHomePage/components/ModalKpiUpdateItem";
-import { TYPE_MISTAKE, STATUS_MISTAKE, STATUS_CUSTOMERCARE } from "apis/localdb/index";
+import { TYPE_MISTAKE, STATUS_MISTAKE, GRADE_MISTAKE } from "apis/localdb/index";
 
 export const FnbRiskReportDetailPage: FC = () => {
 	const history = useHistory();
@@ -168,7 +168,9 @@ export const FnbRiskReportDetailPage: FC = () => {
 								</button>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.mistake?.name}ô
+								{item?.mistake?.name}
+								<p className="text-cbs-highlight-color text-[12px]"><i>Cấp độ: {item?.grade ? GRADE_MISTAKE[Number(item?.grade) - 1].text : ''}</i></p>
+								<hr />
 								{/* <p className=" text-[13px] text-gray-500"><i>{item?._id}</i></p> */}
 								<p className=" text-[13px] text-gray-500"><i>Ghi nhận: {item?.userCreate?.fullname}</i></p>
 								<p className=" text-[13px] text-gray-500"><i>Ngày: {item?.date ? moment(item?.date).format('DD/MM/YYYY') : moment(item?.createAt).format('DD/MM/YYYY')}</i></p>
