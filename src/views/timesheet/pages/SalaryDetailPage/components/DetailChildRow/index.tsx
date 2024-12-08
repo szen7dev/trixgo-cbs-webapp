@@ -244,7 +244,7 @@ export const DetailChildRow: FC<Props> = ({
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
-        <p
+        {/* <p
           contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
@@ -259,6 +259,13 @@ export const DetailChildRow: FC<Props> = ({
           }}
         >
           {convertCurrency(rowData.reward)}
+        </p> */}
+        <p
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+        >
+          {convertCurrency(rowData.reward)}
         </p>
       </div>
       <div
@@ -266,7 +273,7 @@ export const DetailChildRow: FC<Props> = ({
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
-        <p
+        {/* <p
           contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
@@ -281,6 +288,13 @@ export const DetailChildRow: FC<Props> = ({
           }}
         >
           {convertCurrency(rowData.mealAllowance)}
+        </p> */}
+        <p
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+        >
+          {convertCurrency(rowData.mealAllowance)}
         </p>
       </div>
       <div
@@ -288,7 +302,7 @@ export const DetailChildRow: FC<Props> = ({
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
-        <p
+        {/* <p
           contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
@@ -301,6 +315,13 @@ export const DetailChildRow: FC<Props> = ({
               punishment: `${value}`,
             });
           }}
+        >
+          {convertCurrency(rowData.punishment)}
+        </p> */}
+        <p
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
         >
           {convertCurrency(rowData.punishment)}
         </p>
@@ -398,7 +419,7 @@ export const DetailChildRow: FC<Props> = ({
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
-        <p
+        {/* <p
           contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
@@ -411,6 +432,13 @@ export const DetailChildRow: FC<Props> = ({
               other: `${value}`,
             });
           }}
+        >
+          {convertCurrency(rowData.other)}
+        </p> */}
+        <p
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
         >
           {convertCurrency(rowData.other)}
         </p>
