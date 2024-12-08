@@ -645,6 +645,21 @@ export const CHECK_SALLARY = [
     { _id: 2, name: 'Không'},
 ]
 
+export const TYPE_MISTAKE = [
+    { _id: 1, text: 'Hệ thống phát hiện' },
+    { _id: 2, text: 'Khách hàng phát hiện' },
+]
+
+export const STATUS_MISTAKE = [
+    { _id: 1, text: 'Hoàn thành' },
+    { _id: 2, text: 'Hủy' },
+]
+
+export const STATUS_CUSTOMERCARE = [
+    { _id: 1, text: 'Chưa xử lý' },
+    { _id: 2, text: 'Hoàn thành' },
+]
+
 export const DAYOFWEEKS = [
     { _id: 0, name: 'Chủ nhật' },
     { _id: 1, name: 'Thứ 2' },

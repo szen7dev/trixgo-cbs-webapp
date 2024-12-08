@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
 import { FilterDateGroup } from "views/accounting/shareComponents/common";
+import { TYPE_MISTAKE, STATUS_MISTAKE, STATUS_CUSTOMERCARE } from "apis/localdb/index";
 
 /*=====2.CSS=====*/
 
@@ -24,13 +25,6 @@ import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
-
-const TYPE_MISTAKE = [
-	"Hệ thống phát hiện", "Khách hàng phát hiện"
-]
-const STATUS_MISTAKE = [
-	"Đã xử lý", "Chưa xử lý"
-]
 
 export const FnbReportMistake: FC = () => {
 	useEffect(() => {
@@ -212,10 +206,10 @@ export const FnbReportMistake: FC = () => {
 								{item?.funda?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{TYPE_MISTAKE[item?.type-1]}
+								{TYPE_MISTAKE[item?.type-1].text}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{STATUS_MISTAKE[item?.status-1]}
+								{STATUS_MISTAKE[item?.status-1].text}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.amount||0)}
