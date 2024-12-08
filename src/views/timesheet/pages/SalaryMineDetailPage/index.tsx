@@ -184,7 +184,7 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                     "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                   }
                 >
-                  Trả hộ khác
+                  Trả khác
                 </div>
                 <div
                   className={
@@ -234,11 +234,11 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                         <td className="text-right">{convertCurrency(item?.subAllowance3)}</td>
                       </tr>
                       <tr>
-                        <td>Phụ cấp xăng xe, tiền điện thoại:</td>
+                        <td>Phụ cấp xăng xe, điện thoại:</td>
                         <td className="text-right">{convertCurrency(item?.subAllowance4)}</td>
                       </tr>
                       <tr>
-                        <td>Phụ cấp trực an ninh:</td>
+                        <td>Phụ cấp trực:</td>
                         <td className="text-right">{convertCurrency(item?.subAllowance5)}</td>
                       </tr>
                       <tr>

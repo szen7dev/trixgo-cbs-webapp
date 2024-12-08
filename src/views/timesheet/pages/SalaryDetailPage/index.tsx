@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState, useRef, useCallback } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, NavLink } from "react-router-dom";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { debounce } from "lodash";
@@ -377,15 +377,13 @@ const SalaryDetailPage: FC = () => {
             "financial-planning-header flex p-2 sticky top-0 z-10 bg-white"
           }
         >
-          <FileColorIcon />
           <div className="w-auto">
-            <div className={"flex"}>
-              <InputWidthAdjust
-                className={"text-lg w-auto mr-2"}
-                value={salaryInfo.name}
-              />
-              <img alt={"star-icon"} src={StarIcon} />
-            </div>
+            <p className="text-lg">
+              {salaryInfo.name}
+              <NavLink to={`/timesheet/subsalary_detail/${salaryInfo?._id}`} className="ml-5 text-cbs-highlight-color text-sm">
+                Xem Phụ cấp và Trả khác
+              </NavLink>
+            </p>
             <p className={"text-gray-400"}>
               Chỉnh sửa lần cuối cách đây{" "}
               {moment(salaryInfo.modifyAt).isValid() &&
@@ -844,7 +842,7 @@ const SalaryDetailPage: FC = () => {
                   "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
                 }
               >
-                Trả hộ khác
+                Trả khác
               </div>
               <div
                 className={
