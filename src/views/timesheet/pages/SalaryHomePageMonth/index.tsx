@@ -287,8 +287,16 @@ const SalaryHomePageMonth: FC = () => {
                     "px-2 py-2 table-cell box-border border-b"
                   }
                 >
-                  <button className={"text-primary"} onClick={() => handleDownloadExcel({option: 1, year: yearFilter, month: item._id?.month})}>
+                  <button className={"text-primary mr-3"} onClick={() => handleDownloadExcel({option: 1, year: yearFilter, month: item._id?.month})}>
                       Tải dữ liệu
+                  </button>
+                  |
+                  <button className={"text-primary mr-3"} onClick={() => handleDownloadExcel({option: 2, year: yearFilter, month: item._id?.month})}>
+                      Tải KPI Quản lý cơ sở
+                  </button>
+                  |
+                  <button className={"text-primary"} onClick={() => handleDownloadExcel({option: 3, year: yearFilter, month: item._id?.month})}>
+                      Tải KPI Nhân viên cơ sở
                   </button>
                 </div>
             </div>
