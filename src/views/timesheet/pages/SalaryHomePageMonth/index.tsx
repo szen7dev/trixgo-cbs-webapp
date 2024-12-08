@@ -292,19 +292,19 @@ const SalaryHomePageMonth: FC = () => {
                   </button>
                   |
                   <button className={"text-primary mr-3"} onClick={() => handleDownloadExcel({option: 2, year: yearFilter, month: item._id?.month})}>
-                      Tải báo cáo 2
+                      Báo cáo Quản lý 1
                   </button>
                   |
                   <button className={"text-primary mr-3"} onClick={() => handleDownloadExcel({option: 3, year: yearFilter, month: item._id?.month})}>
-                      Tải  báo cáo 3
+                      Báo cáo Quản lý 2
                   </button>
                   |
                   <button className={"text-primary mr-3"} onClick={() => handleDownloadExcel({option: 4, year: yearFilter, month: item._id?.month})}>
-                      Tải  báo cáo 4
+                      Báo cáo nhân viên 1
                   </button>
                   |
                   <button className={"text-primary mr-3"} onClick={() => handleDownloadExcel({option: 5, year: yearFilter, month: item._id?.month})}>
-                      Tải  báo cáo 5
+                      Báo cáo khác
                   </button>
                 </div>
             </div>
