@@ -295,11 +295,11 @@ const SalaryHomePageMonth: FC = () => {
                       Tải KPI Quản lý cơ sở
                   </button>
                   |
-                  <button className={"text-primary"} onClick={() => handleDownloadExcel({option: 3, year: yearFilter, month: item._id?.month})}>
+                  <button className={"text-primary mr-3"} onClick={() => handleDownloadExcel({option: 3, year: yearFilter, month: item._id?.month})}>
                       Tải KPI Nhân viên cơ sở
                   </button>
                   |
-                  <button className={"text-primary"} onClick={() => handleDownloadExcel({option: 4, year: yearFilter, month: item._id?.month})}>
+                  <button className={"text-primary mr-3"} onClick={() => handleDownloadExcel({option: 4, year: yearFilter, month: item._id?.month})}>
                       Tải khác
                   </button>
                 </div>
