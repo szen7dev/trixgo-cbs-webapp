@@ -94,7 +94,7 @@ export const ModalKpiUpdateItem: FC<Props> = ({
                                                 <div className={"flex py-2"}>
                                                     <div className={"w-full flex items-center"}>
                                                         <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-primary-gray font-bold pr-3">Điểm vi phạm</span>
+                                                            <span className="text-primary-gray font-bold pr-3">Điểm vi phạm (chỉ Admin được sửa)</span>
                                                             <Field type="number" name="amount" placeholder=""
                                                                 className="w-[200px] h-[30px] border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none text-right"
                                                             />
@@ -104,7 +104,7 @@ export const ModalKpiUpdateItem: FC<Props> = ({
                                                 <div className={"flex py-2"}>
                                                     <div className={"w-full flex items-center"}>
                                                         <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-primary-gray font-bold pr-3">Điểm thành tích</span>
+                                                            <span className="text-primary-gray font-bold pr-3">Điểm thành tích (chỉ Admin được sửa)</span>
                                                             <Field type="number" name="bonus" placeholder=""
                                                                 className="w-[200px] h-[30px] border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none text-right"
                                                             />
