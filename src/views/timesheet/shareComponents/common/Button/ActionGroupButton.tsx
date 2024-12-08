@@ -13,7 +13,7 @@ interface ActionGroupButtonProps {
 }
 
 const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
-  const { recordSelected, onUpdateTimeSheet, onDeleteTimeSheet } = props;
+  const { recordSelected, onUpdateTimeSheet } = props;
 
   const { openModal } = useModal();
 

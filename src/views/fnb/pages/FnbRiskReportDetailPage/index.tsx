@@ -17,7 +17,7 @@ const TYPE_MISTAKE = [
 	"Hệ thống phát hiện", "Khách hàng phát hiện"
 ]
 const STATUS_MISTAKE = [
-	"Đã xử lý", "Chưa xử lý"
+	"Hoàn thành", "Hủy"
 ]
 
 export const FnbRiskReportDetailPage: FC = () => {
@@ -151,15 +151,22 @@ export const FnbRiskReportDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border text-cente"}>
 								<button
 									className="text-cbs-schedule-nextweek"
-									onClick={() =>
-									openModal(
-										<div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
-											<ModalKpiUpdateItem 
-												defaultValues={{ mistakeID: item._id }} 
-												refetch={refetch}
-											/>
-										</div>
-									)
+									onClick={() => {
+											openModal(
+												<div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+													<ModalKpiUpdateItem 
+														defaultValues={{ 
+															mistakeID: item._id,
+															bonus:  item.bonus,
+															amount:  item.amount,
+															date: moment(item.date).format('YYYY-MM-DD'),
+															status:  item.status,
+														}} 
+														refetch={refetch}
+													/>
+												</div>
+											)
+										}										
 									}
 								>
 									<img className="w-[24px] h-[24px]" alt="icon" src={pencilIcon}/>
@@ -183,7 +190,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 								{TYPE_MISTAKE[item?.type-1]}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{STATUS_MISTAKE[item?.status-1]}
+								{item?.status == 1 ? <span style={{color: 'green'}}>{STATUS_MISTAKE[item?.status-1]}</span> : <span style={{color: 'red'}}>{STATUS_MISTAKE[item?.status-1]}</span> }
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.bonus||0)}
