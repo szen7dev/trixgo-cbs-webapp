@@ -138,6 +138,30 @@ export type SalaryChild = {
     userUpdate: any;
     createAt: any;
     modifyAt: any;
+    subAllowance1: number;
+    subAllowance2: number;
+    subAllowance3: number;
+    subAllowance4: number;
+    subAllowance5: number;
+    subAllowance6: number;
+    subAllowance7: number;
+    subAllowance8: number;
+    subAllowance9: number;
+    subAllowance10: number;
+    subAllowance11: number;
+    subAllowance12: number;
+    subAllowance13: number;
+    subAllowance14: number;
+    subAllowance15: number;
+    subAllowance16: number;
+    subAllowance17: number;
+    subAllowance18: number;
+    subAllowance19: number;
+    subAllowance20: number;
+    subAllowance21: number;
+    subAllowance22: number;
+    nowds: number;
+    nowdsos: number;
 }
 
 export type QueryListSalaryChildPayload = QueryParams & {

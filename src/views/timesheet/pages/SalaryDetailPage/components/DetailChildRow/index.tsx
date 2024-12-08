@@ -136,12 +136,14 @@ export const DetailChildRow: FC<Props> = ({
         <NavLink to={`/timesheet/human_detail/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>
           {rowData?.human?.fullname}
         </NavLink>
-        <p className="text-gray-400 text-[10px]"><i>{rowData?.project?.name}</i></p>
-        <p className="text-gray-400 text-[10px]"><i>{rowData?.position?.name}</i></p>
+        <p className="text-gray-400 text-[10px]"><i>P.ban: {rowData?.project?.name}</i></p>
+        <p className="text-gray-400 text-[10px]"><i>C.danh: {rowData?.position?.name}</i></p>
         {/* <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p> */}
         <hr className="text-gray-400"/>
-        <p className="text-gray-400 text-[10px]"><i>Giờ chính thức: {rowData?.hours1} ({rowData?.hours1 > 0 ? convertCurrency(Number(rowData?.salary/rowData?.hours1).toFixed(0)) : 0 })</i></p>
-        <p className="text-gray-400 text-[10px]"><i>Giờ thử việc: {rowData?.hours4} ({rowData?.hours4 > 0 ? convertCurrency(Number(rowData?.mealAllowance/rowData?.hours4).toFixed(0)) : 0})</i></p>
+        <p className="text-[10px] text-cbs-highlight-color"><i>Giờ chính thức: {rowData?.hours1} ({rowData?.hours1 > 0 ? convertCurrency(Number(rowData?.salary/rowData?.hours1).toFixed(0)) : 0 })</i></p>
+        <p className="text-[10px] text-cbs-highlight-color"><i>Giờ thử việc: {rowData?.hours4} ({rowData?.hours4 > 0 ? convertCurrency(Number(rowData?.mealAllowance/rowData?.hours4).toFixed(0)) : 0})</i></p>
+        <p className="text-[10px] text-cbs-highlight-color"><i>Số ngày làm: {rowData?.nowds}</i></p>
+        <p className="text-[10px] text-cbs-highlight-color"><i>Số ngày làm CN: {rowData?.nowdsos}</i></p>
         <hr className="text-gray-400"/>
         <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
         <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>

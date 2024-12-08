@@ -13,6 +13,7 @@ import {
   SalaryHomePage, 
   SalaryHomePageMonth,
   SalaryDetailPage, 
+  SubSalaryDetailPage, 
   TimesheetMineDetailPage, 
   TimesheetDashboardPage, 
   SalaryMineDetailPage,
@@ -126,7 +127,11 @@ const TimesheetAppRouter: FC = () => {
             path={"/timesheet/salary_detail/:id"}
             component={SalaryDetailPage}
           />
-
+          <ProtectedRoute
+            exact
+            path={"/timesheet/subsalary_detail/:id"}
+            component={SubSalaryDetailPage}
+          />
           <LayoutSecondary pages={[
                 { id: '1', title: 'Nhóm chức năng', path: '/timesheet/admin', navExact: true },
                 {
