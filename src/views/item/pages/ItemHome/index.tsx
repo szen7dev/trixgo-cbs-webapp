@@ -104,7 +104,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 unit,
                 description,
                 type,
-                grade,
+                grade: grade ? grade : 1,
                 salesChannel,
                 amount,
                 alert,
