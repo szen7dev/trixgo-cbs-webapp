@@ -4,28 +4,14 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
-import { formatNumberMoney } from "utils/converter";
-
-/*=====2.CSS=====*/
-
-/*=====3.ICONS=====*/
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
-
-/*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-// import { CreateFnbProductQoutas } from "./modal";
-
-/*=====5.TYPINGS=====*/
-
-/*=====6.HOOKS/APIS=====*/
 import { APP_ID } from "apis/localdb";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
-
-/*=====7.OTHER=====*/
 import { FNB_INTERNAL } from "apis/localdb";
 import { createLinkAndClick } from "utils";
 
@@ -35,32 +21,18 @@ export const FnbShiftPage: FC = () => {
 	}, []);
 	
 	const history = useHistory();
-	const { productID } = useParams<{ productID: string }>();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
-
-	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+	const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const [keyword, setKeyword] = useState("");
-    const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
-	// console.log({ infoProduct });
 
-	/**
-	 * List mẩu tin
-	 */
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFunda({ 
 		params: { 
 			keyword: keyword,  
-			limit: 30,  
+			limit: 50,  
 			isMember: 1,
-			// productID, 
-			// populates: JSON.stringify({
-			// 	path: 'goods', select: "name unit"
-			// }) 
 		}, 
 		isFetchList: true, 
 		isFetchInfo: false
-	});
-
-	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
+	})
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
@@ -73,15 +45,10 @@ export const FnbShiftPage: FC = () => {
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
 
-	/**
-	 * 
-	 * Xử lý download template excel
-	 */
-	const [dataImport, setDataImport] = useState([]);
 	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
-  	const { exportExcelAsync, exportExcelAsync2 } = useFnbShift({});
+  	const { exportExcelAsync2 } = useFnbShift({});
 
 	const handleExportExcel2 = async () => {
 		try {
@@ -109,7 +76,6 @@ export const FnbShiftPage: FC = () => {
 					<button onClick={history.goBack}>
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
-					<p className="text-lg">{infoProduct?.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -118,19 +84,6 @@ export const FnbShiftPage: FC = () => {
 							500
 						)}
 					/>
-					{(idsChecked && idsChecked.length) ? (
-						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{idsChecked.length == 1 ?
-								<>
-								<div
-									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-								>
-									<img src={PencilIcon} alt="Pencil" />
-								</div>
-							</> : <></>
-							}
-						</div>
-					) : <></>}
 				</div>
 				<div className="flex items-center">
 					<button title="Tải dữ liệu Excel" className="ml-5" onClick={handleExportExcel2}>
@@ -141,7 +94,7 @@ export const FnbShiftPage: FC = () => {
 					ref={ref}
 					totalRecord={totalRecord}
 					totalPages={totalPage}
-					limit={20}
+					limit={50}
 					hasNextPage={hasNextPage}
 					isFetching={isLoading}
 					nextPageAction={() => {
