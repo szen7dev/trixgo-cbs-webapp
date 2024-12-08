@@ -2,41 +2,16 @@
 import React, { FC, useCallback, useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
-
-/*=====2.CSS=====*/
-
-/*=====3.ICONS=====*/
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
-
-/*=====4.PAGES/COMPONENTS=====*/
+import { TYPE_MISTAKE, STATUS_MISTAKE, STATUS_CUSTOMERCARE } from "apis/localdb/index";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { ModalZoomView } from "shareComponents/common";
-
-/*=====5.TYPINGS=====*/
 import { ImageProps } from "typings/common";
-
-/*=====6.HOOKS/APIS=====*/
 import { APP_ID } from "apis/localdb";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
-
-/*=====7.OTHER=====*/
-import { FNB_INTERNAL } from "apis/localdb";
 import { createLinkAndClick } from "utils";
-
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
-const TYPE_MISTAKE = [
-	"Hệ thống phát hiện", "Khách hàng phát hiện"
-]
-const STATUS_MISTAKE = [
-	"Đã xử lý", "Chưa xử lý"
-]
 
 export const FnbReportNonameOrder: FC = () => {
 	useEffect(() => {
@@ -201,10 +176,10 @@ export const FnbReportNonameOrder: FC = () => {
 								{item?.funda?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{TYPE_MISTAKE[item?.type-1]}
+								{TYPE_MISTAKE[item?.type-1].text}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{STATUS_MISTAKE[item?.status-1]}
+								{STATUS_MISTAKE[item?.status-1].text}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.amount||0)}

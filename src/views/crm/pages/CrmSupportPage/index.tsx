@@ -36,6 +36,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
 import API from "apis/repository";
+import { TYPE_MISTAKE, STATUS_MISTAKE, STATUS_CUSTOMERCARE } from "apis/localdb/index";
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
@@ -58,16 +59,6 @@ export const CrmSupportPage: FC = () => {
 		appID: APP_ID.FNB.id,
 		companyID: user?.company?._id,
 	})
-
-    const STATUS = [
-        { _id: 1, text: 'Chưa xử lý' },
-        { _id: 2, text: 'Hoàn thành'}
-    ]
-
-    const TYPE = [
-        { _id: 1, text: 'Lỗi của nhân viên' },
-        { _id: 2, text: 'Lỗi khách quan'}
-    ]
 
     const CHANNEL = [
         { _id: 1, text: 'Offline' },
@@ -432,7 +423,7 @@ export const CrmSupportPage: FC = () => {
                         placeholder={"Trạng thái"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        data={STATUS}
+                        data={STATUS_CUSTOMERCARE}
                         formatItem={{
                             id: "_id",
                             text: "text",
@@ -512,7 +503,7 @@ export const CrmSupportPage: FC = () => {
                         placeholder={"Phân loại"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        data={TYPE}
+                        data={TYPE_MISTAKE}
                         formatItem={{
                             id: "_id",
                             text: "text",
@@ -699,11 +690,11 @@ export const CrmSupportPage: FC = () => {
                                 {
                                     item?.status == 1 ?
                                     <div className="w-[80px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
-                                        {STATUS[Number(item?.status) - 1]?.text}
+                                        {STATUS_CUSTOMERCARE[Number(item?.status) - 1]?.text}
                                     </div>
                                     :
                                     <div className="w-[80px] rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
-                                        {STATUS[Number(item?.status) - 1]?.text}
+                                        {STATUS_CUSTOMERCARE[Number(item?.status) - 1]?.text}
                                     </div>
                                 }
                                 <div style={{display: "flex"}}>
