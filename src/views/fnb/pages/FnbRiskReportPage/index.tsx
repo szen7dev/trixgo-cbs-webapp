@@ -42,7 +42,7 @@ export const FnbRiskReportPage: FC = () => {
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFunda({ 
 		params: { 
 			keyword: keyword,  
-			limit: 30,  
+			limit: 50,  
 			isMember: 1
 		}, 
 		isFetchList: true, 
@@ -170,7 +170,7 @@ export const FnbRiskReportPage: FC = () => {
 					ref={ref}
 					totalRecord={totalRecord}
 					totalPages={totalPage}
-					limit={20}
+					limit={50}
 					hasNextPage={hasNextPage}
 					isFetching={isLoading}
 					nextPageAction={() => {
