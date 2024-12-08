@@ -9,6 +9,7 @@ export type Doctype = {
     description: string;
     unit: string;
     type: number;
+    grade?: number;
     amount: number;
     alert: number;
     company?: Company
@@ -75,6 +76,7 @@ interface ModalProps {
         unit: string;
         description: string;
         type: number;
+        grade?: number;
         status: number;
         amount: number;
         alert: number;

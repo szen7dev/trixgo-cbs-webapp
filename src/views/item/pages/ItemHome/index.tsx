@@ -24,6 +24,7 @@ import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { Doctype } from "typings/items";
 import { Link } from "react-router-dom";
+import { GRADE_MISTAKE } from "apis/localdb/index";
 
 export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
     const { openModal } = useModal();
@@ -38,6 +39,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         unit: '',
         description: '',
         type: +type,
+        grade: 1,
         salesChannel: 1,
         amount: 0,
         alert: 0,
@@ -74,6 +76,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
             unit: '',
             description: '',
             type: +type,
+            // grade: 1,
             // salesChannel,
             // amount,
         }))
@@ -92,7 +95,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, linkItem, name, sign, unit, description, type, salesChannel, amount, alert } = newListIDChecked[0];
+            const { _id, linkItem, name, sign, unit, description, type, salesChannel, amount, alert, grade } = newListIDChecked[0];
             setInitialValues({
                 doctypeID: _id,
                 linkItem,
@@ -101,6 +104,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 unit,
                 description,
                 type,
+                grade,
                 salesChannel,
                 amount,
                 alert,
@@ -142,6 +146,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 unit: '',
                 description: '',
                 type,
+                grade: 1,
                 salesChannel: 1,
                 amount: 0,
                 alert: 0,
@@ -151,7 +156,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         openModal(
             <div
                 className={"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
-                style={{height: "600px"}}>
+                style={{height: "700px"}}>
                 <ModalCreateOrUpdateDoctype
                     modalType={modalType}
                     initialValues={initValues}
@@ -245,9 +250,6 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                             >
                             Tạo mới
                         </button>
-                        {/* <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
-                            <img src={`${process.env.PUBLIC_URL}/images/common/icon-3dots-vertical-gray.svg`} alt="Three Dot" />
-                        </div> */}
                     </div>
                 </div>
             </header>
@@ -324,6 +326,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                     {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                <p className="text-cbs-highlight-color text-[12px]"><i>Cấp độ: {item?.grade ? GRADE_MISTAKE[Number(item?.grade) - 1].text : ''}</i></p>
                                 <p className="text-primary-gray text-[12px]"><i>{item?.userUpdate?.fullname} {moment(item.modifyAt).format('DD/MM/YYYY - HH:mm')}</i></p>
                             </td>
                             <td className="py-1 px-2">{item?.parent?.name}</td>

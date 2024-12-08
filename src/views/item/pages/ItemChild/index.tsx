@@ -38,6 +38,7 @@ export const ItemChildPage: FC = () => {
         description: '',
         type: +type,
         salesChannel: 1,
+        // grade: 1,
         amount: 0,
         alert: 0,
     });
@@ -98,6 +99,7 @@ export const ItemChildPage: FC = () => {
                 description,
                 type,
                 salesChannel,
+                // grade,
                 amount,
                 alert,
             });
@@ -212,11 +214,6 @@ export const ItemChildPage: FC = () => {
                                 Nội dung
                             </div>
                         </th>
-                        {/* <th className="py-1" style={{width: "20px"}}>
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Link danh mục
-                            </div>
-                        </th> */}
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Mã hiệu
