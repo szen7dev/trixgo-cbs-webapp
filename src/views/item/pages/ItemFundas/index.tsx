@@ -64,6 +64,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         activeCampaign: [],
         trialStaffSalary: 0,
         officialStaffSalar: 0,
+        nightShiftStaffSalary: 0,
     });
 
     const {
@@ -123,7 +124,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, project, activeCampaign, trialStaffSalary, officialStaffSalar, manager } = newListIDChecked[0];
+            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, project, activeCampaign, trialStaffSalary, officialStaffSalar, nightShiftStaffSalary, manager } = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
@@ -145,6 +146,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 activeCampaign,
                 trialStaffSalary: Number(trialStaffSalary),
                 officialStaffSalar: Number(officialStaffSalar),
+                nightShiftStaffSalary: Number(nightShiftStaffSalary),
             });
         } else {
             clearData();
