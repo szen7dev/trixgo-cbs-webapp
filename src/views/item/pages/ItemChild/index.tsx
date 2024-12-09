@@ -4,25 +4,14 @@ import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { useParams, Link } from 'react-router-dom';
-
-/**
- * Components
- */
 import { SearchInput } from "shareComponents/common";
 import { ModalCreateOrUpdateDoctype, ModalConfirm } from '../../shareComponents/common';
-
-/**
- * Assets
- */
 import styles from "views/support/styles/support.module.css";
 import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
-
-/**
- * Hooks
- */
 import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { Doctype } from "typings/items";
+import { GRADE_MISTAKE } from "apis/localdb/index";
 
 export const ItemChildPage: FC = () => {
     const { type, parentId } = useParams<{ type: string, parentId: string }>();
@@ -146,7 +135,7 @@ export const ItemChildPage: FC = () => {
         openModal(
             <div
                 className={"inline-block w-[521px] h-[340px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
-                style={{height: "600px"}}
+                style={{height: "700px"}}
             >
                 <ModalCreateOrUpdateDoctype
                     modalType={modalType}
@@ -172,15 +161,6 @@ export const ItemChildPage: FC = () => {
                             classNameInput="outline-none w-[296px]"
                             onChange={onChangeSearchDoctype}
                         />
-
-                        {doctypesChecked.length === 1 ? (
-                            <button
-                                className="mr-3"
-                                onClick={() => handleOpenModalCreateOrUpdate('update')}
-                            >
-                                <img src={pencilIcon} alt="icon pencil" />
-                            </button>
-                        ) : ''}
                     </div>
                     <div className="flex items-center">
                         <button
@@ -200,14 +180,6 @@ export const ItemChildPage: FC = () => {
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
                         <th className={cn("py-1 text-center", styles.theadInput)}>
-                            <div className="border-r-2 border-gray-300 flex items-center justify-center">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    checked={getStateCheckedAll}
-                                    onClick={onClickCheckAll}
-                                />
-                            </div>
                         </th>
                         <th className="py-1" style={{width: "20px"}}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
@@ -246,16 +218,32 @@ export const ItemChildPage: FC = () => {
                     {listDoctypes.length ? listDoctypes.map(item => (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
+                                {/* <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    checked={getStateChecked(item._id)}
+                                    onChange={() => onClickCheckButton(item)}
+                                /> */}
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
                                     checked={getStateChecked(item._id)}
                                     onChange={() => onClickCheckButton(item)}
                                 />
+                                <hr className="text-primary-gray"/>
+                                {(doctypesChecked.length === 1 && doctypesChecked[0]?._id.toString() === item._id.toString()) ? (
+                                    <button
+                                        className="mr-3"
+                                        onClick={() => handleOpenModalCreateOrUpdate('update')}
+                                    >
+                                        <img src={pencilIcon} alt="icon pencil" />
+                                    </button>
+                                ) : ''}
                             </td>
                             <td className="py-1 px-2">
                                 {item.name}
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                <p className="text-cbs-highlight-color text-[12px]"><i>Cấp độ: {item?.grade ? GRADE_MISTAKE[Number(item?.grade) - 1].text : ''}</i></p>
                                 <p className="text-primary-gray text-[12px]"><i>{item?.userUpdate?.fullname} {moment(item.modifyAt).format('DD/MM/YYYY - HH:mm')}</i></p>
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>

@@ -65,6 +65,12 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         trialStaffSalary: 0,
         officialStaffSalar: 0,
         nightShiftStaffSalary: 0,
+        planExpense: 0,
+        utilityExpense: 0,
+        humanExpense: 0,
+        sellingExpenseRate: 0,
+        materialExpenseRate: 0,
+        otherExpenseRate: 0,
     });
 
     const {
@@ -124,7 +130,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, project, activeCampaign, trialStaffSalary, officialStaffSalar, nightShiftStaffSalary, manager } = newListIDChecked[0];
+            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, project, activeCampaign, trialStaffSalary, officialStaffSalar, nightShiftStaffSalary, manager, planExpense, utilityExpense, humanExpense, sellingExpenseRate, materialExpenseRate, otherExpenseRate } = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
@@ -147,6 +153,12 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 trialStaffSalary: Number(trialStaffSalary),
                 officialStaffSalar: Number(officialStaffSalar),
                 nightShiftStaffSalary: Number(nightShiftStaffSalary),
+                planExpense: Number(planExpense),
+                utilityExpense: Number(utilityExpense),
+                humanExpense: Number(humanExpense),
+                sellingExpenseRate: Number(sellingExpenseRate),
+                materialExpenseRate: Number(materialExpenseRate),
+                otherExpenseRate: Number(otherExpenseRate),
             });
         } else {
             clearData();
@@ -196,14 +208,20 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 activeCampaign: [],
                 trialStaffSalary: 0,
                 officialStaffSalar: 0,
-            };
+                planExpense: 0,
+                utilityExpense: 0,
+                humanExpense: 0,
+                sellingExpenseRate: 0,
+                materialExpenseRate: 0,
+                otherExpenseRate: 0,
+            }
         }
 
         openModal(
             <div
                 className={"inline-block w-[521px] h-[300px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1100px",
+                    height: "1450px",
                 }}
             >
                 <ModalCreateOrUpdateFunda
@@ -273,21 +291,11 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
 							<img src="/images/common/button_back.png" alt="Button Back" />
 						</button>
                         <p className="text-lg ml-2">Danh sách</p>
-
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
                             classNameInput="outline-none w-[296px]"
                             onChange={onChangeSearch}
                         />
-
-                        {itemsChecked.length === 1 ? (
-                            <button
-                                className="mr-3"
-                                onClick={() => handleOpenModalCreateOrUpdate('update')}
-                            >
-                                <img src={pencilIcon} alt="icon pencil" />
-                            </button>
-                        ) : ''}
                     </div>
 
                     <div className="flex items-center">
@@ -380,6 +388,15 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                     checked={getStateChecked(item._id)}
                                     onChange={() => onClickCheckButton(item)}
                                 />
+                                <hr className="text-primary-gray"/>
+                                {(itemsChecked.length === 1 && itemsChecked[0]?._id.toString() === item._id.toString()) ? (
+                                    <button
+                                        className="mr-3"
+                                        onClick={() => handleOpenModalCreateOrUpdate('update')}
+                                    >
+                                        <img src={pencilIcon} alt="icon pencil" />
+                                    </button>
+                                ) : ''}
                             </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/fundas/${item._id}`}>
@@ -387,14 +404,21 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                 </Link>
                                 <p className="text-primary "><i>{item?.warehouse?.name}</i></p>
                                 <p className="text-primary "><i>{item?.contact?.name}</i></p>
-                                <hr />
                                 <p className="text-primary "><i>Quản lý: {item?.manager?.fullname}</i></p>
                                 <hr />
                                 <p>TKNH: <b>{item?.bankAccount}</b></p>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
-                            <td className="py-1 px-2">{item?.description}</td>
+                            <td className="py-1 px-2">
+                                {item?.description}
+                                <p className="text-right"><i>Mặt bằng: {convertCurrency(Number(item?.planExpense).toFixed(0))}</i></p>
+                                <p className="text-right"><i>Điện, nước, IE: {convertCurrency(Number(item?.utilityExpense).toFixed(0))}</i></p>
+                                <p className="text-right"><i>Lương nhân viên: {convertCurrency(Number(item?.humanExpense).toFixed(0))}</i></p>
+                                <p className="text-right"><i>% CP bán hàng: {convertCurrency(Number(item?.sellingExpenseRate))} %</i></p>
+                                <p className="text-right"><i>% CP nguyên liệu: {convertCurrency(Number(item?.materialExpenseRate))} %</i></p>
+                                <p className="text-right"><i>$ CP khác: {convertCurrency(Number(item?.otherExpenseRate))} %</i></p>
+                            </td>
                             <td className="py-1 px-2">
                                 {item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}
                                 <p className="text-primary"><i>Dự án: {item?.project?.name}</i></p>
@@ -406,7 +430,6 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                 {convertCurrency(Number(item?.officialStaffSalar).toFixed(0))}
                                 <p><i>Ca đêm: {convertCurrency(Number(item?.nightShiftStaffSalary).toFixed(0))}</i></p>
                             </td>
-                            {/* <td className="py-1 px-2">{CAMPAIGN_CONSTANT[item?.campaign-1]}</td> */}
                             <td className="py-1 px-2">
                                 <p>{INTERNAL_CONSTANT[item?.internal-1]}</p>
                                 <p className="text-primary ">{PLATFORM_CONSTANT[item?.platform-1]}</p>
