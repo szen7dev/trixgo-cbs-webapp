@@ -254,15 +254,8 @@ const TimeSheetDetailPage: FC = () => {
           "financial-planning-header flex p-2 sticky top-0 z-10 bg-white"
         }
       >
-        {/* <FileColorIcon /> */}
         <div className="w-auto">
-          <div className={"flex"}>
-            <InputWidthAdjust
-              className={"text-lg w-auto mr-2"}
-              value={timeSheetInfo.name}
-            />
-            <img alt={"star-icon"} src={StarIcon} />
-          </div>
+          <p className="text-lg">{timeSheetInfo.name}</p>
           <p className={"text-gray-400"}>
             Chỉnh sửa {" "}
               {moment(timeSheetInfo.modifyAt).isValid() &&
