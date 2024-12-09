@@ -10,4 +10,5 @@ export {default as TimesheetBudgetPage} from './TimesheetBudgetPage';
 export {default as TimesheetShiftPage} from './TimesheetShiftPage';
 export {default as TimesheetShiftDetailPage} from './TimesheetShiftDetailPage';
 export {default as SubSalaryDetailPage} from './SubSalaryDetailPage';
+export {default as TimesheetHumanKpiDetailPage} from './TimesheetHumanKpiDetailPage';
 export {TimesheetDashboardPage} from './TimesheetDashboardPage';

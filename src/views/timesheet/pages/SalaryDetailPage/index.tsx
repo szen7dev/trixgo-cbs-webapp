@@ -380,7 +380,7 @@ const SalaryDetailPage: FC = () => {
           <div className="w-auto">
             <p className="text-lg">
               {salaryInfo.name}
-              <NavLink to={`/timesheet/subsalary_detail/${salaryInfo?._id}`} className="ml-5 text-cbs-highlight-color text-sm">
+              <NavLink to={`/timesheet/subsalary_detail/${salaryInfo?._id}`} className="ml-5 text-cbs-highlight-color text-sm underline">
                 Xem Phụ cấp và Trả khác
               </NavLink>
             </p>

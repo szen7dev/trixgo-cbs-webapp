@@ -21,6 +21,7 @@ import {
   TimesheetShiftPage,
   TimesheetBudgetPage,
   TimesheetShiftDetailPage,
+  TimesheetHumanKpiDetailPage
 } from "views/timesheet/pages";
 import TimesheetAdminFunctionalTab from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminFunctionalTab";
 import TimesheetAdminDetail from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminDetail";
@@ -101,6 +102,11 @@ const TimesheetAppRouter: FC = () => {
             exact
             path="/timesheet/human_detail/:id/:year/:month"
             component={() => <TimesheetHumanDetailPage type={3} />}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/human_kpi_detail/:id/:year/:month"
+            component={() => <TimesheetHumanKpiDetailPage type={3} />}
           />
           <ProtectedRoute
             exact

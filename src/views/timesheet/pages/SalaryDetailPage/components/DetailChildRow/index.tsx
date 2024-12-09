@@ -261,11 +261,14 @@ export const DetailChildRow: FC<Props> = ({
           {convertCurrency(rowData.reward)}
         </p> */}
         <p
+          title="Bấm để xem chi tiết"
           className={
-            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end text-cbs-highlight-color underline "
           }
         >
-          {convertCurrency(rowData.reward)}
+          <NavLink to={`/timesheet/human_kpi_detail/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>
+            {convertCurrency(rowData.reward)}
+          </NavLink>
         </p>
       </div>
       <div
@@ -320,10 +323,13 @@ export const DetailChildRow: FC<Props> = ({
         </p> */}
         <p
           className={
-            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end text-cbs-highlight-color underline "
           }
+          title="Bấm để xem chi tiết"
         >
-          {convertCurrency(rowData.punishment)}
+          <NavLink to={`/timesheet/human_kpi_detail/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>
+            {convertCurrency(rowData.punishment)}
+          </NavLink>
         </p>
       </div>
       <div
