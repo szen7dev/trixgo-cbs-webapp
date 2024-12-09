@@ -17,7 +17,7 @@ import TriangleDown from "assets/icons/TriangleDown";
 import moment from "moment";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import downloadIcon from "assets/images/icons8-download-64.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
+import pencilIcon from "assets/images/icons8-pencil-96 1.png";
 import iconMaleUser from "assets/images/icons8-male-user-64.svg";
 import {formatNumberMoney} from "utils";
 import {CONTRACT_COME_IN_STATUS} from "apis/localdb";
@@ -428,7 +428,7 @@ const CmcHomePageV2:FC = () => {
                         recordSelected._id&&
                         <button
                             className={"flex items-center justify-center mx-3 ml-6"}>
-                            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                            <img src={pencilIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                         </button>
                     }
                     <PaginateV2

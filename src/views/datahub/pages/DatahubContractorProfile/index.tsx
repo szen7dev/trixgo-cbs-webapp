@@ -9,7 +9,7 @@ import { buildDatahubProfilesKey } from 'apis/datahub/profiles';
 import { useAuth } from "services/hooks/auth/useAuth";
 
 // Icons
-import iconPencil from "assets/images/icons8-pencil.svg";
+import pencilIcon from "assets/images/icons8-pencil.svg";
 import { isSupporter } from 'configs';
 import { toast } from 'react-toastify';
 import { useUpload } from 'services/hooks/useUpload';
@@ -150,7 +150,7 @@ const DatahubContractorProfile: FC = () => {
 									}}>
 									{user && isSupporter(user) ?
 										<div className='w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center'>
-											<img src={iconPencil} />
+											<img src={pencilIcon} />
 										</div>
 										: <></>
 									}

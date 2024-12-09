@@ -18,7 +18,7 @@ import cn from "classnames";
 // import IconPrint from "assets/images/icons8-print-32.png";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
-import IconPencil from "assets/images/icons8-pencil.svg";
+import pencilIcon from "assets/images/icons8-pencil.svg";
 import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
 import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
@@ -589,7 +589,7 @@ const PcmDetailTask: FC = () => {
                 )
               }}
             >
-              <img className="w-6" src={IconPencil} alt="Pencil icon" />
+              <img className="w-6" src={pencilIcon} alt="Pencil icon" />
             </button>
           )}
           {permissions.hasPermissionAddRelatedUser && (

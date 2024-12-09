@@ -8,7 +8,7 @@ import { SearchInput, ModalContainer, Loader } from "shareComponents/common";
 import { ModalCreateOrUpdateCompany, ModalConfirm } from 'views/support/shareComponents/common';
 import CompanyLogo from "assets/images/thumbnail1.jpg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
-import iconPencil from 'assets/images/icons8-pencil-96 1.png';
+import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 // import CameraIcon from "assets/images/camera-icon.svg";
 
@@ -176,7 +176,7 @@ export const SupportCompanyPage: FC = () => {
 							toggleModalCreateOrUpdateCompany();
 							}}
 						>
-							<img src={iconPencil} alt="icon pencil" />
+							<img src={pencilIcon} alt="icon pencil" />
 						</button>
 					) : ''}
 

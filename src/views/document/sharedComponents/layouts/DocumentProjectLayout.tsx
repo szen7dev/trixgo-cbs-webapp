@@ -8,7 +8,7 @@ import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
+import pencilIcon from "assets/images/icons8-pencil-96 1.png";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import {useParams} from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -236,7 +236,7 @@ export const DocumentProjectLayout:FC = ({children}) => {
                         <button
                             onClick={handleOnClickUpdate(recordSelected)}
                             className={"flex items-center justify-center mx-3 ml-6"}>
-                            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                            <img src={pencilIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                         </button>
                     }
                     <div className={"flex-1 flex items-center justify-end"}>

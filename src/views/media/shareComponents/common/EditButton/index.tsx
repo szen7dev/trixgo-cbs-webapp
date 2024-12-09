@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { Menu, Transition } from "@headlessui/react";
 
 import iconTrash from 'assets/images/icons8-remove.svg';
-import iconPencil from 'assets/images/icons8-pencil.svg';
+import pencilIcon from 'assets/images/icons8-pencil.svg';
 
 type Props = {
 	onUpdate?: () => unknown,
@@ -39,7 +39,7 @@ export const EditButton: FC<Props> = ({ hasPermissionUpdate, hasPermissionDelete
 					{hasPermissionUpdate ? (
 						<Menu.Item>
 							<button onClick={onUpdate} className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
-								<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
+								<img src={pencilIcon} alt="Icon Edit" className="inline-block mr-6" />
 								Cập nhật
 							</button>
 						</Menu.Item>

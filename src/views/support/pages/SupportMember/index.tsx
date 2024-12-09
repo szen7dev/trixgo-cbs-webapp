@@ -21,7 +21,7 @@ import { ModalCreateOrUpdateUser } from 'views/support/shareComponents/common';
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 import styles from "views/support/styles/support.module.css";
 import DeleteIcon from "assets/images/icons8-remove.svg";
-import iconPencil from 'assets/images/icons8-pencil-96 1.png';
+import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
 
 /**
  * Hooks
@@ -227,7 +227,7 @@ export const SupportMemberPage: FC = () => {
                   toggleModalCreateOrUpdateUser();
                 }}
               >
-                <img src={iconPencil} alt="icon pencil" />
+                <img src={pencilIcon} alt="icon pencil" />
               </button>
             ) : ''}
 

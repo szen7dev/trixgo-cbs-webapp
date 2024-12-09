@@ -11,7 +11,7 @@ import categoryIcon from "assets/images/icons8-category-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import {NavigateTabBudgetPage} from "./NavigateTabBudgetPage";
 import downloadIcon from "assets/images/icons8-download-64.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
+import pencilIcon from "assets/images/icons8-pencil-96 1.png";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import { createLinkAndClick } from 'utils';
 import { toast } from "react-toastify";
@@ -112,7 +112,7 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
                     {/* <button className={"flex items-center justify-center mx-3 ml-6"}>
-                        <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                        <img src={pencilIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button> */}
                     {/* <div className={"flex-1 flex items-center justify-end"}>
                         <span className={"text-primary-gray"}>1-50 trong số 2.358</span>

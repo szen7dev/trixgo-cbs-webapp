@@ -4,7 +4,7 @@ import moment from "moment";
 import cn from "classnames";
 
 // import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
-import IconPencil from "assets/images/icons8-pencil.svg";
+import pencilIcon from "assets/images/icons8-pencil.svg";
 import LinkIcon from "assets/images/icon-linking.png";
 
 import { TypeStatusLabel } from "./components/TypeStatusLabel";
@@ -68,7 +68,7 @@ export const CheckListItem: FC<Props> = ({ userID, data, onUpdateStatusCheckList
             {/* {(data.type === 2 && !isDisabled) ? (
               <div className="flex w-1/4 justify-end">
                 <button className="mx-2">
-                  <img className="w-6" src={IconPencil} alt="Pencil icon" />
+                  <img className="w-6" src={pencilIcon} alt="Pencil icon" />
                 </button>
               </div>
             ) : ''} */}

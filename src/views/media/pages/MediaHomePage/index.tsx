@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 
 import { Loader, ModalContainer } from "shareComponents/common";
 
-import iconPencil from 'assets/images/icons8-pencil-100 1.png';
+import pencilIcon from 'assets/images/icons8-pencil-100 1.png';
 import 'views/media/styles/index.css';
 
 import {
@@ -106,7 +106,7 @@ export const MediaHomePage: FC = () => {
 					</div>
 				</div>
 				{/* <button className="button-newpost flex" onClick={() => toggleCreateModal()}>
-					<img src={iconPencil} alt="icon pencil" />
+					<img src={pencilIcon} alt="icon pencil" />
 				</button> */}
 			</div>
 			{/* <ModalContainer isModalOpen={isShowCreateModal} toggle={() => ''}>

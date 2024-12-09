@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { Menu, Transition } from "@headlessui/react";
 
 import iconTrash from 'assets/images/icons8-remove.svg';
-import iconPencil from 'assets/images/icons8-pencil.svg';
+import pencilIcon from 'assets/images/icons8-pencil.svg';
 
 type Props = {
 	onUpdate?: () => unknown,
@@ -34,7 +34,7 @@ const EditButton: FC<Props> = ({ ...props }) => {
 				<Menu.Items className="z-10 absolute right-1/2 mt-2 text-right origin-top-right border border-gray-300 bg-white divide-y divide-gray-100 rounded-md whitespace-nowrap" style={{ width: "264px" }}>
 					<Menu.Item>
 						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={onUpdate}>
-							<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
+							<img src={pencilIcon} alt="Icon Edit" className="inline-block mr-6" />
 							Cập nhật
 						</button>
 					</Menu.Item>

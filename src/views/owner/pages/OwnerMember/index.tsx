@@ -17,7 +17,7 @@ import { SearchInput, ModalContainer } from "shareComponents/common";
 import { ModalCreateOrUpdateUser } from 'views/support/shareComponents/common';
 
 import styles from "views/support/styles/support.module.css";
-import iconPencil from 'assets/images/icons8-pencil-96 1.png';
+import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
 
 /**
  * Hooks
@@ -244,7 +244,7 @@ export const OwnerMemberPage: FC = () => {
                   toggleModalCreateOrUpdateUser();
                 }}
               >
-                <img src={iconPencil} alt="icon pencil" />
+                <img src={pencilIcon} alt="icon pencil" />
               </button>
             ) : ''}
 

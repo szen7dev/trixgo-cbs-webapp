@@ -2,7 +2,7 @@ import React, { FC, HTMLAttributes, useCallback, useState, useContext } from "re
 import moment from "moment";
 import { Link } from 'react-router-dom';
 import cn from "classnames";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
+import pencilIcon from "assets/images/icons8-pencil-96 1.png";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 import type { UseQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import styles from "views/support/styles/support.module.css";
@@ -132,7 +132,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
                 <button
                   onClick={handleOnClickUpdate(recordSelected)}
                   className={"flex items-center justify-center mx-3 ml-6"}>
-                  <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"} />
+                  <img src={pencilIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
                 </button>
               }
             </th>
