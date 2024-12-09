@@ -312,19 +312,19 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                     {listDoctypes.length ? listDoctypes.map((item: any) => (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    checked={getStateChecked(item._id)}
-                                    onChange={() => onClickCheckButton(item)}
-                                />
-
                                 {/* <button
                                     className="mr-3"
                                     onClick={() => handleClick(item)}
                                 >
                                     <img src={pencilIcon} alt="icon pencil" />
                                 </button> */}
+                                
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    checked={getStateChecked(item._id)}
+                                    onChange={() => onClickCheckButton(item)}
+                                />
                                 <hr className="text-primary-gray"/>
                                 {(doctypesChecked.length === 1 && doctypesChecked[0]?._id.toString() === item._id.toString()) ? (
                                     <button
