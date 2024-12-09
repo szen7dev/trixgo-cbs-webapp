@@ -30,6 +30,12 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     trialStaffSalary: 0,
     officialStaffSalar: 0,
     nightShiftStaffSalary: 0,
+    planExpense: 0,
+    utilityExpense: 0,
+    humanExpense: 0,
+    sellingExpenseRate: 0,
+    materialExpenseRate: 0,
+    otherExpenseRate: 0,
   }
 }) => {
   const { closeModal } = useModal();
@@ -291,6 +297,90 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
             defaultValue={Number(formData?.nightShiftStaffSalary)}
             onChange={onChange}
             name = "nightShiftStaffSalary"
+        ></input>
+      </section>
+
+      <section className="px-10">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="planExpense">
+          Chi phí mặt bằng
+        </label>
+        <input
+            type="number"
+            placeholder={"Chi phí mặt bằng"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={Number(formData?.planExpense)}
+            onChange={onChange}
+            name = "planExpense"
+        ></input>
+      </section>
+
+      <section className="px-10">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="utilityExpense">
+          Chi phí điện nước
+        </label>
+        <input
+            type="number"
+            placeholder={"Lương ca đêm/giờ"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={Number(formData?.utilityExpense)}
+            onChange={onChange}
+            name = "utilityExpense"
+        ></input>
+      </section>
+
+      <section className="px-10">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="humanExpense">
+          Chi phí nhân sự
+        </label>
+        <input
+            type="number"
+            placeholder={"Chi phí nhân sự"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={Number(formData?.humanExpense)}
+            onChange={onChange}
+            name = "humanExpense"
+        ></input>
+      </section>
+
+      <section className="px-10">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="sellingExpenseRate">
+          % Chi phí Bán hàng
+        </label>
+        <input
+            type="number"
+            placeholder={"sellingExpenseRate"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={Number(formData?.sellingExpenseRate)}
+            onChange={onChange}
+            name = "sellingExpenseRate"
+        ></input>
+      </section>
+
+      <section className="px-10">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="materialExpenseRate">
+          % Chi phí nguyên liệu
+        </label>
+        <input
+            type="number"
+            placeholder={"materialExpenseRate"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={Number(formData?.materialExpenseRate)}
+            onChange={onChange}
+            name = "materialExpenseRate"
+        ></input>
+      </section>
+
+      <section className="px-10">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="otherExpenseRate">
+          % Chi phí khác
+        </label>
+        <input
+            type="number"
+            placeholder={"otherExpenseRate"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={Number(formData?.otherExpenseRate)}
+            onChange={onChange}
+            name = "otherExpenseRate"
         ></input>
       </section>
 
