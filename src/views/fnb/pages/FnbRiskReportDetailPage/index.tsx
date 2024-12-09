@@ -1,4 +1,3 @@
-/*=====1.LIBRARY=====*/
 import React, { FC, useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
@@ -21,6 +20,10 @@ export const FnbRiskReportDetailPage: FC = () => {
 	const [keyword, setKeyword] = useState("");
 	const { openModal, closeModal } = useModal();
 	const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    const ref = React.useRef<PaginateHandle>(null);
+    const [pageIndex, setPageIndex] = useState(0);
+	
 	const [defaultState, setDefaultState] = useState({
 	    mediaID: '',
 	    images: [] as ImageProps[],
@@ -47,10 +50,6 @@ export const FnbRiskReportDetailPage: FC = () => {
 	useEffect(() => {
 		document.title = "Trixgo | Báo cáo KPI";
 	}, []);
-
-	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-    const ref = React.useRef<PaginateHandle>(null);
-    const [pageIndex, setPageIndex] = useState(0);
 
 	return (
 		<main className="h-full overflow-auto">
