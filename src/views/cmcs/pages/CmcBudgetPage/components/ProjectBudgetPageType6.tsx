@@ -4,7 +4,7 @@ import categoryIcon from "assets/images/icons8-category-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import {NavigateTabBudgetPage} from "./NavigateTabBudgetPage";
 import downloadIcon from "assets/images/icons8-download-64.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
+import pencilIcon from "assets/images/icons8-pencil-96 1.png";
 import {useCashFlowPlan} from "services/hooks/financial/useCashFlow";
 import {Project} from "typings/items/project";
 import PaginateV2 from "shareComponents/common/PaginateV2";
@@ -56,7 +56,7 @@ export const ProjectBudgetPageType6:FC<Props> = ({projectInfo}) => {
                     {
                         recordSelected._id&&
                         <button className={"flex items-center justify-center mx-3 ml-6"}>
-                            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                            <img src={pencilIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                         </button>
                     }
                 </div>

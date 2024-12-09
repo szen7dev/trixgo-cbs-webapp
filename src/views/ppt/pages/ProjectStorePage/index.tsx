@@ -13,7 +13,7 @@ import { formatNumberMoney } from "utils/cmcs";
 import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
-import iconPencil from 'assets/images/icons8-pencil-96 1.png';
+import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
 import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -385,7 +385,7 @@ const ProjectStorePage: FC = () => {
                                 className="mr-3"
                                 onClick={() => handleOpenModalCreateOrUpdate('update')}
                             >
-                                <img src={iconPencil} alt="icon pencil" />
+                                <img src={pencilIcon} alt="icon pencil" />
                             </button>
                         ) : ''}
                     </div>

@@ -2,7 +2,7 @@ import React, { FC, HTMLAttributes, useState, useContext } from "react";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import QRCodeIcon from "assets/images/document/qr-code.png";
-// import iconPencil from "assets/images/icons8-pencil-96 1.png";
+// import pencilIcon from "assets/images/icons8-pencil-96 1.png";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 import styles from "views/support/styles/support.module.css";
 import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";

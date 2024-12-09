@@ -4,22 +4,10 @@ import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
-
-/**
- * Components
- */
 import { SearchInput } from "shareComponents/common";
 import { ModalCreateOrUpdateDoctype } from '../../shareComponents/common';
-
-/**
- * Assets
- */
 import styles from "views/support/styles/support.module.css";
-import iconPencil from 'assets/images/icons8-pencil-96 1.png';
-
-/**
- * Hooks
- */
+import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
 import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { Doctype } from "typings/items";
@@ -81,6 +69,13 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
             // amount,
         }))
     }
+    
+    const getStateChecked = useCallback((id: string) => {
+        const item = doctypesChecked.find(item => item._id === id);
+        return item ? true : false;
+    }, [doctypesChecked]);
+
+    // console.log(doctypesChecked)
 
     const onClickCheckButton = (doctype: Doctype.Doctype) => {
         const check = doctypesChecked.find(item => item._id === doctype._id);
@@ -112,25 +107,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         } else {
             clearData();
         }
-    };
-
-    const getStateChecked = useCallback((id: string) => {
-        const user = doctypesChecked.find(item => item._id === id);
-        return user ? true : false;
-    }, [doctypesChecked]);
-
-    const getStateCheckedAll = useMemo(() => {
-        if(!doctypesChecked.length && !listDoctypes.length) return false;
-        return doctypesChecked.length === listDoctypes.length;
-    }, [doctypesChecked.length, listDoctypes.length]);
-
-    const onClickCheckAll = () => {
-        if (doctypesChecked.length === listDoctypes.length) {
-            setDoctypesChecked([]);
-        } else {
-            setDoctypesChecked(listDoctypes);
-        }
-    };
+    }
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
         let initValues: any = {...initialValues};
@@ -166,16 +143,44 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         )
     }
 
+    // const handleClick = (item: any) => {
+    //     getStateChecked(item._id)
+    //     onClickCheckButton(item)
+
+    //     if(doctypesChecked.length === 1){
+    //         handleOpenModalCreateOrUpdate("update")
+    //     }
+
+    //     // console.log(doctype)
+
+    //     // // Gọi setInitialValues
+    //     // setInitialValues({
+    //     //   doctypeID: doctype._id,
+    //     //   linkItem: doctype.linkItem,
+    //     //   name: doctype.name,
+    //     //   sign: doctype.sign,
+    //     //   unit: doctype.unit,
+    //     //   description: doctype.description,
+    //     //   type: doctype.type,
+    //     //   grade: doctype.grade,
+    //     //   salesChannel: doctype.salesChannel,
+    //     //   amount: doctype.amount,
+    //     //   alert: doctype.alert,
+    //     // });
+    
+    //     // Gọi handleOpenModalCreateOrUpdate
+    //     // handleOpenModalCreateOrUpdate("update");
+
+    //     // // Đảm bảo mở modal sau khi state đã cập nhật
+    //     // setTimeout(() => {
+    //     //     handleOpenModalCreateOrUpdate("update");
+    //     // }, 500); // Đảm bảo React cập nhật state trước khi mở modal
+    //   }
+
     //_____Import excel
     const [dataImport, setDataImport] = useState([]);
-    // const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-    //     isExporting: false,
-    // });
     const { importFromExcelAsync } = useDoctype({});
 
-    /**
-     * Xử lý import excel (đọc file)
-     */
     const handleImport = ($event: any) => {
         const files = $event.target.files;
         if (files.length) {
@@ -234,14 +239,14 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                             <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo danh mục</label>
                         </button>
 
-                        {doctypesChecked.length === 1 ? (
+                        {/* {doctypesChecked.length === 1 ? (
                             <button
                                 className="mr-3"
                                 onClick={() => handleOpenModalCreateOrUpdate('update')}
                             >
-                                <img src={iconPencil} alt="icon pencil" />
+                                <img src={pencilIcon} alt="icon pencil" />
                             </button>
-                        ) : ''}
+                        ) : ''} */}
                     </div>
                     <div className="flex items-center">
                         <button
@@ -258,14 +263,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
                         <th className={cn("py-1 text-center", styles.theadInput)}>
-                            <div className="border-r-2 border-gray-300 flex items-center justify-center">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    checked={getStateCheckedAll}
-                                    onClick={onClickCheckAll}
-                                />
-                            </div>
+
                         </th>
                         <th className="py-1" style={{width: "20px"}}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
@@ -314,12 +312,28 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                     {listDoctypes.length ? listDoctypes.map((item: any) => (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
+                                {/* <button
+                                    className="mr-3"
+                                    onClick={() => handleClick(item)}
+                                >
+                                    <img src={pencilIcon} alt="icon pencil" />
+                                </button> */}
+                                
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
                                     checked={getStateChecked(item._id)}
                                     onChange={() => onClickCheckButton(item)}
                                 />
+                                <hr className="text-primary-gray"/>
+                                {(doctypesChecked.length === 1 && doctypesChecked[0]?._id.toString() === item._id.toString()) ? (
+                                    <button
+                                        className="mr-3"
+                                        onClick={() => handleOpenModalCreateOrUpdate('update')}
+                                    >
+                                        <img src={pencilIcon} alt="icon pencil" />
+                                    </button>
+                                ) : ''}
                             </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/home/${type}/${item._id}`}>

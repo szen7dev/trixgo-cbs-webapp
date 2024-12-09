@@ -41,7 +41,7 @@ import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 import categoryIcon from "../../../../assets/images/icons8-category-48.svg";
 import contractIcon from "../../../../assets/images/icons8-contract-64-blue.svg";
 import downloadIcon from "../../../../assets/images/icons8-download-64.svg";
-import iconPencil from "../../../../assets/images/icons8-pencil-96 1.png";
+import pencilIcon from "../../../../assets/images/icons8-pencil-96 1.png";
 import nextIcon from "../../../../assets/images/icons-arrow-next.svg";
 import userIcon from "../../../../assets/images/icons8-male-user-64.svg";
 import customCheckbox from "../../../../assets/images/custom-checkbox.png";
@@ -224,7 +224,7 @@ const ProjectBiddingPage: FC = () => {
             <button
               onClick={toggleModalCreateOrUpdate.bind(null, "update")}
               className={"flex items-center justify-center mx-3 ml-6"}>
-              <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"} />
+              <img src={pencilIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
             </button>
           }
           <div className={"flex-1 flex items-center justify-end"}>

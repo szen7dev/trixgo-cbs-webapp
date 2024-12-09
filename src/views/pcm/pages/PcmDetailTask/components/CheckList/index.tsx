@@ -9,7 +9,7 @@ import classnames from "classnames";
 
 import IconPlus from "assets/images/icons8-plus-math-100.png";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
-import IconPencil from "assets/images/icons8-pencil.svg";
+import pencilIcon from "assets/images/icons8-pencil.svg";
 import LinkIcon from "assets/images/icon-linking.png";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
@@ -249,7 +249,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
                 />
               </button>
               <button className="mx-2">
-                <img className="w-6" src={IconPencil} alt="Update" />
+                <img className="w-6" src={pencilIcon} alt="Update" />
               </button>
               <button className="mx-2">
                 <img className="w-6" src={LinkIcon} alt="Link" />

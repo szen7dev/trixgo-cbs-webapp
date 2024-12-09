@@ -6,7 +6,7 @@ import cn from 'classnames';
  * ASSETS
  */
 import iconTrash from 'assets/images/icons8-remove.svg';
-import iconPencil from 'assets/images/icons8-pencil.svg';
+import pencilIcon from 'assets/images/icons8-pencil.svg';
 import iconCopy from 'assets/images/icons8-copy-96.png';
 import iconPrint from 'assets/images/icons8-print-96.png';
 
@@ -49,7 +49,7 @@ const ButtonMore: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ onClickC
 					</Menu.Item>
 					<Menu.Item>
 						<button onClick={() => onClickUpdate?.apply(null)} className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
-							<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
+							<img src={pencilIcon} alt="Icon Edit" className="inline-block mr-6" />
 							Cập nhật
 						</button>
 					</Menu.Item>

@@ -35,7 +35,7 @@ import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
+import pencilIcon from "assets/images/icons8-pencil-96 1.png";
 import { NavigateTab } from "../../sharedComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { useContractIsMembers } from "services/hooks/items/useContract";
@@ -615,7 +615,7 @@ export const DocumentProjectPage: FC = () => {
                         <button
                             onClick={handleOnClickUpdate(recordSelected)}
                             className={"flex items-center justify-center mx-3 ml-6"}>
-                            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"} />
+                            <img src={pencilIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
                         </button>
                     }
                     <PaginateV2
