@@ -409,6 +409,20 @@ export const GeneralInfo: FC<Props> = memo((props) => {
             </tr>
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
+                Số giờ làm quy định/năm
+              </td>
+              <td className="border w-2/6 pl-4">
+                {formatNumberMoney(info?.annualWorkingHours)} | (365-52 tuần*1 ngày nghỉ/tuần)*8
+              </td>
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Khác
+              </td>
+              <td className="border w-2/6 pl-4">
+                
+              </td>
+            </tr>
+            <tr className="border h-7 leading-7">
+              <td className="border text-primary-gray w-1/6 pl-4">
                 Link tài khoản
               </td>
               <td className="border w-2/6 pl-4">

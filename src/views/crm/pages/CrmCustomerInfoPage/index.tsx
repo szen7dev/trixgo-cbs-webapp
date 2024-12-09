@@ -137,6 +137,7 @@ export const CrmCustomerInfoPage: FC = () => {
               contractExpire: defaultValues.contractExpire,
               bankAccount: defaultValues.bankAccount,
               insuranceFee: defaultValues.insuranceFee,
+              annualWorkingHours: defaultValues.annualWorkingHours,
             }}
             onFinish={handleFinishForm}
           />
@@ -238,6 +239,7 @@ export const CrmCustomerInfoPage: FC = () => {
             modifyAt: detailHuman.modifyAt,
             bankAccount: detailHuman.bankAccount,
             insuranceFee: detailHuman.insuranceFee,
+            annualWorkingHours: detailHuman.annualWorkingHours,
           }}
         />
         <JourneyInfo
