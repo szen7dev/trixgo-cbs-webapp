@@ -214,6 +214,7 @@ export type Human = {
     bankAccount?: any;
     bank?: any;
     insuranceFee?: any;
+    annualWorkingHours?: any;
     dataSource?: any;
     parent?: any;
     level?: any;

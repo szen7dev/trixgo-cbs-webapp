@@ -148,6 +148,7 @@ export const HumanInfo: FC = () => {
               bankAccount: defaultValues.bankAccount,
               bank: defaultValues.bank,
               insuranceFee: defaultValues.insuranceFee,
+              annualWorkingHours: defaultValues.annualWorkingHours,
             }}
             onFinish={handleFinishForm}
           />
@@ -295,6 +296,7 @@ export const HumanInfo: FC = () => {
             bankAccount: detailHuman.bankAccount,
             bank: detailHuman.bank,
             insuranceFee: detailHuman.insuranceFee,
+            annualWorkingHours: detailHuman.annualWorkingHours,
             union: detailHuman.union,
             share: detailHuman.share,
           }}

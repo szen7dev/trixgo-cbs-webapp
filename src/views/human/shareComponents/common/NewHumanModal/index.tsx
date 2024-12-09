@@ -206,6 +206,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       linkUser: "",
       note: "",
       insuranceFee: "",
+      annualWorkingHours: "",
       parent: "",
       dataSource: "",
       ...initialValues,
@@ -1471,7 +1472,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
 
                     <div className="w-1/5 flex items-center">
-                    <span className="w-4/12 text-primary-gray">
+                      <span className="w-4/12 text-primary-gray">
                         Số ngày tối đa được nghỉ phép năm
                       </span>
                       <Field
@@ -1638,7 +1639,18 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         />
                     </div>
                     <div className="w-1/5 flex items-center">
-
+                      <span className="w-4/12 text-primary-gray">
+                        Số giờ làm quy định/năm
+                      </span>
+                      <Field
+                        type="text"
+                        name="annualWorkingHours"
+                        placeholder="Số giờ làm quy định/năm"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
                     </div>
                   </div>
 
