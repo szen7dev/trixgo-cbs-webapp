@@ -412,12 +412,12 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">
                                 {item?.description}
-                                <p><i>Mặt bằng: {convertCurrency(Number(item?.planExpense).toFixed(0))}</i></p>
-                                <p><i>Điện, nước, IE: {convertCurrency(Number(item?.utilityExpense).toFixed(0))}</i></p>
-                                <p><i>Lương nhân viên: {convertCurrency(Number(item?.humanExpense).toFixed(0))}</i></p>
-                                <p><i>% CP bán hàng: {convertCurrency(Number(item?.sellingExpenseRate))} %</i></p>
-                                <p><i>% CP nguyên liệu: {convertCurrency(Number(item?.materialExpenseRate))} %</i></p>
-                                <p><i>$ CP khác: {convertCurrency(Number(item?.otherExpenseRate))} %</i></p>
+                                <p className="text-right"><i>Mặt bằng: {convertCurrency(Number(item?.planExpense).toFixed(0))}</i></p>
+                                <p className="text-right"><i>Điện, nước, IE: {convertCurrency(Number(item?.utilityExpense).toFixed(0))}</i></p>
+                                <p className="text-right"><i>Lương nhân viên: {convertCurrency(Number(item?.humanExpense).toFixed(0))}</i></p>
+                                <p className="text-right"><i>% CP bán hàng: {convertCurrency(Number(item?.sellingExpenseRate))} %</i></p>
+                                <p className="text-right"><i>% CP nguyên liệu: {convertCurrency(Number(item?.materialExpenseRate))} %</i></p>
+                                <p className="text-right"><i>$ CP khác: {convertCurrency(Number(item?.otherExpenseRate))} %</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}
