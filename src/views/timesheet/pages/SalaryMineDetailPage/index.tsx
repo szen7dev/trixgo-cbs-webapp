@@ -324,8 +324,8 @@ const SalaryMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                 </div>
                 <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.salary)}</div>
                 <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.onLeaveSalary)}</div>
-                <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.revenueBonus)}</div>
                 <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.overtimeSalary)}</div>
+                <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.revenueBonus)}</div>
                 <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.reward)}</div>
                 <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.mealAllowance)}</div>
                 <div className={"px-[5px] py-[2px] table-cell relative box-border border border-gray-300 align-middle bg-white text-right"}>{convertCurrency(item.punishment)}</div>
