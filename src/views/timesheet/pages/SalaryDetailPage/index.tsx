@@ -213,6 +213,8 @@ const SalaryDetailPage: FC = () => {
         if (!isUpdated.error) {
           onRefreshSalaryChild();
           refetch(); // refetch time sheet parent
+        }else{
+          return toast.error(isUpdated?.data?.message)
         }
       } catch (err) {
         return null;
