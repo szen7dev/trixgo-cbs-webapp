@@ -145,6 +145,8 @@ export const DetailChildRow: FC<Props> = ({
         <p className="text-[10px] text-cbs-highlight-color"><i>Số ngày làm: {rowData?.nowds}</i></p>
         <p className="text-[10px] text-cbs-highlight-color"><i>Số ngày làm CN: {rowData?.nowdsos}</i></p>
         <hr className="text-gray-400"/>
+        <p className="text-[10px] text-cbs-highlight-color"><i>Còn lại phải trả: {convertCurrency(Number(rowData?.remaining).toFixed(0))}</i></p>
+        <hr className="text-gray-400"/>
         <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
         <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
       </div>
