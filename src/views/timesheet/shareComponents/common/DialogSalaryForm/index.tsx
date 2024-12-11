@@ -40,6 +40,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     type: "",
     project: {},
     convertFactor: "",
+    status: "",
     note: "",
     date: null,
     ...defaultValues,
@@ -60,7 +61,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "625px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "700px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center mb-3 border-b bg-cbs-table-header p-2"}
@@ -104,7 +105,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <p className="text-primary-gray text-[13px] mb-1">Hệ số chuyển đổi KPI sang giá trị</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
                     <Field
@@ -117,7 +118,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       }}
                     />
                   </div>
-                </div>
+                </div> */}
 
                 <div>
                   <p className="text-primary-gray text-[13px] mb-1">Phân loại</p>
@@ -199,6 +200,21 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       type="text"
                       name="note"
                       placeholder="Ghi chú..."
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Khóa bảng lương</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="status"
+                      placeholder="1-Hoạt động | 2-Hủy"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);

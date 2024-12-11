@@ -26,7 +26,7 @@ import {
   useQueryListSalaryParent,
   useMutationSalaryParent,
 } from "services/hooks/useSalary";
-import { SALARY_RESET_PERMISSION } from "apis/localdb";
+import { TIMESHEET_STATUS } from "apis/localdb";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 
@@ -175,7 +175,7 @@ const SalaryHomePage: FC = () => {
     )
    
     if (status !== 200 || data.error) {
-      return toast.warn('Đồng bộ thất bại')
+      return toast.error(data?.data?.message)
     }
 
     refreshListSalary();
@@ -414,6 +414,7 @@ const SalaryHomePage: FC = () => {
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item.note}
+                <p style={{color: 'red'}}>{(item?.status && item?.status == 2) ? TIMESHEET_STATUS[Number(item?.status) - 1].name : ''}</p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 2, salaryID: item._id, title: 'Bạn có muốn sao chép không?', description: 'Dữ liệu sẽ được sao chép sang Bảng lương mới' })}>

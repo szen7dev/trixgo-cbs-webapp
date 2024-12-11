@@ -40,6 +40,7 @@ export type StoreParent = {
   modifyAt: string;
   date: string;
   convertFactor: number;
+  status: number;
   budgetWork: strinstring | null;
   files: any;
 };
@@ -79,6 +80,7 @@ export type InsertStoreParentPayload = {
   sign: string;
   date: string;
   convertFactor: number;
+  status: number;
 };
 
 export type InsertStoreParentResponse = {

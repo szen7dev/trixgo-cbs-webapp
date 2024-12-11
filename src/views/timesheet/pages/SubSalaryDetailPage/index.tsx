@@ -216,6 +216,8 @@ const SubSalaryDetailPage: FC = () => {
         if (!isUpdated.error) {
           onRefreshSalaryChild();
           refetch(); // refetch time sheet parent
+        }else{
+          return toast.error(isUpdated?.data?.message)
         }
       } catch (err) {
         return null;
@@ -363,7 +365,7 @@ const SubSalaryDetailPage: FC = () => {
     )
    
     if (status !== 200 || data.error) {
-      return toast.warn('Cập nhật thất bại')
+      return toast.error(data?.data?.message)
     }
 
     onRefreshSalaryChild();

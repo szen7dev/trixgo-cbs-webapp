@@ -36,6 +36,7 @@ export type SalaryParent = {
     insurance: number;
     pitax: number;
     convertFactor: number;
+    status: number;
     union: number;
     share: number;
     other: number;
@@ -132,6 +133,7 @@ export type SalaryChild = {
     other: number;
     kpiFactor: number;
     convertFactor: number;
+    status: number;
     project: any;
     position: any;
     userCreate: any;

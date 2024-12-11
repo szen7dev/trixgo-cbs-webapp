@@ -49,6 +49,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
                 outin: record.outin,
                 type: record.type,
                 convertFactor: record.convertFactor,
+                status: record.status,
                 date: record.date,
               }}
             />
