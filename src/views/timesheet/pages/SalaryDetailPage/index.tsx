@@ -360,7 +360,7 @@ const SalaryDetailPage: FC = () => {
     )
    
     if (status !== 200 || data.error) {
-      return toast.warn('Cập nhật thất bại')
+      return toast.error(data?.data?.message)
     }
 
     onRefreshSalaryChild();
