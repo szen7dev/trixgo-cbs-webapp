@@ -28,6 +28,7 @@ export type TimeSheetParent = {
     modifyAt: string;
     date: string;
     convertFactor: number;
+    status: number;
 }
 
 export type ListTimeSheetPayload = QueryParams & {
@@ -59,6 +60,7 @@ export type InsertTimeSheetParentPayload = {
     note: string;
     date: string;
     convertFactor: number;
+    status: number;
 }
 
 export type InsertTimeSheetParentResponse = {
