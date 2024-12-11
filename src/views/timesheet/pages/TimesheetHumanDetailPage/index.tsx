@@ -3,13 +3,11 @@ import moment from "moment";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { NavLink, useParams } from "react-router-dom";
 import { useQueryListTimeSheetParent } from "services/hooks/useTimeSheet";
-import { DAYOFWEEKS, TIMESHEET_SUBTYPES } from "apis/localdb/index";
+import { DAYOFWEEKS, TIMESHEET_SUBTYPES, TIMESHEET_TYPES } from "apis/localdb/index";
 import { convertCurrency } from "utils/converter";
 import { createLinkAndClick } from "utils";
 import { toast } from "react-toastify";
 import { useCashBook } from "services/hooks/financial/useCashBook";
-
-const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface TimesheetHomePageProps {
   type?: number
 }
@@ -273,6 +271,7 @@ const TimesheetHumanDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                   <NavLink  to={`/timesheet/home/${item?.parent?._id}`}>
                     <p><i>{item?.parent?.name}</i></p>
                   </NavLink>
+                  <p className="text-[10px] text-cbs-highlight-color"><i>{TIMESHEET_TYPES[Number(item?.type) - 1]?.text}</i></p>
                 </div>
                 <div
                   className={
@@ -280,9 +279,9 @@ const TimesheetHumanDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                   }
                 >
                   {moment(item.date).format("DD/MM/YY")}
+                  <p className="text-[10px] text-cbs-highlight-color"><i>{DAYOFWEEKS[Number(new Date(item?.date).getDay())]?.name}</i></p>
                   <p className="text-gray-400 text-[10px]"><i>Cre: {item?.userCreate?.fullname} {moment(item.createAt).format("DD/MM/YY hh:mm")}</i></p>
                   <p className="text-gray-400 text-[10px]"><i>Mod: {item?.userUpdate?.fullname} {moment(item.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
-                  <p className="text-gray-400 text-[10px] text-cbs-highlight-color"><i>{DAYOFWEEKS[Number(new Date(item?.date).getDay())]?.name}</i></p>
                 </div>
                 <div
                   className={
