@@ -105,7 +105,7 @@ const TimesheetAppRouter: FC = () => {
           />
           <ProtectedRoute
             exact
-            path="/timesheet/human_kpi_detail/:id/:year/:month"
+            path="/timesheet/human_kpi_detail/:funda/:id/:year/:month"
             component={() => <TimesheetHumanKpiDetailPage type={3} />}
           />
           <ProtectedRoute

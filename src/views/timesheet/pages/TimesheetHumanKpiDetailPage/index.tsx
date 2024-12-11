@@ -27,7 +27,8 @@ const TimesheetHumanKpiDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) =
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
 
-    const params = useParams<{ id: string, year: string, month: string}>();
+    const params = useParams<{ funda: string, id: string, year: string, month: string}>();
+    const fundaID = params["funda"];
     const humanID = params["id"];
     const year = Number(params["year"]);
     const month = Number(params["month"]);
@@ -45,6 +46,7 @@ const TimesheetHumanKpiDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) =
         year: year, 
         month: month, 
         keyword: keyword, 
+        fundasID: [fundaID],
         executorID: humanID,
         populates: JSON.stringify({
             path: 'userCreate userUpdate mistake executor funda files manager',
