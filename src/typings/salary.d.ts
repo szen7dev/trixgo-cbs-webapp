@@ -138,6 +138,7 @@ export type SalaryChild = {
     userUpdate: any;
     createAt: any;
     modifyAt: any;
+    funda: any;
     subAllowance1: number;
     subAllowance2: number;
     subAllowance3: number;
