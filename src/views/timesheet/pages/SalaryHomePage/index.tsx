@@ -135,8 +135,8 @@ const SalaryHomePage: FC = () => {
         }
       >
         <ModalConfirm
-          title="Bạn có muốn xác nhận Cập nhật/Đồng bộ không?"
-          description= "Dữ liệu từ Bảng chấm công, KPI sẽ được đồng bộ sang Bảng lương này"
+          title= {param?.title}
+          description= {param?.description}
           onConfirm={() => handleConfirmSync({ option: param.option, salaryID: param.salaryID, fundaID: param.fundaID })}
           defaultText={false}
           onCancel={closeModal}
@@ -416,20 +416,22 @@ const SalaryHomePage: FC = () => {
                 {item.note}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 4, salaryID: item._id })}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 2, salaryID: item._id, title: 'Bạn có muốn sao chép không?', description: 'Dữ liệu sẽ được sao chép sang Bảng lương mới' })}>
                   <img src={iconCopy} title={'Sao chép'} className={"w-[24px] h-[24px] mr-3"} />
                   <span>Sao chép</span>
                 </button>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <div className="mb-3"><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 2, salaryID: item._id })}><img src={iconRefresh} title={'Đồng bộ tổng hợp'} className={"w-[24px] h-[24px] mr-3"} /><span>Đồng bộ Tổng hợp</span></button> </div>
-                {(["6046bedeb55525368b11c5c3","6046bf25b55525368b11d311"].includes(`${user?.company?._id.toString()}`) && item.funda) ?  <div className="mb-3"><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: item._id, fundaID: item?.funda?._id })}>
+                <div className="mb-3"><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: item._id, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công, KPI sẽ được đồng bộ sang bảng lương này' })}><img src={iconRefresh} title={'Đồng bộ tổng hợp'} className={"w-[24px] h-[24px] mr-3"} /><span>Đồng bộ Tổng hợp</span></button> </div>
+                <hr className="flex text-primary-gray" />
+                {(["6046bedeb55525368b11c5c3","6046bf25b55525368b11d311"].includes(`${user?.company?._id.toString()}`) && item.funda) ?  <div className="mb-3"><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 6, salaryID: item._id, fundaID: item?.funda?._id, title: 'Bạn có muốn thêm nhân sự Cơ sở vào bảng lương?', description: 'Nhân sự chấm công tại các Cơ sở sẽ được thêm vào bảng lương này' })}>
                 <img src={iconCreate} title={'Thêm nhân sự cơ sở vào Bảng lương'} className={"w-[24px] h-[24px] mr-3"} /><span>Thêm nhân sự Cơ sở vào Bảng lương</span></button></div> : <></>}
-                {(["6046bedeb55525368b11c5c3","6046bf25b55525368b11d311"].includes(`${user?.company?._id.toString()}`) && item.funda) ? <div><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 8, salaryID: item._id, fundaID: item?.funda?._id })}><img src={iconRefresh} title={'Đồng bộ theo Cơ sở'} className={"w-[24px] h-[24px] mr-3"} /><span>Đồng bộ theo Cơ sở</span></button></div> : <></>}
+
+                {(["6046bedeb55525368b11c5c3","6046bf25b55525368b11d311"].includes(`${user?.company?._id.toString()}`) && item.funda) ? <div><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 8, salaryID: item._id, fundaID: item?.funda?._id, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công, KPI các Cơ sở sẽ được đồng bộ sang bảng lương này' })}><img src={iconRefresh} title={'Đồng bộ theo Cơ sở'} className={"w-[24px] h-[24px] mr-3"} /><span>Đồng bộ theo Cơ sở</span></button></div> : <></>}
               </div>
 
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSignReset({ option: 3, salaryID: item._id })}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSignReset({ option: 3, salaryID: item._id, title: 'Bạn có muốn xóa không?', description: 'Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu nà' })}>
                   <span style={{ "color": "red" }}>Xóa dữ liệu</span>
                 </button>
               </div>

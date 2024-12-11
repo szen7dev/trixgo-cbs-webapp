@@ -16,13 +16,13 @@ export const ModalConfirm: FC<Props> = ({ title, description, customComponent, i
         <main className="relative h-full">
             <header className="px-10 py-4">
                 <p className="font-bold text-xl">
-                    {title ? title : 'Bạn có muốn xóa không?'}
+                    {title ? title : 'Bạn có muốn thực hiện hành động không?'}
                 </p>
             </header>
 
             <section className="px-10 text-primary-gray">
                 <p>
-                    {defaultText ? 'Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này' : description}
+                    {defaultText ? 'Chúng tôi sẽ thực hiện hành động ngay sau khi bạn xác nhận' : description}
                 </p>
             </section>
 

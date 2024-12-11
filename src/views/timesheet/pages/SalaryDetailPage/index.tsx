@@ -7,17 +7,10 @@ import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
 import { TIMESHEET_SUBTYPES, CHECK_SALLARY } from "apis/localdb/index";
 import API from "apis/repository";
-
-/**
- * Components, Assets
- */
-import FileColorIcon from "assets/icons/FileColor";
-import StarIcon from "assets/images/star.svg";
+import iconRefresh from "assets/images/icons8-refresh.png";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-
 import { createLinkAndClick } from "utils";
 import { APP_ID } from "apis/localdb";
-
 import { DetailMainRow, ModalShare } from "./components";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust, DialogSalaryAddUser } from "views/timesheet/shareComponents/common";
@@ -38,7 +31,6 @@ import { usePosition } from 'services/hooks/items/usePosition';
 import { useCashBook } from "services/hooks/financial/useCashBook";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useAuth } from "services/hooks/auth/useAuth";
-
 import { User } from "typings/user";
 import { DeleteSalaryContext, DeleteSalaryContextType } from "./contexts/DeleteSalary";
 
@@ -328,6 +320,8 @@ const SalaryDetailPage: FC = () => {
       })
 
       toast.success(message);
+      
+      refetch();
       onRefreshSalaryChild();
     } catch (error: any) {
       toast.error(error.message);
@@ -335,6 +329,26 @@ const SalaryDetailPage: FC = () => {
   }
 
   const handleConfirmSync = useCallback(async (param: any) => {
+    closeModal();
+
+    const { data, status } = await API.post(
+      `/api/timesheet/expert_salary/sync-data`, {
+        option: param.option,
+        salaryID: param.salaryID,
+        fundaID: param.fundaID,
+      }
+    )
+   
+    if (status !== 200 || data.error) {
+      return toast.warn('Đồng bộ thất bại')
+    }
+
+    refetch();
+    onRefreshSalaryChild();
+    return toast.success('Đồng bộ thành công')
+  }, [])
+
+  const handleConfirmAddUser = useCallback(async (param: any) => {
     closeModal();
 
     const { data, status } = await API.post(
@@ -364,6 +378,24 @@ const SalaryDetailPage: FC = () => {
       </div>
     );
   }
+  
+  const toggleModalOpenSign = (param: any) => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title= {param?.title}
+          description= {param?.description}
+          onConfirm={() => handleConfirmSync({ option: param.option, salaryID: param.salaryID, fundaID: param.fundaID })}
+          defaultText={false}
+          onCancel={closeModal}
+        />
+      </div>
+    )
+  }
 
   if (!salaryInfo || loading || !user) {
     return <Loader className="border-primary" />;
@@ -383,12 +415,13 @@ const SalaryDetailPage: FC = () => {
               <NavLink to={`/timesheet/subsalary_detail/${salaryInfo?._id}`} className="ml-5 text-cbs-highlight-color text-sm underline">
                 Xem Phụ cấp và Trả khác
               </NavLink>
-            </p>
-            <p className={"text-gray-400"}>
-              Chỉnh sửa lần cuối cách đây{" "}
-              {moment(salaryInfo.modifyAt).isValid() &&
-                moment(salaryInfo.modifyAt).fromNow()}{" "}
-              bởi {salaryInfo.userCreate?.fullname}
+              <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px]"}>
+                <img src={iconRefresh} title={'Đồng bộ Tổng hợp'} className={"w-[24px] h-[24px] mr-3"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: salaryParentID, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công, KPI sẽ được đồng bộ sang bảng lương này'})} />
+                <span className="text-sm text-cbs-highlight-color mr-3">Đồng bộ Tổng hợp</span> |
+                <img src={iconRefresh} title={'Đồng bộ Cơ sở'} className={"w-[24px] h-[24px] mr-3 ml-3"} onClick={() => toggleModalOpenSign({ option: 8, salaryID: salaryParentID, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công, KPI sẽ được đồng bộ sang bảng lương này'})} />
+                <span className="text-sm text-cbs-highlight-color mr-1">Đồng bộ Cơ sở</span> |
+                <span className="text-primary-gray text-sm ml-1">Cập nhật: {moment(salaryInfo.modifyAt).format('DD/MM/YYYY HH:mm')} | {moment(salaryInfo.modifyAt).fromNow()} {" "} bởi {salaryInfo.userCreate?.fullname}</span>
+              </button>
             </p>
           </div>
           <div className={"flex-1 flex items-center justify-end"}>
@@ -714,7 +747,7 @@ const SalaryDetailPage: FC = () => {
                 <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
                   <DialogSalaryAddUser
                     title="Thêm nhân sự"
-                    onSubmit={handleConfirmSync}
+                    onSubmit={handleConfirmAddUser}
                     projectName={""}
                     assigneeName={""}
                   />
