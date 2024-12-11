@@ -268,9 +268,7 @@ export const DetailChildRow: FC<Props> = ({
             "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end text-cbs-highlight-color underline "
           }
         >
-          <NavLink to={`/timesheet/human_kpi_detail/${rowData?.funda}/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>
-            {convertCurrency(rowData.reward)}
-          </NavLink>
+          {(rowData?.funda && rowData?.funda != undefined) ? <NavLink to={`/timesheet/human_kpi_detail/${rowData?.funda}/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>{convertCurrency(rowData.reward)}</NavLink> : <NavLink to={`/timesheet/human_kpi_detail/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>{convertCurrency(rowData.reward)}</NavLink>}
         </p>
       </div>
       <div
@@ -329,9 +327,7 @@ export const DetailChildRow: FC<Props> = ({
           }
           title="Bấm để xem chi tiết"
         >
-          <NavLink to={`/timesheet/human_kpi_detail/${rowData?.funda}/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>
-            {convertCurrency(rowData.punishment)}
-          </NavLink>
+          {(rowData?.funda && rowData?.funda != undefined) ? <NavLink to={`/timesheet/human_kpi_detail/${rowData?.funda}/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>{convertCurrency(rowData.punishment)}</NavLink> : <NavLink to={`/timesheet/human_kpi_detail/${rowData?.human?._id}/${new Date(rowData?.date).getFullYear()}/${Number(new Date(rowData?.date).getMonth()) + 1}`}>{convertCurrency(rowData.punishment)}</NavLink>}
         </p>
       </div>
       <div
