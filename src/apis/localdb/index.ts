@@ -626,6 +626,11 @@ export const TIMESHEET_OFFICIAL = [
     { _id: 2, name: 'Thử việc'},
 ]
 
+export const TIMESHEET_STATUS = [
+    { _id: 1, name: 'Active' },
+    { _id: 2, name: 'Khóa'},
+]
+
 export const TIMESHEET_SUBTYPES = [
     { _id: 1, name: 'Thông thường' },
     { _id: 2, name: 'Nghỉ phép'},
