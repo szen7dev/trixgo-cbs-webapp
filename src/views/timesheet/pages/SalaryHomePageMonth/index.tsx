@@ -280,7 +280,7 @@ const SalaryHomePageMonth: FC = () => {
                       "px-2 py-2 table-cell box-border border-b text-right"
                     }
                   >
-                    { ["6046bedeb55525368b11c5c3","6046bf25b55525368b11d311"].includes(`${user?.company?._id.toString()}`) ? <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ option: 6, year: yearFilter, month: item._id?.month })}><img src={iconCreate} title={'Tạo bảng lương theo cơ sở'} className={"w-[24px] h-[24px]"} /><span>Tạo bảng lương theo cơ sở</span></button> : <></>}
+                    { ["6046bedeb55525368b11c5c3","6046bf25b55525368b11d311"].includes(`${user?.company?._id.toString()}`) ? <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] mr-2"} onClick={() => toggleModalOpen({ option: 5, year: yearFilter, month: item._id?.month })}><img src={iconCreate} title={'Tạo bảng lương theo cơ sở'} className={"w-[24px] h-[24px]"} /><span>Tạo bảng lương theo cơ sở</span></button> : <></>}
               </div>
               <div
                   className={
