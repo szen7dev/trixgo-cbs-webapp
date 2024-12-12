@@ -301,7 +301,7 @@ export const CashDetailPage: FC = () => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
-          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 5})}>
+          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 6})}>
             Tải excel Phiếu
           </button>
         </div>

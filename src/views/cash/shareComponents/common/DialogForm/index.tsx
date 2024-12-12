@@ -85,6 +85,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   const initialValues = {
     name: "",
     date: null,
+    toDate: null,
     assignee: {},
     outin: Number(outin),
     type: Number(type),
@@ -112,7 +113,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "800px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "820px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center border-b bg-cbs-table-header p-2"}
@@ -165,6 +166,21 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       name="date"
                       onChange={(date: Date | null) => {
                         setFieldValue("date", date);
+                      }}
+                      dateFormat="dd/MM/yyyy"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Đến ngày</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <DatePicker
+                      className="w-full h-6 outline-none"
+                      selected={values?.toDate ? new Date(values?.toDate) : null}
+                      placeholderText="Ngày/tháng/năm"
+                      name="toDate"
+                      onChange={(toDate: Date | null) => {
+                        setFieldValue("toDate", toDate);
                       }}
                       dateFormat="dd/MM/yyyy"
                     />
