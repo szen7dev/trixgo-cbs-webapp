@@ -541,7 +541,7 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 {item.note}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalCopy({ option: 5, orderID: item?._id })}>
+                <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalCopy({ option: 4, orderID: item?._id })}>
                   <img src={iconCopy} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
                   <span>Sao chép</span>
                 </button>
