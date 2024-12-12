@@ -39,6 +39,7 @@ export type StoreParent = {
   createAt: string;
   modifyAt: string;
   date: string;
+  toDate?: string;
   convertFactor: number;
   status: number;
   budgetWork: strinstring | null;
@@ -79,6 +80,7 @@ export type InsertStoreParentPayload = {
   note: string;
   sign: string;
   date: string;
+  toDate?: string;
   convertFactor: number;
   status: number;
 };
@@ -140,6 +142,7 @@ export type StoreChild = {
   state: 1;
   name: string;
   date: string;
+  toDate?: string;
   parent?: StoreParent;
   assignee?: User;
   project?: Project;
@@ -204,6 +207,7 @@ export type UpdateStoreChildPayload = {
   customerID?: string;
   name?: string;
   date?: string;
+  toDate?: string;
   status?: string;
   quantity?: string;
   unitPrice?: string;

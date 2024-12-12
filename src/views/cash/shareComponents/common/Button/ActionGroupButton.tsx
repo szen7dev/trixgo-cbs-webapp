@@ -51,6 +51,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
                 convertFactor: record.convertFactor,
                 status: record.status,
                 date: record.date,
+                toDate: record.toDate,
               }}
             />
           </div>
