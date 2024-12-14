@@ -612,6 +612,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
                   {item?.warehouse?.name}
+                  <p className="text-gray-500"><i>{item?.warehouse?._id}</i></p>
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
                   {item?.customer?.name}
