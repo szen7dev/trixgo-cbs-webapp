@@ -53,6 +53,15 @@ const SalaryHomePageMonth: FC = () => {
     isFetchList: true
   })
 
+  let salary = 0, paid = 0, remaining = 0
+  if(listByProperty && listByProperty.length){
+    for(const item of listByProperty){
+      salary = Number(salary) + Number(item?.salary)
+      paid = Number(paid) + Number(item?.paid)
+    }
+    remaining = Number(remaining) + Number(salary - paid)
+  }
+
   const handleCreateSalary = React.useCallback(
     async (values) => {
       try {
@@ -245,14 +254,14 @@ const SalaryHomePageMonth: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(Number(item?.salary))}
+                {convertCurrency(Number(item?.salary).toFixed(0))}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(Number(item?.paid))}
+                {convertCurrency(Number(item?.paid).toFixed(0))}
               </div>
               <div
                 className={
@@ -266,7 +275,7 @@ const SalaryHomePageMonth: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(Number(item?.salary - item?.paid))}
+                {convertCurrency(Number(item?.salary - item?.paid).toFixed(0))}
               </div>
               <div
                 className={
@@ -313,6 +322,46 @@ const SalaryHomePageMonth: FC = () => {
                 </div>
             </div>
           ))}
+
+            <div className={"body-table table-row font-bold"}>
+                <div
+                  className={
+                    "px-2 py-2 table-cell box-border border-b align-middle w-3"
+                  }
+                >
+                  Tổng
+                </div>
+                <div className={"px-2 py-2 table-cell box-border border-b  text-right"}>
+                  {convertCurrency(Number(salary).toFixed(0))}
+                </div>
+                <div
+                  className={
+                    "px-2 py-2 table-cell box-border border-b text-right"
+                  }
+                >
+                  {convertCurrency(Number(paid).toFixed(0))}
+                </div>
+                <div
+                  className={
+                    "px-2 py-2 table-cell box-border border-b text-right"
+                  }
+                >
+                </div>
+                <div
+                  className={
+                    "px-2 py-2 table-cell box-border border-b text-right"
+                  }
+                >
+                  {convertCurrency(Number(salary - paid).toFixed(0))}
+                </div>
+                <div className={"px-2 py-2 table-cell box-border border-b"}>
+                </div>
+                <div className={"px-2 py-2 table-cell box-border border-b"}>
+                </div>
+                <div className={"px-2 py-2 table-cell box-border border-b"}>
+                </div>
+            </div>
+
         </div>
       </div>
     </div>

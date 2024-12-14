@@ -396,21 +396,21 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(Number(item?.salary + item?.onLeaveSalary + item?.overtimeSalary + item?.revenueBonus + item?.reward + item?.mealAllowance - item?.punishment - item?.insurance - item?.pitax - item?.union - item?.share - item?.other))}
+                {convertCurrency(Number(item?.salary + item?.onLeaveSalary + item?.overtimeSalary + item?.revenueBonus + item?.reward + item?.mealAllowance - item?.punishment - item?.insurance - item?.pitax - item?.union - item?.share - item?.other).toFixed(0))}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(Number(item?.paid + item?.advance))}
+                {convertCurrency(Number(item?.paid + item?.advance).toFixed(0))}
               </div>
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {convertCurrency(Number(item?.remaining))}
+                {convertCurrency(Number(item?.remaining).toFixed(0))}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {item.note}
@@ -487,7 +487,8 @@ const SalaryHomePage: FC = () => {
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
               </div>
-            </div>
+          </div>
+
         </div>
       </div>
     </div>
