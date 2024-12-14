@@ -112,7 +112,7 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
 
                         <div className={"flex-1 ml-2"}>
                             <p>{task.assignee?.bizfullname}</p>
-                            <p className={"text-primary-gray text-xs"}>Người thực hiện</p>
+                            <p className={"text-primary-gray text-xs"}>Người thực hiện/Phê duyệt</p>
                         </div>
                     </div>
                     <ModalUpdateTaskAssignee
