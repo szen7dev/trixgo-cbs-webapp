@@ -169,6 +169,7 @@ export const DetailChildRow: FC<Props> = ({
             })
           }
         />
+        <p className="text-primary-gray"><i>{rowData?.goods?._id}</i></p>
         {rowData?.parentGoods ? (
           <p className="text-cbs-highlight-color mt-2">
             {rowData?.parentGoods?.project?.sign}.{rowData?.parentGoods?.name}

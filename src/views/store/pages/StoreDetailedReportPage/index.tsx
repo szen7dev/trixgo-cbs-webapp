@@ -625,6 +625,7 @@ export const StoreDetailedReportPage: FC<Props> = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                         <p className="text-primary-gray"><i>{item?.name}</i></p>
                         <p>{item?.goods?.name}</p>
+                        <p className="text-primary-gray"><i>{item?.goods?._id}</i></p>
                         { item?.assets ?  <p><i>{item?.assets?.name}</i></p> : <></>}
                         { item?.parentGoods ?  <p><i>{item?.parentGoods?.name}</i></p> : <></>}
                         { item?.package ?  <p><i>{item?.package?.name}</i></p> : <></>}
@@ -657,6 +658,7 @@ export const StoreDetailedReportPage: FC<Props> = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                         <p className="text-primary-gray"><i>{item?.name}</i></p>
                         <p>{item?.goods?.name}</p>
+                        <p className="text-primary-gray"><i>{item?.goods?._id}</i></p>
                         { item?.assets ?  <p><i>{item?.assets?.name}</i></p> : <></>}
                         { item?.parentGoods ?  <p><i>{item?.parentGoods?.name}</i></p> : <></>}
                         { item?.package ?  <p><i>{item?.package?.name}</i></p> : <></>}
