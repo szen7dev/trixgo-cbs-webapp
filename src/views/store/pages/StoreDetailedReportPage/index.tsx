@@ -590,20 +590,23 @@ export const StoreDetailedReportPage: FC<Props> = () => {
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center" style={{width: "80px"}}>Ngày</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Hàng hóa, vật tư, công cụ</th>
               <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Đơn vị tính</th>
-              <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">NHẬP</th>
-              <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">XUẤT</th>
-              <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">TỒN</th>
+              <th colSpan={3} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">NHẬP</th>
+              <th colSpan={3} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">XUẤT</th>
+              <th colSpan={3} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">TỒN</th>
             </tr>
             <tr className="text-left text-sm text-primary-gray">
               <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
               <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
               <th className="py-1 px-2 font-normal border-r border-primary-border"></th>
               <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Đơn giá</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Thành tiền</th>
               <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Đơn giá</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Thành tiền</th>
               <th className="py-1 px-2 font-normal border-r border-primary-border">Khối lượng</th>
-              <th className="py-1 px-2 font-normal border-r border-primary-border">Giá trị</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Đơn giá</th>
+              <th className="py-1 px-2 font-normal border-r border-primary-border">Thành tiền</th>
             </tr>
         </thead>
         <tbody>
@@ -635,10 +638,12 @@ export const StoreDetailedReportPage: FC<Props> = () => {
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">{item?.goods?.unit}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantity)}</td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount/item?.quantity)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventoryQuantity)}</td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory/inventoryQuantity)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory)}</td>
                     </tr>
                   )
@@ -670,8 +675,10 @@ export const StoreDetailedReportPage: FC<Props> = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
                       <td className="py-1 px-2 border-r border-primary-border text-right"></td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantity)}</td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount/item?.quantity)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.amount)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventoryQuantity)}</td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory/inventoryQuantity)}</td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(inventory)}</td>
                     </tr>
                   )
