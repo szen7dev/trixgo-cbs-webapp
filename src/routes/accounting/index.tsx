@@ -79,7 +79,7 @@ const AccountingRouter: FC = () => {
           <Route exact path={`/accounting/admin/goods/:parentID`} component={ItemGoodsPage} />
         </LayoutSecondary>
       </Route>
-            <ProtectedRoute
+      <ProtectedRoute
         exact
         path="/accounting/support-tools"
         component={AccountingSupportToolsPage}

@@ -1,15 +1,7 @@
 import React, { FC, useState, useCallback, useEffect } from "react";
 import moment from "moment";
-
-// import DatePicker from "react-datepicker";
-// import { DropdownSearchable, } from "shareComponents/common";
-// import ThreeDotsVertical from "assets/images/icon-3dots-vertical-gray.svg";
-// import PolygonIcon from "assets/images/icon-polygon.svg";
-// import styles from 'views/accounting/styles/styles.module.css';
-
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
-
 import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import { debounce } from "lodash";
 import { DropdownSearchableV2, Loader } from "shareComponents/common";
@@ -144,10 +136,10 @@ const CostAnalysis: FC = () => {
   }
 
   return (
-    <main className="h-full bg-cbs-gray p-4">
+    <main className="h-full p-4">
       <section className="px-8 py-6 bg-primary-light flex items-center">
         <p className="text-lg font-bold text-primary-gray mr-5">
-          Phân tích giá vốn
+          Phân tích giá vốn xuất kho
         </p>
         <DropdownSearchableV2
           ref={accountRef}

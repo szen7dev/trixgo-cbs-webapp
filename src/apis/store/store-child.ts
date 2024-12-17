@@ -62,6 +62,11 @@ async function exportByFilter<T>(params: any): Promise<T> {
     return data;
 }
 
+async function analysePrimeCost(data: any) {
+    const { data: result } = await API.post(`${STORE_URL}/order_products/analyse-prime-cost`, data);
+    return result
+}
+
 interface StoreChildRepository {
     fetchListStore: (params: ListStorePayload) => Promise<QueryStoreChildResponse>;
     fetchListByProperty: (params: any) => Promise<QueryStoreChildResponse>;
@@ -70,6 +75,7 @@ interface StoreChildRepository {
     updateStore: (payload: UpdateStoreChildPayload) => Promise<UpdateStoreChildResponse>;
     deleteStore: (payload: DeleteStoreChildPayload) => Promise<DeleteStoreChildResponse>;
     exportByFilter: (data: any) => Promise<any>;
+    analysePrimeCost: (data: any) => Promise<any>;
 }
 
 export const storeChildRepository: StoreChildRepository = {
@@ -93,5 +99,8 @@ export const storeChildRepository: StoreChildRepository = {
     },
     deleteStore: (payload) => {
         return deleteStore(payload);
+    },
+    analysePrimeCost: (payload) => {
+        return analysePrimeCost(payload);
     }
 }

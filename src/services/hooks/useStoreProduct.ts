@@ -194,6 +194,7 @@ export const useMutationStoreChild = (): UseMutationStoreChild => {
 // Khai báo kiểu
 type UseProductCustom = {
   exportByFilterAsync: (payload: any) => Promise<any>,
+  analysePrimeCostAsync: (payload: any) => Promise<any>,
 }
 
 export const useProductCustom = () : UseProductCustom => {
@@ -204,7 +205,13 @@ export const useProductCustom = () : UseProductCustom => {
         StoreChildRepository.exportByFilter(payload)
   );
 
+  const { mutateAsync: analysePrimeCostAsync } =
+    useMutation((payload: any) =>
+      StoreChildRepository.analysePrimeCost(payload)
+  );
+
   return {
-    exportByFilterAsync
+    exportByFilterAsync,
+    analysePrimeCostAsync,
   }
 }
