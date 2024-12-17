@@ -12,6 +12,9 @@ import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
 import AdminFunctionalTab from "views/store/pages/StoreAdminPage/pages/AdminFunctionalTab";
 import AdminDetail from "views/store/pages/StoreAdminPage/pages/AdminDetail";
 import AdminAuthorTab from "views/store/pages/StoreAdminPage/pages/AdminAuthorTab";
+import {
+    StoreSupportToolsPage,
+  } from "views/store/pages";
 
 /*=====4.CONFIG ROUTE=====*/
 
@@ -50,6 +53,11 @@ const StoreRouter: FC = () => {
                             <Route exact path="/store/admin/2" component={AdminAuthorTab} />
                         </LayoutSecondary>
                     </Route>
+                    <ProtectedRoute
+                        exact
+                        path="/store/support-tools"
+                        component={StoreSupportToolsPage}
+                    />
                     <Route exact path="/store/home" component={StoreHomePage}/>
                     <Route exact path="/store/home/:id" component={StoreDetailPage}/>
 
