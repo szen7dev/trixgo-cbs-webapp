@@ -20,11 +20,11 @@ import { Link, useLocation } from "react-router-dom";
 import { useSocket } from "services/hooks/useSocket";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "redux/reducer";
-import { setAmountMissMessage } from "redux/reducer/messages/ListConversation";
-import { UseListConversation } from "services/hooks/messages/useListConversation";
+// import { setAmountMissMessage } from "redux/reducer/messages/ListConversation";
+// import { UseListConversation } from "services/hooks/messages/useListConversation";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
-import { populates } from "../../../views/messages/shareComponents/layouts/MessagesLayoutV2";
-import { appendMessageToConversation, updateNewMessageToConversation } from "../../../redux/reducer/messages/ListMessage";
+// import { populates } from "../../../views/messages/shareComponents/layouts/MessagesLayoutV2";
+// import { appendMessageToConversation, updateNewMessageToConversation } from "../../../redux/reducer/messages/ListMessage";
 import { pushMoreUnreadMessage } from "../../../redux/reducer/messages/UnreadMessages";
 import Favico from "react-favico-js";
 import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
@@ -37,8 +37,9 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   const { t } = useTranslation();
   const { listAppOfUser } = useGetListAppOfUser();
   const currentUser = localStorage.getItem("currentUser") ?? "{}";
-  const profileId = JSON.parse(currentUser)?._id;
+  // const profileId = JSON.parse(currentUser)?._id;
   const audioRef = useRef<HTMLAudioElement>(null);
+  const profile = JSON.parse(currentUser);
 
   const { pathname } = useLocation();
   const pathBreak = pathname.split("/");
@@ -58,26 +59,26 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
     return badge.amountUnreadTask || data?.data?.amountUnreadTask || 0;
   }, [data?.data?.amountUnreadTask, badge.amountUnreadTask])
 
-  useEffect(() => {
-    setTimeout(() => {
-      setEnabled(true);
-    }, 300);
-    if (firstRoute !== "messages") {
-      setTimeout(() => {
-        getListConversation({ keyword: "" });
-      }, 300);
-    }
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setEnabled(true);
+  //   }, 300);
+  //   if (firstRoute !== "messages") {
+  //     setTimeout(() => {
+  //       getListConversation({ keyword: "" });
+  //     }, 300);
+  //   }
+  // }, []);
 
   useEffect(() => {
 
     if (!socket) return;
 
-    socket.on("CHATTING_SSC_RECEIVE_MESSAGE", onReceiveMessage);
+    // socket.on("CHATTING_SSC_RECEIVE_MESSAGE", onReceiveMessage);
     socket.on("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
 
     return () => {
-      socket.off("CHATTING_SSC_RECEIVE_MESSAGE", onReceiveMessage);
+      // socket.off("CHATTING_SSC_RECEIVE_MESSAGE", onReceiveMessage);
       socket.off("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
     };
   }, [socket]);
@@ -86,7 +87,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
   const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
   const isReviewOldMessage = useSelector((state: RootState) => state.listMessage.data.isReviewOldMessage[currentChat]);
-  const { getListConversation } = UseListConversation();
+  // const { getListConversation } = UseListConversation();
 
   const onUpdateBadgeNotification = ({ error, data }: any) => {
     if(error || !Object.keys(data).length) return;
@@ -96,46 +97,46 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
     }
   }
 
-  const onReceiveMessage = (data: any) => {
-    if (data?.infoMessage?.error) {
-      getListConversation({ keyword: "" });
-      return;
-    }
-    dispatch(setAmountMissMessage(data.amountMissMessage))
-    socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
-      conversationID: data?.infoMessage?.conversation,
-      populates
-    });
-    if (data?.infoMessage?.sender?._id === profileId) {
-      dispatch(updateNewMessageToConversation({
-        conversationId: data?.infoMessage?.conversation,
-        newMessageId: data?.infoMessage?._id,
-        oldMessageId: data?.tmpid,
-        messageData: {
-          ...data?.infoMessage,
-          noAnimation: true
-        }
-      }));
-    } else {
-      playSound();
-      dispatch(appendMessageToConversation({
-        conversationId: data?.infoMessage?.conversation,
-        messageId: data?.infoMessage?._id,
-        messageData: {
-          ...data?.infoMessage,
-          noAnimation: true
-        }
-      }));
-      if (currentChat === data?.infoMessage?.conversation) {
-        dispatch(pushMoreUnreadMessage({ conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id] }));
-      }
-      if (!inSearchMode && currentChat === data?.infoMessage?.conversation && !isReviewOldMessage) {
-        setTimeout(() => {
-          scrollToBottom();
-        }, 100)
-      }
-    }
-  };
+  // const onReceiveMessage = (data: any) => {
+  //   if (data?.infoMessage?.error) {
+  //     getListConversation({ keyword: "" });
+  //     return;
+  //   }
+  //   dispatch(setAmountMissMessage(data.amountMissMessage))
+  //   socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+  //     conversationID: data?.infoMessage?.conversation,
+  //     populates
+  //   });
+  //   if (data?.infoMessage?.sender?._id === profileId) {
+  //     dispatch(updateNewMessageToConversation({
+  //       conversationId: data?.infoMessage?.conversation,
+  //       newMessageId: data?.infoMessage?._id,
+  //       oldMessageId: data?.tmpid,
+  //       messageData: {
+  //         ...data?.infoMessage,
+  //         noAnimation: true
+  //       }
+  //     }));
+  //   } else {
+  //     playSound();
+  //     dispatch(appendMessageToConversation({
+  //       conversationId: data?.infoMessage?.conversation,
+  //       messageId: data?.infoMessage?._id,
+  //       messageData: {
+  //         ...data?.infoMessage,
+  //         noAnimation: true
+  //       }
+  //     }));
+  //     if (currentChat === data?.infoMessage?.conversation) {
+  //       dispatch(pushMoreUnreadMessage({ conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id] }));
+  //     }
+  //     if (!inSearchMode && currentChat === data?.infoMessage?.conversation && !isReviewOldMessage) {
+  //       setTimeout(() => {
+  //         scrollToBottom();
+  //       }, 100)
+  //     }
+  //   }
+  // };
 
   const playSound = () => {
     if (audioRef.current) {
@@ -271,7 +272,8 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           </div>
           <span className={"text-primary-gray mt-1"}>{t("menu:fnb")}</span>
         </Link> : <></>}
-        {checkPermissionApp('61e049aefdebf77b072d1b12') ?
+         {/* Show acc with 5f52341f880c2f26c8df8c10 = Store */}
+        {(profile?.company?._id.toString() === '6046bedeb55525368b11c5c3' && checkPermissionApp('5f52341f880c2f26c8df8c10')) ?
         <Link to={`/accounting/home`} className={"flex flex-col items-center mb-3"}>
           <div
             className={
