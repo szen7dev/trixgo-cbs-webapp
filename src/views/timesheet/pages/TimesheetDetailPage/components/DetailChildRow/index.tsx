@@ -3,6 +3,7 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import debounce from "lodash/debounce";
 import { convertCurrency } from "utils/converter";
 import moment from "moment";
+// import "moment-timezone";
 
 import {DropdownSearchable} from "shareComponents/common";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
@@ -140,11 +141,32 @@ export const DetailChildRow: FC<Props> = ({
               });
           }}
         />
-        <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
-        <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
-        {/* <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p> */}
+        <p className="text-gray-400 text-[10px]">
+          <i>Cre: {rowData?.userCreate?.fullname}{" "}
+          {rowData?.createAt ? new Date(rowData?.createAt).toLocaleString("en-GB", {
+              timeZone: "Asia/Ho_Chi_Minh",
+              day: "2-digit",
+              month: "2-digit",
+              year: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false, // Định dạng 24 giờ
+            }) : ''}
+          </i></p>
+        <p className="text-gray-400 text-[10px]">
+          <i>Mod: {rowData?.userUpdate?.fullname}{" "}
+          {rowData?.modifyAt ? new Date(rowData?.modifyAt).toLocaleString("en-GB", {
+              timeZone: "Asia/Ho_Chi_Minh",
+              day: "2-digit",
+              month: "2-digit",
+              year: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false, // Định dạng 24 giờ
+            }) : ''}
+          </i></p>
+        <p className="text-gray-400 text-[10px]"><i>{rowData?._id}</i></p>
         <p className="text-gray-400 text-[10px] text-cbs-highlight-color"><i>{DAYOFWEEKS[Number(new Date(rowData?.date).getDay())]?.name}</i></p>
-        {/* <p className="text-gray-400 text-[10px]"><i>{Number(new Date(rowData?.date).getDay() + 1)}</i></p> */}
       </div>
       <div
         className={
