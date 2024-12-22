@@ -280,8 +280,34 @@ const TimesheetHumanDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                 >
                   {moment(item.date).format("DD/MM/YY")}
                   <p className="text-[10px] text-cbs-highlight-color"><i>{DAYOFWEEKS[Number(new Date(item?.date).getDay())]?.name}</i></p>
-                  <p className="text-gray-400 text-[10px]"><i>Cre: {item?.userCreate?.fullname} {moment(item.createAt).format("DD/MM/YY hh:mm")}</i></p>
-                  <p className="text-gray-400 text-[10px]"><i>Mod: {item?.userUpdate?.fullname} {moment(item.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
+                  {/* <p className="text-gray-400 text-[10px]"><i>Cre: {item?.userCreate?.fullname} {moment(item.createAt).format("DD/MM/YY hh:mm")}</i></p>
+                  <p className="text-gray-400 text-[10px]"><i>Mod: {item?.userUpdate?.fullname} {moment(item.modifyAt).format("DD/MM/YY hh:mm")}</i></p> */}
+                  <p className="text-gray-400 text-[10px]">
+                    <i>Cre: {item?.userCreate?.fullname}{" "}
+                    {item?.createAt ? new Date(item?.createAt).toLocaleString("en-GB", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false, // Định dạng 24 giờ
+                      }) : ''}
+                    </i></p>
+                  <p className="text-gray-400 text-[10px]">
+                    <i>Mod: {item?.userUpdate?.fullname}{" "}
+                    {item?.modifyAt ? new Date(item?.modifyAt).toLocaleString("en-GB", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false, // Định dạng 24 giờ
+                      }) : ''}
+                    </i></p>
+                  <p className="text-gray-400 text-[10px]"><i>{item?._id}</i></p>
+                  <p className="text-gray-400 text-[10px] text-cbs-highlight-color"><i>{DAYOFWEEKS[Number(new Date(item?.date).getDay())]?.name}</i></p>
                 </div>
                 <div
                   className={
