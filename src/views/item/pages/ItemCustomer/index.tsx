@@ -217,6 +217,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     //_____Import, export excel
     const [dataImport, setDataImport] = useState([]);
     const [dataImport2, setDataImport2] = useState([]);
+    const [dataImport3, setDataImport3] = useState([]);
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
@@ -329,6 +330,21 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             fetchData()
         }
     }, [dataImport2])
+
+    useEffect(() => {
+        if(dataImport3.length){
+            const fetchData = async () => {
+                const data = await importCustomerFromExcelAsync({ dataImport: JSON.stringify(dataImport3), option: 3 })
+                setDataImport3([])
+
+                if(!data.error){
+                    return toast.success("Import thành công")
+                }
+                return toast.error(data.message)
+            }
+            fetchData()
+        }
+    }, [dataImport3])
     
     return (
         <main className="relative h-full">
