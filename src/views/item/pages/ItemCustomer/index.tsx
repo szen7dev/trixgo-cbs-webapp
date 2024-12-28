@@ -292,7 +292,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
 
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[2]]); // Index=0 (Sheet 1 từ trái sang)
-                    setDataImport2(rows) // Set data để Import
+                    setDataImport3(rows) // Set data để Import
                 }
             }
             reader.readAsArrayBuffer(file)
