@@ -293,6 +293,8 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[2]]); // Index=0 (Sheet 1 từ trái sang)
                     setDataImport3(rows) // Set data để Import
+
+                    console.log(dataImport3)
                 }
             }
             reader.readAsArrayBuffer(file)
@@ -375,9 +377,9 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                         </button>
 
                         <button className={"flex items-center justify-center mx-3 ml-3"}>
-                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport3}
+                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile3" required hidden onChange={handleImport3}
                             accept=".xlsx, .xlsm, .xls, .csv"/>
-                            <label className="custom-file-label" htmlFor="inputGroupFile">***Import nhanh Danh bạ***</label>
+                            <label className="custom-file-label" htmlFor="inputGroupFile3">***Import nhanh Danh bạ***</label>
                         </button>
 
                         <button className={"flex items-center justify-center mx-3 ml-3"}>
