@@ -280,6 +280,25 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         $event.target.value = null; // Đọc xong xóa value trong Input đi
     }
 
+    const handleImport3 = ($event: any) => {
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[2]]); // Index=0 (Sheet 1 từ trái sang)
+                    setDataImport2(rows) // Set data để Import
+                }
+            }
+            reader.readAsArrayBuffer(file)
+        }
+        $event.target.value = null; // Đọc xong xóa value trong Input đi
+    }
+
     //_____Gọi tới API để đẩy data lên
     useEffect(() => {
         if(dataImport.length){
@@ -330,13 +349,19 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                         <button className={"flex items-center justify-center mx-3 ml-3"}
                                 onClick={handleDownloadTemplateImportExcel}
                             >
-                                Tải mẫu Import Excel danh bạ
+                                Tải mẫu Import
                         </button>
 
                         <button className={"flex items-center justify-center mx-3 ml-3"}>
                             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport1}
                             accept=".xlsx, .xlsm, .xls, .csv"/>
                             <label className="custom-file-label" htmlFor="inputGroupFile">Import excel Tạo danh bạ</label>
+                        </button>
+
+                        <button className={"flex items-center justify-center mx-3 ml-3"}>
+                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport3}
+                            accept=".xlsx, .xlsm, .xls, .csv"/>
+                            <label className="custom-file-label" htmlFor="inputGroupFile">***Import nhanh Danh bạ***</label>
                         </button>
 
                         <button className={"flex items-center justify-center mx-3 ml-3"}>
