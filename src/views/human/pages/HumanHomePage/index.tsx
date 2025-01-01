@@ -35,6 +35,9 @@ type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
 type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
 
 export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
+    const yearFilter = new Date().getFullYear()
+    const items = [yearFilter-2, yearFilter-1, yearFilter];
+
     const [keyword, setKeyword] = useState('');
 
     const dispatch = useDispatch();
@@ -119,10 +122,11 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
         } 
     }
 
-    const handleExportByFilter = async () => {
+    const handleExportByFilter = async (param: any) => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportHumanByFilterAsync({
+                year: param.year,
                 filterParams: {
                     ...fromToDate,
                     lastestID: lastestIDs && lastestIDs[pageIndex],
@@ -320,11 +324,19 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
                         <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
                     </button>
                     <button className={"flex items-center justify-center mx-1"}
-                        onClick={handleExportByFilter}
-                    >
-                        Download
+                            onClick={() => handleExportByFilter({})}
+                        >
+                        Download 
                         <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
                     </button>
+                    {items?.map((item: any, index: any) => (
+                        <button className={"flex items-center justify-center mx-1"} key={item}
+                            onClick={() => handleExportByFilter({year: item})}
+                        >
+                            Nghỉ phép {item}
+                            <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
+                        </button>
+                    ))}
 
                     <PaginateV2
                         ref={ref}
