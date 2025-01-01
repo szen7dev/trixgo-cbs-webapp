@@ -126,6 +126,7 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportHumanByFilterAsync({
+                option: param.option,
                 year: param.year,
                 filterParams: {
                     ...fromToDate,
@@ -331,7 +332,7 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
                     </button>
                     {items?.map((item: any, index: any) => (
                         <button className={"flex items-center justify-center mx-1"} key={item}
-                            onClick={() => handleExportByFilter({year: item})}
+                            onClick={() => handleExportByFilter({year: item, option: 3})}
                         >
                             Nghỉ phép {item}
                             <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
