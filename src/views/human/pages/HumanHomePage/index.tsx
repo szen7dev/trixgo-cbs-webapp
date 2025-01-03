@@ -38,6 +38,14 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
     const yearFilter = new Date().getFullYear()
     const items = [yearFilter-2, yearFilter-1, yearFilter];
 
+    const DURATIONS = [
+        { _id: yearFilter-4, name: yearFilter-4 },
+        { _id: yearFilter-3, name: yearFilter-3 },
+        { _id: yearFilter-2, name: yearFilter-2 },
+        { _id: yearFilter-1, name: yearFilter-1 },
+        { _id: yearFilter, name: yearFilter }
+    ]
+
     const [keyword, setKeyword] = useState('');
 
     const dispatch = useDispatch();
@@ -72,6 +80,7 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
     });
 
     const [genders, setGenders] = useState<string[]>([]);
+    const [year, setYear] = useState<string | null>();
 
     const [projectKeyword, setProjectKeyword] = useState("");
     const [departmentsID, setDepartmentsID] = useState<string[]>([]);
@@ -81,8 +90,8 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
     const { listProjectsUserIsMember } = useProjectCustom({
         paramsProjectsUserIsMember: { keyword: projectKeyword },
         isFetchProjectsUserIsMember: true
-    });
-
+    })
+    
     const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs } = useListFilterHuman({
         params: {
             ...fromToDate,
@@ -185,6 +194,26 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
                             onChange={onChangeSearch}
                             />
                         </div>
+                        <DropdownSearchableV2
+                            ref={typeRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Chọn năm dữ liệu"}
+                            isMultiple={false}
+                            allowClearValueSingleInput={true}
+                            data={DURATIONS}
+                            formatItem={{
+                                id: "_id",
+                                text: "name",
+                            }}
+                            onClearData={() => {
+                                setYear("");
+                            }}
+                            onchangeValue={(item) => {
+                                setYear(item._id);
+                            }}
+                            renderItem={(item) => <p className={"min-w-[300px]"}>{item.text}</p>}
+                            selectOneByOne={true}
+                        />
                         <DropdownSearchableV2
                             ref={typeRef}
                             className={"mr-1 border border-primary-border rounded-lg mb-2"}
@@ -325,19 +354,17 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
                         <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
                     </button>
                     <button className={"flex items-center justify-center mx-1"}
-                            onClick={() => handleExportByFilter({})}
+                            onClick={() => handleExportByFilter({year: year})}
                         >
-                        Download 
+                        Nhân sự
                         <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
                     </button>
-                    {items?.map((item: any, index: any) => (
-                        <button className={"flex items-center justify-center mx-1"} key={item}
-                            onClick={() => handleExportByFilter({year: item, option: 3})}
+                    <button className={"flex items-center justify-center mx-1"}
+                            onClick={() => handleExportByFilter({year: year, option: 3})}
                         >
-                            Nghỉ phép {item}
-                            <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
-                        </button>
-                    ))}
+                        Phép
+                        <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
+                    </button>
 
                     <PaginateV2
                         ref={ref}
