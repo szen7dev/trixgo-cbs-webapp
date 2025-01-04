@@ -114,7 +114,7 @@ export const FnbReportMistake: FC = () => {
 					<button onClick={history.goBack} className="mr-5">
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
-					<p className="text-lg mr-10">Danh sách lỗi nhân viên</p>
+					<p className="text-lg mr-10">Tải Danh sách lỗi nhân viên</p>
 				</div>
 				<FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 				<button onClick={handleExportExcel} title="Tải dữ liệu Excel">

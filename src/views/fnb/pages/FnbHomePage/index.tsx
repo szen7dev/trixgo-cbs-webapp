@@ -1158,11 +1158,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 </button>
               )}
 
-              {(fnbAccessData.includes(`${user?.email}`)) && (
+              {/* {(fnbAccessData.includes(`${user?.email}`)) && (
                 <button onClick={handleExportExcel22} title="Tải dữ liệu Excel">
                   Tải Khách hàng
                 </button>
-              )}
+              )} */}
 
               {idsChecked.length === 1 && (
                 <label className="w-8 h-8 rounded-md flex justify-center items-center cursor-pointer">
