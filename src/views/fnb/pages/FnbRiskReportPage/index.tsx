@@ -1,11 +1,12 @@
 /*=====1.LIBRARY=====*/
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useCallback } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
 import { read, utils } from 'xlsx';
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
 
 /*=====2.CSS=====*/
 
@@ -66,12 +67,23 @@ export const FnbRiskReportPage: FC = () => {
 	const { exportOrderAsync } = useFnbOrder({});
 	const { importExcelAsync } = useFnbMistake({});
 
+	const today = new Date();
+	const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+	const currentMonth = new Date().getMonth()
+	const [inputFilter, setInputFilter] = useState({
+		fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+		toDate: lastDayOfMonth
+	})
+
 	const handleExportExcel = async () => {
 		try {
 		  setStateExport({ isExporting: true });
 		  const { error, data } = await exportOrderAsync({
 			option: 1,
+			fromDate: inputFilter.fromDate,
+			toDate: inputFilter.toDate,
 			filterParams: {
+
 			}
 		  });
 	
@@ -111,23 +123,31 @@ export const FnbRiskReportPage: FC = () => {
   
 	  // Đọc xong thì xóa value trong Input đi
 	  $event.target.value = null;
-  }
-  
-  // Gọi tới API để đẩy data lên
-  useEffect(() => {
-	  if(dataImport.length){
-		  const fetchData = async () => {
-			  const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
-			  setDataImport([]);
-  
-			  if(!data.error){
-				  return toast.success("Import thành công");
-			  }
-			  return toast.error(data.message);
-		  }
-		  fetchData();
-	  }
-  }, [JSON.stringify(dataImport)])
+	}
+	
+	// Gọi tới API để đẩy data lên
+	useEffect(() => {
+		if(dataImport.length){
+			const fetchData = async () => {
+				const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
+				setDataImport([]);
+	
+				if(!data.error){
+					return toast.success("Import thành công");
+				}
+				return toast.error(data.message);
+			}
+			fetchData();
+		}
+	}, [JSON.stringify(dataImport)])
+
+  	const handleOnChangeDate = useCallback((date, input) => {
+	if (input) {
+		setInputFilter((value) => ({ ...value, toDate: date }))
+	} else {
+		setInputFilter((value) => ({ ...value, fromDate: date }))
+	}
+	}, [])
 
 	return (
 		<main className="h-full overflow-auto">
@@ -136,12 +156,13 @@ export const FnbRiskReportPage: FC = () => {
 					<p className="text-lg">{infoProduct?.name}</p>
 					<SearchInput
 						classNameWrapper="mr-3"
-						classNameInput="outline-none w-[296px]"
+						classNameInput="outline-none w-[150px]"
 						onChange={debounce(
 							(event: any) => setKeyword(event.target.value),
 							500
 						)}
 					/>
+					<FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 					<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
 						Tải báo cáo KPI
 					</button>
