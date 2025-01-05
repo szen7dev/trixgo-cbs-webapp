@@ -306,7 +306,7 @@ export const BudgetDetailPage: FC = () => {
                 const sheets = wb.SheetNames;
 
                 if (sheets.length) {
-                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=0 (tức Sheet số 1 từ trái sang)
                     
                     // Set data để Import
                     setDataImport(rows)
@@ -349,14 +349,14 @@ export const BudgetDetailPage: FC = () => {
 					<button className={"px-4 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
 						onClick={handleDownloadTemplateImportExcel}
 					>
-						Tải mẫu Import ngân sách
+						Tải báo cáo/Mẫu Import
 					</button>
 
 					<button className={"px-4 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
 					>
 						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
 							accept=".xlsx, .xlsm, .xls, .csv"/>
-						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel ngân sách</label>
+						<label className="custom-file-label" htmlFor="inputGroupFile">Import Excel tạo ngân sách</label>
 					</button>
 					<button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={toggleModalOpenSign}>
                         <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
