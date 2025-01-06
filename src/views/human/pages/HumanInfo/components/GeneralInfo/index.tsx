@@ -415,10 +415,10 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {formatNumberMoney(info?.annualWorkingHours)} | (365-52 tuần*1 ngày nghỉ/tuần)*8
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
-                Khác
+                Số ngày nghỉ phép phát sinh (việc Hỉ, Sinh, Hiếu)
               </td>
               <td className="border w-2/6 pl-4">
-                
+                {info?.numberOnLeavePlus}
               </td>
             </tr>
             <tr className="border h-7 leading-7">

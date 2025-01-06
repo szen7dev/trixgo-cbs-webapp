@@ -31,10 +31,10 @@ export const TaskHumanDetailSubmit:FC<Props> = ({ task, userId }) => {
         params: {
             populates: JSON.stringify({
                 path: "work staff contact goods assets",
-                select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount numberOnLeave department contacts",
+                select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount numberOnLeave numberOnLeavePlus department contacts",
                 populate: {
                     path: "department contacts",
-                    select: "name numberOnLeave"
+                    select: "name numberOnLeave numberOnLeavePlus"
                 }
             }),
             taskID: task?._id
@@ -104,13 +104,15 @@ export const TaskHumanDetailSubmit:FC<Props> = ({ task, userId }) => {
                                             <p className="text-primary-gray">
                                                 <p>
                                                     Bắt đầu làm việc từ tháng: <span className="font-bold">{Number(12 - item?.staff?.contacts[0]?.numberOnLeave + 1)}</span> |
-                                                    Số phép tối đa trong năm: <span className="text-green-500 font-bold"> {item?.staff?.contacts[0]?.numberOnLeave}</span> | 
-                                                    Tổng số phép được nghỉ tới hiện tại: <span className="font-bold">{Number(new Date().getMonth()) - Number(12 - item?.staff?.contacts[0]?.numberOnLeave)}</span>
+                                                    Số phép được nghỉ trong năm: <span className="text-green-500 font-bold"> {item?.staff?.contacts[0]?.numberOnLeave}</span> | 
+                                                    Số ngày nghỉ phép phát sinh (Hỉ, Sinh, Hiếu,..): <span className="text-green-500 font-bold"> {item?.staff?.contacts[0]?.numberOnLeavePlus}</span> | 
+                                                    Tổng phép tối đa được nghỉ: <span className="text-green-500 font-bold"> {Number(item?.staff?.contacts[0]?.numberOnLeave + item?.staff?.contacts[0]?.numberOnLeavePlus)}</span> | 
+                                                    Tổng số phép được nghỉ tới hiện tại: <span className="font-bold">{Number(new Date().getMonth()) - Number(12 - item?.staff?.contacts[0]?.numberOnLeave - item?.staff?.contacts[0]?.numberOnLeavePlus)}</span>
                                                 </p>
                                                 Số phép đã nghỉ: <span className="font-bold">{item?.staff?.numberOnLeave}</span> | 
                                                 Số phép còn lại tới hiện tại:  
                                                 <span className="text-red-500 font-bold ml-2"> 
-                                                    {Number(new Date().getMonth() + 1) - Number(item?.staff?.numberOnLeave + 1) - (12 - Number(item?.staff?.contacts[0]?.numberOnLeave))}
+                                                    {Number(new Date().getMonth() + 1) - Number(item?.staff?.numberOnLeave + 1) - (12 - Number(item?.staff?.contacts[0]?.numberOnLeave + item?.staff?.contacts[0]?.numberOnLeavePlus))}
                                                 </span>
                                             </p>
                                         </p>
