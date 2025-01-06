@@ -400,6 +400,7 @@ export const DetailChildRow: FC<Props> = ({
             })
           }
         />
+          <p className="text-gray-400"><i>{rowData?.work?.name}</i></p>
       </div>
 
       <div
