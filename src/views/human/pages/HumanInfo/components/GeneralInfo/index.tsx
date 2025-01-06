@@ -415,10 +415,10 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {formatNumberMoney(info?.annualWorkingHours)} | (365-52 tuần*1 ngày nghỉ/tuần)*8
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
-                Khác
+                Số ngày nghỉ phép phát sinh (việc Hỉ, Sinh, Hiếu)
               </td>
               <td className="border w-2/6 pl-4">
-                
+                {info?.numberOnLeavePlus}
               </td>
             </tr>
             <tr className="border h-7 leading-7">
@@ -441,13 +441,15 @@ export const GeneralInfo: FC<Props> = memo((props) => {
             <p className="text-primary-gray">
                 <p>
                     Bắt đầu làm việc từ tháng: <span className="font-bold">{Number(12 - info.numberOnLeave + 1)}</span> |
-                    Số phép tối đa trong năm: <span className="text-green-500 font-bold"> {info.numberOnLeave}</span> | 
-                    Tổng số phép được nghỉ tới hiện tại: <span className="font-bold">{Number(new Date().getMonth()) - Number(12 - info.numberOnLeave)}</span>
+                    Số phép được nghỉ trong năm: <span className="text-green-500 font-bold"> {info.numberOnLeave}</span> | 
+                    Số ngày nghỉ phép phát sinh (Hỉ, Sinh, Hiếu,..): <span className="text-green-500 font-bold"> {info?.numberOnLeavePlus}</span> | 
+                    Tổng phép tối đa được nghỉ: <span className="text-green-500 font-bold"> {Number(info.numberOnLeave + info?.numberOnLeavePlus)}</span> | 
+                    Tổng số phép được nghỉ tới hiện tại: <span className="font-bold">{Number(new Date().getMonth()) - Number(12 - info.numberOnLeave - info?.numberOnLeavePlus)}</span>
                 </p>
                 Số phép đã nghỉ: <span className="font-bold">{info?.linkUser?.numberOnLeave}</span> | 
                 Số phép còn lại tới hiện tại:  
                 <span className="text-red-500 font-bold ml-2"> 
-                    {Number(new Date().getMonth() + 1) - Number(info?.linkUser?.numberOnLeave + 1) - (12 - Number(info.numberOnLeave))}
+                    {Number(new Date().getMonth() + 1) - Number(info?.linkUser?.numberOnLeave + 1) - (12 - Number(info.numberOnLeave + info?.numberOnLeavePlus))}
                 </span>
             </p>
           </div>

@@ -192,6 +192,7 @@ export type Human = {
     insuranceSign?: number;
     sallaryBasic?: any;
     numberOnLeave?: any;
+    numberOnLeavePlus?: any;
     sallary?: any;
     nods?: any;
     sallarySubFactor?: string;
