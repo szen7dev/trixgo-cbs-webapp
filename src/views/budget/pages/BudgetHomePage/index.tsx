@@ -246,13 +246,13 @@ export const BudgetHomePage: FC = () => {
 									</Link>
 								</td>
 								<td className="py-1 px-2 text-right">
-									{formatNumberMoney(item.budget)}
+									{formatNumberMoney(item.budget.toFixed(0))}
 								</td>
 								<td className="py-1 px-2 text-right">
-									{formatNumberMoney(item.finalBudget)}
+									{formatNumberMoney(item.finalBudget.toFixed(0))}
 								</td>
 								<td className="py-1 px-2 text-right">
-									{formatNumberMoney(item.budget - item.finalBudget)}
+									{formatNumberMoney(Number(item.budget - item.finalBudget).toFixed(0))}
 								</td>
 								<td className="py-1 px-2 text-left">
 									{item.note}

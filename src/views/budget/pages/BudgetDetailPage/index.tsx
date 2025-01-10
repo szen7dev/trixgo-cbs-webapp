@@ -475,7 +475,7 @@ export const BudgetDetailPage: FC = () => {
 									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.amount)}
+									{formatNumberMoney(Number(budgetItem.amount).toFixed(0))}
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									
@@ -484,7 +484,7 @@ export const BudgetDetailPage: FC = () => {
 									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.impleAmount)}
+									{formatNumberMoney(Number(budgetItem.impleAmount).toFixed(0))}
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									
@@ -493,7 +493,7 @@ export const BudgetDetailPage: FC = () => {
 									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.amount - budgetItem.impleAmount)}
+									{formatNumberMoney(Number(budgetItem.amount - budgetItem.impleAmount).toFixed(0))}
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-left">
 									{budgetItem.note}

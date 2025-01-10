@@ -83,7 +83,7 @@ export const RowBudgetGroup: FC<Props> = memo(({ row, index, show, onAdd, onUpda
 					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.amount)}
+					{formatNumberMoney(row.amount.toFixed(0))}
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 					
@@ -92,7 +92,7 @@ export const RowBudgetGroup: FC<Props> = memo(({ row, index, show, onAdd, onUpda
 					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.impleAmount)}
+					{formatNumberMoney(row.impleAmount.toFixed(0))}
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 					
@@ -101,7 +101,7 @@ export const RowBudgetGroup: FC<Props> = memo(({ row, index, show, onAdd, onUpda
 					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.amount - row.impleAmount)}
+					{formatNumberMoney(Number(row.amount - row.impleAmount).toFixed(0))}
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-left">
 					{row.note}
