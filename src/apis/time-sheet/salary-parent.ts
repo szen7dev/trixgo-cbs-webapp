@@ -21,7 +21,7 @@ export async function fetchListSalary<T>(
   const { data } = await API.get(`${TIME_SHEET_URL}/expert_salary`, {
     params: {
       populates: {
-        path: "assignee human project position work userCreate userUpdate",
+        path: "assignee human project funda position work userCreate userUpdate",
         select: "_id fullname name",
       },
       ...params,
