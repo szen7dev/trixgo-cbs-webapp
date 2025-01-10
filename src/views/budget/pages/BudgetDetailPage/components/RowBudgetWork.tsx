@@ -28,7 +28,8 @@ export const RowBudgetWork: FC<Props> = memo(({ row, index, indexGroup, show, on
 			<td className='bg-gray-300 px-1.5 relative'></td>
 			<td className='py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-left'>{indexGroup+1}.{index+1}</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-left text-blue-800">
-				<i>{row?.sign}-{row.name}</i>
+				{/* <i>{row?.sign}-{row.name}</i> */}
+				<i>{row.name}</i>
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
 				{row.unit}
@@ -40,7 +41,7 @@ export const RowBudgetWork: FC<Props> = memo(({ row, index, indexGroup, show, on
 				{formatNumberMoney(row.unitPrice)}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-				{formatNumberMoney(row.amount)}
+				{formatNumberMoney(row.amount.toFixed(0))}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 				{formatNumberMoney(row.impleQuantity)}
@@ -49,7 +50,7 @@ export const RowBudgetWork: FC<Props> = memo(({ row, index, indexGroup, show, on
 				{formatNumberMoney(row.impleUnitPrice)}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-				{formatNumberMoney(row.impleAmount)}
+				{formatNumberMoney(row.impleAmount.toFixed(0))}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 				{formatNumberMoney(row.quantity - row.impleQuantity)}
@@ -58,7 +59,7 @@ export const RowBudgetWork: FC<Props> = memo(({ row, index, indexGroup, show, on
 				{Number(row.quantity - row.impleQuantity) != 0 ? formatNumberMoney((row.amount - row.impleAmount/(row.quantity - row.impleQuantity))) : 0}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-				{formatNumberMoney(row.amount - row.impleAmount)}
+				{formatNumberMoney(Number(row.amount - row.impleAmount).toFixed(0))}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-left">
 				{row.note}
