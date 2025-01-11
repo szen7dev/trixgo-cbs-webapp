@@ -263,6 +263,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }
     setProductsInCart(newProducts);
   };
+
   const decreaseCount = (product: any) => {
     const newProducts = [...productsInCart];
     for (let i = 0; i < newProducts.length; i++) {
@@ -330,20 +331,20 @@ export const ModalAddNewOrder: FC<Props> = () => {
         fundaID,
         shiftID,
         products,
+        service,
         total: `${totalMoney}`,
         discount: `${discountAndSales.discount}`,
         salesoff: `${discountAndSales.sales}`,
         credit: realCredit.toString(),
         offer: voucherTotalPrice.toString(),
-        voucherID: voucherId || ""
+        voucherID: voucherId || "",
+        productsInCart,
       }
-      // console.log({ dataAddNewOrder })
 
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
       );
-      // console.log({ data, status })
 
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if (data.error) return toast.warning(data.data.message);
