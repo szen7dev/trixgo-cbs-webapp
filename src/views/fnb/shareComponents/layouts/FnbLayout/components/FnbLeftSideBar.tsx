@@ -34,7 +34,6 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useModal } from "services/hooks/useModal";
 import { ModalAddNewOrder } from "./ModalAddNewOrder";
-import { ModalAddNewOrder2 } from "./ModalAddNewOrder2";
 import { useDispatch } from "react-redux";
 import { resetQueryFnb } from "redux/reducer/FnbSlice";
 

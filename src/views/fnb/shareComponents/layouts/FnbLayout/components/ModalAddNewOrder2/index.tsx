@@ -238,7 +238,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
 
         setVouchers(data.listRecords);
       } catch(err) {
-        toast.error(err.message);
+        toast.error((err as Error).message);
       }
     }
 
@@ -388,6 +388,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
         offer: voucherTotalPrice.toString(),
         voucherID: voucherId || ""
       }
+      console.log({ dataAddNewOrder });
 
       const { data, status } = await API.post(
         `/api/fnb/orders?type=2`,

@@ -65,7 +65,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
       // Handle api here!
       switch (modalType) {
         case 'create': {
-          const { error, data } = await insertAsync({...formData, salesChannel: +formData?.salesChannel, amount: +formData?.amount, alert: +formData?.alert});
+          const { error, data } = await insertAsync({...formData, salesChannel: +formData?.salesChannel, grade: +(formData?.grade || 1),  amount: +formData?.amount, alert: +formData?.alert});
 
           if (error) {
             return toast.warning(data.message);
@@ -75,7 +75,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
           break;
         }
         case 'update': {
-          const { error, data } = await updateAsync({...formData, salesChannel: +formData?.salesChannel, amount: +formData?.amount, alert: +formData?.alert});
+          const { error, data } = await updateAsync({...formData, salesChannel: +formData?.salesChannel, grade: +(formData?.grade || 1), amount: +formData?.amount, alert: +formData?.alert});
 
           if (error) {
             return toast.warning(data.message);
