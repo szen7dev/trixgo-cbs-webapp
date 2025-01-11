@@ -24,13 +24,14 @@ type Props = {
 };
 
 export const FnbLayout: FC<Props> = ({ children }) => {
-  const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
-  const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
+  // const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
+  // const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
 
-  const handleHeaderEvent = () => {
-    setIsHeaderCollapse(!isHeaderCollapse);
-  };
+  // const handleHeaderEvent = () => {
+  //   setIsHeaderCollapse(!isHeaderCollapse);
+  // };
+
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
   };
@@ -39,8 +40,8 @@ export const FnbLayout: FC<Props> = ({ children }) => {
     <section
       className={cn("home-layout relative bg-primary-light", {
         "collapse-left": isLeftMenuCollapse,
-        "active-right": isRightSideBarCollapse,
-        "collapse-header": isHeaderCollapse,
+        "active-right": false,
+        "collapse-header": false,
       })}
     >
       {/* Collapse menu button */}
