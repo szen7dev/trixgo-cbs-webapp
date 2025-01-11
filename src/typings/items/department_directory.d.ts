@@ -25,7 +25,7 @@ export type DepartmentDirectoryQueryResponse = APIResponse & {
         nextCursor: string | null;
     }
 }
-    
+
 export type DepartmentDirectoryQueryDetailResponse = APIResponse & {
     data: DepartmentDirectory
 }
