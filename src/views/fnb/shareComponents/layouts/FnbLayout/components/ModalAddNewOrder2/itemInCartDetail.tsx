@@ -9,10 +9,7 @@ import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 import { Checkbox, FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { formatNumberMoney } from "utils/converter";
 
-export const ItemInCartMenu: FC<any> = ({
-    item, service, increaseCount, decreaseCount,
-    handleChooseVariant, handleChangeQuantity, handleChangeNote, handleChangeValue, handleRemoveItem
-}) =>  {
+export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, handleChangeQuantity, increaseCount, decreaseCount, handleChangeNote, handleChangeValue, handleRemoveItem}) =>  {
     const [menuShowList, setMenuState] = useState(false);
 
     const calTotalPriceEachProduct = (product: any) => {

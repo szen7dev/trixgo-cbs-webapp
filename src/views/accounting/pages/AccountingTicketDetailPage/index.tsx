@@ -2,14 +2,15 @@ import React, { FC, useEffect, useState } from "react";
 import Pen from "assets/images/icons8-pencil.svg";
 import LogIcon from "assets/icons/Log";
 import { useHistory, useParams } from "react-router-dom";
-import { VOUCHER_TYPES } from "apis/localdb/index";
+import { VOUCHER_TYPES, DATE_FORMAT_TIME } from "apis/localdb/index";
 import { useUpdateAccountingVoucherMutation } from "services/hooks/accounting/useAccountingVoucher";
-import { formatNumberMoney } from "utils/cmcs";
+import { formatNumberMoney, convertDisplayDate } from "utils/cmcs";
 import { CreateNewTicket } from "views/accounting/shareComponents/common";
 import { useModal } from "services/hooks/useModal";
 import { useJournalList, useJournal } from "services/hooks/accounting/useGeneralJournal";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { toast } from "react-toastify";
+import { read, utils } from 'xlsx';
 import { createLinkAndClick } from "utils";
 import moment from "moment";
 
@@ -58,6 +59,7 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
     },
     isFetchList: true
   })
+  // console.log(voucherDetail)
 
   const handleFinishForm = async (values: any) => {
     const res = await updateAccountingVoucherMutateAsync(values);
@@ -71,34 +73,34 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
     return true;
   }
 
-  //_____Excel
-  const [, setStateExport] = useState<{ isExporting: boolean }>({
-    isExporting: false,
-  })
-  const { exportExcelAsync } = useJournal({})
+    //_____Excel
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+    })
+    const { exportExcelAsync } = useJournal({})
+    const handleExportExcel = async (param: any) => {
+      try {
+          console.log('Clicked with parameter:', param);
+            setStateExport({ isExporting: true })
+            const { error, data } = await exportExcelAsync({
+              type: param.option,
+              voucherID: params.id,
+              filterParams: {
+                voucherID: params.id
+              }
+             })
 
-  const handleExportExcel = async (param: any) => {
-    try {
-          setStateExport({ isExporting: true })
-          const { error, data } = await exportExcelAsync({
-            type: param.option,
-            voucherID: params.id,
-            filterParams: {
-              voucherID: params.id
+            if(error) {
+                return toast.warn(data?.message);
             }
-            })
 
-          if(error) {
-              return toast.warn(data?.message);
-          }
-
-          data && createLinkAndClick(data, '_self')
-      } catch (error: any) {
-          toast.error(error.message)
-      } finally {
-          setStateExport({ isExporting: false })
+            data && createLinkAndClick(data, '_self')
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false })
+      }
     }
-  }
 
   const openModalUpdate = () => {
     openModal(
