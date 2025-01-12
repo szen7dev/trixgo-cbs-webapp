@@ -400,7 +400,7 @@ export const DetailChildRow: FC<Props> = ({
             })
           }
         />
-          <p className="text-gray-400"><i>{rowData?.work?.name}</i></p>
+          <p className="text-gray-400"><i>{rowData?.work?.name} - {convertCurrency(rowData?.work?.unitPrice)}/{rowData?.work?.unit}</i></p>
       </div>
 
       <div
