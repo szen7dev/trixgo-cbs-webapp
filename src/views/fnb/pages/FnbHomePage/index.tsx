@@ -37,7 +37,7 @@ import { ModalUpdateSalesChannel } from "./components/ModalUpdateSalesChannel";
 import { ModalQRPayment } from "./components/ModalQRPayment";
 import { DropdownSearchableV2, Loader, ModalConfirm } from "shareComponents/common";
 import TriangleDown from "assets/icons/TriangleDown";
-// import QRCodeIcon from "assets/images/document/qr-code.png";
+import QRCodeIcon from "assets/images/document/qr-code.png";
 import { APP_ID } from "apis/localdb";
 import { validateFiles } from 'validation/file';
 import { ImageProps } from "typings/common";
@@ -61,10 +61,7 @@ import { FNB_CHANNEL, FNB_SERVICE, FNB_ORDER_STATUS, FNB_SHIFT, FNB_NORESIDENT_T
 import { useInfiniteQuery } from "react-query";
 import { setQueryFnb } from "redux/reducer/FnbSlice";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-// import { options } from "views/financial/pages/CashBookDetailPage/components/ChartExpenseSumary";
-import { ModalCloneOrder } from "views/fnb/shareComponents/layouts/FnbLayout/components/ModalCloneOrder";
-import CustomDropdown from "shareComponents/common/MaterialComponents/Dropdown";
-import { CopyAll } from "@mui/icons-material";
+import { options } from "views/financial/pages/CashBookDetailPage/components/ChartExpenseSumary";
 
 type Props = {
   type?: number;
@@ -100,7 +97,6 @@ export const getIconApp = (salesChannel: number) => {
 }
 
 type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-
 export const fnbAccessData = ['kiemthuvien4.fnb@gmail.com', 'adwgo.winggo@gmail.com', 'hiepnh.winggo@gmail.com', 'chinhnv.winggo@gmail.com', 'huongnt.winggo@gmail.com', 'hoangnh.winggo@gmail.com', 'hienpd.winggo@gmail.com', 'toannd.winggo@gmail.com', 'kiemsoat1.winggo@gmail.com', 'kiemsoat2.winggo@gmail.com', 'kiemsoat3.winggo@gmail.com', 'kiemsoat4.winggo@gmail.com', 'kiemsoat5.winggo@gmail.com', 'vund.winggo@gmail.com', 'quynhntd.winggo@gmail.com', 'nhungvth.winggo@gmail.com', 'tuyetnt.winggo@gmail.com']
 
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
@@ -358,28 +354,28 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     }
   }
 
-  // const handleExportExcel22 = async () => {
-  //   try {
-  //     setStateExport({ isExporting: true });
-  //     const { error, data } = await exportOrderAsync2({
-  //       option: 2,
-  //       filterParams: {
-  //         ...queryFnb,
-  //         keyword,
-  //       }
-  //     });
+  const handleExportExcel22 = async () => {
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportOrderAsync2({
+        option: 2,
+        filterParams: {
+          ...queryFnb,
+          keyword,
+        }
+      });
 
-  //     if (error) {
-  //       return toast.warn(data?.message);
-  //     }
+      if (error) {
+        return toast.warn(data?.message);
+      }
 
-  //     data && createLinkAndClick(data, '_self');
-  //   } catch (error: any) {
-  //     toast.error(error.message)
-  //   } finally {
-  //     setStateExport({ isExporting: false });
-  //   }
-  // }
+      data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+  }
 
   const handleExportExcel23 = async () => {
     try {
@@ -435,23 +431,12 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     }
   }
 
-  // const openModalQRPayment = (order: any) => {
-  //   setPaymentInfo({
-  //     description: `Thanh toán đơn hàng ${order.sign || order._id}`,
-  //     amount: order.amount
-  //   })
-  //   setIsToggleModalQRPayment(true);
-  // }
-
-  const openModalCloneOrder = (item: any) => {
-    openModal(
-      <div
-          className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-6 align-top inline-block"
-          style={{ maxWidth: " calc(100vw - 50px)" }}
-      >
-          <ModalCloneOrder defaultValues={item} />
-      </div>
-    )
+  const openModalQRPayment = (order: any) => {
+    setPaymentInfo({
+      description: `Thanh toán đơn hàng ${order.sign || order._id}`,
+      amount: order.amount
+    })
+    setIsToggleModalQRPayment(true);
   }
 
   if (isUploading) {
@@ -1236,7 +1221,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <th className="pb-1 pt-1 font-normal text-center">Giá trị</th>
                 {/* <th className="pb-1 pt-1 font-normal text-center">Thanh toán</th> */}
                 <th className="pb-1 pt-1 font-normal text-center">In ấn</th>
-                <th className="pb-1 pt-1 font-normal text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -1409,17 +1393,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       <Link to={`/fnb/home/${item._id}/print/2`}>
                         <span className="text-cbs-primary underline">In tem</span>
                       </Link>
-                    </td>
-                    <td className="flex justify-center aligh-items-center pt-2.5 pb-3 pr-2">
-                      <CustomDropdown
-                        options={[
-                          {
-                            name: 'Copy',
-                            icon: <CopyAll />,
-                            onAction: () => openModalCloneOrder(item),
-                          }
-                        ]}
-                      />
                     </td>
                   </tr>
                 ))}

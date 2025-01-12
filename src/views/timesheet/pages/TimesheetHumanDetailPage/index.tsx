@@ -351,7 +351,7 @@ const TimesheetHumanDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                     "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
                   }
                 >
-                  {item?.work?.name} - {convertCurrency(item?.work?.unitPrice)}/{item?.work?.unit}
+                  {item?.work?.name}
                 </div>
           
                 <div

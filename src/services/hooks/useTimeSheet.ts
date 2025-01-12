@@ -43,7 +43,7 @@ export const useQueryListTimeSheetParent = (
       TimeSheetParentRepository.fetchListTimeSheet({
         populates: {
           path: "assignee project userCreate userUpdate parent work funda",
-          select: "_id fullname name unitPrice unit",
+          select: "fullname name",
         },
         limit,
         lastestID: pageParam,
