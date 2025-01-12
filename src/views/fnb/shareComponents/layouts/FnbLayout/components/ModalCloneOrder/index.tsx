@@ -15,10 +15,6 @@ import { useQueryClient } from 'react-query';
 // import moment from "moment";
 
 /**
- * Hooks, Typings
- */
-
-/**
  * Components, Assets
  */
 import Close from "assets/icons/Close";
@@ -35,6 +31,7 @@ import { convertObToUrl } from "utils";
 import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
 import { ItemInCartMenu } from "./itemInCartDetail";
 // import SearchIcon from "assets/icons/Search";
+
 interface InitialValues {
   fundaID: string,
   shiftID: string,
@@ -326,7 +323,6 @@ export const ModalCloneOrder: FC<Props> = ({ defaultValues }) => {
         `/api/fnb/orders`,
         dataAddNewOrder
       );
-      console.log({ data, status })
 
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if (data.error) return toast.warning(data.data.message);
@@ -702,6 +698,10 @@ export const ModalCloneOrder: FC<Props> = ({ defaultValues }) => {
     appOrderSign: "",
   }
 
+  if (!defaultValues || !Object.keys(defaultValues).length) {
+    return <Loader />;
+  }
+
   return (
     <>
       {(loading) && <Loader className="border-primary" />}
@@ -762,7 +762,7 @@ export const ModalCloneOrder: FC<Props> = ({ defaultValues }) => {
                                   label: `${funda.sign}.${funda.name}`,
                                   value: funda._id,
                                 }))}
-                                valueControlled={{
+                                initialValue={{
                                   label: `${defaultValues?.funda?.sign}.${defaultValues?.funda?.name}`,
                                   value: defaultValues?.funda?._id,
                                 }}
@@ -807,7 +807,7 @@ export const ModalCloneOrder: FC<Props> = ({ defaultValues }) => {
                                   label: `${shift.funda.sign}.${shift.name}`,
                                   value: shift._id,
                                 }))}
-                                valueControlled={{
+                                initialValue={{
                                   label: `${defaultValues?.funda?.sign}.${defaultValues?.shift?.name}`,
                                   value: defaultValues?.shift?._id,
                                 }}
@@ -859,7 +859,7 @@ export const ModalCloneOrder: FC<Props> = ({ defaultValues }) => {
                                   label: `${contact.name}-${contact.phone}`,
                                   value: contact._id,
                                 }))}
-                                valueControlled={{
+                                initialValue={{
                                   label: `${defaultValues?.customer?.name}-${defaultValues?.customer?.phone}`,
                                   value: defaultValues?.customer?._id,
                                 }}
