@@ -38,7 +38,8 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
     status: 1,
     phone: "",
     resetPass: "",
-    storageUse: 0
+    startingTime: "",
+    storageUse: 0,
   }
 }) => {
   const [keywordDepartment, setKeywordDepartment] = useState('');
@@ -75,6 +76,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
       level: +values.level,
       status: +values.status,
       phone: values.phone,
+      startingTime: values.startingTime,
       storageUse: values.storageUse,
       resetPass: values.resetPass,
     }
@@ -211,6 +213,18 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
                 
+                <div className="mb-2">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="startingTime">
+                   Thời gian bắt đầu làm việc theo quy định (Giờ = TZ + 7 giờ)
+                  </label>
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="startingTime" type="string" placeholder="Thời gian bắt đầu làm việc theo quy định" {...getFieldProps('startingTime')} />
+                  <ErrorMessage
+                    name="startingTime"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+
                 <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="storageUse">
                     Dung lượng đã dùng
