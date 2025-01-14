@@ -307,6 +307,11 @@ export const OwnerMemberPage: FC = () => {
                 Chức danh
               </div>
             </th>
+            <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+              <div className="border-r-2 border-gray-300 font-normal pl-2">
+                Giờ bắt đầu làm việc
+              </div>
+            </th>
             <th className={cn("py-1 font-normal", styles.theadSignDate)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Quyền
@@ -364,6 +369,9 @@ export const OwnerMemberPage: FC = () => {
               </td>
               <td className="py-1 px-2">{item.department?.name}</td>
               <td className="py-1 px-2">{item.position?.name}</td>
+              <td className="py-1 px-2">
+                {item.startingTime ? moment(item.startingTime).format('HH:mm') : ''}
+              </td>
               <td className={cn('py-1 px-2', item.level === 0 ? 'text-primary' : '')}>
                 {item.level === 0 ? 'Admin' : 'Member'}
               </td>
