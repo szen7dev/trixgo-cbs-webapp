@@ -44,6 +44,7 @@ export const OwnerMemberPage: FC = () => {
     level: 1,
     positionName: "",
     departmentName: "",
+    startingTime: "",
     status: 1,
     storageUse: 0,
   });
@@ -87,6 +88,7 @@ export const OwnerMemberPage: FC = () => {
       level: -1,
       positionName: "",
       departmentName: "",
+      startingTime: "",
       status: 1,
       storageUse: 0,
     }))
@@ -105,13 +107,14 @@ export const OwnerMemberPage: FC = () => {
     };
 
     if (newListIDChecked.length === 1) {
-      const { _id, fullname, email, phone, department, position, level, status, storageUse } = newListIDChecked[0];
+      const { _id, fullname, email, phone, department, position, level, status, storageUse, startingTime } = newListIDChecked[0];
       setInitialValues({
         userID: _id,
         companyID: companySelected,
         fullname: fullname,
         email: email ? `${email}` : "",
         phone: phone ? `${phone}` : "",
+        startingTime: startingTime ? `${startingTime}` : "",
         departmentID: department?._id,
         positionID: position?._id,
         level: Number(level),

@@ -38,6 +38,7 @@ export type UserSystemPayload = {
     level: number,
     status: number,
     phone?: string,
+    startingTime?: string,
     storageUse?: number,
     newPass?: string,
     currentPass?: string,
@@ -73,6 +74,7 @@ export type UserSystemProps = {
     numLog: number,
     lang: string,
     imgUrl?: string;
+    startingTime?: string;
     storageUse?: number;
     createAt?: any
 }
@@ -92,6 +94,7 @@ interface ModalProps {
         departmentName?: string,
         positionName?: string,
         status: number
+        startingTime?: string;
         storageUse?: number;
         phone?: string;
     }
