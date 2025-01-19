@@ -21,7 +21,7 @@ import {
   ActionAccountingGroup,
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
-
+import { useAuth } from "services/hooks/auth/useAuth";
 import {
   UseAccountingVoucherList,
   useCreateAccountingVoucherMutation,
@@ -32,14 +32,18 @@ import { DATE_FORMAT, DATE_FORMAT_TIME, VOUCHER_TYPES } from "apis/localdb/index
 import {
   useVoucherList
 } from "services/hooks/accounting/useAccVoucher";
+import { useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
 
 interface AccountingTicketsPageProps {
   type?: number
 }
 
 export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1 }) => {
+  const { user } = useAuth();
+  const { hasPermission, permission } = useCheckPerAccessOneMenu({ appID: APP_ID.ACCOUNTING.id, menuID: APP_ID.ACCOUNTING.menuAccountingApp.accbill.id, companyID: user?.company._id, type: "1", });
+
   const { openModal } = useModal();
-  const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
 
   const history = useHistory();
@@ -133,32 +137,36 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
       case 1:
         break;
       case 2:
-        openModal(
-          <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
-            <CreateNewTicket
-              onFinish={handleFinishForm}
-              type={type}
-              isEdit={false}
-              idEdit={data._id}
-              contractId={data?.contract?._id}
-              title="Copy phiếu"
-            />
-          </div>
-        )
+        if(hasPermission && permission && Number(permission?.create) >= 1){
+          openModal(
+            <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
+              <CreateNewTicket
+                onFinish={handleFinishForm}
+                type={type}
+                isEdit={false}
+                idEdit={data._id}
+                contractId={data?.contract?._id}
+                title="Copy phiếu"
+              />
+            </div>
+          )
+        }
         break;
       case 3:
-        openModal(
-          <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
-            <CreateNewTicket
-              onFinish={handleFinishForm}
-              type={type}
-              isEdit={true}
-              idEdit={data._id}
-              contractId={data?.contract?._id}
-              title="Cập nhật"
-            />
-          </div>
-        )
+        if(hasPermission && permission && Number(permission?.update) >= 1){
+          openModal(
+            <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
+              <CreateNewTicket
+                onFinish={handleFinishForm}
+                type={type}
+                isEdit={true}
+                idEdit={data._id}
+                contractId={data?.contract?._id}
+                title="Cập nhật"
+              />
+            </div>
+          )
+        }
         break;
       case 4:
         openDeleteConfirm({
@@ -286,41 +294,23 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         />
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          <button
-            onClick={() =>
-              openModal(
-                <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
-                  <CreateNewTicket onFinish={handleFinishForm} type={type} title="Phiếu mới" />
-                </div>
-              )
-            }
-            className={"bg-green-success h-[32px] text-white rounded px-3"}>
-            Tạo mới
-          </button>
-          {/* <div className={"relative z-5 inline-block"}>
-            <button onClick={() => setShowOption(!showOption)}
-              className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
-              >
-                <DotsVerticalIcon/>
+          {
+          (hasPermission && permission && Number(permission?.create) >= 1) ? 
+            <button
+              onClick={() =>
+                openModal(
+                  <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
+                    <CreateNewTicket onFinish={handleFinishForm} type={type} title="Phiếu mới" />
+                  </div>
+                )
+              }
+              className={"bg-green-success h-[32px] text-white rounded px-3"}>
+              Tạo mới
             </button>
-            {
-                showOption &&
-                <div className={"absolute right-0 z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
-                    <div className={"flex items-center mx-4 py-2 border-b-0.5 border-primary-border"}>
-                        <div className={"flex-1"}>Chức năng khác</div>
-                        <button onClick={() => setShowOption(false)}>
-                            <Close/>
-                        </button>
-                    </div>
-
-                    <div className={"mb-4"}>
-                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
-                            Tải excel
-                        </button>
-                    </div>
-                </div>
-            }
-          </div> */}
+            :
+            <></>
+          }
+          
           <div className="absolute right-0">
             <PaginateV2
                 ref={ref}

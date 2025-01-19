@@ -19,16 +19,17 @@ import { validateFiles } from 'validation/file';
 import { useUpload } from 'services/hooks/useUpload';
 import { APP_KEY } from 'utils/constants';
 import fileIcon from "assets/images/icons8-attach.svg";
-
 import API from "apis/repository";
+import { useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
 const APP_ACCOUNTING_VOUCHER = "/api/accounting/vouchers";
-
 type Props = {
   type?: number
 };
 
 export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
   const { user } = useAuth();
+  const { hasPermission, permission } = useCheckPerAccessOneMenu({ appID: APP_ID.ACCOUNTING.id, menuID: APP_ID.ACCOUNTING.menuAccountingApp.accbill.id, companyID: user?.company._id, type: "1", });
   const [pageIndex, setPageIndex] = useState(0)
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -203,9 +204,15 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
               <span className={"text-sm rounded-full bg-primary text-white h-5 leading-5 ml-2 px-2"}>
                 {VOUCHER_TYPES.find(item => item.value === voucherDetail?.type)?.text}
               </span>
-              <button onClick={openModalUpdate} className={"p-3 ml-3 rounded-full hover:bg-gray-100"}>
-                <img alt={"Icon"} src={Pen} />
-              </button>
+              {
+                (hasPermission && permission && Number(permission?.update) >= 1) ? 
+                <button onClick={openModalUpdate} className={"p-3 ml-3 rounded-full hover:bg-gray-100"}>
+                  <img alt={"Icon"} src={Pen} />
+                </button>
+                  :
+                  <></>
+              }
+
             </div>
           </div>
           <div className={"infor-ticket flex mt-1 items-center"}>
