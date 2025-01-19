@@ -13,6 +13,12 @@ import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
 import { createLinkAndClick } from "utils";
 import moment from "moment";
+import { useAuth } from "services/hooks/auth/useAuth";
+import iconUpload from "assets/images/icons8-upload-file-100 1.png";
+import { validateFiles } from 'validation/file';
+import { useUpload } from 'services/hooks/useUpload';
+import { APP_KEY } from 'utils/constants';
+import fileIcon from "assets/images/icons8-attach.svg";
 
 import API from "apis/repository";
 const APP_ACCOUNTING_VOUCHER = "/api/accounting/vouchers";
@@ -22,6 +28,7 @@ type Props = {
 };
 
 export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
+  const { user } = useAuth();
   const [pageIndex, setPageIndex] = useState(0)
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -38,8 +45,12 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
       `${APP_ACCOUNTING_VOUCHER}?voucherID=${id}`, {
       params: {
         populates: {
-          "path": "customer contract ipc subtype userCreate userUpdate company",
-          "select": "name description fullname",
+          "path": "customer contract ipc subtype userCreate userUpdate company files",
+          "select": "name description fullname createAt path size nameOrg author",
+          populate: {
+            path: 'author',
+            select: "_id fullname",
+          }
         }
       }
     }
@@ -117,6 +128,51 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
     )
   }
 
+    // Upload file  
+    const { addFileToUpload } = useUpload({
+      appID: APP_KEY.ACCOUNTING,
+      companyID: user?.company._id,
+    })
+  
+    const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      try {
+        // Đọc file từ Client
+        if (!event.target.files || !event.target.files.length) return;
+  
+        const validation = await validateFiles(event.target.files);
+        if(validation.error) return toast.warn(validation.message);
+  
+        const arrFileID: any = []
+  
+        // Upload files to S3 và lưu DB file-core
+        for (const [, file] of Object.entries(event.target.files)) {
+          const { _id } = await addFileToUpload({
+            files: file as any,
+            fileType: 2,
+            useCompress: true
+          })
+          arrFileID.push(_id)
+        }
+  
+        const { error, data } = await updateAccountingVoucherMutateAsync({
+          voucherID: params.id,
+          filesID: arrFileID,
+        });
+  
+        if (error) {
+          return toast.warning(data?.message);
+        }
+  
+        toast.success('Thêm file thành công');
+        refetch();
+      } catch (error) {
+        console.log({ error })
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
+      }
+    }
+
   return (
     <div className={"relative min-h-full pb-10"}>
       <div className={"content-detail-ticket"}>
@@ -180,6 +236,7 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
             />
           </div>
         </div>
+
         <div className={"relative table border-collapse w-full"}>
           <div className={"header flex table-row"}>
             <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
@@ -313,6 +370,53 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
             </div>
           </div>
         </div>
+
+        <div className="flex flex-wrap mt-3">
+          <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
+            Tài liệu đính kèm phiếu
+          </h3>
+          <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
+            <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
+            <input
+              type="file"
+              name="files"
+              id="file"
+              className="hidden"
+              accept="*"
+              multiple
+              onChange={handleSetFiles}
+            />
+          </label>
+        </div>
+
+        <table className="w-full mt-3">
+          <tbody>
+            {voucherDetail?.files?.map((item: any) => (
+              <tr key={item._id}>
+                <td className="py-2">
+                  <div className="flex items-center">
+                    <img
+                      src={fileIcon}
+                      alt=""
+                      className="h-6 w-6 px-1 box-content"
+                    />
+                    <a className="text-primary" href={`${process.env.REACT_APP_URL_S3}${item?.path}`} target="_blank" rel="noreferrer"> {item?.nameOrg || "-"} </a>
+                  </div>
+                </td>
+                <td className="py-2 align-middle">
+                  {item?.author?.fullname || "-"}
+                </td>
+                <td className="py-2 align-middle">
+                  {moment(item.createAt).format('DD/MM/YYYY HH:mm')}
+                </td>
+                <td className="py-2 align-middle">
+                  {formatNumberMoney(Number(item?.size / 1024 || 0).toFixed(0))} KB
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
       </div>
     </div>
   )

@@ -152,8 +152,12 @@ export const useQueryDetailSalaryParent = (
     async () =>
       SalaryParentRepository.fetchDetailSalary({
         populates: {
-          path: "assignee project userCreate members admins",
-          select: "_id fullname bizfullname name sign image",
+          path: "assignee project userCreate members admins files",
+          select: "_id fullname bizfullname name sign image createAt path size nameOrg author",
+          populate: {
+            path: 'author',
+            select: "_id fullname",
+          }
         },
         expertSalaryID,
       }),

@@ -23,6 +23,7 @@ export type Budget = {
     date: string,
     modifyAt?: string;
     createAt?: string;
+    files: any;
 }
 
 export type BudgetListParams = QueryParam & {

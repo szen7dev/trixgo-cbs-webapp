@@ -29,6 +29,7 @@ export type TimeSheetParent = {
     date: string;
     convertFactor: number;
     status: number;
+    files: any;
 }
 
 export type ListTimeSheetPayload = QueryParams & {
@@ -74,6 +75,7 @@ export type InsertTimeSheetParentResponse = {
 
 export type UpdateTimeSheetParentPayload = {
     expertTimesheetID: string;
+    filesID?: string[];
     members?: string[];
     membersRemove?: string[];
     admins?: string[];
