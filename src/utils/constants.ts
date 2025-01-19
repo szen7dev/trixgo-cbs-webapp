@@ -17,6 +17,9 @@ export const APP_KEY = {
     DATAHUB: "60390cb12b367a1cdd9f3fb2",
     FNB: "61e04971fdebf77b072d1b0f",
     STORE: "5f52341f880c2f26c8df8c10",
+    TIMESHEET: "61e049cffdebf77b072d1b14",
+    BUDGET: "5fe58c9b95db3c6e1534ec78",
+    ACCOUNTING: "61e049aefdebf77b072d1b12",
 }
 
 export const EMOJI_TYPE = [

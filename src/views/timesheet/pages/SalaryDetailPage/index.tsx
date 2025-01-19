@@ -18,8 +18,8 @@ import { setFilterDropdown } from "redux/reducer/DocumentProjectSlice";
 import { usePcmFile } from "services/hooks/pcm/usePcm";
 import { Loader, ModalConfirm, DropdownSearchableV2 } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-
 import {
+  useMutationSalaryParent,
   useQueryDetailSalaryParent,
   useQueryListSalaryChild,
   useMutationSalaryChild,
@@ -33,6 +33,12 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { User } from "typings/user";
 import { DeleteSalaryContext, DeleteSalaryContextType } from "./contexts/DeleteSalary";
+import iconUpload from "assets/images/icons8-upload-file-100 1.png";
+import { validateFiles } from 'validation/file';
+import { useUpload } from 'services/hooks/useUpload';
+import { APP_KEY } from 'utils/constants';
+import fileIcon from "assets/images/icons8-attach.svg";
+import { formatNumberMoney } from "utils/converter";
 
 const SalaryDetailPage: FC = () => {
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
@@ -397,6 +403,53 @@ const SalaryDetailPage: FC = () => {
         />
       </div>
     )
+  }
+
+  // Upload file
+  const { onUpdateSalaryParentAsync } = useMutationSalaryParent();
+
+  const { addFileToUpload } = useUpload({
+    appID: APP_KEY.TIMESHEET,
+    companyID: user?.company._id,
+  })
+
+  const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      // Đọc file từ Client
+      if (!event.target.files || !event.target.files.length) return;
+
+      const validation = await validateFiles(event.target.files);
+      if(validation.error) return toast.warn(validation.message);
+
+      const arrFileID: any = []
+
+      // Upload files to S3 và lưu DB file-core
+      for (const [, file] of Object.entries(event.target.files)) {
+        const { _id } = await addFileToUpload({
+          files: file as any,
+          fileType: 2,
+          useCompress: true
+        })
+        arrFileID.push(_id)
+      }
+
+      const { error, data } = await onUpdateSalaryParentAsync({
+        expertSalaryID: salaryParentID,
+        filesID: arrFileID,
+      });
+
+      if (error) {
+        return toast.warning(data?.message);
+      }
+
+      toast.success('Thêm file thành công');
+      refetch();
+    } catch (error) {
+      console.log({ error })
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   }
 
   if (!salaryInfo || loading || !user) {
@@ -781,6 +834,53 @@ const SalaryDetailPage: FC = () => {
             }}
           />
         </div>
+
+        <div className="flex flex-wrap mt-3">
+          <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
+            Tài liệu đính kèm bảng lương
+          </h3>
+          <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
+            <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
+            <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
+          </label>
+        </div>
+
+        <table className="w-full mt-3">
+          <tbody>
+            {salaryInfo?.files?.map((item: any) => (
+              <tr key={item._id}>
+                <td className="py-2">
+                  <div className="flex items-center">
+                    <img
+                      src={fileIcon}
+                      alt=""
+                      className="h-6 w-6 px-1 box-content"
+                    />
+                    <a
+                      className="text-primary"
+                      href={`${process.env.REACT_APP_URL_S3}${item?.path}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {" "}
+                      {item?.nameOrg || "-"}{" "}
+                    </a>
+                  </div>
+                </td>
+                <td className="py-2 align-middle">
+                  {item?.author?.fullname || "-"}
+                </td>
+                <td className="py-2 align-middle">
+                  {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
+                </td>
+                <td className="py-2 align-middle">
+                  {formatNumberMoney(Number(item?.size / 1024 || 0).toFixed(0))}{" "}
+                  KB
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         <div className={"financial-planning-table mt-2"}>
           <div className={"relative table border-collapse w-full"}>

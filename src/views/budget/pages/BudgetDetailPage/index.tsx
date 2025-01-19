@@ -20,12 +20,20 @@ import API from "apis/repository";
  * Hooks, Typings
  */
 import { useBudget } from 'services/hooks/budget/useBudget';
-import { useBudgetItem } from 'services/hooks/budget/useBudgetItem';
+import { useBudgetItem,  } from 'services/hooks/budget/useBudgetItem';
 import { useBudgetWork } from "services/hooks/budget/useBudgetWork";
 import { BudgetGroupRepository, BudgetWorkRepository } from "apis/budget";
 import { BudgetItem } from 'typings/budget/budget-item';
 import { BudgetGroup } from 'typings/budget/budget-group';
 import { BudgetWork } from 'typings/budget/budget-work';
+
+import iconUpload from "assets/images/icons8-upload-file-100 1.png";
+import { validateFiles } from 'validation/file';
+import { useUpload } from 'services/hooks/useUpload';
+import { APP_KEY } from 'utils/constants';
+import { useAuth } from "services/hooks/auth/useAuth";
+import fileIcon from "assets/images/icons8-attach.svg";
+import moment from "moment";
 
 const APP_BUGET = "/api/buget";
 
@@ -87,6 +95,7 @@ const executeSetState = (key: string, funcs: Array<Array<any>>, payload: any) =>
 }
 
 export const BudgetDetailPage: FC = () => {
+	const { user } = useAuth();
 	const { openModal, closeModal } = useModal();
 	const { budgetID } = useParams<{ budgetID: string }>();
 
@@ -118,7 +127,8 @@ export const BudgetDetailPage: FC = () => {
 		// fetchPreviousPage,
 		hasNextPage,
 		totalRecord,
-		// totalPage
+		// totalPage,
+		refetch
 	} = useBudgetItem({
 		params: { budgetID },
 		isFetchList: true
@@ -127,7 +137,7 @@ export const BudgetDetailPage: FC = () => {
 	const { info: budgetInfo } = useBudget({
 		params: {
 			budgetID,
-			select: "_id name"
+			select: "_id name sign files",
 		},
 		isFetchInfo: true
 	})
@@ -336,6 +346,53 @@ export const BudgetDetailPage: FC = () => {
         }
     }, [dataImport])
 
+	// Upload file
+	const { updateAsync } = useBudgetItem({});
+
+	const { addFileToUpload } = useUpload({
+		appID: APP_KEY.BUDGET,
+		companyID: user?.company._id,
+	})
+
+	const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		try {
+			// Đọc file từ Client
+			if (!event.target.files || !event.target.files.length) return;
+
+			const validation = await validateFiles(event.target.files);
+			if(validation.error) return toast.warn(validation.message);
+
+			const arrFileID: any = []
+
+			// Upload files to S3 và lưu DB file-core
+			for (const [, file] of Object.entries(event.target.files)) {
+			const { _id } = await addFileToUpload({
+				files: file as any,
+				fileType: 2,
+				useCompress: true
+			})
+			arrFileID.push(_id)
+			}
+
+			const { error, data } = await updateAsync({
+				budgetID: budgetID,
+				filesID: arrFileID,
+			});
+
+			if (error) {
+			return toast.warning(data?.message);
+			}
+
+			toast.success('Thêm file thành công');
+			refetch();
+		} catch (error) {
+			console.log({ error })
+			if (error instanceof Error) {
+			toast.error(error.message);
+			}
+		}
+	}
+
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -372,6 +429,53 @@ export const BudgetDetailPage: FC = () => {
 					</button>
 				</div>
 			</header>
+
+			<div className="flex flex-wrap mt-3">
+				<h3 className="text-cbs-subtext text-x-large font-bold flex-1">
+				Tài liệu đính kèm ngân sách
+				</h3>
+				<label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
+				<img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
+				<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
+				</label>
+			</div>
+
+			<table className="w-full mt-3">
+				<tbody>
+					{budgetInfo?.files?.map((item: any) => (
+					<tr key={item._id}>
+						<td className="py-2">
+						<div className="flex items-center">
+							<img
+							src={fileIcon}
+							alt=""
+							className="h-6 w-6 px-1 box-content"
+							/>
+							<a
+							className="text-primary"
+							href={`${process.env.REACT_APP_URL_S3}${item?.path}`}
+							target="_blank"
+							rel="noreferrer"
+							>
+							{" "}
+							{item?.nameOrg || "-"}{" "}
+							</a>
+						</div>
+						</td>
+						<td className="py-2 align-middle">
+						{item?.author?.fullname || "-"}
+						</td>
+						<td className="py-2 align-middle">
+						{moment(item.createAt).format("DD/MM/YYYY HH:mm")}
+						</td>
+						<td className="py-2 align-middle">
+						{formatNumberMoney(Number(item?.size / 1024 || 0).toFixed(0))}{" "}
+						KB
+						</td>
+					</tr>
+					))}
+				</tbody>
+			</table>
 
 			<table className='text-medium w-full border-separate border-spacing-0 text-center'>
 				<thead className="text-left">

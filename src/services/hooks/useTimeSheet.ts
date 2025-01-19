@@ -154,8 +154,12 @@ export const useQueryDetailTimeSheetParent = (
     async () =>
       TimeSheetParentRepository.fetchDetailTimeSheet({
         populates: {
-          path: "assignee project userCreate userUpdate members admins",
-          select: "_id fullname bizfullname name sign image",
+          path: "assignee project userCreate userUpdate members admins files",
+          select: "_id fullname bizfullname name sign image createAt path size nameOrg author",
+          populate: {
+            path: 'author',
+            select: "_id fullname",
+          }
         },
         expertTimesheetID,
       }),

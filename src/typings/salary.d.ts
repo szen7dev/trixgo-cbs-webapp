@@ -41,6 +41,7 @@ export type SalaryParent = {
     share: number;
     other: number;
     numberOfHuman: number;
+    files: any;
 }
 
 export type ListSalaryPayload = QueryParams & {
@@ -81,6 +82,7 @@ export type InsertSalaryParentResponse = {
 
 export type UpdateSalaryParentPayload = {
     expertSalaryID: string;
+    filesID?: string[];
     members?: string[];
     membersRemove?: string[];
     admins?: string[];
