@@ -295,6 +295,12 @@ export const CrmSupportPage: FC = () => {
                 option: param.option,
                 customerID,
                 userCreateID: userID,
+                status,
+                type,
+                salesChannel,
+                managerID,
+                fromDate: inputFilter.fromDate,
+                toDate: inputFilter.toDate,
             });
 
             if(error) {
