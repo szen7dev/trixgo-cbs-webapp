@@ -442,7 +442,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 <p>
                     Bắt đầu làm việc từ tháng: <span className="font-bold">{Number(12 - info.numberOnLeave + 1)}</span> |
                     Số phép được nghỉ trong năm: <span className="text-green-500 font-bold"> {info.numberOnLeave}</span> | 
-                    Số ngày nghỉ phép phát sinh (Hỉ, Sinh, Hiếu,..): <span className="text-green-500 font-bold"> {info?.numberOnLeavePlus}</span> | 
+                    Số ngày nghỉ phép phát sinh (Hỉ, Sinh, Hiếu,..): <span className="text-green-500 font-bold"> {info?.numberOnLeavePlus}</span> {info?.note ? <span>({info?.note})</span> : <></>} | 
                     Tổng phép tối đa được nghỉ: <span className="text-green-500 font-bold"> {Number(info.numberOnLeave + info?.numberOnLeavePlus)}</span> | 
                     Tổng số phép được nghỉ tới hiện tại: <span className="font-bold">{Number(new Date().getMonth()) - Number(12 - info.numberOnLeave - info?.numberOnLeavePlus)}</span>
                 </p>

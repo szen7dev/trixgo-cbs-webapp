@@ -34,7 +34,7 @@ export const TaskHumanDetailSubmit:FC<Props> = ({ task, userId }) => {
                 select: "name fullname phone sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount numberOnLeave numberOnLeavePlus department contacts",
                 populate: {
                     path: "department contacts",
-                    select: "name numberOnLeave numberOnLeavePlus"
+                    select: "name numberOnLeave numberOnLeavePlus note"
                 }
             }),
             taskID: task?._id
@@ -105,7 +105,7 @@ export const TaskHumanDetailSubmit:FC<Props> = ({ task, userId }) => {
                                                 <p>
                                                     Bắt đầu làm việc từ tháng: <span className="font-bold">{Number(12 - item?.staff?.contacts[0]?.numberOnLeave + 1)}</span> |
                                                     Số phép được nghỉ trong năm: <span className="text-green-500 font-bold"> {item?.staff?.contacts[0]?.numberOnLeave}</span> | 
-                                                    Số ngày nghỉ phép phát sinh (Hỉ, Sinh, Hiếu,..): <span className="text-green-500 font-bold"> {item?.staff?.contacts[0]?.numberOnLeavePlus}</span> | 
+                                                    Số ngày nghỉ phép phát sinh (Hỉ, Sinh, Hiếu,..): <span className="text-green-500 font-bold"> {item?.staff?.contacts[0]?.numberOnLeavePlus}</span> {item?.staff?.contacts[0]?.note ? <span>({item?.staff?.contacts[0]?.note})</span> : <></>} | 
                                                     Tổng phép tối đa được nghỉ: <span className="text-green-500 font-bold"> {Number(item?.staff?.contacts[0]?.numberOnLeave + item?.staff?.contacts[0]?.numberOnLeavePlus)}</span> | 
                                                     Tổng số phép được nghỉ tới hiện tại: <span className="font-bold">{Number(new Date().getMonth()) - Number(12 - item?.staff?.contacts[0]?.numberOnLeave - item?.staff?.contacts[0]?.numberOnLeavePlus)}</span>
                                                 </p>
