@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useCallback } from "react";
 import { DropdownSearchable } from "shareComponents/common";
 import { toast } from "react-toastify";
 import { object, string } from "yup";
@@ -9,6 +9,7 @@ import { useBudgetSubmittal } from "services/hooks/budget/useBudgetSubmittal";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { useQueryContact } from "services/hooks/items/useContact";
 import { useGoods } from "services/hooks/items/useGoods";
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
 
 type Props = {
     task: Task;
@@ -24,6 +25,14 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
     const [keywordUContact, setKeywordUContact] = useState('');
     const [keywordWoods, setKeywordWoods] = useState('');
     const companyID = task?.company?._id
+
+    const today = new Date();
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+    const currentMonth = new Date().getMonth()
+    const [inputFilter, setInputFilter] = useState({
+        fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+        toDate: lastDayOfMonth
+    });
 
     const {
 		list: listBudgetWorks
@@ -93,6 +102,8 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
             }
 
             const { error, data } = await insertBugetWorkAsync({
+                fromDate: inputFilter.fromDate,
+                toDate: inputFilter.toDate,
                 ...values,
                 ...dataUpdate
             });
@@ -120,6 +131,14 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
     const validateSchema = object().shape({
         name: string().required("Bạn cần nhập nội dung")
     });
+
+    const handleOnChangeDate = useCallback((date, input) => {
+    if (input) {
+        setInputFilter((value) => ({ ...value, toDate: date }))
+    } else {
+        setInputFilter((value) => ({ ...value, fromDate: date }))
+    }
+    }, [])
 
     return (
         <div className={"create-new-subtask border-0.5 border-primary-border rounded ml-6 mt-4"}>
@@ -304,6 +323,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         onBlur={handleBlur}
                                     />
                                 </div>
+                                <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
                             </div>
 
                              {/* Validate data */}

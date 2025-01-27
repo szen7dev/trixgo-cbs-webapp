@@ -6,6 +6,7 @@ import { Task } from "typings/task";
 import { formatNumberMoney } from "utils/cmcs";
 import iconNote from "assets/images/icons8-note-48.svg";
 import { ModalHumanInformation } from 'shareComponents/common/ModalHumanInformation';
+import moment from "moment";
 
 type Props = {
     task: Task;
@@ -99,6 +100,7 @@ export const TaskHumanDetailSubmit:FC<Props> = ({ task, userId }) => {
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5">{Number(index + 1)}</td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
                                         {item?.name}
+                                        {item?.fromDate ? <p><i>Từ {moment(item?.fromDate).format('DD/MM/YYYY')} - Đến {moment(item?.toDate).format('DD/MM/YYYY')}</i></p> : <></>}
                                         <p onClick={() => toggleVisible({ option: 1, staffID: item?.staff?._id})} className="mt-2 text-cbs-highlight-color">
                                             Nhân sự: {item?.staff?.fullname} | {item?.staff?.department?.name}
                                             <p className="text-primary-gray">
