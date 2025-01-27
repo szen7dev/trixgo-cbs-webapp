@@ -162,6 +162,7 @@ const TimeSheetDetailPage: FC = () => {
           type: `${values.type}`,
           status: `${values.status}`,
         });
+        
         if (!isUpdated.error) {
           onRefreshTimeSheetChild();
           refetch(); // refetch time sheet parent
