@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useCallback } from "react";
 import { NavLink, useHistory, useParams } from 'react-router-dom';
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
@@ -9,6 +9,10 @@ import {
     useByProperty,
     useTimesheetCustom
   } from "services/hooks/useTimeSheet";
+import { useModal } from "services/hooks/useModal";
+import { ModalConfirm } from "shareComponents/common";
+import API from "apis/repository";
+import iconRefresh from "assets/images/icons8-refresh.png";
 
 const TimesheetBudgetPage: FC = () => {
     const params = useParams<{ year: string }>();
@@ -21,6 +25,8 @@ const TimesheetBudgetPage: FC = () => {
         history.push("/")
       }
     }, [hasPermission])
+
+    const { openModal, closeModal } = useModal();
     
     let yearFilter = new Date().getFullYear()
     if(year && !isNaN(year)){
@@ -71,6 +77,40 @@ const TimesheetBudgetPage: FC = () => {
       }
     };
 
+      const toggleModalOpenSign = (param: any) => {
+        openModal(
+          <div
+            className={
+              "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+            }
+          >
+            <ModalConfirm
+              title= {param?.title}
+              description= {param?.description}
+              onConfirm={() => handleConfirmSync({ option: param.option })}
+              defaultText={false}
+              onCancel={closeModal}
+            />
+          </div>
+        )
+      }
+
+    const handleConfirmSync = useCallback(async (param: any) => {
+      closeModal();
+  
+      const { data, status } = await API.post(
+        `/api/timesheet/expert_timesheets/sync-data`, {
+          option: param.option,
+        }
+      )
+      
+      if (status !== 200 || data.error) {
+        return toast.error(data?.data?.message)
+      }
+  
+      return toast.success('Đồng bộ thành công')
+    }, [])
+
     return (
       <div className={"financial-cashflow-listing paginate-wrapper relative"}>
         <div
@@ -112,6 +152,13 @@ const TimesheetBudgetPage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right text-gray-500"
                 }
               >
+                Đồng bộ tổng hợp
+              </div>
+              <div
+                className={
+                  "px-2 py-2 table-cell box-border border-b text-right text-gray-500"
+                }
+              >
                 Tải dữ liệu
               </div>
             </div>
@@ -129,6 +176,12 @@ const TimesheetBudgetPage: FC = () => {
                   }
                 >
                   {convertCurrency(Number(total).toFixed(0))}
+                </div>
+                <div
+                  className={
+                    "px-2 py-2 table-cell box-border border-b text-right"
+                  }
+                >
                 </div>
                 <div
                   className={
@@ -155,6 +208,16 @@ const TimesheetBudgetPage: FC = () => {
                   }
                 >
                   {convertCurrency(Number(item?.amount).toFixed(0))}
+                </div>
+                <div
+                  className={
+                    "px-2 py-2 table-cell box-border border-b text-right"
+                  }
+                >
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 3, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công sẽ được đồng bộ về sản lượng/ngân sách thực hiện' })}>
+                    <img src={iconRefresh} title={'Đồng bộ sang ngân sách'} className={"w-[24px] h-[24px] mr-3"} />
+                    <span>Đồng bộ sang ngân sách</span>
+                  </button>
                 </div>
                 <div
                   className={
