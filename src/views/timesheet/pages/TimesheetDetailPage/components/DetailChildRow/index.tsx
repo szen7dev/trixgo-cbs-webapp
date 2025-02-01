@@ -41,7 +41,7 @@ export const DetailChildRow: FC<Props> = ({
   const { user } = useAuth();
 
   const [searchBudgetWorkValue, setSearchBudgetWorkValue] = React.useState(
-    rowData.work?.name || ""
+    rowData?.budgetWork?.name || ""
 	);
 
   const [searchAssigneeStr, setSearchAssigneeStr] = React.useState(
@@ -384,7 +384,7 @@ export const DetailChildRow: FC<Props> = ({
             </p>
           )}
           data={listBudgetWork}
-          initialValue={rowData?.work}
+          initialValue={rowData?.budgetWork}
           formatItem={{
             id: "_id",
             text: "name",
@@ -400,7 +400,7 @@ export const DetailChildRow: FC<Props> = ({
             })
           }
         />
-          <p className="text-gray-400"><i>{rowData?.work?.name} - {convertCurrency(rowData?.work?.unitPrice)}/{rowData?.work?.unit}</i></p>
+          <p className="text-gray-400"><i>{rowData?.budgetWork?.name} - {convertCurrency(rowData?.budgetWork?.unitPrice)}/{rowData?.budgetWork?.unit}</i></p>
       </div>
 
       <div
