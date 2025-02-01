@@ -20,11 +20,11 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 export const OwnerLeftSideBar: FC = () => {
 	useEffect(() => {
-		document.title = "Quản trị viên";
+		document.title = "Trixgo | Quản trị viên";
 	}, []);
 
     const history = useHistory();
-    const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.OWNER.id });
+    const { hasPermission, isSuccess, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.OWNER.id });
 
     useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
@@ -39,6 +39,16 @@ export const OwnerLeftSideBar: FC = () => {
 
                 {/* menu block */}
                 <div className="t-link-menu-container">
+                    {hasPermission && dataUserAccess?.level == 0 ?
+                        <NavLink
+                        to={`/owner/admin`}
+                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+                        >
+                        <img width={'20px'} src={'/images/pcm/admin.png'} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
+                        </NavLink> : <></>
+                    }
+
                     <NavLink to={`/owner/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'7px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
