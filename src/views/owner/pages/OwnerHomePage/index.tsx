@@ -20,7 +20,7 @@ SwiperCore.use([Pagination]);
 
 export const OwnerHomePage: FC = () => {
 	useEffect(() => {
-		document.title = "Quản trị viên"
+		document.title = "Trixgo | Quản trị viên"
 	}, []);
 
 	return (
