@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect, matchPath } from "react-router-dom";
 
 /*=====3.LAYOUTS=====*/
 import { ProtectedRoute } from "routes/components";
@@ -19,11 +19,32 @@ import {
     ItemFundasPageMember
 } from "views/item/pages";
 import { ItemLayout } from "views/item/shareComponents/layouts";
+import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary';
+import AdminFunctionalTab from "views/item/pages/ItemAdminPage/pages/AdminFunctionalTab";
+import AdminDetail from "views/item/pages/ItemAdminPage/pages/AdminDetail";
+import AdminAuthorTab from "views/item/pages/ItemAdminPage/pages/AdminAuthorTab";
 
 const ItemRouter: FC = () => {
     return (
         <ItemLayout>
             <Switch>
+                <Route path="/item/admin">
+                    <LayoutSecondary pages={[
+                        { id: '1', title: 'Nhóm chức năng', path: '/item/admin', navExact: true },
+                        {
+                        id: '2', title: 'Phân quyền chức năng', path: '/item/admin/2', location: (location) => {
+                            // Get match params
+                            const match = matchPath<{ id: string }>(location.pathname, { path: '/item/admin/:id/detail' })
+                            // Push to state
+                            return ({ pathname: '/item/admin/2', state: match ? match.params.id : null })
+                        }
+                        }
+                    ]}>
+                        <Route exact path="/item/admin" component={AdminFunctionalTab} />
+                        <Route exact path="/item/admin/:id/detail" component={AdminDetail} />
+                        <Route exact path="/item/admin/2" component={AdminAuthorTab} />
+                    </LayoutSecondary>
+                </Route>
                 <ProtectedRoute exact path="/item/contact" component={ItemCustomerPage} />
                 <ProtectedRoute exact path="/item/contact/:parentID" component={ItemCustomerPage} />
                 

@@ -1,10 +1,23 @@
-import { FC } from "react";
-import { NavLink } from "react-router-dom";
+import { FC, useEffect } from "react";
+import { NavLink, useHistory } from 'react-router-dom';
 import { useAuth } from "services/hooks/auth/useAuth";
 import iconFolder from "assets/images/bullet.svg";
+import { toast } from "react-toastify";
+import { APP_ID } from "apis/localdb";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 export const ItemLeftSideBar: FC = () => {
   const { user } = useAuth();
+
+  const history = useHistory();
+  const { hasPermission, isSuccess, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.ITEM.id });
+
+  useEffect(() => {
+  if (isSuccess && !(hasPermission)) {
+    toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
+    history.push("/")
+  }
+}, [hasPermission]);
 
   return (
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
@@ -12,6 +25,15 @@ export const ItemLeftSideBar: FC = () => {
 
         {/* menu block */}
         <div className="t-link-menu-container">
+          {hasPermission && dataUserAccess?.level == 0 ?
+              <NavLink
+              to={`/item/admin`}
+              className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+              >
+              <img width={'20px'} src={'/images/pcm/admin.png'} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
+              </NavLink> : <></>
+          }
           <NavLink
             to="/item/contact"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
