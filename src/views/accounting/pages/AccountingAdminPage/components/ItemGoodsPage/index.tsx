@@ -19,6 +19,7 @@ import { ModalCreateOrUpdateGoods, ModalConfirm } from '../../../../shareCompone
 
 /*=====5.TYPINGS=====*/
 import { Goods } from "typings/items";
+import { formatNumberMoney } from "utils/cmcs";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
@@ -35,6 +36,10 @@ export const ItemGoodsPage: FC = () => {
         goodsID: '',
         name: '',
         description: '',
+        unit: '',
+        note: '',
+        unitprice: '',
+        sellingUnitprice: '',
     });
 
     const {
@@ -56,6 +61,10 @@ export const ItemGoodsPage: FC = () => {
             goodsID: '',
             name: '',
             description: '',
+            unit: '',
+            note: '',
+            unitprice: '',
+            sellingUnitprice: '',
         }))
     }
 
@@ -81,11 +90,15 @@ export const ItemGoodsPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, description } = newListIDChecked[0];
+            const { _id, name, description, note, unit, unitprice, sellingUnitprice } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 name,
                 description: description || '',
+                unit: unit || '',
+                note: note || '',
+                unitprice: unitprice || '',
+                sellingUnitprice: sellingUnitprice || '',
             });
         } else {
             clearData();
@@ -146,12 +159,17 @@ export const ItemGoodsPage: FC = () => {
                 goodsID: '',
                 name: '',
                 description: '',
+                unit: '',
+                note: '',
+                unitprice: '',
+                sellingUnitprice: '',
             };
         }
         
         openModal(
             <div
-                className={"inline-block w-[521px] h-[280px] my-8  text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                className={"inline-block w-[521px] my-8  text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                style={{height: "450px"}}
             >
                  <ModalCreateOrUpdateGoods
                     modalType={modalType}
@@ -234,15 +252,30 @@ export const ItemGoodsPage: FC = () => {
                     </th>
                     <th className="w-1/6 py-1">
                         <div className="border-r-2 border-gray-300 font-normal pl-2">
-                            Nội dung
+                            Tên
                         </div>
                     </th>
                     <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                         <div className="border-r-2 border-gray-300 font-normal pl-2">
-                            Mô tả
+                            Đơn vị tính
                         </div>
                     </th>
-                    <th className="w-1/12 py-1 font-normal">
+                    <th className="py-1">
+                        <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            Giá nhập
+                        </div>
+                    </th>
+                    <th className="py-1">
+                        <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            Giá xuất
+                        </div>
+                    </th>
+                    <th className="py-1">
+                        <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            Ghi chú
+                        </div>
+                    </th>
+                    <th className="w-1/6 py-1 font-normal">
                         <div className="border-r-2 border-gray-300 font-normal pl-2">
                             Cập nhật lần cuối
                         </div>
@@ -267,9 +300,12 @@ export const ItemGoodsPage: FC = () => {
                             </Link>
                             <p className="text-gray-500 text-[12px]"><i>{item._id}</i></p>
                         </td>
-                        <td className="py-1 px-2">{item.description}</td>
+                        <td className="py-1 px-2">{item.unit}</td>
+                        <td className="py-1 px-2 text-right">{formatNumberMoney(item.unitprice)}</td>
+                        <td className="py-1 px-2 text-right">{formatNumberMoney(item.sellingUnitprice)}</td>
+                        <td className="py-1 px-2">{item.note}</td>
                         <td className="py-1 px-2">
-                        {item.modifyAt ? moment(item.modifyAt).format(' HH:mm - DD/MM/YYYY') : ''} - {item?.userUpdate?.bizfullname || "Anonymous"}
+                            {item.modifyAt ? moment(item.modifyAt).format(' HH:mm - DD/MM/YYYY') : ''} - {item?.userUpdate?.fullname || "Anonymous"}
                         </td>
                     </tr>
                 )) : <></>}
@@ -288,5 +324,3 @@ export const ItemGoodsPage: FC = () => {
     </main>
   );
 };
-
-// export default ItemGoodsPage;
