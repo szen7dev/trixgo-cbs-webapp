@@ -7,7 +7,6 @@ export type Doctype = {
     name: string;
     sign: string;
     description: string;
-    unit: string;
     type: number;
     grade?: number;
     amount: number;
@@ -18,6 +17,10 @@ export type Doctype = {
     salesChannel: number;
     userCreate: any;
     userUpdate: any;
+    unit?: string;
+    note?: string;
+    unitprice?: string;
+    sellingUnitprice?: string;
 }
 
 export type DoctypeListParams = QueryParam & {
@@ -73,7 +76,10 @@ interface ModalProps {
         parent?: string;
         name: string;
         sign: string;
-        unit: string;
+        unit?: string;
+        note?: string;
+        unitprice?: string;
+        sellingUnitprice?: string;
         description: string;
         type: number;
         grade?: number;

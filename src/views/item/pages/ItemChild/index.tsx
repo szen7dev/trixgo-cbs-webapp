@@ -30,6 +30,9 @@ export const ItemChildPage: FC = () => {
         // grade: 1,
         amount: 0,
         alert: 0,
+        note: '',
+        unitprice: '',
+        sellingUnitprice: '',
     });
 
     const {
@@ -62,6 +65,9 @@ export const ItemChildPage: FC = () => {
             unit: '',
             description: '',
             type: +type,
+            note: '',
+            unitprice: '',
+            sellingUnitprice: '',
         }))
     }
 
@@ -78,19 +84,22 @@ export const ItemChildPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, unit, description, type, salesChannel, amount, alert } = newListIDChecked[0];
+            const { _id, name, sign, unit, description, note, unitprice, sellingUnitprice, type, salesChannel, amount, alert } = newListIDChecked[0];
             setInitialValues({
                 doctypeID: _id,
                 parent: parentId,
                 name,
                 sign,
-                unit,
-                description,
                 type,
                 salesChannel,
                 // grade,
                 amount,
                 alert,
+                description: description || '',
+                unit: unit || '',
+                note: note || '',
+                unitprice: unitprice || '',
+                sellingUnitprice: sellingUnitprice || '',
             });
         } else {
             clearData();
@@ -129,6 +138,9 @@ export const ItemChildPage: FC = () => {
                 unit: '',
                 description: '',
                 type: +type,
+                note: '',
+                unitprice: '',
+                sellingUnitprice: '',
             };
         }
 
