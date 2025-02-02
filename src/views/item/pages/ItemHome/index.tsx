@@ -14,7 +14,7 @@ import { Doctype } from "typings/items";
 import { Link } from "react-router-dom";
 import { GRADE_MISTAKE } from "apis/localdb/index";
 
-export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
+export const ItemHome: FC<{ type: number }> = ({ type }) => {
     const { openModal } = useModal();
     const [keywordDoctype, setKeywordDoctype] = useState('');
     const [doctypesChecked, setDoctypesChecked] = useState<Array<Doctype.Doctype>>([]);
