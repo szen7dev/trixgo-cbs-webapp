@@ -1001,7 +1001,13 @@ export const APP_ID = {
     ITEM: {
         id: "5f5234b2880c2f26c8df8c13",
         menuItemApp: {
-            id: "623f24cce998e94feda0cdaf", // Thay thế theo app
+            id: "623f24cce998e94feda0cdaf",
+        },
+    },
+    OWNER: {
+        id: "61e04989fdebf77b072d1b10",
+        menuOwnerApp: {
+            id: "623f216ae998e94feda0cd86",
         },
     },
     PCM: {
@@ -1274,12 +1280,6 @@ export const APP_ID = {
                 name: "Báo cáo khác"
             },
         }
-    },
-    OWNER: {
-        id: "61e04989fdebf77b072d1b10",
-        menuOwnerApp: {
-            id: "623f1f0de998e94feda0cd72", // Thay thế theo app
-        },
     },
     TIMESHEET: {
         id: "61e049cffdebf77b072d1b14",

@@ -1,22 +1,9 @@
-/*=====1.LIBRARY=====*/
 import { FC, useEffect } from "react";
 import { NavLink, useHistory } from 'react-router-dom';
 import { toast } from "react-toastify";
-
-/*=====2.CSS=====*/
-
-/*=====3.ICONS=====*/
 import iconFolder from "assets/images/bullet.svg";
-
-/*=====4.PAGES/COMPONENTS=====*/
-
-/*=====5.TYPINGS=====*/
-
-/*=====6.HOOKS/APIS=====*/
 import { APP_ID } from "apis/localdb";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-
-/*=====7.OTHER=====*/
+import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions"
 
 export const OwnerLeftSideBar: FC = () => {
 	useEffect(() => {
@@ -24,7 +11,9 @@ export const OwnerLeftSideBar: FC = () => {
 	}, []);
 
     const history = useHistory();
+    const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.OWNER.id, parentID: APP_ID.OWNER.menuOwnerApp.id })
     const { hasPermission, isSuccess, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.OWNER.id });
+    const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.OWNER.id, type: "1" })
 
     useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
@@ -48,39 +37,31 @@ export const OwnerLeftSideBar: FC = () => {
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
                         </NavLink> : <></>
                     }
-
-                    <NavLink to={`/owner/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'7px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
-                    </NavLink>
-                    <NavLink to={`/owner/members`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Tài khoản thành viên</span>
-                    </NavLink>
-                    <NavLink to={`/owner/grant`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấp phép ứng dụng</span>
-                    </NavLink>
-                    <NavLink to={`/owner/payment`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấu hình thanh toán</span>
-                    </NavLink>
-                    <NavLink to={`/owner/config`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấu hình môi trường</span>
-                    </NavLink>
-                    <NavLink to={`/owner/workflow`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấu hình workflow</span>
-                    </NavLink>
-                    <NavLink to={`/owner/traffic`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý truy cập</span>
-                    </NavLink>
-                    <NavLink to={`/owner/storage`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý dung lượng</span>
-                    </NavLink>
+                    {listAppMenu && listAppMenu.length ?
+                        <>
+                        {listAppMenu.map((item: any, index: number) => {
+                            const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == item?._id);
+                            if (roleApp && roleApp.read >= 1) {
+                            return (
+                                <NavLink
+                                key={index}
+                                to={`/owner/${item.slug}`}
+                                className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"
+                                >
+                                <img
+                                    width={'7px'}
+                                    src={iconFolder}
+                                    alt="Menu item"
+                                />
+                                <span className={"flex-1 ml-2 text-left text-[14px]"}>{item.name}</span>
+                                </NavLink>
+                            )
+                            };
+                            return <div key={index}></div>
+                        })
+                        }              
+                        </> : <></>
+                    }
                 </div>
             </div>
         </div>
