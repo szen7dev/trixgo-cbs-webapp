@@ -4,13 +4,14 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import iconFolder from "assets/images/bullet.svg";
 import { toast } from "react-toastify";
 import { APP_ID } from "apis/localdb";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions"
 
 export const ItemLeftSideBar: FC = () => {
   const { user } = useAuth();
-
   const history = useHistory();
+  const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.ITEM.id, parentID: APP_ID.ITEM.menuItemApp.id })
   const { hasPermission, isSuccess, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.ITEM.id });
+  const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.ITEM.id, type: "1" })
 
   useEffect(() => {
   if (isSuccess && !(hasPermission)) {
@@ -34,7 +35,34 @@ export const ItemLeftSideBar: FC = () => {
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
               </NavLink> : <></>
           }
-          <NavLink
+
+          {listAppMenu && listAppMenu.length ?
+              <>
+              {listAppMenu.map((item: any, index: number) => {
+                  const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == item?._id);
+                  if (roleApp && roleApp.read >= 1) {
+                  return (
+                      <NavLink
+                      key={index}
+                      to={`/item/${item.slug}`}
+                      className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"
+                      >
+                      <img
+                          width={'7px'}
+                          src={iconFolder}
+                          alt="Menu item"
+                      />
+                      <span className={"flex-1 ml-2 text-left text-[14px]"}>{item.name}</span>
+                      </NavLink>
+                  )
+                  };
+                  return <div key={index}></div>
+              })
+              }              
+              </> : <></>
+          }
+
+          {/* <NavLink
             to="/item/contact"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Danh bạ"
@@ -226,7 +254,7 @@ export const ItemLeftSideBar: FC = () => {
           >
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
             <span className={"flex-1 ml-2 text-left text-[13px]"}>CM-Nguyên nhân phát sinh</span>
-          </NavLink>
+          </NavLink> */}
           {/* <NavLink
             to="/item/home/18"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
