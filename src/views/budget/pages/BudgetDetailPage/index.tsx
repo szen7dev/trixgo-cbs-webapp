@@ -15,6 +15,7 @@ import iconCheckmark from "assets/images/icons8-copy-96.svg";
 import { ModalConfirm } from "shareComponents/common";
 import { useModal } from "services/hooks/useModal";
 import API from "apis/repository";
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
 
 /**
  * Hooks, Typings
@@ -104,6 +105,11 @@ export const BudgetDetailPage: FC = () => {
 
 	const [itemsIDToggle, setItemsIDToggle] = useState<string[]>([]);
 	const [itemID, setItemID] = useState('');
+ 
+	const [inputFilter, setInputFilter] = useState({
+		fromDate: new Date(new Date().getFullYear(), 0, 1),
+		toDate: new Date(new Date().getFullYear(), 11, 31),
+	});
 
 	const [listBudgetItem, setListBudgetItem] = useState<BudgetItem[]>([]);
 
@@ -289,7 +295,9 @@ export const BudgetDetailPage: FC = () => {
 			setStateExport({ isExporting: true })
 			const { error, data } = await downloadTemplateExcelAsync({
                 option: 1,
-                budgetID
+                budgetID,
+				fromDate: inputFilter.fromDate,
+				toDate: inputFilter.toDate,
             })
 			if(error) {
 				return toast.warn(data?.message)
@@ -393,6 +401,14 @@ export const BudgetDetailPage: FC = () => {
 		}
 	}
 
+	const handleOnChangeDate = useCallback((date, input) => {
+	if (input) {
+		setInputFilter((value) => ({ ...value, toDate: date }))
+	} else {
+		setInputFilter((value) => ({ ...value, fromDate: date }))
+	}
+	}, [])
+
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -401,19 +417,19 @@ export const BudgetDetailPage: FC = () => {
 						<img src="/images/common/button_back.png" alt="Button Back" />
 					</Link>
 
-					<p className="text-lg ml-2">{budgetInfo?.name}</p>
-
-					<button className={"px-4 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
+					<p className="text-lg ml-2 mr-2">{budgetInfo?.name}</p>
+					<FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+					<button className={"px-2 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
 						onClick={handleDownloadTemplateImportExcel}
 					>
 						Tải báo cáo/Mẫu Import
 					</button>
 
-					<button className={"px-4 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
+					<button className={"px-2 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
 					>
 						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
 							accept=".xlsx, .xlsm, .xls, .csv"/>
-						<label className="custom-file-label" htmlFor="inputGroupFile">Import Excel tạo ngân sách</label>
+						<label className="custom-file-label" htmlFor="inputGroupFile">Import Excel ngân sách</label>
 					</button>
 					<button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={toggleModalOpenSign}>
                         <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
