@@ -10,6 +10,7 @@ export interface Goods {
     note: string | null;
     convert: number
     unitprice: string | null;
+    sellingUnitprice: string | null;
     userUpdate: string | null;
     convertQuantity: number
     project?: any

@@ -11,7 +11,11 @@ export const ModalCreateOrUpdateGoods: FC<ModalProps> = ({
   initialValues = {
     goodsID: '',
     name: '',
-    description: ''
+    description: '',
+    unit: '',
+    note: '',
+    unitprice: '',
+    sellingUnitprice: '',
   }
 }) => {
   const { closeModal } = useModal();
@@ -90,7 +94,7 @@ export const ModalCreateOrUpdateGoods: FC<ModalProps> = ({
       <section className="px-10 py-2">
         <input
           type="text"
-          placeholder="Nhập nội dung"
+          placeholder="Tên"
           name="name"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.name}
@@ -101,10 +105,43 @@ export const ModalCreateOrUpdateGoods: FC<ModalProps> = ({
       <section className="px-10 mt-2">
         <input
           type="text"
-          placeholder="Nhập mô tả"
-          name="description"
+          placeholder="Đơn vị tính"
+          name="unit"
           className="h-12 w-full border border-primary-border outline-none px-8"
-          defaultValue={formData.description}
+          defaultValue={formData.unit}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 mt-2">
+        <input
+          type="number"
+          placeholder="Giá nhập"
+          name="unitprice"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.unitprice}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 mt-2">
+        <input
+          type="number"
+          placeholder="Giá xuất"
+          name="sellingUnitprice"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.sellingUnitprice}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 mt-2">
+        <input
+          type="text"
+          placeholder="Nhập ghi chú"
+          name="note"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.note}
           onChange={onChange}
         />
       </section>

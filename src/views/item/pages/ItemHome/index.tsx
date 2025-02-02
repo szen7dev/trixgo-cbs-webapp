@@ -25,7 +25,10 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
         name: '',
         sign: '',
         unit: '',
+        note: '',
         description: '',
+        unitprice: '',
+        sellingUnitprice: '',
         type: +type,
         grade: 1,
         salesChannel: 1,
@@ -62,8 +65,11 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
             name: '',
             sign: '',
             unit: '',
+            note: '',
             description: '',
             type: +type,
+            unitprice: '',
+            sellingUnitprice: '',
             // grade: 1,
             // salesChannel,
             // amount,
@@ -90,19 +96,22 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, linkItem, name, sign, unit, description, type, salesChannel, amount, alert, grade } = newListIDChecked[0];
+            const { _id, linkItem, name, sign, unit, note, description, type, salesChannel, amount, alert, grade, unitprice, sellingUnitprice } = newListIDChecked[0];
             setInitialValues({
                 doctypeID: _id,
                 linkItem,
                 name,
                 sign,
-                unit,
-                description,
                 type,
                 grade: grade ? grade : 1,
                 salesChannel,
                 amount,
                 alert,
+                description: description || '',
+                unit: unit || '',
+                note: note || '',
+                unitprice: unitprice || '',
+                sellingUnitprice: sellingUnitprice || '',
             });
         } else {
             clearData();
