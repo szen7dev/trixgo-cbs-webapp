@@ -44,14 +44,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   defaultValues,
   onSubmit,
   orderID,
-  assigneeName,
-  fundaName,
-  projectName,
-  warehouseName,
-  contractName,
-  customerName,
 }) => {
-  // const [userKeyword, setUserKeyword] = useState(assigneeName);
   const [departmentKeyword, setDepartmentKeyword] = useState("");
   const [contractKeyword, setContractKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
@@ -95,6 +88,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     customer: {},
     note: "",
     status: "",
+    forward: "",
     ...defaultValues,
   };
 
@@ -113,7 +107,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "820px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "900px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center border-b bg-cbs-table-header p-2"}
@@ -350,6 +344,20 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       type="text"
                       name="status"
                       placeholder="5-Hoạt động | 6-Hủy"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Phân loại  (0-Thông thường | 1-Phiếu đầu kỳ)</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="forward"
+                      placeholder="0-Thông thường | 1-Phiếu đầu kỳ"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);

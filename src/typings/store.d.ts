@@ -41,7 +41,7 @@ export type StoreParent = {
   date: string;
   toDate?: string;
   convertFactor: number;
-  status: number;
+  forward: number;
   budgetWork: strinstring | null;
   files: any;
 };
@@ -83,6 +83,7 @@ export type InsertStoreParentPayload = {
   toDate?: string;
   convertFactor: number;
   status: number;
+  forward: number;
 };
 
 export type InsertStoreParentResponse = {
@@ -134,6 +135,7 @@ export type StoreChild = {
   unitPrice: number;
   amount: number;
   status: number;
+  forward: number;
   subtype: any | null;
   timeApproved: string | null;
   author: User;
@@ -209,6 +211,7 @@ export type UpdateStoreChildPayload = {
   date?: string;
   toDate?: string;
   status?: string;
+  forward?: string;
   quantity?: string;
   unitPrice?: string;
   amount?: string;
