@@ -549,11 +549,16 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                   ) : (
                     <></>
                   )}
+                  {Number(item.forward) == 1 ? <div className="relative z-5 inline-block -translate-y-1"><button className="text-[10px] text-white rounded px-1 py-0.5 mx-1 bg-blue-400">Phiếu đầu kỳ</button></div> : <></>}
                   <NavLink
                     to={`${currentPathname}/${item._id}`}
-                    className="text-cbs-highlight-color font-bold text-medium"
+                    className="font-bold text-medium"
                   >
-                    {item.name}
+                    {Number(item.forward) == 1 ? (
+                      <span style={{"color": "orange"}}>{item.name}</span>
+                    ) : (
+                      <span className="text-cbs-highlight-color">{item.name}</span>
+                    )}
                     {item?.files?.length ? (
                       <span className="text-gray-500">
                         <img

@@ -50,6 +50,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
                 type: record.type,
                 convertFactor: record.convertFactor,
                 status: record.status,
+                forward: record.forward,
                 date: record.date,
                 toDate: record.toDate,
               }}

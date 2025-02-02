@@ -45,14 +45,10 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   defaultValues,
   onSubmit,
   orderID,
-  assigneeName,
-  fundaName,
   projectName,
   warehouseName,
-  contractName,
   customerName,
 }) => {
-  // const [userKeyword, setUserKeyword] = useState(assigneeName);
   const [departmentKeyword, setDepartmentKeyword] = useState(projectName);
   const [warehouseKeyword, setWarehouseKeyword] = useState(warehouseName);
   const [contactKeyword, setContactKeyword] = useState(customerName);
@@ -77,25 +73,13 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 
   const {
 		data: listDocumentPackage,
-		// fetchNextPage: fetchNextPageDocumentPackage,
-		// hasNextPage: hasNextPageDocumentPackage,
-		// totalRecord,
 	} = useDocumentPackage({
-		// departmentID: projectID,
 		isShowAll: "1",
 		keyword: packageKeyword
 	}, true, false)
 
   const {
     data,
-    // refetch: refreshListStore,
-    // totalPages,
-    // totalRecord,
-    // fetchNextPage,
-    // fetchPrevPage,
-    // limit,
-    // loading,
-    // hasNextPage,
   } = useQueryListStoreParent({
     keyword, 
     outin: 2, 
@@ -117,6 +101,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     link: {},
     note: "",
     status: "",
+    forward: "",
     ...defaultValues,
   };
 
@@ -135,7 +120,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "900px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "1000px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center border-b bg-cbs-table-header p-2"}
@@ -421,6 +406,20 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       type="text"
                       name="status"
                       placeholder="5-Hoạt động | 6-Hủy"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Phân loại  (0-Thông thường | 1-Phiếu đầu kỳ)</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="forward"
+                      placeholder="0-Thông thường | 1-Phiếu đầu kỳ"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);
