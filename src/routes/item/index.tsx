@@ -10,6 +10,7 @@ import { ProtectedRoute } from "routes/components";
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import {
+    ItemHome,
     ItemHomePage,
     ItemChildPage,
     ItemCustomerPage,
@@ -45,6 +46,7 @@ const ItemRouter: FC = () => {
                         <Route exact path="/item/admin/2" component={AdminAuthorTab} />
                     </LayoutSecondary>
                 </Route>
+                <ProtectedRoute exact path="/item/home" component={ItemHomePage} />
                 <ProtectedRoute exact path="/item/contact" component={ItemCustomerPage} />
                 <ProtectedRoute exact path="/item/contact/:parentID" component={ItemCustomerPage} />
                 
@@ -57,131 +59,125 @@ const ItemRouter: FC = () => {
                 <ProtectedRoute exact path="/item/fundas" component={ItemFundasPage} />
                 <ProtectedRoute exact path="/item/fundas/:parentID" component={ItemFundasPage} />
                 <ProtectedRoute exact path="/item/fundas/:fundaID/members" component={ItemFundasPageMember} />
-
-                <ProtectedRoute
-                    exact
-                    path="/item/home"
-                    component={() => <Redirect to="/item/home/1" />}
-                />
                 <ProtectedRoute
                     exact
                     path="/item/home/1"
-                    component={() => <ItemHomePage type={1} />}
+                    component={() => <ItemHome type={1} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/2"
-                    component={() => <ItemHomePage type={2} />}
+                    component={() => <ItemHome type={2} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/3"
-                    component={() => <ItemHomePage type={3} />}
+                    component={() => <ItemHome type={3} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/4"
-                    component={() => <ItemHomePage type={4} />}
+                    component={() => <ItemHome type={4} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/5"
-                    component={() => <ItemHomePage type={5} />}
+                    component={() => <ItemHome type={5} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/6"
-                    component={() => <ItemHomePage type={6} />}
+                    component={() => <ItemHome type={6} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/7"
-                    component={() => <ItemHomePage type={7} />}
+                    component={() => <ItemHome type={7} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/8"
-                    component={() => <ItemHomePage type={8} />}
+                    component={() => <ItemHome type={8} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/9"
-                    component={() => <ItemHomePage type={9} />}
+                    component={() => <ItemHome type={9} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/10"
-                    component={() => <ItemHomePage type={10} />}
+                    component={() => <ItemHome type={10} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/11"
-                    component={() => <ItemHomePage type={11} />}
+                    component={() => <ItemHome type={11} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/12"
-                    component={() => <ItemHomePage type={12} />}
+                    component={() => <ItemHome type={12} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/13"
-                    component={() => <ItemHomePage type={13} />}
+                    component={() => <ItemHome type={13} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/14"
-                    component={() => <ItemHomePage type={14} />}
+                    component={() => <ItemHome type={14} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/15"
-                    component={() => <ItemHomePage type={15} />}
+                    component={() => <ItemHome type={15} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/16"
-                    component={() => <ItemHomePage type={16} />}
+                    component={() => <ItemHome type={16} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/17"
-                    component={() => <ItemHomePage type={17} />}
+                    component={() => <ItemHome type={17} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/18"
-                    component={() => <ItemHomePage type={18} />}
+                    component={() => <ItemHome type={18} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/19"
-                    component={() => <ItemHomePage type={19} />}
+                    component={() => <ItemHome type={19} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/20"
-                    component={() => <ItemHomePage type={20} />}
+                    component={() => <ItemHome type={20} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/21"
-                    component={() => <ItemHomePage type={21} />}
+                    component={() => <ItemHome type={21} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/22"
-                    component={() => <ItemHomePage type={22} />}
+                    component={() => <ItemHome type={22} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/23"
-                    component={() => <ItemHomePage type={23} />}
+                    component={() => <ItemHome type={23} />}
                 />
                 <ProtectedRoute
                     exact
                     path="/item/home/24"
-                    component={() => <ItemHomePage type={24} />}
+                    component={() => <ItemHome type={24} />}
                 />
                 <ProtectedRoute
                     exact

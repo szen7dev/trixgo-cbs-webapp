@@ -1,5 +1,4 @@
 import React, {ChangeEvent, FC, useEffect, useRef, useState} from "react";
-// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import searchIcon from "assets/images/icons8-search-120.png";
 import { useListFilterDocument} from "services/hooks/document/useDocument";
 import {Link} from "react-router-dom";
