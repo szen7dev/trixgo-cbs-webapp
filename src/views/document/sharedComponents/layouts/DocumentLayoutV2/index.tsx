@@ -9,7 +9,7 @@ import cn from "classnames";
 /*=====4.PAGES/COMPONENTS=====*/
 import { LeftMenu, LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import DocumentHeaderContent from "./components/DocumentHeaderContent";
-import DocumentLeftMenuContent from "./components/DocumentLeftMenuContent";
+import DocumentLeftSideBar from "./components/DocumentLeftSideBar";
 
 /*=====5.TYPINGS=====*/
 
@@ -47,10 +47,7 @@ const DocumentLayoutV2: FC<Props> = ({ children }) => {
             <DocumentHeaderContent />
           </MainHeaderV2>
 
-          {/* Left navigation */}
-          <LeftMenu>
-            <DocumentLeftMenuContent />
-          </LeftMenu>
+          <DocumentLeftSideBar />
 
           {/* Content area */}
           <main className="main-route-content transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content">

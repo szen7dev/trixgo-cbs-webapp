@@ -7,12 +7,12 @@ import { useLocation, useHistory } from "react-router-dom";
 import { DropdownSearchable } from "shareComponents/common";
 import { toast } from "react-toastify";
 
-const DocumentAdminAuthorTab: FC = () => {
+const AdminAuthorTab: FC = () => {
 	const history = useHistory();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id });
 	const location = useLocation<string | null>();
 	const [funcID, setFuncID] = useState<string>(location.state || "");
-	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" }); 
+	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" });
 	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.DOCUMENT.id, parentID: typeAppRoleDetail == "1" ? APP_ID.DOCUMENT.menuDocumentApp.id : APP_ID.DOCUMENT.menuDocumentApp.id });
 	const { listAppRoles } = useAdmin({ appID: APP_ID.DOCUMENT.id, keyword: "" });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.DOCUMENT.id, type: typeAppRoleDetail });
@@ -106,8 +106,6 @@ const DocumentAdminAuthorTab: FC = () => {
 					disableSearch={true}
 					searchInputClassName="h-[40px] w-[322px] px-[46px]"
 					onchangeValue={(item) =>
-						// history.push(`/pcm/admin/${item._id}/detail`)
-						// Don't use history.push;
 						setFuncID(item._id)
 					}
 				/>
@@ -192,4 +190,4 @@ const DocumentAdminAuthorTab: FC = () => {
 	);
 };
 
-export default DocumentAdminAuthorTab;
+export default AdminAuthorTab;

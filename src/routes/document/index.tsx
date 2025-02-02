@@ -22,76 +22,14 @@ const DocumenDatahubContactPage       = lazy(() => import("views/document/pages/
 const DocumentOfTypePage       = lazy(() => import("views/document/pages/DocumentOfTypePage"))
 const DocumentOfPackagePage       = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
 
-const DocumentAdminFunctionalTab       = lazy(() => import("views/document/pages/DocumentAdminPage/pages/DocumentAdminFunctionalTab"))
-const DocumentAdminDetail       = lazy(() => import("views/document/pages/DocumentAdminPage/pages/DocumentAdminDetail"))
-const DocumentAdminAuthorTab       = lazy(() => import("views/document/pages/DocumentAdminPage/pages/DocumentAdminAuthorTab"))
+import AdminFunctionalTab from "views/document/pages/DocumentAdminPage/pages/AdminFunctionalTab";
+import AdminDetail from "views/document/pages/DocumentAdminPage/pages/AdminDetail";
+import AdminAuthorTab from "views/document/pages/DocumentAdminPage/pages/AdminAuthorTab";
 
 const DocumentRouter: FC = () => {
     return (
         <Switch>
-            <ProtectedRoute
-                exact
-                path="/document/home"
-                component={DocumentHomePageV2}
-            />
-            <ProtectedRoute
-                exact
-                path="/document/dashboard"
-                component={DocumentDashboardPage}
-            />
-            <ProtectedRoute
-                path="/document/admin"
-                component={() => (
-                    <Switch>
-                        <Route path="/document/admin">
-                            <LayoutSecondary pages={[
-                                { id: '1', title: 'Nhóm chức năng', path: '/document/admin', navExact: true },
-                                {
-                                    id: '2', title: 'Phân quyền chức năng', path: '/document/admin/2', location: (location) => {
-                                        // Get match params
-                                        const match = matchPath<{ id: string }>(location.pathname, { path: '/document/admin/:id/detail' })
-                                        // Push to state
-                                        return ({ pathname: '/document/admin/2', state: match ? match.params.id : null })
-                                    }
-                                }
-                            ]}>
-                                <Route exact path="/document/admin" component={DocumentAdminFunctionalTab} />
-                                <Route exact path="/document/admin/:id/detail" component={DocumentAdminDetail} />
-                                <Route exact path="/document/admin/2" component={DocumentAdminAuthorTab} />
-                            </LayoutSecondary>
-                        </Route>
-                    </Switch>
-                )}
-            />
-
-            <Route exact path={['/document/project/:id/home', '/document/project/:id/home/(1|2|3|4)']}>
-                <LayoutSecondary pages={[
-                    { id: '1', title: 'Danh sách', path: '/document/project/:id/home', navExact: true },
-                    { id: '2', title: 'Tính chất', path: '/document/project/:id/home/1' },
-                    { id: "3", title: "Đơn vị ban hành", path: "/document/project/:id/home/2" },
-                    { id: '4', title: 'Gói thầu', path: '/document/project/:id/home/3' },
-                    // { id: '4', title: 'Báo cáo', path: '/ppt/project/:id/document/3' },
-                    // { id: '5', title: 'Lịch sử upload file', path: '/ppt/project/:id/document/4' },
-                ]}>
-                    <ModalProvider>
-                        <Switch>
-                            <Route exact path='/document/project/:id/home' component={DocumentProjectPage} />
-                            <Route exact path='/document/project/:id/home/1' component={DocumentProfilePage} />
-                            <Route exact path="/document/project/:id/home/2"  component={DocumenDatahubContactPage}/>
-                            <Route exact path='/document/project/:id/home/3' component={DocumentFolderPage} />
-                            {/* <Route exact path='/document/project/:id/home/3' component={DocumentReportPage} /> */}
-                            {/* <Route exact path='/document/project/:id/home/4' component={DocumentHistoryPage} /> */}
-                        </Switch>
-                        <ModalCreateDocument />
-                    </ModalProvider>
-                </LayoutSecondary>
-            </Route>
-            <Route exact path="/document/project/:id/document/1/type/:type" component={DocumentOfTypePage} />
-            <Route exact path="/document/project/:id/document/1/datahubContact/:datahubContactID" component={DocumentOfTypePage} />
-            <Route exact path="/document/project/:id/package/:packageID" component={DocumentOfPackagePage} />
-
-            <Route exact path='/document/project/:id/detail/:docID' component={DocumentDetailPage} />
-            <Route path="/document/*" component={ErrorPage} />
+            
         </Switch>
         )
     };

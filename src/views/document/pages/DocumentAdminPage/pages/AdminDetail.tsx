@@ -1,30 +1,27 @@
-import { FC, useCallback, useState, useEffect } from "react";
-
-import { Link, useHistory } from "react-router-dom";
-
+import { FC, useState, useCallback, useEffect } from "react";
 import { useModal } from "services/hooks/useModal";
-import debounce from "lodash/debounce";
+import { useParams, useHistory } from "react-router-dom";
 import { SearchInput } from "shareComponents/common";
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
-
+import debounce from "lodash/debounce";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-import FolderIcon from "assets/images/icons8-folder.svg";
+import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-64.svg";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-import { Create, Update, Delete } from "../modal";
-import { useAdmin } from "services/hooks/auth/useAdmin";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import MemberIcon from "assets/images/member-icon.svg";
+import { useGetListAppRoleMenu, useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { CreateNewAdminMember, DeleteMembers } from "../modal";
+import { useAdminDetail } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
-import moment from "moment";
 import { toast } from "react-toastify";
 
-const DocumentAdminFunctionalTab: FC = () => {
+const AdminDetail: FC = () => {
 	const history = useHistory();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id });
+	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { listAppRoles: listDocumentAdmin, totalRecord, nextPageListAppRoles: nextPageDocumentAdmin, hasNextPageListAppRoles: hasNextPageDocumentAdmin } = useAdmin({ appID: APP_ID.DOCUMENT.id, keyword: keyword });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id })
+	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = useAdminDetail({ appID: id, keyword: keyword });
+	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.DOCUMENT.id, type: "1" });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -44,14 +41,14 @@ const DocumentAdminFunctionalTab: FC = () => {
 	};
 
 	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listDocumentAdmin.length;
+		return idsChecked.length == listMembers.length;
 	}, [idsChecked]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listDocumentAdmin.length) {
+		if (idsChecked.length == listMembers.length) {
 			setIdsChecked([]);
 		} else {
-			const idsAll = listDocumentAdmin.map(e => e._id);
+			const idsAll = listMembers.map(e => e._id);
 			setIdsChecked(idsAll);
 		}
 	};
@@ -64,44 +61,27 @@ const DocumentAdminFunctionalTab: FC = () => {
 	}, [hasPermission, dataUserAccess]);
 
 	return (
-		<main className="h-full overflow-auto">
+		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg">Danh sách</p>
+					<p className="text-lg">{nameAppRoleDetail}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
 						onChange={debounce(
-							(event: any) => setKeyword(event.target.value),
+							(event: any) => {
+								//	setKeyword(event.target.value);
+							},
 							500
 						)}
 					/>
-					{/* <FinancialCashFlowFilterButton /> */}
+
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={DownloadIcon} alt="Download" />
 							</div>
-							{idsChecked.length == 1 ?
-								<div
-									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-									onClick={() =>
-										openModal(
-											<div
-												className={
-													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-												}
-											>
-												<Update item={listDocumentAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
-											</div>
-										)
-									}
-								>
-									<img src={PencilIcon} alt="Pencil" />
-								</div> : <></>
-							}
-							<div
-								className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
 								onClick={() =>
 									openModal(
 										<div
@@ -109,11 +89,10 @@ const DocumentAdminFunctionalTab: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<Delete idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
+											<DeleteMembers appID={id} idsChecked={idsChecked} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
 										</div>
 									)
-								}
-							>
+								}>
 								<img src={TrashIcon} alt="Trash" />
 							</div>
 						</div>
@@ -121,20 +100,20 @@ const DocumentAdminFunctionalTab: FC = () => {
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[120px] h-8 rounded font-bold mr-6"
 						onClick={() =>
 							openModal(
 								<div
 									className={
-										"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<Create />
+									<CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
 								</div>
 							)
 						}
 					>
-						Tạo mới
+						Thêm thành viên
 					</button>
 					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
@@ -148,81 +127,94 @@ const DocumentAdminFunctionalTab: FC = () => {
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
 							<div className="border-r-2 border-gray-300 flex items-center justify-center">
 								<input
-									className="form-check-input"
+									className="form-check-input mr-2"
 									type="checkbox"
+									value=""
+									id="flexCheckDefault"
 									checked={getStateCheckedAll()}
 									onChange={() => onClickCheckAll()}
 								/>
+								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
-						<th className="w-1/4 pb-1 pt-1">
+						<th className="w-1/5 pb-1 pt-1">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Nội dung
+								Tên
 							</div>
 						</th>
-						<th className="w-1/4 pb-1 pt-1">
+						<th className="w-1/5 pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Loại
+								Công ty
 							</div>
 						</th>
-						<th className="w-1/4 pb-1 pt-1 font-normal">
+						<th className="w-1/6 pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Người tạo
+								Phòng ban
 							</div>
 						</th>
-						<th className="w-1/4 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">Cập nhật lần cuối</div>
+						<th className="w-1/6 pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Chức danh
+							</div>
+						</th>
+						<th className="w-1/12 pb-1 pt-1 font-normal">
+							<div className="font-normal pl-2">Hành động</div>
 						</th>
 					</tr>
 				</thead>
-
-				{listDocumentAdmin && listDocumentAdmin.length ?
-					<tbody className="bg-primary-light text-left">
-						{listDocumentAdmin.map((item, index) => (
+				{listMembers && listMembers.length ?
+					<tbody className="bg-primary-light">
+						{listMembers.map((item, index) =>
 							<tr key={index} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input
 										className="form-check-input"
 										type="checkbox"
+										value=""
 										id="flexCheckDefault"
+										style={{ marginLeft: "-23px" }}
 										checked={getStateChecked(item._id)}
 										onChange={() => onClickCheckButton(item._id)}
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to={`/Document/admin/${item._id}/detail`}>
-										<div className="flex items-center">
-											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
-											<p>{item.name}</p>
-										</div>
-									</Link>
+									<div className="flex items-center">
+										<img
+											src={item.image ? `${process.env.REACT_APP_URL_S3_USER}/${item.image}` : MemberIcon}
+											alt="Member"
+											className="w-6 h-6 rounded-full"
+										/>
+										<p className="px-1">{item.bizfullname}</p>
+									</div>
 								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item.type}
+								<td className="py-1 px-2">
+									{item.company?.name}
 								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item.userCreate?.bizfullname}
+								<td className="py-1 px-2">{item.department?.name}</td>
+								<td className="py-1 px-2">{item.position?.name}</td>
+								<td className="py-1 px-2 text-negative">
+									<button
+										onClick={() =>
+											openModal(
+												<div
+													className={
+														"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+													}
+												>
+													<DeleteMembers appID={id} idsChecked={[item._id]} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
+												</div>
+											)
+										}>
+										Xoá bỏ
+									</button>
 								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item.userUpdate?.bizfullname}
-								</td>
-							</tr>
-						))
+							</tr>)
 						}
 					</tbody> : <></>
 				}
-
 			</table>
-			{hasNextPageDocumentAdmin && (
-				<div className="w-full flex justify-center my-5">
-					<button onClick={() => nextPageDocumentAdmin()}>
-						<span className="text-primary">{`Xem thêm (${totalRecord - listDocumentAdmin.length
-							})`}</span>
-					</button>
-				</div>
-			)}
 		</main>
 	);
 };
 
-export default DocumentAdminFunctionalTab;
+export default AdminDetail;
