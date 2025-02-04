@@ -1,7 +1,5 @@
 import React, { FC, useCallback, useState, useEffect } from "react";
 import { NavLink, useParams, useHistory } from "react-router-dom"
-import DotsVerticalIcon from "assets/icons/DotsVertical";
-import Close from "assets/icons/Close";
 import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
 import { formatNumberMoney } from "utils/cmcs";
@@ -28,13 +26,11 @@ export const AccountingInOutDetailPage1: FC = () => {
   const [goodsID, setGoodsID] = useState<string | null>();
   const [keyword, setKeyword] = useState('');
   const [fundaKeyword, setFundaKeyword] = useState("");
-  const today = new Date();
 
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  const today = new Date()
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0)
   const currentMonth = new Date().getMonth()
-
   const [inputFilter, setInputFilter] = useState({
-    // keyword: '',
     fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
     toDate: lastDayOfMonth
   })
@@ -84,7 +80,6 @@ export const AccountingInOutDetailPage1: FC = () => {
     }
     fetchDetailAccount(accountId)
   }, [accountId])
-
   // console.log(dataAll?.arrCombine?)
 
   let tonDauKy = 0, nhapTrongKy = 0, xuatTrongKy = 0, tonCuoiKy = 0
@@ -193,30 +188,6 @@ export const AccountingInOutDetailPage1: FC = () => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          {/* <div className={"relative z-5 inline-block"}>
-            <button onClick={() => setShowOption(!showOption)} 
-              className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
-              >
-                <DotsVerticalIcon/>
-            </button>
-            {
-                showOption &&
-                <div className={"absolute right-0 z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
-                    <div className={"flex items-center mx-4 py-2 border-b-0.5 border-primary-border"}>
-                        <div className={"flex-1"}>Chức năng khác</div>
-                        <button onClick={() => setShowOption(false)}>
-                            <Close/>
-                        </button>
-                    </div>
-
-                    <div className={"mb-4"}>
-                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
-                            Tải excel
-                        </button>
-                    </div>
-                </div>
-            }
-          </div> */}
         </div>
         
       </header>
