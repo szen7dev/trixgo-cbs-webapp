@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from "react";
+import React, { FC, useState, useCallback } from "react";
 import { formatNumberMoney } from "utils/cmcs";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
@@ -25,9 +25,9 @@ import { STORE_TYPES } from "apis/localdb";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from "utils";
-// import {
-//   exportByFilterAsync
-// } from "services/hooks/useProductCustom";
+import styles from 'views/accounting/styles/styles.module.css';
+import cn from "classnames";
+import { FilterDateGroup }  from "views/accounting/shareComponents/common";
 interface Props {
   outin?: number
   // type?: number
@@ -49,6 +49,14 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
   const [assetsID, setAssetsID] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
 
+  const today = new Date()
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0)
+  const currentMonth = new Date().getMonth()
+  const [inputFilter, setInputFilter] = useState({
+    fromDate: new Date(new Date().getFullYear(), currentMonth-1, 1),
+    toDate: lastDayOfMonth
+  })
+
   const {
     data,
   }: any = useQueryListByPropertyStoreChild({
@@ -59,22 +67,34 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
     customerID,
     goodsID,
     assetsID,
-    userCreateID: userID
+    userCreateID: userID,
+    fromDate: inputFilter.fromDate,
+    toDate: inputFilter.toDate,
   })
 
-  const { tongNhap, tongXuat, tongTon } = useMemo(() => {
-    let tongNhap = 0, tongXuat = 0, tongTon = 0
+  let tonDauKy = 0, nhapTrongKy = 0, xuatTrongKy = 0, tonCuoiKy = 0
+  let klTonDauKy = 0, klNhapTrongKy = 0, klXuatTrongKy = 0, klTonCuoiKy = 0
+  if(data && data?.data){
+    for(const item of data?.data){
+      tonDauKy = tonDauKy + item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy
+      nhapTrongKy = nhapTrongKy + item.noTrongKy
+      xuatTrongKy = xuatTrongKy + item.coTrongKy
+      tonCuoiKy = tonCuoiKy + item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy
 
-    if(data?.data && data.data.length) { 
-      for(const item of data?.data){
-        tongNhap = Number(tongNhap) + Number(item.income)
-        tongXuat = Number(tongXuat) + Number(item.expense)
-      }
-      tongTon = tongNhap - tongXuat
+      klTonDauKy = klTonDauKy + item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy
+      klNhapTrongKy = klNhapTrongKy + item.klNoTrongKy
+      klXuatTrongKy = klXuatTrongKy + item.klCoTrongKy
+      klTonCuoiKy = klTonCuoiKy + item.klKcNoDauKy + item.klNoDauKy + item.klNoTrongKy - item.klCoTrongKy- item.klKcCoDauKy - item.klCoDauKy
     }
-    
-    return { tongNhap, tongXuat, tongTon }
-  }, [data?.data])
+  }
+
+  const handleOnChangeDate = useCallback((date, input) => {
+  if (input) {
+    setInputFilter((value) => ({ ...value, toDate: date }))
+  } else {
+    setInputFilter((value) => ({ ...value, fromDate: date }))
+  }
+  }, [])
 
   const [userKeyword, setUserKeyword] = useState("");
   const [projectKeyword, setProjectKeyword] = useState("");
@@ -345,66 +365,204 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
           )}
           selectOneByOne={true}
         />
+
+        <div className="flex items-center">
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+        </div>
         <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 1})}>
             Download <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
         </button>
       </div>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-        <thead className="bbg-cbs-table-header h-10 border-b border-primary-border">
+        <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
-            <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center" style={{ width: "40px" }}>TT</th>
-            <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Hàng hóa, vật tư, công cụ</th>
-            <th className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">Đơn vị tính</th>
-            <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">NHẬP</th>
-            <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">XUẤT</th>
-            <th colSpan={2} className="py-1 px-2 font-normal border-r border-l border-b border-primary-border text-center">TỒN</th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/6">
+              Sản phẩm, nguyên liệu
+            </th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
+              Đơn vị
+            </th>
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Tồn đầu kỳ
+            </th>
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Nhập trong kỳ
+            </th>
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Xuất trong kỳ
+            </th>
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Tồn cuối kỳ
+            </th>
           </tr>
           <tr className="text-left text-sm text-primary-gray">
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border"></th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Khối lượng</th>
-            <th className="py-1 px-2 font-normal border-r border-b border-primary-border">Giá trị</th>
-          </tr>
-          <tr className="text-left text-sm text-primary-gray font-bold">
-            <th className="py-1 px-2 border-r border-primary-border"></th>
-            <th className="py-1 px-2 border-r border-primary-border"></th>
-            <th className="py-1 px-2 border-r border-primary-border"></th>
-            <th className="py-1 px-2 border-r border-primary-border"></th>
-            <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongNhap)}</th>
-            <th className="py-1 px-2 border-r border-primary-border text-right"></th>
-            <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongXuat)}</th>
-            <th className="py-1 px-2 border-r border-primary-border text-right"></th>
-            <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongTon)}</th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
+             
+            </th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
+              
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              SL
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              Đơn giá
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+             Thành tiền
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              SL
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              Đơn giá
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+             Thành tiền
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              SL
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              Đơn giá
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+             Thành tiền
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              SL
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              Đơn giá
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+             Thành tiền
+            </th>
           </tr>
         </thead>
-        <tbody>
-          {data?.data?.map((item: any, index: any) => (
-            <tr key={index} className="border-b border-primary-border h-10">
-              <td className="py-1 px-2 border-r border-primary-border">{(index + 1)}</td>
+
+        <tbody className="">
+          { 
+            (data?.data?.map((item: any, index: any) => {
+                let donGiaTonDauKy = 0, donGiaNhapTrongKy = 0, donGiaXuatTrongKy = 0, donGiaTonCuoiKy = 0
+
+                if(Number(item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy) != 0){
+                  donGiaTonDauKy = Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy)/Number(item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy)
+                }
+                if(Number(item.klNoTrongKy) != 0){
+                  donGiaNhapTrongKy = Number(item.noTrongKy)/Number(item.klNoTrongKy)
+                }
+                if(Number(item.klCoTrongKy) != 0){
+                  donGiaXuatTrongKy = Number(item.coTrongKy)/Number(item.klCoTrongKy)
+                }
+                if(Number(item.klKcNoDauKy + item.klNoDauKy + item.klNoTrongKy - item.klKcCoDauKy - item.klCoDauKy - item.klCoTrongKy) != 0){
+                  donGiaTonCuoiKy = Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy)/Number(item.klKcNoDauKy + item.klNoDauKy + item.klNoTrongKy - item.klKcCoDauKy - item.klCoDauKy - item.klCoTrongKy)
+                }
+
+                return(
+                  <tr key={index} className="border-b border-primary-border h-10">
+                    <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                      {/* <NavLink to={`/accounting/import-export/acc/${params.accountID}/prod/${item?._id}`}>
+                        {item.name}
+                      </NavLink> */}
+                      {item.name}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.unit}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(donGiaTonDauKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(item.klNoTrongKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(donGiaNhapTrongKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.noTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(item.klCoTrongKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(donGiaXuatTrongKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.coTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.klKcNoDauKy + item.klNoDauKy + item.klNoTrongKy - item.klKcCoDauKy - item.klCoDauKy - item.klCoTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(donGiaTonCuoiKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy).toFixed(0))}
+                    </td>
+                  </tr>
+                )
+              }
+            ))
+          }
+          
+            <tr className={cn(
+              "border-b border-primary-border h-10 font-bold",
+              styles.bgFooterYellow
+            )}>
               <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                {item?.name}
-                {/* <p><i>{item?._id}</i></p>
-                <NavLink className="text-primary" to={`/store/detailed-report/${item?._id}`}>
-                  {item?.name}
-                </NavLink> */}
+                Tổng
               </td>
-              <td className="py-1 px-2 border-r border-primary-border">{item?.unit}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityExpense)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.expense)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.quantityIncome - item?.quantityExpense)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income - item?.expense)}</td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                  
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(klTonDauKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                  
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(tonDauKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(klNhapTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                  
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(nhapTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(klXuatTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                  
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(xuatTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(klTonCuoiKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                  
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(tonCuoiKy.toFixed(0))}
+              </td>
             </tr>
-          ))}
         </tbody>
       </table>
+      
     </div>
   )
 }
