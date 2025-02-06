@@ -46,8 +46,8 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0)
   const currentMonth = new Date().getMonth()
   const [inputFilter, setInputFilter] = useState({
-    fromDate: new Date(new Date().getFullYear(), currentMonth-1, 1),
-    toDate: lastDayOfMonth
+    fromDate: new Date(new Date().getFullYear(), 0, 1),
+    toDate: new Date(new Date().getFullYear(), 11, 31)
   })
 
   const {
