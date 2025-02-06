@@ -1,23 +1,32 @@
-import React, { FC, useMemo } from "react";
+import { FC, useMemo, useState, useCallback } from "react";
 import { formatNumberMoney } from "utils/cmcs";
-import PaginateV2 from "shareComponents/common/PaginateV2";
-import { DropdownSearchableV2 } from "shareComponents/common";
+import { FilterDateGroup }  from "views/accounting/shareComponents/common";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import { toast } from "react-toastify";
+import { createLinkAndClick } from "utils";
 import {
+  useProductCustom,
   useQueryListByPropertyStoreChild
 } from "services/hooks/useStoreProduct";
 interface Props {
   outin?: number
-  // type?: number
 }
 
 export const CashInventoryPage: FC<Props> = ({ outin }) => {
-  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+  const today = new Date()
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0)
+  const currentMonth = new Date().getMonth()
+  const [inputFilter, setInputFilter] = useState({
+    fromDate: new Date(new Date().getFullYear(), currentMonth-1, 1),
+    toDate: lastDayOfMonth
+  })
 
   const {
     data,
   }: any = useQueryListByPropertyStoreChild({
-    option: 2
+    option: 2,
+    fromDate: inputFilter.fromDate,
+    toDate: inputFilter.toDate,
   })
 
   const { tongNhap, tongXuat, tongTon } = useMemo(() => {
@@ -34,18 +43,65 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
     return { tongNhap, tongXuat, tongTon }
   }, [data?.data])
 
+  const handleOnChangeDate = useCallback((date, input) => {
+  if (input) {
+    setInputFilter((value) => ({ ...value, toDate: date }))
+  } else {
+    setInputFilter((value) => ({ ...value, fromDate: date }))
+  }
+  }, [])
+
+  
+  //_____Import, export excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  })
+  const { exportByFilterAsync } = useProductCustom();
+  const handleExportByFilter = async (param: any) => {
+    try {
+        setStateExport({ isExporting: true });
+        const { error, data } = await exportByFilterAsync({
+          option: param.option,
+          filterParams: {
+              option: param.option,
+          }
+        });
+
+        if(error) {
+            return toast.warn(data?.message);
+        }
+
+        data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+        toast.error(error.message)
+    } finally {
+        setStateExport({ isExporting: false });
+    }
+  }
+
   return (
     <div>
+      <div className={"filter-bar flex flex-wrap border-b py-2"}>
+        <div className="flex items-center">
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+        </div>
+        <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 2})}>
+            Download <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
+        </button>
+      </div>
+
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bbg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray font-bold">
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center" style={{ width: "40px" }}>TT</th>
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tài khoản</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tồn đầu kỳ</th>
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Thu</th>
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Chi</th>
-            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tồn</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tồn cuối kỳ</th>
           </tr>
           <tr className="text-left text-sm font-bold">
+            <th className="py-1 px-2 border-r border-primary-border"></th>
             <th className="py-1 px-2 border-r border-primary-border"></th>
             <th className="py-1 px-2 border-r border-primary-border"></th>
             <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongNhap)}</th>
@@ -64,6 +120,7 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
                   {item?.name}
                 </NavLink> */}
               </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(0)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.expense)}</td>
               <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income - item?.expense)}</td>
