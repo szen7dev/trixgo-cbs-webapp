@@ -29,19 +29,21 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
     toDate: inputFilter.toDate,
   })
 
-  const { tongNhap, tongXuat, tongTon } = useMemo(() => {
-    let tongNhap = 0, tongXuat = 0, tongTon = 0
+  let tonDauKy = 0, nhapTrongKy = 0, xuatTrongKy = 0, tonCuoiKy = 0
+  let klTonDauKy = 0, klNhapTrongKy = 0, klXuatTrongKy = 0, klTonCuoiKy = 0
+  if(data && data?.data){
+    for(const item of data?.data){
+      tonDauKy = tonDauKy + item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy
+      nhapTrongKy = nhapTrongKy + item.noTrongKy
+      xuatTrongKy = xuatTrongKy + item.coTrongKy
+      tonCuoiKy = tonCuoiKy + item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy
 
-    if(data?.data && data.data.length) { 
-      for(const item of data?.data){
-        tongNhap = Number(tongNhap) + Number(item.income)
-        tongXuat = Number(tongXuat) + Number(item.expense)
-      }
-      tongTon = tongNhap - tongXuat
+      klTonDauKy = klTonDauKy + item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy
+      klNhapTrongKy = klNhapTrongKy + item.klNoTrongKy
+      klXuatTrongKy = klXuatTrongKy + item.klCoTrongKy
+      klTonCuoiKy = klTonCuoiKy + item.klKcNoDauKy + item.klNoDauKy + item.klNoTrongKy - item.klCoTrongKy- item.klKcCoDauKy - item.klCoDauKy
     }
-    
-    return { tongNhap, tongXuat, tongTon }
-  }, [data?.data])
+  }
 
   const handleOnChangeDate = useCallback((date, input) => {
   if (input) {
@@ -95,18 +97,18 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
           <tr className="text-left text-sm text-primary-gray font-bold">
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center" style={{ width: "40px" }}>TT</th>
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tài khoản</th>
-            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tồn đầu kỳ</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tồn quỹ đầu kỳ</th>
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Thu</th>
             <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Chi</th>
-            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tồn cuối kỳ</th>
+            <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center">Tồn quỹ cuối kỳ</th>
           </tr>
           <tr className="text-left text-sm font-bold">
             <th className="py-1 px-2 border-r border-primary-border"></th>
             <th className="py-1 px-2 border-r border-primary-border"></th>
-            <th className="py-1 px-2 border-r border-primary-border"></th>
-            <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongNhap)}</th>
-            <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongXuat)}</th>
-            <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tongTon)}</th>
+            <th className="py-1 px-2 border-r border-primary-border">{formatNumberMoney(tonDauKy.toFixed(0))}</th>
+            <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(nhapTrongKy.toFixed(0))}</th>
+            <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(xuatTrongKy.toFixed(0))}</th>
+            <th className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(tonCuoiKy.toFixed(0))}</th>
           </tr>
         </thead>
         <tbody>
@@ -120,10 +122,18 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
                   {item?.name}
                 </NavLink> */}
               </td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(0)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.expense)}</td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">{formatNumberMoney(item?.income - item?.expense)}</td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy))}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(Number(item.noTrongKy))}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(Number(item.coTrongKy))}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                 {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy).toFixed(0))}
+              </td>
             </tr>
           ))}
         </tbody>
