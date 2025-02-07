@@ -58,19 +58,19 @@ const CashRouter: FC = () => {
                     <Route exact path="/cash/detailed-report" component={CashDetailedReportPage}/>  
                     <Route exact path="/cash/detailed-report/:id" component={CashDetailedReportPage}/> 
 
-                    <Route exact path="/cash/income-plan" component={() => <CashPage outin={1} type ={1}/>}/>
+                    <Route exact path="/cash/income-plan" component={() => <CashPage outin={2} type ={1}/>}/>
                     <Route exact path="/cash/income-plan/:id" component={CashDetailPage}/>
-                    <Route exact path="/cash/expense-plan" component={() => <CashPage outin={2} type ={1}/>}/>
+                    <Route exact path="/cash/expense-plan" component={() => <CashPage outin={1} type ={1}/>}/>
                     <Route exact path="/cash/expense-plan/:id" component={CashDetailPage}/>
 
-                    <Route exact path="/cash/receipt" component={() => <CashPage outin={1} type ={7}/>}/>
+                    <Route exact path="/cash/receipt" component={() => <CashPage outin={2} type ={7}/>}/>
                     <Route exact path="/cash/receipt/:id" component={CashDetailPage}/>
-                    <Route exact path="/cash/payment" component={() => <CashPage outin={2} type ={7}/>}/>
+                    <Route exact path="/cash/payment" component={() => <CashPage outin={1} type ={7}/>}/>
                     <Route exact path="/cash/payment/:id" component={CashDetailPage}/>
 
-                    <Route exact path="/cash/credit" component={() => <CashPage outin={1} type ={8}/>}/>
+                    <Route exact path="/cash/credit" component={() => <CashPage outin={2} type ={8}/>}/>
                     <Route exact path="/cash/credit/:id" component={CashDetailPage}/>
-                    <Route exact path="/cash/debit" component={() => <CashPage outin={2} type ={8}/>}/>
+                    <Route exact path="/cash/debit" component={() => <CashPage outin={1} type ={8}/>}/>
                     <Route exact path="/cash/debit/:id" component={CashDetailPage}/>
 
                     <Route exact path="/cash/*" component={ErrorPage} />
