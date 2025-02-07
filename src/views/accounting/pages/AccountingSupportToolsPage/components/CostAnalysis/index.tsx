@@ -26,7 +26,7 @@ const CostAnalysis: FC = () => {
   const [inputFilter, setInputFilter] = useState({
     keyword: "",
     fromDate: new Date(new Date().getFullYear(), 0, 1),
-    toDate: new Date(new Date().getFullYear(), 11, 31),
+    toDate: new Date(new Date().getFullYear(), 11, 31)
   });
 
   const { current: socket }: any = useSocket();

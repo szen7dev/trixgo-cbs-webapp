@@ -23,7 +23,11 @@ export const AccountingBalance: FC = () => {
   const [optionCal, setOptionCal] = useState("");
 
   const [showOption, setShowOption] = useState(false)
-  const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
+  const [inputFilter, setInputFilter] = useState({ 
+    keyword: '', 
+    fromDate: new Date(new Date().getFullYear(), 0, 1), 
+    toDate: new Date(new Date().getFullYear(), 11, 31) 
+  });
   
   const { list: listFunda } = useFunda({
 		params: { keyword: fundaKeyword },

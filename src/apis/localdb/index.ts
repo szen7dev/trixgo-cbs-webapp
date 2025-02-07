@@ -689,8 +689,8 @@ export const STORE_OUTIN = [
 ]
 
 export const CASH_OUTIN = [
-    { value: 1, text: 'Thu' },
-    { value: 2, text: 'Chi' },
+    { value: 1, text: 'Chi/Giấy báo nợ' },
+    { value: 2, text: 'Thu/Giấy báo có' },
 ]
 
 export const STORE_TYPES = [
