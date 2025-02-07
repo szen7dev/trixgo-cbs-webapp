@@ -32,8 +32,8 @@ export const AccountingDebtDetailPage1: FC = () => {
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
-    fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
-    toDate: lastDayOfMonth
+    fromDate: new Date(new Date().getFullYear(), 0, 1), 
+    toDate: new Date(new Date().getFullYear(), 11, 31) 
   })
    
   const params: any = useParams();
