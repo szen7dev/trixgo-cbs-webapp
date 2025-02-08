@@ -14,7 +14,9 @@
     "pre-commit": "lint-staged",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,json,css,scss,md} !src/styles/output.css"
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,json,css,scss,md} !src/styles/output.css",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix"
   },
   "dependencies": {
     "@babel/plugin-syntax-decorators": "^7.16.7",
