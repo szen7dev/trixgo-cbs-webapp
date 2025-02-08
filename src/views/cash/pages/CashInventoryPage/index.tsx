@@ -53,7 +53,6 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
   }
   }, [])
 
-  
   //_____Import, export excel
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
       isExporting: false,
