@@ -9,7 +9,7 @@ import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { TIMESHEET_TYPES } from "apis/localdb";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { useAuth } from "services/hooks/auth/useAuth";
 import type { InsertTimeSheetParentPayload } from "typings/time-sheet";
 interface CreateOrEditDialogProps {
   title: string;
@@ -29,6 +29,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   assigneeName,
   projectName,
 }) => {
+  const { user } = useAuth();
   const [searchhDepartmentStr, setSearchDepartmentSrt] = useState(projectName);
 
   const [searchAssigneeStr, setSearchAssigneeStr] = useState(assigneeName);
@@ -44,7 +45,8 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     hasNextPage: hasNextPageUsersSystem,
     fetchNextPage: fetchNextPageUsersSystem
   } = useUserSystem({
-    keyword: searchAssigneeStr
+    companyID: user?.company._id,
+    keyword: searchAssigneeStr,
   }, true);
 
   const initialValues = {
