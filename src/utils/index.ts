@@ -20,6 +20,23 @@ export const convertObToUrl = (obj: any) => {
     return str;
 };
 
+/**
+ * Converts an object to a query string.
+ * @param obj - The object to convert.
+ * @returns The query string.
+ */
+export const convertObjectToQueryString = (obj: Record<string, any>): string => {
+  const queryString = Object.keys(obj)
+    .map(key => {
+      if (Array.isArray(obj[key])) {
+        return obj[key].map((val: any) => `${encodeURIComponent(key)}[]=${encodeURIComponent(val)}`).join('&');
+      }
+      return `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;
+    })
+    .join('&');
+  return queryString;
+};
+
 export const convertDateToString = (date: any) => {
     return (date && moment(date).isValid() && moment(date).toJSON()) || ""
 }

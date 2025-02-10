@@ -12,7 +12,7 @@ type UseDataCustom = {
 };
 
 export const useJournal = ({
-    params = {}
+    params = {},
 }: any) : UseDataCustom => {
 
     // Tải mẫu import excel
