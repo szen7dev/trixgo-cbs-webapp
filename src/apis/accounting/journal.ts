@@ -1,8 +1,8 @@
 import API from "../repository";
 
-const ACCOUNTING_JOURNAL = "/api/accounting/journals"; ///api/accounting/journals/export-excel
+export const ACCOUNTING_JOURNAL = "/api/accounting/journals"; ///api/accounting/journals/export-excel
 
-interface JournalRepository {
+interface IJournalRepository {
     insert: (data: any) => Promise<any>;
     update: (data: any) => Promise<any>;
     fetchListJournal: (data: any) => Promise<any>;
@@ -12,9 +12,10 @@ interface JournalRepository {
     importFromExcel: (data: any) => Promise<any>;
     exportExcel: (data: any) => Promise<any>;
     analysePrimeCost: (data: any) => Promise<any>;
+    getAccountBalance: (data: any) => Promise<any>;
 }
 
-export const JournalRepository: JournalRepository = {
+export const JournalRepository: IJournalRepository = {
     insert: data => inserData(data),
     update: data => updateData(data),
     fetchListJournal: params => fetchListJournal(params),
@@ -24,6 +25,7 @@ export const JournalRepository: JournalRepository = {
     importFromExcel: params => importFromExcel(params), 
     exportExcel: params => exportExcel(params), 
     analysePrimeCost: params => analysePrimeCost(params), 
+    getAccountBalance: params => getAccountBalance(params),
 }
 
 async function fetchListJournal(params : any) {
@@ -89,4 +91,9 @@ async function exportExcel(data: any) {
 async function analysePrimeCost(data: any) {
     const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/analyse-prime-cost`, data);
     return result
+}
+
+async function getAccountBalance(query: string) {
+    const { data: result } = await API.get(`${ACCOUNTING_JOURNAL}/get-account-balance?${query}`);
+    return result;
 }
