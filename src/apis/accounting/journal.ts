@@ -1,7 +1,6 @@
 import API from "../repository";
 
 export const ACCOUNTING_JOURNAL = "/api/accounting/journals"; ///api/accounting/journals/export-excel
-
 interface IJournalRepository {
     insert: (data: any) => Promise<any>;
     update: (data: any) => Promise<any>;
