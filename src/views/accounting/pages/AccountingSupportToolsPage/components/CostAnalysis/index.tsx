@@ -40,7 +40,6 @@ const CostAnalysis: FC = () => {
   const { listAccount } = useQueryListAccount({
     limit: 10,
     keyword: searchAccount,
-    option: 1,
     arrNames: ['152','156'],
   });
 
