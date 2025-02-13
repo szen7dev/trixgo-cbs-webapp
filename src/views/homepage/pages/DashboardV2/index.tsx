@@ -258,6 +258,7 @@ export const DashboardV2: FC<Props> = () => {
   const [toExpiredDate, setToExpiredDate] = useState("2999/12/31");
   const [isExpired, setIsExpired] = useState<any>(0);
   const [isParent, setIsParent] = useState<any>(-1);
+  const [approvalType, setApprovalType] = useState<any>(-1);
   const [subtypes, setSubtypes] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
 
@@ -270,6 +271,7 @@ export const DashboardV2: FC<Props> = () => {
     isParent: isParent,
     subtypes: subtypes,
     status: status,
+    approvalType: approvalType,
     isGroup:
       querySubject.companiesOfAssignee.length ||
       querySubject.assigneesID.length ||
@@ -332,6 +334,7 @@ export const DashboardV2: FC<Props> = () => {
     setProject([]);
     setAuthors([]);
     setIsParent(-1);
+    setApprovalType(-1);
     setFromExpiredDate("1990/01/01");
     setToExpiredDate("2999/12/31");
     setIsExpired(0);
@@ -1436,14 +1439,41 @@ export const DashboardV2: FC<Props> = () => {
           )}
 
           {tabIndex === 2 && (
+            // <DropdownSearchableV2
+            //   selectOneByOne={true}
+            //   disableSearch={true}
+            //   reset={reset}
+            //   className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            //   placeholder={"Cấp"}
+            //   onchangeValue={(val) => {
+            //     setIsParent(val.id);
+            //     dispatch(setTabActive(tabIndex));
+            //     setPageIndex(0);
+            //     ref.current && ref.current.resetPaginate();
+            //   }}
+            //   data={[
+            //     {
+            //       id: 0,
+            //       text: "Tất cả",
+            //     },
+            //     {
+            //       id: 1,
+            //       text: "Việc cha",
+            //     },
+            //     {
+            //       id: 2,
+            //       text: "Việc con",
+            //     },
+            //   ]}
+            // />
             <DropdownSearchableV2
               selectOneByOne={true}
               disableSearch={true}
               reset={reset}
               className={"mr-1 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Cấp"}
+              placeholder={"Tính chất khác"}
               onchangeValue={(val) => {
-                setIsParent(val.id);
+                setApprovalType(val.id);
                 dispatch(setTabActive(tabIndex));
                 setPageIndex(0);
                 ref.current && ref.current.resetPaginate();
@@ -1455,11 +1485,27 @@ export const DashboardV2: FC<Props> = () => {
                 },
                 {
                   id: 1,
-                  text: "Việc cha",
+                  text: "Thông thường",
                 },
                 {
                   id: 2,
-                  text: "Việc con",
+                  text: "Ngân sách",
+                },
+                {
+                  id: 3,
+                  text: "Công nợ",
+                },
+                {
+                  id: 4,
+                  text: "Báo giá",
+                },
+                {
+                  id: 5,
+                  text: "Sửa chữa",
+                },
+                {
+                  id: 6,
+                  text: "Nghỉ phép",
                 },
               ]}
             />
