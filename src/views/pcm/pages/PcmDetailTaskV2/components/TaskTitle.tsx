@@ -170,7 +170,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
         },
         {
             id: 8,
-            text: "Chất lượng kiểm tra không đạt",
+            text: "Chất lượng kiểm tra không đạt 222",
             color: "#ffb3b3"
         },
     ]
