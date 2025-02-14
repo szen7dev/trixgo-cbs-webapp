@@ -4,6 +4,7 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
     _id: string;
     date: string;
     sign: string;
+    history: string;
     signInvoice: string;
     dateInvoice: string;
     commodity: string;

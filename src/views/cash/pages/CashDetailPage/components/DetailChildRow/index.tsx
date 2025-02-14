@@ -160,6 +160,7 @@ export const DetailChildRow: FC<Props> = ({
         </p>
         <p className="text-gray-400 px-2"><i>{rowData?.userUpdate?.fullname ? rowData?.userUpdate?.fullname : rowData?.userCreate?.fullname}</i></p>
         <p className="text-gray-400 px-2"><i>{moment(rowData?.modifyAt).format("DD/MM/YYYY HH:mm")}</i></p>
+        {/* <p><i>{rowData?.history}</i></p> */}
       </div>
       <div
         className={
