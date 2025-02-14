@@ -290,46 +290,47 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
             (listDataWithPager[pageIndex] ?? []).map((item, index) => {
               return (
                   <div key={item._id} className={"flex table-row"}>
-                  <div className={"px-2 py-4 table-cell text-left box-border border-b border-t border-gray-300"}>
-                    {item?.debit?.name} - {item?.debit?.description}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    {item?.credit?.name} - {item?.credit?.description}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    {item?.customerDebit?.name}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    {item?.customerCredit?.name}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    {item?.goods?.name}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    {item?.warehouse?.name}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    {item?.goods?.unit}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
-                    {formatNumberMoney(item?.quantity)}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
-                    {formatNumberMoney(item?.unitprice)}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
-                    {formatNumberMoney(item?.amount)}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    {item?.contract?.name}
-                    <p className="text-primary"><i>{item.subtype?.name}</i></p>
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    {item?.budgetWork?.name}
-                  </div>
-                  <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    {item?.note}
-                  </div>
+                    <div className={"px-2 py-4 table-cell text-left box-border border-b border-t border-gray-300"}>
+                      {item?.debit?.name} - {item?.debit?.description}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                      {item?.credit?.name} - {item?.credit?.description}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                      {item?.customerDebit?.name}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                      {item?.customerCredit?.name}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                      {item?.goods?.name}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                      {item?.warehouse?.name}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                      {item?.goods?.unit}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
+                      {formatNumberMoney(item?.quantity)}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
+                      {formatNumberMoney(item?.unitprice)}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
+                      {formatNumberMoney(item?.amount)}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                      {item?.contract?.name}
+                      <p className="text-primary"><i>{item.subtype?.name}</i></p>
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                      {item?.budgetWork?.name}
+                    </div>
+                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                      {item?.note}
+                      {/* <p><i>{item?.history}</i></p> */}
+                    </div>
                 </div>
                 )
               })

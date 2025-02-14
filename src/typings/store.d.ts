@@ -167,6 +167,7 @@ export type StoreChild = {
   userUpdate?: any | null;
   map?: any;
   checked: number;
+  history: string;
 };
 
 export type QueryListStoreChildPayload = QueryParams & {
