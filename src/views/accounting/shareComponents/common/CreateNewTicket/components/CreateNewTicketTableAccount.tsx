@@ -16,6 +16,7 @@ import { ACCOUNTING_JOURNAL } from "apis/accounting/journal";
 import { convertObjectToQueryString } from "utils";
 import API from "apis/repository";
 import moment from "moment";
+import { Inventory } from "@mui/icons-material";
 
 type Props = {
   formik: any;
@@ -97,81 +98,155 @@ const CreateNewTicketTableAccount: FC<Props> = ({
     );
   };
 
-  useEffect(() => {
-    if (!inventoryData.length) return;
+  /**
+   * Hàm lấy số dư tài khoản.
+   *
+   * Hàm này lọc các mục trong `inventoryData` để tìm các mục có giá trị `inventory` không phải là số.
+   * Sau đó, nó tạo các truy vấn để lấy số dư tài khoản từ API và cập nhật lại `inventoryData` với số dư mới.
+   *
+   * @async
+   * @function getAccountBalance
+   * @returns {Promise<void>} - Trả về một Promise không có giá trị.
+   * @throws {Error} - Ném ra lỗi nếu có vấn đề xảy ra trong quá trình lấy dữ liệu từ API.
+   */
+  const getAccountBalance = async (inventoryData: any[]) => {
+    try {
+      const inventories = inventoryData.filter(
+        (item: any) =>
+          isNaN(item.inventory) && item.warehouse && item.goods && item.credit
+      );
 
-    const isNotChange = inventoryData.some((item: any) => {
-      return !item.warehouse || !item.goods || !item.credit;
-    });
-    if (isNotChange) return;
+      if (!inventories.length) return;
+      console.log({ inventories });
 
-    /**
-     * Hàm lấy số dư tài khoản.
-     *
-     * Hàm này lọc các mục trong `inventoryData` để tìm các mục có giá trị `inventory` không phải là số.
-     * Sau đó, nó tạo các truy vấn để lấy số dư tài khoản từ API và cập nhật lại `inventoryData` với số dư mới.
-     *
-     * @async
-     * @function getAccountBalance
-     * @returns {Promise<void>} - Trả về một Promise không có giá trị.
-     * @throws {Error} - Ném ra lỗi nếu có vấn đề xảy ra trong quá trình lấy dữ liệu từ API.
-     */
-    const getAccountBalance = async () => {
-      try {
-        const inventories = inventoryData.filter((item: any) =>
-          isNaN(item.inventory)
-        );
-
-        if (!inventories.length) return;
-
-        const asyncTask = inventories.map(async (item: any) => {
-          const query = convertObjectToQueryString({
-            optionAccount: 1,
-            fromDate: moment().startOf("year").format("YYYY-MM-DD"),
-            toDate: moment().endOf("year").format("YYYY-MM-DD"),
-            arrAccNames: [item.credit],
-            warehouseID: item.warehouse,
-            goodsID: item.goods,
-          });
-
-          const { data: result } = await API.get(
-            `${ACCOUNTING_JOURNAL}/get-account-balance?${query}`
-          );
-          return [item, result?.data];
+      const asyncTask = inventories.map(async (item: any) => {
+        const query = convertObjectToQueryString({
+          optionAccount: 1,
+          fromDate: moment().startOf("year").format("YYYY-MM-DD"),
+          toDate: moment().endOf("year").format("YYYY-MM-DD"),
+          arrAccNames: [item.credit],
+          warehouseID: item.warehouse,
+          goodsID: item.goods,
         });
 
-        const result = await Promise.all(asyncTask);
+        const { data: result } = await API.get(
+          `${ACCOUNTING_JOURNAL}/get-account-balance?${query}`
+        );
+        return [item, result?.data];
+      });
 
-        const dataInventory = result.map(([item, data]: any) => {
-          const dataArray = data.arrCombine;
-          if (!dataArray.length) return { ...item, inventory: 0 };
+      const result = await Promise.all(asyncTask);
 
-          const { klKcNoDauKy, klNoTrongKy, klKcCoDauKy, klCoTrongKy } =
-            dataArray[0];
+      const dataInventory = result.map(([item, data]: any) => {
+        const dataArray = data.arrCombine;
+        if (!dataArray.length) return { ...item, inventory: 0 };
 
-          return {
-            ...item,
-            inventory: klKcNoDauKy + klNoTrongKy - klKcCoDauKy - klCoTrongKy,
+        const { klKcNoDauKy, klNoTrongKy, klKcCoDauKy, klCoTrongKy } =
+          dataArray[0];
+
+        return {
+          ...item,
+          inventory: klKcNoDauKy + klNoTrongKy - klKcCoDauKy - klCoTrongKy,
+        };
+      });
+
+      setInventoryData((prev) => {
+        const newData = [...prev];
+        dataInventory.forEach((item: any) => {
+          newData[item.index] = {
+            ...newData[item.index],
+            inventory: item.inventory,
           };
         });
 
-        setInventoryData(prev => {
-          const newData = [...prev];
-          dataInventory.forEach((item: any) => {
-            newData[item.index] = {
-              ...newData[item.index],
-              inventory: item.inventory,
-            };
-          });
+        return newData;
+      });
+    } catch (error) {
+      console.error({ error });
+    }
+  };
 
-          return newData;
-        })
-      } catch (error) {
-        console.error({ error });
+  useEffect(() => {
+    if (!values.warehouse) return;
+
+    setInventoryData((prev: any) => {
+      const newInventoryData = prev.map((item: any) => {
+        return {
+          ...item,
+          warehouse: values.warehouse?._id,
+          inventory: undefined,
+        };
+      });
+
+      return newInventoryData;
+    });
+  }, [values.warehouse]);
+
+  useEffect(() => {
+    if (!values.selectedJournals?.length) return;
+
+    const data = values.selectedJournals.map((item: any, index: any) => {
+      const warehouse = item.warehouse?.value || values.warehouse?._id;
+      const goods = item.goods?.value || values.goods?._id;
+      const inventoryItem = inventoryData[index];
+
+      const inventory = (() => {
+        if (!inventoryItem || inventoryItem.warehouse != warehouse) {
+          return undefined;
+        }
+
+        return inventoryItem.inventory;
+      })();
+
+      const credit = (() => {
+        if (item.credit?.name) return item.credit?.name;
+
+        const creditLabel = item.credit?.label;
+        const creditSplit = creditLabel?.split?.("-") || [];
+        const creditName = creditSplit?.[0]?.trim() || "";
+
+        return creditName;
+      })();
+
+      return {
+        ...item,
+        warehouse,
+        goods,
+        credit,
+        inventory,
+        index,
+      };
+    });
+
+    setInventoryData(data);
+  }, [values.selectedJournals]);
+
+  useEffect(() => {
+    if (!inventoryData.length) return;
+
+    try {
+      console.log({ inventoryData });
+
+      const isChange = inventoryData.some((item: any) => {
+        return (
+          item.warehouse && item.goods && item.credit && isNaN(item.inventory)
+        );
+      });
+      console.log({ isChange });
+
+      if (!isChange) {
+        const isNotChange = inventoryData.some((item: any) => {
+          return !item.warehouse || !item.goods || !item.credit;
+        });
+        console.log({ isNotChange });
+
+        if (isNotChange) return;
       }
-    };
+    } catch (error) {
+      console.error("CreateNewTicketTableAccount.tsx Error: ", error);
+    }
 
-    getAccountBalance();
+    getAccountBalance(inventoryData);
   }, [inventoryData]);
 
   return (
@@ -1007,7 +1082,7 @@ const CreateNewTicketTableAccount: FC<Props> = ({
               <button
                 type="button"
                 className={"btn btn-success"}
-                onClick={() =>
+                onClick={() => {
                   push({
                     debit: "",
                     credit: "",
@@ -1025,8 +1100,19 @@ const CreateNewTicketTableAccount: FC<Props> = ({
                     job: "",
                     note: "",
                     updown: "",
-                  })
-                }
+                  });
+                  console.log({ warehouse, initialValues, values });
+
+                  setInventoryData((prev: any) => {
+                    const newData = [...prev];
+                    newData.push({
+                      warehouse: warehouse?._id || initialValues.warehouse?._id,
+                      index: newData.length,
+                      inventory: undefined,
+                    });
+                    return newData;
+                  });
+                }}
               >
                 + Thêm bút toán
               </button>
