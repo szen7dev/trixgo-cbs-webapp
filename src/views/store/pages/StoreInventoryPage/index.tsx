@@ -138,7 +138,9 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
               customerID,
               goodsID,
               assetsID,
-              userCreateID: userID
+              userCreateID: userID,
+              fromDate: inputFilter.fromDate,
+              toDate: inputFilter.toDate,
           }
         });
 
