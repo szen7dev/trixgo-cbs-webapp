@@ -339,7 +339,7 @@ const ProjectStorePage: FC = () => {
     useEffect(() => {
         if(dataImport.length){
             const fetchData = async () => {
-                const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
+                const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport), projectID });
                 setDataImport([]);
 
                 if(!data.error){
