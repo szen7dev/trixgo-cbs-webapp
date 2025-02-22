@@ -225,7 +225,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         <p>Đơn giá xuất</p>
         <input
           type="number"
-          placeholder="Đơn giá xuất"
+          placeholder="Đơn giá xuất bán"
           name="sellingUnitprice"
           className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData?.sellingUnitprice}
