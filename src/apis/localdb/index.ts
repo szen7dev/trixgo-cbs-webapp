@@ -1317,6 +1317,10 @@ export const APP_ID = {
                 id: "65b307c66ed71b0012c947de",
                 name: "Danh sách khách hàng"
             },
+            voucher: {
+                id: "65b307c66ed71b0012c947de", // bổ sung ID
+                name: "Voucher"
+            },
         },
     },
     STORE: {

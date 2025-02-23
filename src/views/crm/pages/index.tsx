@@ -7,3 +7,5 @@ export {CrmSupportPage} from './CrmSupportPage';
 export {CrmAffiliatePage} from './CrmAffiliatePage';
 export {CrmCustomerInfoPage} from './CrmCustomerInfoPage';
 export {CrmBookingPage} from './CrmBookingPage';
+export {CrmVoucherPage} from './CrmVoucherPage';
+export {CrmVoucherDetailPage} from './CrmVoucherDetailPage';
