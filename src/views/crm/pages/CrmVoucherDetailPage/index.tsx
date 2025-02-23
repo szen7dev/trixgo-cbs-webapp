@@ -103,6 +103,7 @@ export const CrmVoucherDetailPage: FC = () => {
 					</td>
 					<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
 						{item?.name}
+						<p className="text-xs text-primary-gray"><i>{item?._id}</i></p>
 					</td>
 					<td className={"p-2 border-0.5 border-primary-border"}>
 						{item?.phone}
