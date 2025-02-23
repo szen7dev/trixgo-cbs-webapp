@@ -40,6 +40,7 @@ export const CrmVoucherDetailPage: FC = () => {
     } = useCustomer({
         params: { 
 			limit: 10,
+			option: 3,
 			voucherID,
             select: "name phone", 
         },
