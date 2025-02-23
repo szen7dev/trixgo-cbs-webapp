@@ -80,7 +80,7 @@ const CreateCrmVoucher: FC<any> = ({ toggle, modalType, onConfirm, initialValues
             }
         };
 
-        queryClient.refetchQueries('fnb-voucher-list')
+        queryClient.refetchQueries('store-voucher-list')
     };
 
     return (
