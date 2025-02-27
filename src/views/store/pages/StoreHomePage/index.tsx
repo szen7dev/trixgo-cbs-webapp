@@ -154,11 +154,11 @@ export const StoreHomePage: FC<{ type: number }> = ({ type }) => {
                             onChange={onChangeSearch}
                         />
 
-                        {/* <button className={"flex items-center justify-center mx-3 ml-3"}
+                        <button className={"flex items-center justify-center mx-3 ml-3"}
                                 onClick={handleDownloadTemplateImportExcel}
                             >
-                                Tải mẫu Import Excel
-                        </button> */}
+                                Tải danh mục Kho
+                        </button>
                     </div>
                 </div>
             </header>
