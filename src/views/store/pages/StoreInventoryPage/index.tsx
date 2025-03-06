@@ -41,10 +41,7 @@ export const StoreInventoryPage: FC<Props> = ({ outin }) => {
   const [goodsID, setGoodsID] = useState<string | null>();
   const [assetsID, setAssetsID] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
-
-  const today = new Date()
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0)
-  const currentMonth = new Date().getMonth()
+  
   const [inputFilter, setInputFilter] = useState({
     fromDate: new Date(new Date().getFullYear(), 0, 1),
     toDate: new Date(new Date().getFullYear(), 11, 31)
