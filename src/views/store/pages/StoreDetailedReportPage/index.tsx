@@ -22,7 +22,7 @@ import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from "utils";
-
+import { FilterDateGroup }  from "views/accounting/shareComponents/common";
 interface Props {
     outin?: number
     // type?: number
@@ -52,6 +52,10 @@ export const StoreDetailedReportPage: FC<Props> = () => {
   const [keywordWork, setKeywordWork] = useState("");
   const [keywordDoctype, setKeywordDoctype] = useState('');
   const [packageKeyword, setPackageKeyword] = useState("");
+  const [inputFilter, setInputFilter] = useState({
+    fromDate: new Date(new Date().getFullYear(), 0, 1),
+    toDate: new Date(new Date().getFullYear(), 11, 31)
+  })
 
   const {
     dataNotFilter: listDataWithPager,
@@ -81,6 +85,8 @@ export const StoreDetailedReportPage: FC<Props> = () => {
     subtypeID,
     userCreateID: userID,
     sortKey: JSON.stringify(['date__1', 'createAt__1']),
+    fromDate: inputFilter.fromDate,
+    toDate: inputFilter.toDate,
   })
 
   const [userKeyword, setUserKeyword] = useState("");  
@@ -156,6 +162,8 @@ export const StoreDetailedReportPage: FC<Props> = () => {
               subtypeID,
               userCreateID: userID,
               sortKey: JSON.stringify(['date__1', 'createAt__1']),
+              fromDate: inputFilter.fromDate,
+              toDate: inputFilter.toDate,
           }
         })
 
@@ -183,6 +191,14 @@ export const StoreDetailedReportPage: FC<Props> = () => {
 	}, true, false)
 
   let inventoryQuantity = 0, inventory = 0
+
+  const handleOnChangeDate = useCallback((date, input) => {
+  if (input) {
+    setInputFilter((value) => ({ ...value, toDate: date }))
+  } else {
+    setInputFilter((value) => ({ ...value, fromDate: date }))
+  }
+  }, [])
   
   return (
     <div>
@@ -562,6 +578,9 @@ export const StoreDetailedReportPage: FC<Props> = () => {
             )}
             selectOneByOne={true}
         />
+        <div className="flex items-center">
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+        </div>
         <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 2})}>
             Download <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
         </button>
