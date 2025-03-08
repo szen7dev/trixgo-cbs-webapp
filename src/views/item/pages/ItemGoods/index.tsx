@@ -106,11 +106,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         params: { 
             keyword, 
             isListParentOfListChilds: "1", 
-            parentID,
-            // populates: JSON.stringify({
-            //     path: 'parent',
-            //     select: '_id name sign path'
-            // })
+            parentID
         },
         isFetchList: true
     })

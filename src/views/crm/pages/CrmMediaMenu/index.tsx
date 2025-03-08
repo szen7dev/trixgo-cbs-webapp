@@ -4,7 +4,7 @@ import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams, useHistory, useLocation } from "react-router-dom";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -17,73 +17,66 @@ import { SearchInput } from "shareComponents/common";
 import { ModalCreateOrUpdateMenu } from '../../shareComponents/common';
  
 /*=====5.TYPINGS=====*/
-import { Customer } from "typings/items";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
-import { useCustomer } from "services/hooks/items/useCustomer";
+import { useMediaMenu } from "services/hooks/crm/useMediaMenu";
 
 /*=====7.OTHER=====*/
-import { CONTACT_TYPES, GENDER_TYPES, CUSTOMER_TYPES } from "apis/localdb";
+import { MEDIA_MENU_TYPES } from "apis/localdb";
 
 export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
+    const location = useLocation();
 	const history = useHistory();
     const { closeModal, openModal } = useModal();
 	const { parentID } = useParams<{ parentID: string }>();
     const [keyword, setKeyword] = useState('');
     const [title, setTitle] = useState("Danh sách");
-    const [itemsChecked, setItemsChecked] = useState<Array<Customer.Customer>>([]);
+    const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
     const [initialValues, setInitialValues] = useState({
         parent: parentID,
-        contactID: '',
-        type: '2',
+        menuID: '',
+        type: '1',
+        status: '1',
         name: '',
-        address: '',
+        expired: '',
+        slug: '',
         note: '',
-        taxid: '',
-        phone: '',
-        email: '',
-        description: '',
-        funda: '',
-        sale: '',
-        gender: 1,
-        birthday: '',
-        nonResident: '1'
-    });
+    })
 
     const {
-        deleteAsync,
-        list: listCustomers,
+        list: listData,
         hasNextPage,
         refetch,
         fetchNextPage,
         totalRecord
-    } = useCustomer({
+    } = useMediaMenu({
         params: { 
-            populates: {
-                path: 'parent userUpdate funda sale',
-                select: 'name bizfullname fullname'
-            },
-            keyword, 
             parentID,
-            isListParentOrListChilds: "1"
+            keyword, 
+            populates: {
+                path: 'parent userUpdate userCreate',
+                select: 'name fullname parent',
+                populate: {
+                    path: 'parent',
+                    select: 'name',
+                }
+            },
         },
         isFetchList: true,
-    });
+    })
 
     // Reset form
     const clearData = () => {
         setInitialValues(previousValue => ({
             ...previousValue,
-            contactID: '',
+            menuID: '',
             type: '',
+            status: '',
             name: '',
-            address: '',
-            taxid: '',
-            phone: '',
-            email: '',
-            description: '',
-            nonResident: '',
+            expired: '',
+            slug: '',
+            note: '',
         }))
     }
 
@@ -96,7 +89,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
     }, 500);
 
     // Làm việc với update mẩu tin
-    const onClickCheckButton = (doc: Customer.Customer) => {
+    const onClickCheckButton = (doc: any) => {
         const check = itemsChecked.find(item => item._id === doc._id);
         let newListIDChecked = [];
 
@@ -109,23 +102,16 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, address, taxid, phone, email, description, funda, sale, note, gender, birthday, nonResident } = newListIDChecked[0];
+            const { _id, type, status, name, expired, slug, note } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
-                contactID: _id,
+                menuID: _id,
                 type,
+                status,
                 name,
-                address: address || '',
-                taxid: taxid || '',
-                phone: phone || '', 
-                email: email || '', 
-                description: description || '',
-                funda: funda,
-                sale: sale,
-                note,
-                gender,
-                birthday,
-                nonResident
+                expired,
+                slug,
+                note
             });
         } else {
             clearData();
@@ -139,14 +125,14 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
     }, [itemsChecked]);
     
     const getStateCheckedAll = useCallback(() => {
-        return itemsChecked.length == listCustomers.length;
+        return itemsChecked.length == listData.length;
     }, [itemsChecked]);
 
     const onClickCheckAll = () => {
-        if (itemsChecked.length == listCustomers.length) {
+        if (itemsChecked.length == listData.length) {
             setItemsChecked([]);
         } else {
-            setItemsChecked(listCustomers);
+            setItemsChecked(listData);
         }
     }
 
@@ -161,16 +147,14 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
             clearData();
             initValues = {
                 parent: parentID,
-                contactID: '',
-                type: '2',
+                menuID: '',
+                type: '1',
+                status: '1',
                 name: '',
-                address: '',
-                taxid: '',
-                phone: '',
-                email: '',
-                description: '',
-                nonResident: '1',
-            };
+                expired: '',
+                slug: '',
+                note: '',
+            }
         }
 
         openModal(
@@ -239,41 +223,31 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="py-1 w-1/6">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Phân loại
                             </div>
                         </th>
                         <th className="py-1 w-1/6">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Tên
+                                Nội dung
+                            </div>
+                        </th> 
+                        <th className="py-1 w-1/6">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Mã hiệu/Slug
                             </div>
                         </th> 
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Giới tính
+                                Danh mục cha 1
                             </div>
                         </th> 
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Địa chỉ
+                                Danh mục cha 2
                             </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Mã số thuế
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Điện thoại
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Ngày sinh
-                            </div>
-                        </th>
+                        </th> 
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Ghi chú
@@ -281,7 +255,12 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Thông tin khách
+                                Hình ảnh
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Trạng thái
                             </div>
                         </th>
                         <th className="py-1 font-normal">
@@ -293,7 +272,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
                 </thead>
 
                 <tbody>
-                    {listCustomers.length ? listCustomers.map((item: any) => (
+                    {listData.length ? listData.map((item: any) => (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
@@ -304,27 +283,25 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {item.type > 1 ? CONTACT_TYPES[Number(item.type)-1].text : ""}
-                                <p className="text-xs"><i>{item.email}</i></p>
-                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                {item.type >= 1 ? MEDIA_MENU_TYPES[Number(item.type)-1].text : ""}
                             </td>
                             <td className="py-1 px-2">
-                                <Link to={`/item/contact/${item._id}`}>
-                                    {item?.childs.length > 0? <b>{item.name}({item?.childs.length})</b>: item.name }
+                                <Link to={`/crm/menu/${item._id}`}>
+                                    {item?.childs.length > 0? <b>{item.name} ({item?.childs.length})</b>: item.name }
                                 </Link>
-                                <p className="text-primary">Sale: {item?.sale?.fullname || ''}</p>
                             </td>
-                            <td className="py-1 px-2">{item.gender > 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}</td>
-                            <td className="py-1 px-2">{item.address}</td>
-                            <td className="py-1 px-2">{item.taxid}</td>
-                            <td className="py-1 px-2">{item.phone}</td>
-                            <td className="py-1 px-2">
-                                {item.birthday ? moment(item.birthday).format('DD/MM/YYYY') : ''}
-                            </td>
+                            <td className="py-1 px-2">{item?.slug}</td>
+                            <td className="py-1 px-2">{item?.parent?.name}</td>
+                            <td className="py-1 px-2">{item?.parent?.parent?.name}</td>
                             <td className="py-1 px-2">{item.note}</td>
-                            <td className="py-1 px-2">{item?.nonResident > 1 ? CUSTOMER_TYPES[Number(item?.nonResident)-1].text : ''}</td>
                             <td className="py-1 px-2">
-                                {item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY - HH:mm') : ''} <br /> {item?.userUpdate?.bizfullname || ''}
+                                
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.status == 1 ? <span className="bg-green-400">Active</span> : <span className="bg-red-400">Inactive</span>}
+                            </td>
+                            <td className="py-1 px-2">
+                                {item.userUpdate ? `${item?.userUpdate?.fullname} ${moment(item.modifyAt).format('DD/MM/YYYY HH:mm')}` : `${item?.userCreate?.fullname} ${moment(item.createAt).format('DD/MM/YYYY HH:mm')}`}
                             </td>
                         </tr>
                     )) : <></>}
@@ -335,7 +312,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
                 <div className="w-full flex justify-center my-5">
                     <button onClick={fetchNextPage}>
                         <span className="text-primary">
-                            {`Xem thêm (${totalRecord - listCustomers.length})`}
+                            {`Xem thêm (${totalRecord - listData.length})`}
                         </span>
                     </button>
                 </div>

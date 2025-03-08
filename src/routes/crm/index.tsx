@@ -75,7 +75,10 @@ const CrmRouter: FC = () => {
                     <Route exact path="/crm/combo" component={CrmMediaCombo}/>
                     <Route exact path="/crm/post" component={CrmMediaPost}/>
                     <Route exact path="/crm/tag" component={CrmMediaTag}/>
+
                     <Route exact path="/crm/menu" component={CrmMediaMenu}/>
+                    <Route exact path="/crm/menu/:parentID" component={CrmMediaMenu}/>
+
                     <Route exact path="/crm/banner" component={CrmMediaBanner}/>
                     <Route exact path="/crm/*" component={ErrorPage} />
                 </Switch>

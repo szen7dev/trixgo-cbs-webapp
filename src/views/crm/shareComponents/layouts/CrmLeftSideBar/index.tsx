@@ -45,7 +45,7 @@ export const CrmLeftSideBar: FC = () => {
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
                         </NavLink> : <></>
                     }
-                    <NavLink
+                    {/* <NavLink
                         to={`/crm/home`}
                         className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
                     >
@@ -55,7 +55,7 @@ export const CrmLeftSideBar: FC = () => {
                         alt="Menu item"
                         />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
-                    </NavLink>
+                    </NavLink> */}
                     {listAppMenu && listAppMenu.length ?
                         <>
                         {listAppMenu.map((item: any, index: number) => {
@@ -81,66 +81,6 @@ export const CrmLeftSideBar: FC = () => {
                         }              
                         </> : <></>
                     }
-
-                    <NavLink
-                        to={`/crm/post`}
-                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"
-                        >
-                        <img
-                            width={'7px'}
-                            src={iconFolder}
-                            alt="Menu item"
-                        />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Bài viết</span>
-                    </NavLink>   
-
-                    <NavLink
-                        to={`/crm/combo`}
-                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"
-                        >
-                        <img
-                            width={'7px'}
-                            src={iconFolder}
-                            alt="Menu item"
-                        />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Combo ưu đãi, deal hot</span>
-                    </NavLink>   
-
-                    <NavLink
-                        to={`/crm/menu`}
-                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"
-                        >
-                        <img
-                            width={'7px'}
-                            src={iconFolder}
-                            alt="Menu item"
-                        />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Menu Website</span>
-                    </NavLink>
-
-                    <NavLink
-                        to={`/crm/banner`}
-                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"
-                        >
-                        <img
-                            width={'7px'}
-                            src={iconFolder}
-                            alt="Menu item"
-                        />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Banner truyền thông</span>
-                    </NavLink>
-
-                    <NavLink
-                        to={`/crm/tag`}
-                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"
-                        >
-                        <img
-                            width={'7px'}
-                            src={iconFolder}
-                            alt="Menu item"
-                        />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Tagline bài viết</span>
-                    </NavLink>
                 </div>
             </div>
         </div>

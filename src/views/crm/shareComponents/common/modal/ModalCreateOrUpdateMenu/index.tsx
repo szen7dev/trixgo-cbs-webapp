@@ -1,33 +1,25 @@
 import React, { UIEvent, FC, useState } from "react";
 import { toast } from "react-toastify";
 import moment from 'moment';
-import { ModalProps } from 'typings/items/customer';
 import { useModal } from "services/hooks/useModal";
-import { useCustomer } from "services/hooks/items/useCustomer";
-import { useFunda } from "services/hooks/items/useFunda";
+import { useMediaMenu } from "services/hooks/crm/useMediaMenu";
 
-export const ModalCreateOrUpdateMenu: FC<ModalProps> = ({
+export const ModalCreateOrUpdateMenu: FC<any> = ({
   modalType,
   onConfirm,
   initialValues = {
-    contactID: '',
-    type: 2,
+    menuID: '',
+    type: 1,
+    status: 1,
     name: '',
-    address: '',
-    taxid: '',
-    phone: '',
-    gender: 1,
-    birthday: '',
-    description: '',
+    expired: '',
+    slug: '',
     note: '',
-    email: '',
-    nonResident: '',
-    funda: {},
   }
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { refetch: refetchCustomer, insertAsync, updateAsync } = useCustomer({});
+  const { refetch: refetchCustomer, insertAsync, updateAsync } = useMediaMenu({});
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -54,8 +46,8 @@ export const ModalCreateOrUpdateMenu: FC<ModalProps> = ({
           const { error, message, data } = await updateAsync({
             ...formData,
             type: `${formData.type}`,
-            gender: `${formData.gender}`,
-          });
+            status: `${formData.status}`,
+          })
 
           if (error) {
             if(data.message){
@@ -85,7 +77,7 @@ export const ModalCreateOrUpdateMenu: FC<ModalProps> = ({
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormData(previous => ({
+    setFormData((previous: any) => ({
       ...previous,
       [name]: value
     }))
@@ -97,7 +89,7 @@ export const ModalCreateOrUpdateMenu: FC<ModalProps> = ({
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
-          {modalType === 'create' ? 'Tạo danh bạ' : 'Cập nhật danh bạ'}
+          {modalType === 'create' ? 'Tạo' : 'Cập nhật'}
         </p>
         <img
           src={`${process.env.PUBLIC_URL}/images/common/icon-small-bold-close.svg`}
@@ -109,100 +101,14 @@ export const ModalCreateOrUpdateMenu: FC<ModalProps> = ({
 
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
-          Tên danh bạ (*)
+          Nội dung (*)
         </label>
         <input
           type="text"
-          placeholder="Nhập tên"
+          placeholder="Nội dung"
           name="name"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.name}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
-          Điện thoại (*)
-        </label>
-        <input
-          type="text"
-          placeholder="Điện thoại"
-          name="phone"
-          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.phone}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtEmail">
-          Email
-        </label>
-        <input
-          type="text"
-          placeholder="Email"
-          name="email"
-          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.email}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
-          Giới tính (*)
-        </label>
-        <div className={"flex items-center"}>
-            <div className={"flex items-center ml-3"}>
-                <input
-                  type="radio"
-                  value={1}
-                  name="gender"
-                  className="form-check-input mt-0"
-                  defaultValue={formData.gender}
-                  checked={formData.gender == 1?true: false}
-                  onChange={onChange}
-                />
-                <label htmlFor="gender" className={"text-left ml-3"}>Nam</label>
-            </div>
-            <div className={"flex items-center ml-3"}>
-                <input
-                  type="radio"
-                  value={2}
-                  name="gender"
-                  className="form-check-input mt-0"
-                  defaultValue={formData.gender}
-                  checked={formData.gender == 2?true: false}
-                  onChange={onChange}
-                />
-                <label htmlFor="gender" className={"text-left ml-3"}>Nữ</label>
-            </div>
-            <div className={"flex items-center ml-3"}>
-                <input
-                  type="radio"
-                  value={3}
-                  name="gender"
-                  className="form-check-input mt-0"
-                  defaultValue={formData.gender}
-                  checked={formData.gender == 3?true: false}
-                  onChange={onChange}
-                />
-                <label htmlFor="campaign" className={"text-left ml-3"}>Khác</label>
-            </div>
-          </div>
-      </section>
-
-      <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
-          Ngày sinh
-        </label>
-        <input
-          type="date"
-          placeholder="Ngày sinh"
-          name="birthday"
-          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={moment(formData.birthday).format("YYYY-MM-DD")}
           onChange={onChange}
         />
       </section>
@@ -219,10 +125,10 @@ export const ModalCreateOrUpdateMenu: FC<ModalProps> = ({
                   name="type"
                   className="form-check-input mt-0"
                   defaultValue={formData.type}
-                  checked={formData.type == 1?true: false}
+                  checked={formData.type == 1 ? true : false}
                   onChange={onChange}
                 />
-                <label htmlFor="type" className={"text-left ml-3"}>Nhân viên</label>
+                <label htmlFor="type" className={"text-left ml-3"}>Trang sản phẩm</label>
             </div>
             <div className={"flex items-center ml-3"}>
                 <input
@@ -231,44 +137,56 @@ export const ModalCreateOrUpdateMenu: FC<ModalProps> = ({
                   name="type"
                   className="form-check-input mt-0"
                   defaultValue={formData.type}
-                  checked={formData.type == 2?true: false}
+                  checked={formData.type == 2 ? true : false}
                   onChange={onChange}
                 />
-                <label htmlFor="type" className={"text-left ml-3"}>Khách hàng</label>
+                <label htmlFor="type" className={"text-left ml-3"}>Trang bài viết</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={3}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 3 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Trang khác</label>
             </div>
           </div>
       </section>
 
       <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
-          Địa chỉ
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Thời hạn
         </label>
         <input
-          type="text"
-          placeholder="Nhập địa chỉ"
-          name="address"
+          type="date"
+          placeholder="Thời hạn"
+          name="expired"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.address}
+          defaultValue={moment(formData.expired).format("YYYY-MM-DD")}
           onChange={onChange}
         />
       </section>
 
       <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtTaxid">
-          Mã số thuế
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Mã hiệu/Slug
         </label>
         <input
           type="text"
-          placeholder="Nhập mã số thuế"
-          name="taxid"
+          placeholder="Nhập nội dung"
+          name="slug"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.taxid}
+          defaultValue={formData.slug}
           onChange={onChange}
         />
       </section>
 
       <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
           Ghi chú
         </label>
         <input
@@ -279,6 +197,38 @@ export const ModalCreateOrUpdateMenu: FC<ModalProps> = ({
           defaultValue={formData.note}
           onChange={onChange}
         />
+      </section>
+
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
+          Trạng thái
+        </label>
+        <div className={"flex items-center"}>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={1}
+                  name="status"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.status}
+                  checked={formData.status == 1?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="status" className={"text-left ml-3"}>Active</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={2}
+                  name="status"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.status}
+                  checked={formData.status == 2?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="status" className={"text-left ml-3"}>Inactive</label>
+            </div>
+          </div>
       </section>
 
       <footer className="absolute right-0 bottom-0 px-5 py-5">
