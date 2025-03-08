@@ -54,6 +54,12 @@ export const MEDIA_MENU_TYPES = [
     { value: 3, text: 'Trang khác' },
 ]
 
+export const MEDIA_BANNER_TYPES = [
+    { value: 1, text: 'Trang sản phẩm' },
+    { value: 2, text: 'Trang bài viết' },
+    { value: 3, text: 'Trang khác' },
+]
+
 // NHÓM CHỨC NĂNG ỨNG DỤNG MẶC ĐỊNH (PHỤC VỤ CẤU HÌNH BAN ĐẦU)
 export const PROJECT_ROLES = [
     { value: 21, text: 'Nhóm quản trị Dự án/Phòng ban/Hợp đồng', permission: { read: 1, create: 1, update: 1, deleteIn: 1 } },

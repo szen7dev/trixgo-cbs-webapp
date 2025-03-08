@@ -60,14 +60,12 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
 	    images: [] as ImageProps[],
 	    index: 0,
 	    createAt: ""
-  	});
-
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
+  	})
+    const fileInputRef = useRef<HTMLInputElement>(null)
     const { addFileToUpload } = useUpload({
         appID: APP_ID.ITEM.id,
         companyID: user?.company?._id,
-    });
+    })
 
 	const history = useHistory();
     const { closeModal, openModal } = useModal();
@@ -532,7 +530,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 {item.note}
                             </td>
                             <td className="py-1 px-2">
-                            <div style={{display: "flex"}}>
+                                <div style={{display: "flex"}}>
 									{item?.images?.map((image: any, i: number) => {
 										return (
 											<div
