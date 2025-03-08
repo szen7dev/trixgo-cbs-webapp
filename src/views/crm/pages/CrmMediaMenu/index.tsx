@@ -1,59 +1,345 @@
-import React, { FC, useState, useEffect } from "react";
+/*=====1.LIBRARY=====*/
+import { FC, useState, useCallback, useEffect } from "react";
+import cn from "classnames";
+import debounce from "lodash/debounce";
+import moment from "moment";
 import { toast } from "react-toastify";
-// import debounce from "lodash/debounce";
-// import moment from "moment";
-// import { formatNumberMoney } from "utils/converter";
-import { read, utils } from 'xlsx';
-import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+import { Link, useParams, useHistory } from "react-router-dom";
 
-export const CrmMediaMenu: FC = () => {
-    const { exportOrderAsync, importExcelAsync } = useFnbOrder({});
+/*=====2.CSS=====*/
+import styles from "views/support/styles/support.module.css";
 
-    const [dataImport, setDataImport] = useState([]);
+/*=====3.ICONS=====*/
+import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
 
-	const handleImport = ($event: any) => {
-        const files = $event.target.files;
-        if (files.length) {
-            const file = files[0];
-            const reader = new FileReader();
-            reader.onload = (event: any) => {
-                const wb = read(event.target.result);
-                const sheets = wb.SheetNames;
-    
-                if (sheets.length) {
-                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-    
-                    // Set data để Import
-                    setDataImport(rows)
-                }
-            }
-    
-            reader.readAsArrayBuffer(file);
-        }
-    
-        // Đọc xong thì xóa value trong Input đi
-        $event.target.value = null;
+/*=====4.PAGES/COMPONENTS=====*/
+import { SearchInput } from "shareComponents/common";
+import { ModalCreateOrUpdateMenu } from '../../shareComponents/common';
+ 
+/*=====5.TYPINGS=====*/
+import { Customer } from "typings/items";
+
+/*=====6.HOOKS/APIS=====*/
+import { useModal } from "services/hooks/useModal";
+import { useCustomer } from "services/hooks/items/useCustomer";
+
+/*=====7.OTHER=====*/
+import { CONTACT_TYPES, GENDER_TYPES, CUSTOMER_TYPES } from "apis/localdb";
+
+export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
+	const history = useHistory();
+    const { closeModal, openModal } = useModal();
+	const { parentID } = useParams<{ parentID: string }>();
+    const [keyword, setKeyword] = useState('');
+    const [title, setTitle] = useState("Danh sách");
+    const [itemsChecked, setItemsChecked] = useState<Array<Customer.Customer>>([]);
+    const [initialValues, setInitialValues] = useState({
+        parent: parentID,
+        contactID: '',
+        type: '2',
+        name: '',
+        address: '',
+        note: '',
+        taxid: '',
+        phone: '',
+        email: '',
+        description: '',
+        funda: '',
+        sale: '',
+        gender: 1,
+        birthday: '',
+        nonResident: '1'
+    });
+
+    const {
+        deleteAsync,
+        list: listCustomers,
+        hasNextPage,
+        refetch,
+        fetchNextPage,
+        totalRecord
+    } = useCustomer({
+        params: { 
+            populates: {
+                path: 'parent userUpdate funda sale',
+                select: 'name bizfullname fullname'
+            },
+            keyword, 
+            parentID,
+            isListParentOrListChilds: "1"
+        },
+        isFetchList: true,
+    });
+
+    // Reset form
+    const clearData = () => {
+        setInitialValues(previousValue => ({
+            ...previousValue,
+            contactID: '',
+            type: '',
+            name: '',
+            address: '',
+            taxid: '',
+            phone: '',
+            email: '',
+            description: '',
+            nonResident: '',
+        }))
     }
-    
-    // Gọi tới API để đẩy data lên
-    useEffect(() => {
-        if(dataImport.length){
-            const fetchData = async () => {
-                const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
-                setDataImport([]);
-    
-                if(!data.error){
-                    return toast.success("Import thành công");
-                }
-                return toast.error(data.message);
-            }
-            fetchData();
+
+    // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
+    const handleConfirmCreateOrUpdate = () => refetch();
+
+    // Xử lý sự kiện tìm kiếm
+    const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+        setKeyword(event.target.value);
+    }, 500);
+
+    // Làm việc với update mẩu tin
+    const onClickCheckButton = (doc: Customer.Customer) => {
+        const check = itemsChecked.find(item => item._id === doc._id);
+        let newListIDChecked = [];
+
+        if (check) {
+            newListIDChecked = itemsChecked.filter(item => item._id !== doc._id)
+            setItemsChecked(newListIDChecked);
+        } else {
+            newListIDChecked = [...itemsChecked, doc];
+            setItemsChecked(newListIDChecked);
+        };
+
+        if (newListIDChecked.length === 1) {
+            const { _id, type, name, address, taxid, phone, email, description, funda, sale, note, gender, birthday, nonResident } = newListIDChecked[0];
+            setInitialValues({
+                parent: parentID,
+                contactID: _id,
+                type,
+                name,
+                address: address || '',
+                taxid: taxid || '',
+                phone: phone || '', 
+                email: email || '', 
+                description: description || '',
+                funda: funda,
+                sale: sale,
+                note,
+                gender,
+                birthday,
+                nonResident
+            });
+        } else {
+            clearData();
         }
-    }, [JSON.stringify(dataImport)])
+    };
+
+    // Check chọn 1 hoặc nhiều mẩu tin
+    const getStateChecked = useCallback((id: string) => {
+        const user = itemsChecked.find(item => item._id === id);
+        return user ? true : false;
+    }, [itemsChecked]);
+    
+    const getStateCheckedAll = useCallback(() => {
+        return itemsChecked.length == listCustomers.length;
+    }, [itemsChecked]);
+
+    const onClickCheckAll = () => {
+        if (itemsChecked.length == listCustomers.length) {
+            setItemsChecked([]);
+        } else {
+            setItemsChecked(listCustomers);
+        }
+    }
+
+    const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
+
+        let initValues: any = {...initialValues};
+
+        setItemsChecked([]);
+
+        // Mở modal tạo mới
+        if(modalType === 'create') {
+            clearData();
+            initValues = {
+                parent: parentID,
+                contactID: '',
+                type: '2',
+                name: '',
+                address: '',
+                taxid: '',
+                phone: '',
+                email: '',
+                description: '',
+                nonResident: '1',
+            };
+        }
+
+        openModal(
+            <div
+                className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                style={{
+                    height: "720px",
+                }}
+            >
+                <ModalCreateOrUpdateMenu
+                    modalType={modalType}
+                    initialValues={initValues}
+                    onConfirm={handleConfirmCreateOrUpdate}
+                />
+            </div>
+        )
+    }
 
     return (
-        <div className="flex flex-1 flex-col overflow-hidden h-full">
-            <p className="text-lg">Menu webiste</p>
-        </div>
+        <main className="relative h-full">
+            <header className="sticky top-0 bg-primary-light z-10">
+                <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
+                    <div className="flex items-center">
+                        <button onClick={history.goBack}>
+							<img src="/images/common/button_back.png" alt="Button Back" />
+						</button>
+                        <p className="text-lg ml-2">{title}</p>
+
+                        <SearchInput
+                            classNameWrapper="ml-4 mr-2"
+                            classNameInput="outline-none w-[296px]"
+                            onChange={onChangeSearch}
+                        />
+
+                        {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
+                        {itemsChecked.length === 1 ? (
+                            <button
+                                className="mr-3"
+                                onClick={() => handleOpenModalCreateOrUpdate('update')}
+                            >
+                                <img src={pencilIcon} alt="icon pencil" />
+                            </button>
+                        ) : ''}
+                    </div>
+                    <div className="flex items-center">
+                        <button
+                            className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
+                            onClick={() => handleOpenModalCreateOrUpdate('create')}
+                            >
+                            Tạo mới
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
+                <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
+                    <tr className="text-left text-sm">
+                        <th className={cn("py-1 text-center", styles.theadInput)}>
+                            <div className="border-r-2 border-gray-300 flex items-center justify-center">
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    defaultChecked={getStateCheckedAll()}
+                                    onClick={onClickCheckAll}
+                                />
+                            </div>
+                        </th>
+                        <th className="py-1 w-1/6">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Phân loại
+                            </div>
+                        </th>
+                        <th className="py-1 w-1/6">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Tên
+                            </div>
+                        </th> 
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Giới tính
+                            </div>
+                        </th> 
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Địa chỉ
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Mã số thuế
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Điện thoại
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Ngày sinh
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Ghi chú
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Thông tin khách
+                            </div>
+                        </th>
+                        <th className="py-1 font-normal">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Cập nhật lần cuối
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {listCustomers.length ? listCustomers.map((item: any) => (
+                        <tr key={item._id} className="border-b border-primary-border h-10">
+                            <td className="py-1 px-2 text-center">
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    checked={getStateChecked(item._id)}
+                                    onChange={() => onClickCheckButton(item)}
+                                />
+                            </td>
+                            <td className="py-1 px-2">
+                                {item.type > 1 ? CONTACT_TYPES[Number(item.type)-1].text : ""}
+                                <p className="text-xs"><i>{item.email}</i></p>
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                            </td>
+                            <td className="py-1 px-2">
+                                <Link to={`/item/contact/${item._id}`}>
+                                    {item?.childs.length > 0? <b>{item.name}({item?.childs.length})</b>: item.name }
+                                </Link>
+                                <p className="text-primary">Sale: {item?.sale?.fullname || ''}</p>
+                            </td>
+                            <td className="py-1 px-2">{item.gender > 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}</td>
+                            <td className="py-1 px-2">{item.address}</td>
+                            <td className="py-1 px-2">{item.taxid}</td>
+                            <td className="py-1 px-2">{item.phone}</td>
+                            <td className="py-1 px-2">
+                                {item.birthday ? moment(item.birthday).format('DD/MM/YYYY') : ''}
+                            </td>
+                            <td className="py-1 px-2">{item.note}</td>
+                            <td className="py-1 px-2">{item?.nonResident > 1 ? CUSTOMER_TYPES[Number(item?.nonResident)-1].text : ''}</td>
+                            <td className="py-1 px-2">
+                                {item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY - HH:mm') : ''} <br /> {item?.userUpdate?.bizfullname || ''}
+                            </td>
+                        </tr>
+                    )) : <></>}
+                </tbody>
+            </table>
+
+            {hasNextPage && (
+                <div className="w-full flex justify-center my-5">
+                    <button onClick={fetchNextPage}>
+                        <span className="text-primary">
+                            {`Xem thêm (${totalRecord - listCustomers.length})`}
+                        </span>
+                    </button>
+                </div>
+            )}
+        </main>
     )
 }
