@@ -9,3 +9,8 @@ export {CrmCustomerInfoPage} from './CrmCustomerInfoPage';
 export {CrmBookingPage} from './CrmBookingPage';
 export {CrmVoucherPage} from './CrmVoucherPage';
 export {CrmVoucherDetailPage} from './CrmVoucherDetailPage';
+export {CrmMediaTag} from './CrmMediaTag';
+export {CrmMediaPost} from './CrmMediaPost';
+export {CrmMediaMenu} from './CrmMediaMenu';
+export {CrmMediaCombo} from './CrmMediaCombo';
+export {CrmMediaBanner} from './CrmMediaBanner';
