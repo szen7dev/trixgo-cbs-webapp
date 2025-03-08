@@ -82,8 +82,8 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
             parentID,
             keyword, 
             populates: {
-                path: 'parent userUpdate userCreate',
-                select: 'name fullname parent',
+                path: 'parent userUpdate userCreate images',
+                select: 'name fullname parent createAt path',
                 populate: {
                     path: 'parent',
                     select: 'name',
