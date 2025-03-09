@@ -148,7 +148,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, category, convertQuantity, status, usage, description, features, ingredients,benefits,instructions,sideEffects,warnings,storage } = newListIDChecked[0];
+            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, category, convertQuantity, status, usage, description, features, ingredients, benefits, instructions, sideEffects, warnings, storage } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 type,
@@ -168,7 +168,14 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 convert,
                 category,
                 convertQuantity,
-                description, features, ingredients,benefits,instructions,sideEffects,warnings,storage
+                description, 
+                features, 
+                ingredients,
+                benefits,
+                instructions,
+                sideEffects,
+                warnings,
+                storage
             });
         } else {
             clearData();
