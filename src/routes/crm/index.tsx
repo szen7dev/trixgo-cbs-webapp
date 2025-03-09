@@ -81,6 +81,7 @@ const CrmRouter: FC = () => {
 
                     <Route exact path="/crm/height-measurement" component={CrmHomePage}/> 
                     <Route exact path="/crm/survey" component={CrmHomePage}/> 
+                    <Route exact path="/crm/question" component={CrmHomePage}/> 
 
                     <Route exact path="/crm/combo" component={CrmMediaCombo}/>
                     <Route exact path="/crm/post" component={CrmMediaPost}/>
