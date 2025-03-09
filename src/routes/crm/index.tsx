@@ -33,6 +33,9 @@ import {
     CrmMediaTag,
     CrmMediaMenu,
     CrmMediaBanner,
+    CrmMediaMeasurement,
+    CrmMediaQuestion,
+    CrmMediaSurvey,
 } from "views/crm/pages";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 
@@ -79,13 +82,13 @@ const CrmRouter: FC = () => {
                     <Route exact path="/crm/shift" component={CrmHomePage}/> 
                     <Route exact path="/crm/reports" component={CrmHomePage}/> 
 
-                    <Route exact path="/crm/height-measurement" component={CrmHomePage}/> 
-                    <Route exact path="/crm/survey" component={CrmHomePage}/> 
-                    <Route exact path="/crm/question" component={CrmHomePage}/> 
-
                     <Route exact path="/crm/combo" component={CrmMediaCombo}/>
                     <Route exact path="/crm/post" component={CrmMediaPost}/>
                     <Route exact path="/crm/tag" component={CrmMediaTag}/>
+
+                    <Route exact path="/crm/height-measurement" component={CrmMediaMeasurement}/>
+                    <Route exact path="/crm/question" component={CrmMediaQuestion}/>
+                    <Route exact path="/crm/survey" component={CrmMediaSurvey}/>
 
                     <Route exact path="/crm/menu" component={CrmMediaMenu}/>
                     <Route exact path="/crm/menu/:parentID" component={CrmMediaMenu}/>
