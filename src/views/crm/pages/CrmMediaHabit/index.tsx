@@ -82,8 +82,8 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
             parentID,
             keyword, 
             populates: {
-                path: 'parent userUpdate userCreate images',
-                select: 'name fullname parent createAt path',
+                path: 'parent userUpdate userCreate images contact',
+                select: 'name phone fullname parent createAt path',
                 populate: {
                     path: 'parent',
                     select: 'name',
@@ -289,14 +289,14 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="py-1">
+                        {/* <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Phân loại
                             </div>
-                        </th>
+                        </th> */}
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Ngày bắt đầu
+                                Khách hàng
                             </div>
                         </th>
                         <th className="py-1 w-1/6">
@@ -304,6 +304,11 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                                 Nội dung
                             </div>
                         </th> 
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Ngày bắt đầu
+                            </div>
+                        </th>
                         <th className="py-1 w-1/6">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Số ngày thực hiện (Ngày)
@@ -312,6 +317,11 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Kế hoạch mỗi ngày (Phút)
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Số ngày đã thực hiện liên tục
                             </div>
                         </th>
                         <th className="py-1">
@@ -348,17 +358,23 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
-                            <td className="py-1 px-2">
+                            {/* <td className="py-1 px-2">
                                 {item.type >= 1 ? MEDIA_TAG_TYPES[Number(item.type)-1].text : ""}
+                            </td> */}
+                            <td className="py-1 px-2">
+                                {item?.contact?.name} - {item?.contact?.phone}
+                            </td>
+                            <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
+                                <Link to={`/crm/habit/${item._id}`}>
+                                    {item.name}
+                                </Link>
                             </td>
                             <td className="py-1 px-2">
                                 {moment(item?.date).format('DD/MM/YYYY')}
                             </td>
-                            <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
-                                {item.name}
-                            </td>
                             <td className="py-1 px-2">{item?.challenge}</td>
                             <td className="py-1 px-2">{item?.duration}</td>
+                            <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">{item?.streakDays}</td>
                             <td className="py-1 px-2">{item.note}</td>
                             <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>
