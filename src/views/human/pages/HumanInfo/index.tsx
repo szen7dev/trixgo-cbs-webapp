@@ -161,17 +161,8 @@ export const HumanInfo: FC = () => {
       );
     },
     [handleFinishForm, openModal]
-  );
-
-  // useEffect(() => {
-  //   if(!user || !Object.keys(detailHuman).length || !dataUserAccess) return;
-
-  //   if(!detailHuman.department?.members?.includes(user._id) && dataUserAccess?.level !== 0) {
-  //     history.push('/human/home');
-  //     toast.error('Bạn không có quyền xem thông tin người dùng này');
-  //   }
-  // }, [detailHuman, dataUserAccess])
-
+  )
+  
   if (loading) {
     return <Loader className="border-primary" />;
   }

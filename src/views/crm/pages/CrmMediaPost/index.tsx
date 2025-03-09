@@ -10,11 +10,9 @@ import { read, utils } from 'xlsx';
 import { formatNumberMoney } from "utils/cmcs";
 
 /*=====2.CSS=====*/
-import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
 import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
-import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
@@ -35,7 +33,6 @@ import API from "apis/repository";
 
 export const CrmMediaPost: FC<{ type: number }> = ({ type }) => {
     const { user } = useAuth();
-    const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
 
     const history = useHistory();
     const { closeModal, openModal } = useModal();
@@ -43,18 +40,6 @@ export const CrmMediaPost: FC<{ type: number }> = ({ type }) => {
     const [keyword, setKeyword] = useState('');
     const [title, setTitle] = useState("Danh sách");
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
-
-    const [defaultState, setDefaultState] = useState({
-        mediaID: '',
-        images: [] as ImageProps[],
-        index: 0,
-        createAt: ""
-    })
-    const fileInputRef = useRef<HTMLInputElement>(null)
-    const { addFileToUpload } = useUpload({
-        appID: APP_ID.ITEM.id,
-        companyID: user?.company?._id,
-    })
 
     const [initialValues, setInitialValues] = useState({
         parent: parentID,
@@ -148,42 +133,6 @@ export const CrmMediaPost: FC<{ type: number }> = ({ type }) => {
         )
     }
 
-    const handleUploadAttach = async (filesSelected: FileList | null, tagID: string) => {
-        if (!filesSelected || !filesSelected.length) return;
-
-        const validation = await validateFiles(filesSelected);
-        if (validation.error) return toast.warn(validation.message);
-
-        // Clear input file
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-
-        const imagesID: any = [];
-
-        // Upload images
-        for (const [_, file] of Object.entries(filesSelected)) {
-            const { _id } = await addFileToUpload({
-                files: file as any,
-                fileType: 1,
-                progress: percentCompleted => {
-                    console.info(`${percentCompleted}%`)
-                }
-            })
-            _id && imagesID.push(_id);
-        }
-
-        // Update image to products
-        await API.put(
-            `/api/medias/tag`,
-            {
-                tagID,
-                imagesID,
-            }
-        );
-        refetch();
-    }
-
     return (
         <main className="relative h-full">
             <header className="sticky top-0 bg-primary-light z-10">
@@ -224,7 +173,7 @@ export const CrmMediaPost: FC<{ type: number }> = ({ type }) => {
             <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
-                        <th className="py-1">
+                        <th className="py-1" style={{width: "125px"}}>
                             <div className="border-gray-300 font-normal pl-2">
                                 Thời gian
                             </div>
@@ -281,10 +230,10 @@ export const CrmMediaPost: FC<{ type: number }> = ({ type }) => {
                                 </div>
                             </td>
                             <td className="py-1 px-2">
-                                <Link to={`/crm/post/${item._id}`}>
+                                <Link to={`/crm/post/${item._id}`} className="text-cbs-highlight-color text-[14px]">
                                     {item?.title}
                                 </Link>
-                                <p><i>{item?.slug}</i></p>
+                                <p className="text-primary-gray"><i>{item?.slug}</i></p>
                             </td>
                             <td className="py-1 px-2">{item.amountView}</td>
                             <td className="py-1 px-2">{item?.category?.name}</td>

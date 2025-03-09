@@ -35,6 +35,7 @@ import { ModalZoomView } from "shareComponents/common";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
 import API from "apis/repository";
+import path from "path";
 
 export const CrmMediaQuestion: FC<{ type: number }> = ({ type }) => {
     const { user } = useAuth();
@@ -82,7 +83,11 @@ export const CrmMediaQuestion: FC<{ type: number }> = ({ type }) => {
             keyword, 
             populates: {
                 path: 'goods userUpdate userCreate images',
-                select: 'name fullname createAt path',
+                select: 'name fullname createAt path images',
+                populate: {
+                    path: 'images',
+                    select: 'path',
+                }
             },
         },
         isFetchList: true,
@@ -282,7 +287,10 @@ export const CrmMediaQuestion: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="py-1 w-1/6">
+                        <th className="py-1" style={{width: "90px"}}>
+                            
+                        </th>
+                        <th className="py-1 w-1/4">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Sản phẩm
                             </div>
@@ -322,9 +330,16 @@ export const CrmMediaQuestion: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {item?.goods?.name}
+                                <div
+                                    className="mt-2 cursor-pointer relative w-[75px] h-[75px]"
+                                >
+                                    <img src={`${process.env.REACT_APP_URL_S3}${item?.goods?.images[0]?.path}`} />
+                                </div>
                             </td>
                             <td className="py-1 px-2">
+                                {item?.goods?.name}
+                            </td>
+                            <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 {item.name}
                             </td>
                             <td className="py-1 px-2">{item.note}</td>
