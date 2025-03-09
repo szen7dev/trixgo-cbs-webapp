@@ -14,3 +14,6 @@ export {CrmMediaPost} from './CrmMediaPost';
 export {CrmMediaMenu} from './CrmMediaMenu';
 export {CrmMediaCombo} from './CrmMediaCombo';
 export {CrmMediaBanner} from './CrmMediaBanner';
+export {CrmMediaMeasurement} from './CrmMediaMeasurement';
+export {CrmMediaQuestion} from './CrmMediaQuestion';
+export {CrmMediaSurvey} from './CrmMediaSurvey';
