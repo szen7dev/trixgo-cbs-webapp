@@ -63,7 +63,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         const data = await API
           .get('/api/medias/menu', {
             params: {
-
+              status: 1
             },
           })
           .then((res) => res.data?.data);
