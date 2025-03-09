@@ -230,7 +230,7 @@ export const CrmMediaPost: FC<{ type: number }> = ({ type }) => {
                                 Thời gian
                             </div>
                         </th> 
-                        <th className="py-1">
+                        <th className="py-1" style={{width: "90px"}}>
                             <div className="border-gray-300 font-normal pl-2">
                                
                             </div>
@@ -240,7 +240,7 @@ export const CrmMediaPost: FC<{ type: number }> = ({ type }) => {
                                 Tiêu đề
                             </div>
                         </th> 
-                        <th className="py-1 w-1/6">
+                        <th className="py-1">
                             <div className="border-gray-300 font-normal pl-2">
                                 Lượt xem
                             </div>
