@@ -70,6 +70,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         note: '',
         phone: '',
         birthday: '',
+        facebook: '',
+        tiktok: '',
         gender: 1,
         height: 0,
         weight: 0,
@@ -110,6 +112,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             note: '',
             phone: '',
             birthday: '',
+            facebook: '',
+            tiktok: '',
             gender: 1,
             height: 0,
             weight: 0,
@@ -138,7 +142,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, status, name, expired, slug, note, phone, birthday, gender, height, weight } = newListIDChecked[0];
+            const { _id, type, status, name, expired, slug, note, phone, facebook, tiktok, birthday, gender, height, weight } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 trackID: _id,
@@ -150,6 +154,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 note,
                 phone,
                 birthday,
+                facebook,
+                tiktok,
                 gender,
                 height,
                 weight,
@@ -196,6 +202,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 slug: '',
                 note: '',
                 phone: '',
+                facebook: '',
+                tiktok: '',
                 birthday: '',
                 gender: 1,
                 height: 0,
@@ -207,7 +215,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "600px",
+                    height: "700px",
                 }}
             >
                 <ModalCreateOrUpdateMeasurement
@@ -327,17 +335,17 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                         </th> 
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Chiều cao
+                                Chiều cao (Cm)
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Cân nặng
+                                Cân nặng (Kg)
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Số điện thoại
+                                Liên hệ
                             </div>
                         </th>
                         <th className="py-1">
@@ -377,7 +385,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                             </td>
-                            <td className="py-1 px-2">
+                            <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 <Link to={`/crm/height-measurement/${item._id}`}>
                                     {item?.name}
                                 </Link>
@@ -390,7 +398,11 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">{item.height}</td>
                             <td className="py-1 px-2">{item.weight}</td>
-                            <td className="py-1 px-2">{item.phone}</td>
+                            <td className="py-1 px-2">
+                                {item.phone}
+                                {item?.facebook ? <p className="text-cbs-highlight-color"><i>FB: {item?.facebook}</i></p> : ''}
+                                {item?.tiktok ? <p className="text-cbs-highlight-color"><i>TT: {item?.tiktok}</i></p> : ''}
+                            </td>
                             <td className="py-1 px-2">{item.note}</td>
                             <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>

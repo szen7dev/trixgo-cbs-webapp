@@ -22,6 +22,7 @@ export type GoodsQueryPayload = QueryParam & {
     projectID?: string;
     isListParentOfListChilds?: string;
     goodsID?: string;
+    usage?: any;
     // populates?: any;
 };
 
