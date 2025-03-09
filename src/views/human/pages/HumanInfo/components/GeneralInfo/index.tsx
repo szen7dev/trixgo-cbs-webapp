@@ -165,10 +165,10 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {info?.area1?.name}, {info?.area1?.parent?.name}, {info?.area1?.parent?.parent?.name}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("workplace")}
+                Lĩnh vực/ngành nghề/Chuyên ngành
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.workplace?.map(elm => elm.name)}
+                {info?.field?.name}
               </td>
             </tr>
 
@@ -180,10 +180,10 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {info?.taxid}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("major")}
+                
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.documents?.map((elm: any) => elm?.field2?.name ? elm?.field2?.name +",": "")}
+                
               </td>
             </tr>
 
