@@ -1,7 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC, useState, useRef, useCallback, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/

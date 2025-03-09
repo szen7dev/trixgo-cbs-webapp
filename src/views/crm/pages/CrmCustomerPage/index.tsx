@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useRef } from "react";
+import React, { FC, useState, useEffect, ChangeEvent, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -18,13 +18,16 @@ import { useDispatch } from "react-redux";
 import { setFilterDropdown } from "redux/reducer/DocumentProjectSlice";
 import iconPlus from "assets/images/icons8-plus-math-96 3.svg";
 import { useModal } from "services/hooks/useModal";
+import { useUpload } from 'services/hooks/useUpload';
+import CameraIcon from "assets/images/camera-icon.svg";
 
 // ========== Hooks ========== //
-import { useHumanCustom, useListFilterHuman } from "services/hooks/human/useHuman";
+import { useHumanCustom, useListHuman } from "services/hooks/human/useHuman";
 import { useProjectCustom } from "services/hooks/items/useProject";
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { ModalCreateOrUpdateCustomer } from 'views/item/shareComponents/common';
+import { useCustomer } from "services/hooks/items/useCustomer";
 
 interface HumanHomePageProps {
     type?: number
@@ -37,9 +40,8 @@ type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
 export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
     const [keyword, setKeyword] = useState('');
     const dispatch = useDispatch();
-    const { current: socket }: any = useSocket();
-    const { user } = useAuth();
-    const { openModal } = useModal();
+    const { openModal } = useModal()
+    const { updateAsync } = useCustomer({})
 
     const initialValues = {
         contactID: '',
@@ -85,12 +87,13 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
         isFetchProjectsUserIsMember: true
     });
 
-    const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs, refetchListHuman } = useListFilterHuman({
+    const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs, refetchListHuman } = useListHuman({
         params: {
             ...fromToDate,
+            limit: 10,
             genders,
             departmentsID,
-            keyword
+            keyword,
         },
         isFetchList: true
     });
@@ -184,24 +187,35 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
 
     const handleConfirmCreateOrUpdate = () => refetchListHuman();
 
-    const handleSocketExportAllContacts = ({ data, error }: any) => {
-        setStateExport({ isExporting: false });
-        if(error) return toast.error("Can't download data");
+    const { addFileToUpload } = useUpload({
+        typeUpload: 'contact'
+    })
 
-        const { receiverID, link } = data;
-        if(user?._id !== receiverID) return;
-        link && createLinkAndClick(link, '_self');
-    }
+    const handleChangeAvatar = async (event: ChangeEvent<HTMLInputElement>, param: any) => {
+        const files = event.target.files;
+        if(!files || !files.length) return toast.warning("Vui lòng chọn ảnh đại diện");
 
-    useEffect(() => {
-        if(!socket) return;
+        const { name } = await addFileToUpload({
+            files: files[0] as any,
+            fileType: 1,
+            useCompress: true
+        })
 
-        socket.on("ITEM_SSC_EXPORT_ALL_CONTACTS", handleSocketExportAllContacts);
-
-        return () => {
-        socket.off("ITEM_SSC_EXPORT_ALL_CONTACTS", handleSocketExportAllContacts);
+        if(name){
+            const { error, message, data } = await updateAsync({
+                image: name, 
+                contactID: param
+            })
+            if (error) {
+                if(data.message){
+                return toast.error(data.message)
+                }
+                return toast.error(message)
+            }
+            refetchListHuman()
+            toast.success('Cập nhật thành công', { autoClose: 1500 })
         }
-    }, [socket])
+    }
 
     if(stateExport.isExporting) {
         return <Loader className="border-primary" />
@@ -323,7 +337,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                         ref={ref}
                         totalRecord={totalRecord}
                         totalPages={totalPage}
-                        limit={20}
+                        limit={10}
                         hasNextPage={hasNextPage}
                         isFetching={isLoading}
                         nextPageAction={() => {
@@ -352,6 +366,9 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                         <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
                             <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '30px' }}>
                                 TT
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Khách hàng
@@ -400,6 +417,25 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                 >
                                     <td className="px-4 py-2.5 border-b border-cbs-border">
                                         {index + 1}
+                                    </td>
+                                    <td className="px-4 py-2.5 border-b border-cbs-border">
+                                        <img
+                                            src={item?.image ? `${process.env.REACT_APP_URL_S3_CONTACT}/${item?.image}` : `${process.env.REACT_APP_URL_S3_CONTACT}/contact_default.png`}
+                                            alt="User Avatar"
+                                            className="w-14 h-14 rounded-full"
+                                        />
+                                       <div className="bg-primary-light relative bottom-10 left-8 h-9 w-9 rounded-full flex items-center justify-center">
+                                            <label>
+                                                <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
+                                                    <img
+                                                        src={CameraIcon}
+                                                        alt="Camera"
+                                                        className="w-[15px] h-[13px]"
+                                                    />
+                                                    <input type="file" name="files" id="file" className="hidden" accept="image/*" onChange={(event)=>handleChangeAvatar(event, item._id)} />
+                                                </div>
+                                            </label>
+                                        </div>
                                     </td>
                                     <td className="px-2 py-2.5 border-b border-cbs-border">
                                         <Link to={linkRef}>
