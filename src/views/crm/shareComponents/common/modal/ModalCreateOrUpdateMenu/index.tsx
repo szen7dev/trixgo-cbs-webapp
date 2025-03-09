@@ -85,7 +85,7 @@ export const ModalCreateOrUpdateMenu: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "720px",
+        height: "500px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">

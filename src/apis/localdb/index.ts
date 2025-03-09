@@ -54,10 +54,22 @@ export const MEDIA_MENU_TYPES = [
     { value: 3, text: 'Trang khác' },
 ]
 
+export const MEDIA_TAG_TYPES = [
+    { value: 1, text: 'Loại 1' },
+    { value: 2, text: 'Loại 2' },
+    { value: 3, text: 'Loại 3' },
+]
+
 export const MEDIA_BANNER_TYPES = [
-    { value: 1, text: 'Trang sản phẩm' },
-    { value: 2, text: 'Trang bài viết' },
-    { value: 3, text: 'Trang khác' },
+    { value: 1, text: 'Loại 1' },
+    { value: 2, text: 'Loại 2' },
+    { value: 3, text: 'Loại 3' },
+]
+
+export const MEDIA_COMBO_TYPES = [
+    { value: 1, text: 'Loại 1' },
+    { value: 2, text: 'Loại 2' },
+    { value: 3, text: 'Loại 3' },
 ]
 
 // NHÓM CHỨC NĂNG ỨNG DỤNG MẶC ĐỊNH (PHỤC VỤ CẤU HÌNH BAN ĐẦU)

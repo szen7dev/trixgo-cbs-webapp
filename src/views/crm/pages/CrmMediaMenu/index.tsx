@@ -18,7 +18,7 @@ import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateMenu } from '../../shareComponents/common';
+import { ModalCreateOrUpdateMenu, ModalCreateOrUpdateBanner, ModalCreateOrUpdateCombo, ModalCreateOrUpdateTag } from '../../shareComponents/common';
  
 /*=====5.TYPINGS=====*/
 
@@ -28,7 +28,7 @@ import { useModal } from "services/hooks/useModal";
 import { useMediaMenu } from "services/hooks/crm/useMediaMenu";
 
 /*=====7.OTHER=====*/
-import { MEDIA_MENU_TYPES, MEDIA_BANNER_TYPES } from "apis/localdb";
+import { MEDIA_MENU_TYPES, MEDIA_TAG_TYPES, MEDIA_COMBO_TYPES, MEDIA_BANNER_TYPES } from "apis/localdb";
 import { ImageProps } from "typings/common";
 import { createLinkAndClick } from "utils";
 import { ModalZoomView } from "shareComponents/common";
@@ -173,7 +173,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
         if(modalType === 'create') {
             clearData();
             initValues = {
-                parent: parentID,
+                parentID,
                 menuID: '',
                 type: '1',
                 status: '1',
@@ -188,7 +188,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "720px",
+                    height: "500px",
                 }}
             >
                 <ModalCreateOrUpdateMenu
@@ -355,7 +355,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">
                                 <Link to={`/crm/menu/${item._id}`}>
-                                    {item?.childs.length > 0? <b>{item.name} ({item?.childs.length})</b>: item.name }
+                                    {item?.childs?.length > 0? <b>{item.name} ({item?.childs?.length})</b>: item.name }
                                 </Link>
                             </td>
                             <td className="py-1 px-2">{item?.slug}</td>
