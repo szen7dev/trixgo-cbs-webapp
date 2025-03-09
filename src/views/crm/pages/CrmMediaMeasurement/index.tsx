@@ -320,7 +320,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                 Giới tính
                             </div>
                         </th>
-                        <th className="py-1 w-1/6">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Ngày sinh
                             </div>

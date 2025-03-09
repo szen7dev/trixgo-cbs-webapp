@@ -170,6 +170,7 @@ export const CrmMediaQuestion: FC<{ type: number }> = ({ type }) => {
             initValues = {
                 parentID,
                 questionID: '',
+                goodsID: '',
                 type: '1',
                 status: '1',
                 name: '',
@@ -298,11 +299,6 @@ export const CrmMediaQuestion: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Hình ảnh
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Trạng thái
                             </div>
                         </th>
@@ -333,45 +329,6 @@ export const CrmMediaQuestion: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">{item.note}</td>
                             <td className="py-1 px-2">
-                                <div style={{display: "flex"}}>
-                                    {item?.images?.map((image: any, i: number) => {
-                                        return (
-                                            <div
-                                                key={image._id}
-                                                className="mt-2 cursor-pointer relative w-[75px] h-[75px]"
-                                                onClick={() => {
-                                                    setDefaultState({
-                                                        mediaID: image._id,
-                                                        images: item?.images,
-                                                        index: i,
-                                                        createAt: image.createAt
-                                                    });
-                                                    setIsShowImageFullScreen(true);
-                                                }}
-                                            >
-                                                <img src={`${process.env.REACT_APP_URL_S3}${image?.path}`} />
-                                            </div>
-                                        )
-                                    })}
-
-                                    <label className="ml-2">
-                                        <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
-                                            <img
-                                            src={CameraIcon}
-                                            alt="Camera"
-                                            className="w-[15px] h-[13px]"
-                                            />
-                                            <input 
-                                                type="file" 
-                                                className="hidden" 
-                                                accept="image/*"
-                                                onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
-                                            />
-                                        </div>
-                                    </label>
-                                </div>
-                            </td>
-                            <td className="py-1 px-2">
                                 {item?.status == 1 ? <span className="bg-green-400">Active</span> : <span className="bg-red-400">Inactive</span>}
                             </td>
                             <td className="py-1 px-2">
@@ -381,13 +338,7 @@ export const CrmMediaQuestion: FC<{ type: number }> = ({ type }) => {
                     )) : <></>}
                 </tbody>
             </table>
-
-            <ModalZoomView
-                isShow={isShowImageFullScreen}
-                toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
-                initialData={defaultState}
-            />
-
+            
             {hasNextPage && (
                 <div className="w-full flex justify-center my-5">
                     <button onClick={fetchNextPage}>
