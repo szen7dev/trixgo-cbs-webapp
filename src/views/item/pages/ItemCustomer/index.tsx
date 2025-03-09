@@ -70,7 +70,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             keyword, isListParentOrListChilds: "1", parentID 
         }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
         isFetchList: true,
-    });
+    })
 
     // Reset form
     const clearData = () => {

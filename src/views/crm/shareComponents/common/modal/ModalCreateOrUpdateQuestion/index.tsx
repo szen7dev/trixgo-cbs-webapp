@@ -3,12 +3,16 @@ import { toast } from "react-toastify";
 import moment from 'moment';
 import { useModal } from "services/hooks/useModal";
 import { useMediaMenu } from "services/hooks/crm/useMediaQuestion";
+import { DropdownSearchable } from "shareComponents/common";
+import debounce from 'lodash/debounce';
+import { useGoods } from "services/hooks/items/useGoods";
 
 export const ModalCreateOrUpdateQuestion: FC<any> = ({
   modalType,
   onConfirm,
   initialValues = {
     questionID: '',
+    goodsID: '',
     type: 1,
     status: 1,
     name: '',
@@ -20,6 +24,16 @@ export const ModalCreateOrUpdateQuestion: FC<any> = ({
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
   const { refetch: refetchCustomer, insertAsync, updateAsync } = useMediaMenu({});
+  const [keywordGoods, setKeywordGoods] = useState('');
+
+  const {
+      list: listGoods,
+  } = useGoods({
+      params: { 
+          keyword: keywordGoods, 
+      },
+      isFetchList: true,
+  })
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -75,6 +89,12 @@ export const ModalCreateOrUpdateQuestion: FC<any> = ({
     closeModal();
   };
 
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+    return bottom;
+  }
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((previous: any) => ({
@@ -100,8 +120,54 @@ export const ModalCreateOrUpdateQuestion: FC<any> = ({
       </header>
 
       <section className="px-5 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay" title="Bắt buộc nhập thông tin">
+            Sản phẩm  (*)
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    goodsID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    goodsID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onScroll={handleScroll}
+            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Tìm kiếm sản phẩm"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listGoods.map((item:any) => ({
+                label: item.name,
+                value: item._id,
+            }))}
+            initialValue={{
+              value: formData?.goods?._id || "",
+              label: formData?.goods?.name || "Chọn sản phẩm"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
+      </section>
+
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
-          Nội dung (*)
+          Câu hỏi (*)
         </label>
         <input
           type="text"
@@ -114,84 +180,12 @@ export const ModalCreateOrUpdateQuestion: FC<any> = ({
       </section>
 
       <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
-          Phân loại (*)
-        </label>
-        <div className={"flex items-center"}>
-            <div className={"flex items-center ml-3"}>
-                <input
-                  type="radio"
-                  value={1}
-                  name="type"
-                  className="form-check-input mt-0"
-                  defaultValue={formData.type}
-                  checked={formData.type == 1 ? true : false}
-                  onChange={onChange}
-                />
-                <label htmlFor="type" className={"text-left ml-3"}>Phân loại 1</label>
-            </div>
-            <div className={"flex items-center ml-3"}>
-                <input
-                  type="radio"
-                  value={2}
-                  name="type"
-                  className="form-check-input mt-0"
-                  defaultValue={formData.type}
-                  checked={formData.type == 2 ? true : false}
-                  onChange={onChange}
-                />
-                <label htmlFor="type" className={"text-left ml-3"}>Phân loại 2</label>
-            </div>
-            <div className={"flex items-center ml-3"}>
-                <input
-                  type="radio"
-                  value={3}
-                  name="type"
-                  className="form-check-input mt-0"
-                  defaultValue={formData.type}
-                  checked={formData.type == 3 ? true : false}
-                  onChange={onChange}
-                />
-                <label htmlFor="type" className={"text-left ml-3"}>Phân loại 3</label>
-            </div>
-          </div>
-      </section>
-
-      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
-          Thời hạn
-        </label>
-        <input
-          type="date"
-          placeholder="Thời hạn"
-          name="expired"
-          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={moment(formData.expired).format("YYYY-MM-DD")}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
-          Mã hiệu/Slug
+          Câu trả lời
         </label>
         <input
           type="text"
-          placeholder="Nhập nội dung"
-          name="slug"
-          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.slug}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
-          Ghi chú
-        </label>
-        <input
-          type="text"
-          placeholder="Nhập ghi chú"
+          placeholder="Nhập trả lời"
           name="note"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.note}
