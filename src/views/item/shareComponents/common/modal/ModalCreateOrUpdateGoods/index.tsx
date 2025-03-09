@@ -4,6 +4,7 @@ import { useModal } from "services/hooks/useModal";
 import { useGoods } from "services/hooks/items/useGoods";
 import { toast } from "react-toastify";
 import { DropdownSearchable } from "shareComponents/common";
+import moment from 'moment';
 import API from "../../../../../../apis/repository";
 
 export const ModalCreateOrUpdateGoods: FC<any> = ({
@@ -525,7 +526,19 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
           onChange={onChange}
         />
       </section>
-
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Thời hạn ưu đãi
+        </label>
+        <input
+          type="date"
+          placeholder="Thời hạn ưu đãi"
+          name="expired"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={moment(formData.expired).format("YYYY-MM-DD")}
+          onChange={onChange}
+        />
+      </section>
       <footer className="absolute right-0 bottom-3 px-5 py-1">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
           onClick={handleSubmit}>

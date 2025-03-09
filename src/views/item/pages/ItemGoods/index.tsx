@@ -100,6 +100,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         sideEffects: '',
         warnings: '',
         storage: '',
+        expired: '',
     })
 
     const {
@@ -148,7 +149,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, category, convertQuantity, status, usage, description, features, ingredients, benefits, instructions, sideEffects, warnings, storage } = newListIDChecked[0];
+            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, category, convertQuantity, status, usage, description, features, ingredients, benefits, instructions, sideEffects, warnings, storage, expired } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 type,
@@ -175,7 +176,8 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 instructions,
                 sideEffects,
                 warnings,
-                storage
+                storage,
+                expired
             });
         } else {
             clearData();
@@ -233,6 +235,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 sideEffects: '',
                 warnings: '',
                 storage: '',
+                expired: '',
             }
         }
 
@@ -240,7 +243,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1650px",
+                    height: "1700px",
                 }}
             >
                 <ModalCreateOrUpdateGoods
@@ -569,7 +572,9 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.sellingUnitprice)}
+                                <hr />
                                 <p><i>{formatNumberMoney(item?.listedUnitprice)}</i></p>
+                                <p className="text-left"><i>Thời hạn ưu đãi: {item?.expired ? moment(item?.expired).format('DD/MM/YYYY HH:mm') : ''}</i></p>
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.unitPrice)}
