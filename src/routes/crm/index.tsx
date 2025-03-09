@@ -37,6 +37,7 @@ import {
     CrmMediaQuestion,
     CrmMediaSurvey,
     CrmMediaGrowTrack,
+    CrmMediaHabit,
 } from "views/crm/pages";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 
@@ -89,6 +90,9 @@ const CrmRouter: FC = () => {
 
                     <Route exact path="/crm/height-measurement" component={CrmMediaMeasurement}/>
                     <Route exact path="/crm/height-measurement/:trackID" component={CrmMediaGrowTrack}/>
+
+                    <Route exact path="/crm/habit" component={CrmMediaHabit}/>
+                    <Route exact path="/crm/habit/:habitID" component={CrmMediaHabit}/>
 
                     <Route exact path="/crm/question" component={CrmMediaQuestion}/>
                     <Route exact path="/crm/survey" component={CrmMediaSurvey}/>
