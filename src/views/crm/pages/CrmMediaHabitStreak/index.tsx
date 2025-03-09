@@ -18,7 +18,7 @@ import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateHabit } from '../../shareComponents/common';
+import { ModalCreateOrUpdateHabitTrack } from '../../shareComponents/common';
  
 /*=====5.TYPINGS=====*/
 
@@ -194,7 +194,8 @@ export const CrmMediaHabitStreak: FC<{ type: number }> = ({ type }) => {
                     height: "550px",
                 }}
             >
-                <ModalCreateOrUpdateHabit
+                <ModalCreateOrUpdateHabitTrack
+                    habitID={habitID}
                     modalType={modalType}
                     initialValues={initValues}
                     onConfirm={handleConfirmCreateOrUpdate}
