@@ -69,7 +69,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
             ...formData,
             type: `${formData.type}`,
             gender: `${formData.gender}`,
-          });
+          })
 
           if (error) {
             if(data.message){
