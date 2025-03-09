@@ -85,7 +85,7 @@ export const ModalCreateOrUpdateBanner: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "500px",
+        height: "700px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -117,7 +117,7 @@ export const ModalCreateOrUpdateBanner: FC<any> = ({
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
           Phân loại (*)
         </label>
-        <div className={"flex items-center"}>
+        <div className={"items-center"}>
             <div className={"flex items-center ml-3"}>
                 <input
                   type="radio"
@@ -128,7 +128,7 @@ export const ModalCreateOrUpdateBanner: FC<any> = ({
                   checked={formData.type == 1 ? true : false}
                   onChange={onChange}
                 />
-                <label htmlFor="type" className={"text-left ml-3"}>Phân loại 1</label>
+                <label htmlFor="type" className={"text-left ml-3"}>Banner 1</label>
             </div>
             <div className={"flex items-center ml-3"}>
                 <input
@@ -140,7 +140,7 @@ export const ModalCreateOrUpdateBanner: FC<any> = ({
                   checked={formData.type == 2 ? true : false}
                   onChange={onChange}
                 />
-                <label htmlFor="type" className={"text-left ml-3"}>Phân loại 2</label>
+                <label htmlFor="type" className={"text-left ml-3"}>Banner 2</label>
             </div>
             <div className={"flex items-center ml-3"}>
                 <input
@@ -152,7 +152,103 @@ export const ModalCreateOrUpdateBanner: FC<any> = ({
                   checked={formData.type == 3 ? true : false}
                   onChange={onChange}
                 />
-                <label htmlFor="type" className={"text-left ml-3"}>Phân loại 3</label>
+                <label htmlFor="type" className={"text-left ml-3"}>Banner 3</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={4}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 4 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Banner 4</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={5}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 5 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Banner 5</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={6}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 6? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Slide</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={7}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 7 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Chức năng phổ biến</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={8}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 8 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Footer 1</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={9}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 9 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Footer 2</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={10}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 10 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Footer 3</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={11}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 11 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Footer 4</label>
             </div>
           </div>
       </section>

@@ -188,7 +188,7 @@ export const CrmMediaBanner: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "500px",
+                    height: "700px",
                 }}
             >
                 <ModalCreateOrUpdateBanner
@@ -303,16 +303,6 @@ export const CrmMediaBanner: FC<{ type: number }> = ({ type }) => {
                         </th> 
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Danh mục cha 1
-                            </div>
-                        </th> 
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Danh mục cha 2
-                            </div>
-                        </th> 
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Thời hạn
                             </div>
                         </th>
@@ -354,13 +344,9 @@ export const CrmMediaBanner: FC<{ type: number }> = ({ type }) => {
                                 {item.type >= 1 ? MEDIA_BANNER_TYPES[Number(item.type)-1].text : ""}
                             </td>
                             <td className="py-1 px-2">
-                                <Link to={`/crm/banner/${item._id}`}>
-                                    {item?.childs?.length > 0? <b>{item.name} ({item?.childs?.length})</b>: item.name }
-                                </Link>
+                                {item.name}
                             </td>
                             <td className="py-1 px-2">{item?.slug}</td>
-                            <td className="py-1 px-2">{item?.parent?.name}</td>
-                            <td className="py-1 px-2">{item?.parent?.parent?.name}</td>
                             <td className="py-1 px-2">
                                 {moment(item?.expired).format('DD/MM/YYYY HH:mm')}
                             </td>

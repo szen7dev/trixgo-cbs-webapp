@@ -61,9 +61,17 @@ export const MEDIA_TAG_TYPES = [
 ]
 
 export const MEDIA_BANNER_TYPES = [
-    { value: 1, text: 'Loại 1' },
-    { value: 2, text: 'Loại 2' },
-    { value: 3, text: 'Loại 3' },
+    { value: 1, text: 'Banner 1' },
+    { value: 2, text: 'Banner 2' },
+    { value: 3, text: 'Banner 3' },
+    { value: 4, text: 'Banner 4' },
+    { value: 5, text: 'Banner 5' },
+    { value: 6, text: 'Slide' },
+    { value: 7, text: 'Chức năng phổ biến' },
+    { value: 8, text: 'Footer 1' },
+    { value: 9, text: 'Footer 2' },
+    { value: 10, text: 'Footer 3' },
+    { value: 11, text: 'Footer 4' },
 ]
 
 export const MEDIA_COMBO_TYPES = [
