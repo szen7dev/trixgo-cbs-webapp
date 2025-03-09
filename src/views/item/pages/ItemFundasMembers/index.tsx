@@ -16,12 +16,16 @@ export const ItemFundasPageMember: FC<any> = () => {
 	const { openModal } = useModal();
     const { fundaID } = useParams<{ fundaID: string }>();
 
-	const {info: infoFunda } = useFunda({ params: {fundaID,  populates: {
-        path: 'members',
-        select: 'bizfullname image email'
-    }}, isFetchList: false, isFetchInfo: true });
+	const {info: infoFunda } = useFunda({ 
+		params: {
+			fundaID,  
+			populates: {
+				path: 'members',
+				select: 'bizfullname image email'
+			}
+		}, isFetchList: false, isFetchInfo: true });
+
 	const listMembers = infoFunda?.members || [];
-	// const projectID = infofunda??.project;
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;

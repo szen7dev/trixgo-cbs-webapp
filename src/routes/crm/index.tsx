@@ -72,10 +72,18 @@ const CrmRouter: FC = () => {
                     <Route exact path="/crm/booking" component={CrmBookingPage}/>
                     <Route exact path="/crm/order" component={() => FnBHomePage({})}/>
                     <Route exact path="/crm/affiliate" component={CrmAffiliatePage}/>
+
+                    <Route exact path="/crm/risk-report" component={CrmHomePage}/> 
+                    <Route exact path="/crm/shift" component={CrmHomePage}/> 
+                    <Route exact path="/crm/reports" component={CrmHomePage}/> 
+
                     <Route exact path="/crm/combo" component={CrmMediaCombo}/>
                     <Route exact path="/crm/post" component={CrmMediaPost}/>
                     <Route exact path="/crm/tag" component={CrmMediaTag}/>
+
                     <Route exact path="/crm/menu" component={CrmMediaMenu}/>
+                    <Route exact path="/crm/menu/:parentID" component={CrmMediaMenu}/>
+
                     <Route exact path="/crm/banner" component={CrmMediaBanner}/>
                     <Route exact path="/crm/*" component={ErrorPage} />
                 </Switch>

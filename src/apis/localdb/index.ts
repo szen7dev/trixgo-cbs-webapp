@@ -47,6 +47,39 @@ export const APP_ROLES = [
     { value: 14, text: 'Nhóm khách mời của công ty', permission: { read: 1, create: 0, update: 0, deleteIn: 0 } },
 ]
 
+// LOẠI MEDIA MENU
+export const MEDIA_MENU_TYPES = [
+    { value: 1, text: 'Trang sản phẩm' },
+    { value: 2, text: 'Trang bài viết' },
+    { value: 3, text: 'Trang khác' },
+]
+
+export const MEDIA_TAG_TYPES = [
+    { value: 1, text: 'Loại 1' },
+    { value: 2, text: 'Loại 2' },
+    { value: 3, text: 'Loại 3' },
+]
+
+export const MEDIA_BANNER_TYPES = [
+    { value: 1, text: 'Banner 1' },
+    { value: 2, text: 'Banner 2' },
+    { value: 3, text: 'Banner 3' },
+    { value: 4, text: 'Banner 4' },
+    { value: 5, text: 'Banner 5' },
+    { value: 6, text: 'Slide' },
+    { value: 7, text: 'Chức năng phổ biến' },
+    { value: 8, text: 'Footer 1' },
+    { value: 9, text: 'Footer 2' },
+    { value: 10, text: 'Footer 3' },
+    { value: 11, text: 'Footer 4' },
+]
+
+export const MEDIA_COMBO_TYPES = [
+    { value: 1, text: 'Loại 1' },
+    { value: 2, text: 'Loại 2' },
+    { value: 3, text: 'Loại 3' },
+]
+
 // NHÓM CHỨC NĂNG ỨNG DỤNG MẶC ĐỊNH (PHỤC VỤ CẤU HÌNH BAN ĐẦU)
 export const PROJECT_ROLES = [
     { value: 21, text: 'Nhóm quản trị Dự án/Phòng ban/Hợp đồng', permission: { read: 1, create: 1, update: 1, deleteIn: 1 } },
@@ -136,7 +169,6 @@ export const PROJECT_CAPITAL = [
 ]
 
 // LOẠI DANH BẠ
-// export const ACCESS_SALARY_TEMP = ['6046bcf1b55525368b11ab79','658cdaab5c952c00131287db','6046bcf1b55525368b11ab91','65a057f21120870012cc60e5']
 export const ACCESS_SALARY_TEMP = ['6046bcf1b55525368b11ab79','658cdaab5c952c00131287db','6046bcf1b55525368b11ab91','65a057f21120870012cc60e5','66c68f46d1fd64001345ee11','654202aea7b45500126c97a6','63f036dde3e82d0012c161f8']
 
 // LOẠI DANH BẠ
