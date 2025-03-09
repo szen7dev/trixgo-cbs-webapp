@@ -36,7 +36,6 @@ import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
 import API from "apis/repository";
 
-
 export const CrmMediaCombo: FC<{ type: number }> = ({ type }) => {
     const { user } = useAuth();
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
