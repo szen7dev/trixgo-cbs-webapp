@@ -34,6 +34,11 @@ export type Position = {
     };
 }
 
+export type Field = {
+    _id: string;
+    name: string;
+}
+
 export type Area = {
     name: string;
     _id: string;
@@ -158,6 +163,7 @@ export type Human = {
     area2?: Area;
     area1?: Area;
     area?: Area;
+    field?: any;
     nestedParents?: Workplace[];
     nestedChilds?: Workplace[];
     workplace?: Workplace[];
