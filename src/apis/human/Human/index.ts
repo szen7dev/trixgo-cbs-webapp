@@ -36,7 +36,7 @@ export const humanRepository: HumanRepository = {
 async function fetchListHuman(params : any) {
     const { data } = await API.get(`${CONTACT_URL}`, {
         params: {
-            select: 'name phone email sign author createAt note status area area1 area2 department position gender birthday contractType workingStatus identity address taxid insuranceSign insuranceDate contractDate parent dataSource joinedDate',
+            select: 'name phone email sign author createAt note status area area1 area2 department position gender birthday contractType workingStatus identity address taxid insuranceSign insuranceDate contractDate parent dataSource joinedDate image',
             populates: {
                 "path": "author area area1 area2 department position contractType workingStatus parent dataSource",
                 "select": "fullname sign image name parent",

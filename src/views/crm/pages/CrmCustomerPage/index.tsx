@@ -2,15 +2,10 @@ import React, { FC, useState, useEffect, ChangeEvent, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
-
-import {
-    DropdownSearchableV2,
-    Loader,
-} from "shareComponents/common";
+import { DropdownSearchableV2, Loader } from "shareComponents/common";
 
 // ========== Utils ========== //
 import { GENDER_TYPES } from 'apis/localdb';
-import { createLinkAndClick } from "utils";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { debounce } from "lodash";
@@ -24,8 +19,6 @@ import CameraIcon from "assets/images/camera-icon.svg";
 // ========== Hooks ========== //
 import { useHumanCustom, useListHuman } from "services/hooks/human/useHuman";
 import { useProjectCustom } from "services/hooks/items/useProject";
-import { useSocket } from "services/hooks/useSocket";
-import { useAuth } from "services/hooks/auth/useAuth";
 import { ModalCreateOrUpdateCustomer } from 'views/item/shareComponents/common';
 import { useCustomer } from "services/hooks/items/useCustomer";
 
@@ -60,7 +53,6 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
     const ref = useRef<PaginateHandle>(null);
     const datahubRef = useRef<DropdownHandle>(null);
     const typeRef = useRef<DropdownHandle>(null);
-    const fromToRef = useRef<TimeRangeHandle>(null);
 
     const [pageIndex, setPageIndex] = useState(0);
 
@@ -70,17 +62,10 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
 
     const location = useLocation()
 
-    //_____Import, export excel
-    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-        isExporting: false,
-    });
-
     const [genders, setGenders] = useState<string[]>([]);
 
     const [projectKeyword, setProjectKeyword] = useState("");
     const [departmentsID, setDepartmentsID] = useState<string[]>([]);
-
-    const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
 
     const { listProjectsUserIsMember } = useProjectCustom({
         paramsProjectsUserIsMember: { keyword: projectKeyword },
@@ -89,68 +74,18 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
 
     const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs, refetchListHuman } = useListHuman({
         params: {
-            ...fromToDate,
+            // ...fromToDate,
             limit: 10,
             genders,
             departmentsID,
             keyword,
         },
         isFetchList: true
-    });
+    })
 
     const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
         setKeyword(event.target.value)
     }, 500)
-
-    const { exportHumanAsync, exportHumanByFilterAsync } = useHumanCustom({});
-
-    // Làm việc với Excel
-    const handleExport = async () => {
-        try {
-            setStateExport({ isExporting: true });
-            const { error, data } = await exportHumanAsync({
-                filterParams: {
-                    ...fromToDate,
-                    type: '1',
-                    genders,
-                    departmentsID,
-                    keyword
-                }
-            });
-
-            if(error) {
-                return toast.warn(data?.message);
-            }
-        } catch (error: any) {
-            toast.error(error.message)
-        }
-    }
-
-    const handleExportByFilter = async () => {
-        try {
-            setStateExport({ isExporting: true });
-            const { error, data } = await exportHumanByFilterAsync({
-                filterParams: {
-                    ...fromToDate,
-                    lastestID: lastestIDs && lastestIDs[pageIndex],
-                    type: '1',
-                    genders,
-                    departmentsID,
-                    keyword
-                }
-            });
-
-            if(error) {
-                return toast.warn(data?.message);
-            }
-
-            data && createLinkAndClick(data, '_self');
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false });
-        }
-    }
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
 
@@ -215,10 +150,6 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
             refetchListHuman()
             toast.success('Cập nhật thành công', { autoClose: 1500 })
         }
-    }
-
-    if(stateExport.isExporting) {
-        return <Loader className="border-primary" />
     }
 
     return (
