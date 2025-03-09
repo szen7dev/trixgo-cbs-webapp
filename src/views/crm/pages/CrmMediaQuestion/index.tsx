@@ -170,6 +170,7 @@ export const CrmMediaQuestion: FC<{ type: number }> = ({ type }) => {
             initValues = {
                 parentID,
                 questionID: '',
+                goodsID: '',
                 type: '1',
                 status: '1',
                 name: '',
