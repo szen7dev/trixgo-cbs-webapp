@@ -17,3 +17,6 @@ export {CrmMediaBanner} from './CrmMediaBanner';
 export {CrmMediaMeasurement} from './CrmMediaMeasurement';
 export {CrmMediaQuestion} from './CrmMediaQuestion';
 export {CrmMediaSurvey} from './CrmMediaSurvey';
+export {CrmMediaGrowTrack} from './CrmMediaGrowTrack';
+export {CrmMediaHabit} from './CrmMediaHabit';
+export {CrmMediaHabitStreak} from './CrmMediaHabitStreak';

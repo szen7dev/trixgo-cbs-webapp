@@ -16,6 +16,8 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
     slug: '',
     note: '',
     phone: '',
+    facebook: '',
+    tiktok: '',
     birthday: '',
     gender: 1,
     height: 0,
@@ -90,7 +92,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "600px",
+        height: "700px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -106,7 +108,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
-          Họ và tên (*)
+          Họ và tên của bé/trẻ em (*)
         </label>
         <input
           type="text"
@@ -178,7 +180,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
-          Chiều cao (cm)
+          Chiều cao (cm) *
         </label>
         <input
           type="number"
@@ -192,7 +194,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
-          Cân nặng (kg)
+          Cân nặng (kg) *
         </label>
         <input
           type="number"
@@ -214,6 +216,34 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
           name="phone"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.phone}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Nick Facebook (nếu có)
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="facebook"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.facebook}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Nick TikTok (nếu có)
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="tiktok"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.tiktok}
           onChange={onChange}
         />
       </section>

@@ -295,7 +295,7 @@ export const CrmMediaTag: FC<{ type: number }> = ({ type }) => {
                                 Nội dung
                             </div>
                         </th> 
-                        <th className="py-1 w-1/6">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Mã hiệu/Slug
                             </div>
@@ -342,7 +342,7 @@ export const CrmMediaTag: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 {item.type >= 1 ? MEDIA_TAG_TYPES[Number(item.type)-1].text : ""}
                             </td>
-                            <td className="py-1 px-2">
+                            <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 {item.name}
                             </td>
                             <td className="py-1 px-2">{item?.slug}</td>

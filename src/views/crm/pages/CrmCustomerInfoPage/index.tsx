@@ -66,6 +66,10 @@ export const CrmCustomerInfoPage: FC = () => {
                 value: defaultValues?.position?._id,
                 label: defaultValues?.position?.name
               },
+              field: defaultValues?.field && {
+                value: defaultValues?.field?._id,
+                label: defaultValues?.field?.name
+              },
               area: defaultValues?.area && {
                 value: defaultValues?.area?._id,
                 label: defaultValues?.area?.name
@@ -196,6 +200,7 @@ export const CrmCustomerInfoPage: FC = () => {
             department: detailHuman.department,
             birthday: detailHuman.birthday,
             position: detailHuman?.position,
+            field: detailHuman?.field,
             identity: detailHuman.identity,
             address: detailHuman.address,
             dateProvice: detailHuman.dateProvice,

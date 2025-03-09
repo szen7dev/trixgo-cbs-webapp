@@ -30,6 +30,7 @@ export const ModalCreateOrUpdateQuestion: FC<any> = ({
       list: listGoods,
   } = useGoods({
       params: { 
+          usage: 2,
           keyword: keywordGoods, 
       },
       isFetchList: true,
