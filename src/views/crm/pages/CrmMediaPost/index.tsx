@@ -57,7 +57,7 @@ export const CrmMediaPost: FC<{ type: number }> = ({ type }) => {
         hasNextPage,
         refetch,
         fetchNextPage,
-        totalRecord
+        totalRecord,
     } = useMediaPost({
         params: { 
             parentID,

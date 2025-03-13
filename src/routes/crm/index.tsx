@@ -41,6 +41,7 @@ import {
     CrmMediaHabitStreak,
 } from "views/crm/pages";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
+import { CrmPostPage } from "views/crm/pages/CrmPostPage";
 
 const CrmRouter: FC = () => {
     return (
@@ -78,6 +79,7 @@ const CrmRouter: FC = () => {
                     <Route exact path="/crm/journey/" component={() => CrmJourneyPage({ })}/>
                     <Route exact path="/crm/business/:id?" component={() => CrmJourneyPage({ })}/>
                     <Route exact path="/crm/booking" component={CrmBookingPage}/>
+                    <Route exact path="/crm/post" component={CrmPostPage}/>
                     <Route exact path="/crm/order" component={() => FnBHomePage({})}/>
                     <Route exact path="/crm/affiliate" component={CrmAffiliatePage}/>
 
