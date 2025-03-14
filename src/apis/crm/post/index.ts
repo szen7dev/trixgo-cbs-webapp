@@ -1,3 +1,4 @@
+import { debug } from "console";
 import API from "../../repository";
 
 const URL = "/api/medias";
@@ -33,6 +34,36 @@ const crmPostRepository = {
             `${URL}`, { params: params }
         );
         return data;
+    },
+
+    async getTags(params: any): Promise<any> {
+        const { data } = await API.get(
+            `${URL}`+'/tag', {
+            params: {
+                ...params
+            }
+        })
+        console.log("data tag",data);
+
+        return data?.data;
+    },
+
+    async insertTag(params: any): Promise<any> {
+        const { data } = await API.post<any>(
+            `${URL}`+'/tag', params
+        );
+        return data || [];
+    },
+
+    async getMenus(params: any): Promise<any> {
+        const { data } = await API.get(
+            `${URL}`+'/menu?select=name slug order', {
+            params: {
+                ...params
+            }
+        })
+
+        return data || [];
     },
 
     async downloadTemplateExcel(params: any): Promise<any> {

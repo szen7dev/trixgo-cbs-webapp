@@ -7,7 +7,9 @@ import crmMediaRepository from 'apis/crm/post';
 export const useMediaPost = ({
     params = {},
     isFetchList = false,
-    isFetchInfo = false
+    isFetchInfo = false,
+    isFetchTags = false,
+    isFetchMenu = false,
 }: any): any => {
 
     const { mutateAsync: insertAsync } =
@@ -32,6 +34,25 @@ export const useMediaPost = ({
         });
 
     const info = detailData?.data;
+    // Fetch tags from the API /api/medias/tag
+    const { data: tagsData, isLoading: isLoadingTags, refetch: refetchTags } =
+        useQuery("media_tags", () => crmMediaRepository.getTags(params),
+            {
+                enabled: isFetchTags,
+                refetchOnWindowFocus: false
+            });
+    const { mutateAsync: insertTag } =
+        useMutation((payload: any) =>
+            crmMediaRepository.insertTag(payload)
+        );
+
+    // Fetch menus from the API /api/medias/menu
+    const { data: menuData, isLoading: isLoadingMenu, refetch: refetchMenu } =
+        useQuery("media_menu", () => crmMediaRepository.getMenus(params),
+            {
+                enabled: isFetchMenu,
+                refetchOnWindowFocus: false
+            });
 
     const {
         isLoading,
@@ -57,7 +78,16 @@ export const useMediaPost = ({
 
     const list = []
         .concat(...(data?.pages || [])
-        .map((d: any) => d.data?.listRecords))
+            .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+        const tag = []
+        .concat(...(data?.pages || [])
+            .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+        const menu = []
+        .concat(...(data?.pages || [])
+            .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
     const listWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
 
@@ -66,25 +96,28 @@ export const useMediaPost = ({
 
     // Tải mẫu import excel
     const { mutateAsync: downloadTemplateExcelAsync } =
-        useMutation((payload: any ) =>
-        crmMediaRepository.downloadTemplateExcel(payload)
-    );
+        useMutation((payload: any) =>
+            crmMediaRepository.downloadTemplateExcel(payload)
+        );
 
     // Import excel
     const { mutateAsync: importExcelAsync } =
         useMutation((payload: { dataImport: string }) =>
-        crmMediaRepository.importExcel(payload)
-    );
+            crmMediaRepository.importExcel(payload)
+        );
 
     // Export excel
     const { mutateAsync: exportExcelAsync } =
         useMutation((payload: any) =>
-        crmMediaRepository.exportExcel(payload)
-    );
+            crmMediaRepository.exportExcel(payload)
+        );
+
 
     return {
         isLoading,
         isLoadingInfo,
+        isLoadingTags,
+        isLoadingMenu,
         list,
         listWithPager,
         info,
@@ -93,12 +126,17 @@ export const useMediaPost = ({
         hasNextPage,
         refetch,
         refetchInfo,
+        refetchTags,
+        refetchMenu,
         fetchNextPage,
         insertAsync,
+        insertTag,
         updateAsync,
         deleteManyAsync,
         downloadTemplateExcelAsync,
         importExcelAsync,
-        exportExcelAsync
+        exportExcelAsync,
+        tag,
+        menu
     }
 }
