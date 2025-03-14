@@ -26,6 +26,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useUpload } from "services/hooks/useUpload";
 import { useInputChange } from "shareComponents/common/InputChange";
 import { useMediaPost } from "services/hooks/crm/useMediaPost";
+import crmMediaRepository from 'apis/crm/post';
 
 const MEDIA_APP_ID = "5df4ce16506d9b3c587948ca";
 interface InputState {
@@ -33,14 +34,14 @@ interface InputState {
 }
 export const CrmPostPage: FC = () => {
   const initialValues = {
-    title: "",
-    content: "",
-    summary: "",
-    description: "",
-    slug: "",
-    status: "1",
-    categoryID: "",
-    thumbnailID: "",
+    title: '',
+    content: '',
+    summary: '',
+    description: '',
+    slug: '',
+    status: '1',
+    categoryID: '',
+    tags: [],
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Tiêu đề không được để trống"),
@@ -53,7 +54,7 @@ export const CrmPostPage: FC = () => {
 
   const history = useHistory();
   const { user } = useAuth();
-  const { parentID } = useParams<{ parentID: string }>();\
+  const { parentID } = useParams<{ parentID: string }>();
   const [keyword, setKeyword] = useState('');
   const [image, setImage] = useState("/logo_medgo.png");
   const { inputValues, handleInputChange, setInputValues } = useInputChange({
@@ -113,15 +114,15 @@ export const CrmPostPage: FC = () => {
   };
 
   const clickBack = () => {
-    history.push("/crm");
+    history.push("/crm/home");
   };
 
   const {
-    list: listData,
-    hasNextPage,
     refetch,
-    fetchNextPage,
-    totalRecord,
+    insertAsync,
+    insertTag,
+    tag,
+    menu,
   } = useMediaPost({
     params: {
       parentID,
@@ -137,6 +138,7 @@ export const CrmPostPage: FC = () => {
     },
     isFetchList: true,
   });
+  
   // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
   const handleConfirmCreateOrUpdate = () => refetch();
   const handleSubmit = async (values: any) => {
@@ -147,7 +149,8 @@ export const CrmPostPage: FC = () => {
         thumbnailID: inputValues.thumbnailID || "",
         tags: tagIds,
       };
-
+      const response = await insertAsync(dataInsert); 
+      console.log('Insert successful:', response);
       clickBack();
     } catch (error: any) {
       toast.error(error.message);
@@ -159,6 +162,15 @@ export const CrmPostPage: FC = () => {
       event.preventDefault();
       const newTag = event.target.value;
       try {
+        const data = await insertTag({name:newTag});
+        if (!data.error) {
+          // getTags();
+          setInputValues((prev) => ({
+            ...prev,
+            tags: [...prev.tags, data],
+          }));
+          event.target.value = '';
+        }
       } catch (error: any) {
         toast.error(error.message);
       }
@@ -167,29 +179,21 @@ export const CrmPostPage: FC = () => {
 
   const getTags = async () => {
     try {
-      const data = await apiService
-        .get("/api/medias/tag")
-        .then((res) => res.data?.data);
-
-      if (data.listRecords?.length) {
-        setTags(data.listRecords);
-      }
+        setTags(tag);
     } catch (error) {
       console.error(error);
     }
   };
 
+  console.log("tag",tags)
+
   useEffect(() => {
     // List menus
     const getMenus = async () => {
-      try {
-        const data = await apiService
-          .get("/api/medias/menu?select=name slug order")
-          .then((res) => res.data?.data);
+      console.log(menu);
 
-        if (data.listRecords?.length) {
-          setMenus(data.listRecords);
-        }
+      try {
+          setMenus(menu);
       } catch (error) {
         console.error(error);
       }
