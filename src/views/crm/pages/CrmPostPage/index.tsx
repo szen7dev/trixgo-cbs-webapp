@@ -26,12 +26,10 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useUpload } from "services/hooks/useUpload";
 import { useInputChange } from "shareComponents/common/InputChange";
 import { useMediaPost } from "services/hooks/crm/useMediaPost";
-import crmMediaRepository from 'apis/crm/post';
+// import crmMediaRepository from 'apis/crm/post';
 
 const MEDIA_APP_ID = "5df4ce16506d9b3c587948ca";
-interface InputState {
-  [key: string]: any;
-}
+
 export const CrmPostPage: FC = () => {
   const initialValues = {
     title: '',
@@ -202,6 +200,7 @@ export const CrmPostPage: FC = () => {
     getMenus();
     getTags();
   }, []);
+
   return (
     <main className="relative h-full">
       <Container>
@@ -329,7 +328,7 @@ export const CrmPostPage: FC = () => {
                         >
                           Bao nhiêu năng lượng cho đủ hoạt động trong 1 ngày
                         </Typography>
-                        <a href="" style={{ color: "hsla(139, 100%, 20%, 1)" }}>
+                        <a href="#!" style={{ color: "hsla(139, 100%, 20%, 1)" }}>
                           https://medgo.trixgo.com/tinh-toan-nang-luong-moi-ngay
                         </a>
                         <Typography>
@@ -339,15 +338,6 @@ export const CrmPostPage: FC = () => {
                           ghé qua địa chỉ 112K Thái Thịnh
                         </Typography>
                       </Box>
-                      {/* <div>
-                            <Typography>Tiêu đề trang</Typography>
-                            <TextField
-                              fullWidth
-                              name="title"
-                              onChange={handleInputChange}
-                            />
-                          </div> */}
-
                       <div>
                         <Typography>Thẻ mô tả</Typography>
                         <Field
