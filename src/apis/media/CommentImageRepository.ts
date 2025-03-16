@@ -36,14 +36,14 @@ const CommentImageRepository = {
    */
   async createComment(payload: CommentBody) {
     const { data } = await API.post<Response<Comment>>(
-      mediaURL + "/comments/file",
+      mediaURL + "",
       payload
     );
     return data;
   },
   async updateComment(payload: CommentBody) {
     const { data } = await API.put<Response<CommentDetail>>(
-      mediaURL + "/comments/file"
+      mediaURL + ""
     );
     return data;
   },
@@ -52,7 +52,7 @@ const CommentImageRepository = {
       error: boolean;
       message: string;
       data?: any;
-    }>(mediaURL + "/comments/file", { params: { commentID: id } });
+    }>(mediaURL + "", { params: { commentID: id } });
     return data;
   },
   async listComments(payload: {
@@ -62,7 +62,7 @@ const CommentImageRepository = {
     parentID?: string;
   }) {
     const { data } = await API.get<Response<ListRecord<Comment>>>(
-      mediaURL + "/comments/file",
+      mediaURL + "",
       {
         params: {
           populates: populatesComment,
