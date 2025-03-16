@@ -7,6 +7,7 @@ export {CrmSupportPage} from './CrmSupportPage';
 export {CrmAffiliatePage} from './CrmAffiliatePage';
 export {CrmCustomerInfoPage} from './CrmCustomerInfoPage';
 export {CrmBookingPage} from './CrmBookingPage';
+export {CrmPostPage} from './CrmPostPage';
 export {CrmVoucherPage} from './CrmVoucherPage';
 export {CrmVoucherDetailPage} from './CrmVoucherDetailPage';
 export {CrmMediaTag} from './CrmMediaTag';
