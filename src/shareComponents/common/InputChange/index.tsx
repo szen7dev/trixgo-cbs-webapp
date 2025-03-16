@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface InputState {
   [key: string]: any;
@@ -14,6 +14,12 @@ export const useInputChange = (defaultValue = {}) => {
       [name]: value,
     });
   };
+
+  useEffect(() => {
+    return () => {
+      setInputValues(defaultValue);
+    };
+  }, []);
 
   return {
     inputValues,

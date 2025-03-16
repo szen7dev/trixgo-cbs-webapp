@@ -415,7 +415,7 @@ export const CreateMediaPost: FC = () => {
                                 /> */}
                             <img
                               src={image ? image : "/no_image.png"}
-                              alt="Uploaded Image"
+                              alt="Thumbnail"
                             />
                           </Box>
                           <br />
