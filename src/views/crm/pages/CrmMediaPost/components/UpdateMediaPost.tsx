@@ -43,10 +43,7 @@ export const UpdateMediaPost: FC = () => {
   const { user } = useAuth();
   const { postID } = useParams<{ postID: string }>();
   const [image, setImage] = useState("/logo_medgo.png");
-  const { inputValues, handleInputChange, setInputValues } = useInputChange({
-    status: "1",
-    tags: [],
-  });
+  const { inputValues, handleInputChange, setInputValues } = useInputChange({});
 
   const [menus, setMenus] = useState<Record<string, string>[]>([]);
   const [tags, setTags] = useState<Record<string, string>[]>([]);
@@ -113,7 +110,7 @@ export const UpdateMediaPost: FC = () => {
     params: {
       mediaID: postID,
       populates: {
-        path: "author tags thumbnail",
+        path: "author tags thumbnail category",
       },
     },
     isFetchInfo: true,
@@ -123,7 +120,7 @@ export const UpdateMediaPost: FC = () => {
 
   const handleSubmit = async (values: any) => {
     try {
-      const tagIds = inputValues.tags?.map((tag: any) => tag._id);
+      const tagIds = inputValues.tags?.map((tag: any) => tag?._id);
       const dataUpdate = {
         ...inputValues,
         tags: tagIds,
@@ -176,52 +173,47 @@ export const UpdateMediaPost: FC = () => {
 
   useEffect(() => {
     const setDataDetail = async () => {
-      try {
-        if (!postDetail) {
-          return console.log("Can't get post detail", postDetail, postID);
-        }
+      if (!postDetail) {
+        return console.log("Can't get post detail", postDetail, postID);
+      }
 
-        const {
-          content,
-          description,
-          summary,
-          slug,
-          status,
-          title,
-          tags,
-          category,
-          author,
-          thumbnail,
-        } = postDetail;
+      const {
+        content,
+        description,
+        summary,
+        slug,
+        status,
+        title,
+        tags,
+        category,
+        author,
+        thumbnail,
+      } = postDetail;
 
-        const values: any = {
-          mediaID: postID,
-          content,
-          description,
-          summary,
-          slug,
-          status: status.toString(),
-          title,
-          tags,
-          categoryID: category,
-          author,
-        };
-        setInputValues(values);
+      const values: any = {
+        mediaID: postID,
+        content,
+        description,
+        summary,
+        slug,
+        status: status.toString(),
+        title,
+        tags,
+        categoryID: category?._id,
+        author,
+      };
+      setInputValues(values);
 
-        if (thumbnail) {
-          const thumbnailUrl = `${process.env.REACT_APP_URL_S3}${thumbnail.path}`;
-          setImage(thumbnailUrl);
-        } else {
-          setImage("/no_image.png");
-        }
-
-      } catch (error: any) {
-        toast.error(error.message);
+      if (thumbnail) {
+        const thumbnailUrl = `${process.env.REACT_APP_URL_S3}${thumbnail.path}`;
+        setImage(thumbnailUrl);
+      } else {
+        setImage("/no_image.png");
       }
     };
 
     setDataDetail();
-  }, [postDetail, setInputValues, postID]);
+  }, [postID, postDetail, setInputValues]);
 
   if (!Object.keys(inputValues).length) {
     return null;
@@ -361,11 +353,9 @@ export const UpdateMediaPost: FC = () => {
                           href="#!"
                           style={{ color: "hsla(139, 100%, 20%, 1)" }}
                         >
-                          https://medgo.trixgo.com/{inputValues.slug}
+                         /{inputValues.slug}
                         </a>
-                        <Typography>
-                          {inputValues.description}
-                        </Typography>
+                        <Typography>{inputValues.description}</Typography>
                       </Box>
 
                       <div>
@@ -418,7 +408,7 @@ export const UpdateMediaPost: FC = () => {
                         <RadioGroup
                           aria-labelledby="demo-radio-buttons-group-label"
                           name="status"
-                          defaultValue={inputValues.status}
+                          value={inputValues.status ?? "1"}
                           onChange={handleInputChange}
                           onBlur={handleBlur}
                         >
@@ -459,7 +449,7 @@ export const UpdateMediaPost: FC = () => {
                           >
                             <img
                               src={image ? image : "/no_image.png"}
-                              alt="thumbnail"
+                              alt="Thumbnail"
                             />
                           </Box>
                           <br />
@@ -514,16 +504,16 @@ export const UpdateMediaPost: FC = () => {
                         <br />
                         <FormControl fullWidth>
                           <InputLabel
-                            id="demo-select-small-label"
+                            id="category-select-small-label"
                             sx={{ fontWeight: "700" }}
                           >
                             Danh mục
                           </InputLabel>
                           <Select
                             fullWidth
-                            labelId="demo-select-small-label"
-                            id="demo-select-small"
-                            defaultValue={inputValues.categoryID}
+                            labelId="category-select-small-label"
+                            id="category-select-small"
+                            value={inputValues.categoryID}
                             label="Danh mục"
                             name="categoryID"
                             onChange={(e) => {
@@ -552,7 +542,7 @@ export const UpdateMediaPost: FC = () => {
                           multiple
                           id="tags-outlined"
                           options={tags}
-                          value={inputValues.tags}
+                          value={inputValues.tags ?? []}
                           getOptionLabel={(option) => option?.name}
                           onChange={(_, val: any) => {
                             setInputValues((prev) => ({

@@ -275,16 +275,13 @@ export const CrmPostDetailPage: FC = () => {
                     color: 'hsla(245, 86%, 36%, 1)',
                   }}
                 >
-                  Bao nhiêu năng lượng cho đủ hoạt động trong 1 ngày
+                  New
                 </Typography>
                 <a href="" style={{ color: 'hsla(139, 100%, 20%, 1)' }}>
-                  https://medgo.trixgo.com/tinh-toan-nang-luong-moi-ngay
+                  New
                 </a>
                 <Typography>
-                  Chính thức mở bán Khai Trương cửa hàng thứ 24 tại Hà Nội.
-                  Trong thời gian này WINGGO giảm giá 30% cho tổng bill thanh
-                  toán tại cơ sở mới. Thân mời bạn bè ở gần ghé qua địa chỉ 112K
-                  Thái Thịnh
+                  New
                 </Typography>
               </Box>
               <div>
