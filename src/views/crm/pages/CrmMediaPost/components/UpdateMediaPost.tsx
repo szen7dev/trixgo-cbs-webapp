@@ -353,7 +353,7 @@ export const UpdateMediaPost: FC = () => {
                           href="#!"
                           style={{ color: "hsla(139, 100%, 20%, 1)" }}
                         >
-                          https://medgo.trixgo.com/{inputValues.slug}
+                         /{inputValues.slug}
                         </a>
                         <Typography>{inputValues.description}</Typography>
                       </Box>
