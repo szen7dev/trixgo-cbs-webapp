@@ -50,7 +50,7 @@ const crmPostRepository = {
       },
     });
 
-    return data || [];
+    return data?.data;
   },
 
   async downloadTemplateExcel(params: any): Promise<any> {
