@@ -335,7 +335,7 @@ export const CrmPostPage: FC = () => {
                           Chính thức mở bán Khai Trương cửa hàng thứ 24 tại Hà
                           Nội. Trong thời gian này WINGGO giảm giá 30% cho tổng
                           bill thanh toán tại cơ sở mới. Thân mời bạn bè ở gần
-                          ghé qua địa chỉ 112K Thái Thịnh
+                          ghé qua địa chỉ 112K Thái Thịnh
                         </Typography>
                       </Box>
                       <div>
