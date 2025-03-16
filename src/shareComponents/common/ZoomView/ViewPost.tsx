@@ -294,10 +294,10 @@ const ViewPost: FC<Props> = ({ initialData, toggle, prioritySingleImageAuthor })
 				</div>
 			</div>
 
-			<SideComments
+			{/* <SideComments
 				prioritySingleImageAuthor={prioritySingleImageAuthor}
 				className={cn("react__comments-wrapper transition-all flex flex-col text-black bg-white h-full overflow-hidden", { collapsed })}
-			/>
+			/> */}
 		</ContextPost.Provider>
 	)
 }
