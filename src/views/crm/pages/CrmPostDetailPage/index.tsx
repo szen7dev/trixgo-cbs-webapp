@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useUpload } from "services/hooks/useUpload";
 import { useInputChange } from "shareComponents/common/InputChange";
@@ -54,7 +54,7 @@ export const CrmPostDetailPage: FC = () => {
 
   const history = useHistory();
   const { user } = useAuth();
-  const { parentID } = useParams<{ parentID: string }>();
+  const { mediaID } = useParams<{ mediaID: string }>();
   const [keyword, setKeyword] = useState('');
   const [image, setImage] = useState("/logo_medgo.png");
   const { inputValues, handleInputChange, setInputValues } = useInputChange({
@@ -121,11 +121,13 @@ export const CrmPostDetailPage: FC = () => {
     refetch,
     updateAsync,
     insertTag,
-    tag,
-    menu,
+    listTags,
+    listMenus,
+    dataPostById,
+    listWithPager
   } = useMediaPost({
     params: {
-      parentID,
+      mediaID,
       keyword,
       populates: {
         path: "parent category userUpdate userCreate images thumbnail author",
@@ -138,7 +140,6 @@ export const CrmPostDetailPage: FC = () => {
     },
     isFetchList: true,
   });
-  
   // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
   const handleConfirmCreateOrUpdate = () => refetch();
   const handleSubmit = async (values: any) => {
@@ -177,31 +178,53 @@ export const CrmPostDetailPage: FC = () => {
     }
   };
 
-  const getTags = async () => {
-    try {
-        setTags(tag);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  console.log("tag",tags)
+  useEffect(() => {
+    setTags(listTags);
+    setMenus(listMenus);
+  }, [dataPostById]);
 
   useEffect(() => {
-    // List menus
-    const getMenus = async () => {
-      console.log(menu);
-
-      try {
-          setMenus(menu);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getMenus();
-    getTags();
-  }, []);
+      const getData = async () => {
+        try {
+          // Gửi yêu cầu API
+          const {
+            content,
+            description,
+            summary,
+            slug,
+            status,
+            title,
+            tags,
+            category,
+            author,
+            thumbnail,
+          } = dataPostById;
+  
+          const values: any = {
+            mediaID,
+            content: content,
+            description,
+            summary,
+            slug,
+            status,
+            title,
+            tags,
+            categoryID: category,
+            author,
+          };
+          console.log("values", values);
+          setInputValues(values);
+          if (!!thumbnail) {
+            const thumbnailUrl = `${process.env.NEXT_PUBLIC_URL_S3}${thumbnail.path}`;
+            setImage(thumbnailUrl);
+          }
+        } catch (error: any) {
+          toast.error(error.message);
+        }
+      };
+  
+      mediaID && getData();
+    }, [mediaID, dataPostById]);
   return (
     <main className="relative h-full">
       <Container>

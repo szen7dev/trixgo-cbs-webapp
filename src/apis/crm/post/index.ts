@@ -15,6 +15,18 @@ const crmPostRepository = {
         return data;
     },
 
+    async getDetailList(params: any): Promise<any> {
+        const { data } = await API.get(
+            `${URL}`, {
+            params: {
+                mediaID: params?.mediaID,
+                ...params
+            }
+        })
+
+        return data?.data;
+    },
+
     async insert(params: any): Promise<any> {
         const { data } = await API.post<any>(
             `${URL}`, params
@@ -42,17 +54,15 @@ const crmPostRepository = {
             params: {
                 ...params
             }
-        })
-        console.log("data tag",data);
-
-        return data?.data;
+        }).then((res) => res.data);
+        return data?.data || [];
     },
 
     async insertTag(params: any): Promise<any> {
         const { data } = await API.post<any>(
             `${URL}`+'/tag', params
         );
-        return data || [];
+        return data?.data || [];
     },
 
     async getMenus(params: any): Promise<any> {
@@ -63,7 +73,7 @@ const crmPostRepository = {
             }
         })
 
-        return data || [];
+        return data?.data || [];
     },
 
     async downloadTemplateExcel(params: any): Promise<any> {

@@ -26,7 +26,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useUpload } from "services/hooks/useUpload";
 import { useInputChange } from "shareComponents/common/InputChange";
 import { useMediaPost } from "services/hooks/crm/useMediaPost";
-import crmMediaRepository from 'apis/crm/post';
+import { setTag } from "@sentry/react";
 
 const MEDIA_APP_ID = "5df4ce16506d9b3c587948ca";
 interface InputState {
@@ -34,13 +34,13 @@ interface InputState {
 }
 export const CrmPostPage: FC = () => {
   const initialValues = {
-    title: '',
-    content: '',
-    summary: '',
-    description: '',
-    slug: '',
-    status: '1',
-    categoryID: '',
+    title: "",
+    content: "",
+    summary: "",
+    description: "",
+    slug: "",
+    status: "1",
+    categoryID: "",
     tags: [],
   };
   const validationSchema = Yup.object({
@@ -55,7 +55,7 @@ export const CrmPostPage: FC = () => {
   const history = useHistory();
   const { user } = useAuth();
   const { parentID } = useParams<{ parentID: string }>();
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState("");
   const [image, setImage] = useState("/logo_medgo.png");
   const { inputValues, handleInputChange, setInputValues } = useInputChange({
     status: "1",
@@ -117,13 +117,7 @@ export const CrmPostPage: FC = () => {
     history.push("/crm/home");
   };
 
-  const {
-    refetch,
-    insertAsync,
-    insertTag,
-    tag,
-    menu,
-  } = useMediaPost({
+  const { refetch, refetchTags, insertAsync, insertTag, listTags, listMenus } = useMediaPost({
     params: {
       parentID,
       keyword,
@@ -138,9 +132,8 @@ export const CrmPostPage: FC = () => {
     },
     isFetchList: true,
   });
-  
+
   // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
-  const handleConfirmCreateOrUpdate = () => refetch();
   const handleSubmit = async (values: any) => {
     try {
       const tagIds = inputValues.tags?.map((tag: any) => tag._id);
@@ -149,27 +142,34 @@ export const CrmPostPage: FC = () => {
         thumbnailID: inputValues.thumbnailID || "",
         tags: tagIds,
       };
-      const response = await insertAsync(dataInsert); 
-      console.log('Insert successful:', response);
+      const response = await insertAsync(dataInsert);
+      console.log("Insert successful:", response);
+      toast.success(`${response.message}`);
+
       clickBack();
     } catch (error: any) {
       toast.error(error.message);
     }
   };
 
+  useEffect(() => {
+    setTags(listTags);
+    setMenus(listMenus)
+  }, []);
+
   const handleTag = async (event: any) => {
     if (event.key === "Enter" && event.target.value) {
       event.preventDefault();
       const newTag = event.target.value;
       try {
-        const data = await insertTag({name:newTag});
+        const data = await insertTag({ name: newTag });
+        setTags((prevTags) => [...prevTags, data]); 
         if (!data.error) {
-          // getTags();
           setInputValues((prev) => ({
             ...prev,
             tags: [...prev.tags, data],
           }));
-          event.target.value = '';
+          event.target.value = "";
         }
       } catch (error: any) {
         toast.error(error.message);
@@ -177,31 +177,7 @@ export const CrmPostPage: FC = () => {
     }
   };
 
-  const getTags = async () => {
-    try {
-        setTags(tag);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  console.log("tag",tags)
-
-  useEffect(() => {
-    // List menus
-    const getMenus = async () => {
-      console.log(menu);
-
-      try {
-          setMenus(menu);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getMenus();
-    getTags();
-  }, []);
   return (
     <main className="relative h-full">
       <Container>
@@ -531,7 +507,7 @@ export const CrmPostPage: FC = () => {
                           value={inputValues.tags}
                           getOptionLabel={(option) => option?.name}
                           onChange={(_, val: any) => {
-                            setInputValues((prev) => ({
+                            setInputValues((prev: any) => ({
                               ...prev,
                               tags: val,
                             }));
@@ -540,8 +516,8 @@ export const CrmPostPage: FC = () => {
                           renderInput={(params) => (
                             <TextField
                               {...params}
-                              placeholder="Nhập và enter để tạo tag mới"
                               onKeyDown={handleTag}
+                              placeholder="Nhập và enter để tạo tag mới"
                             />
                           )}
                         />

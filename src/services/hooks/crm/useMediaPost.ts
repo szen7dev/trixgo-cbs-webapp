@@ -3,6 +3,7 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 /*=====2.TYPING/APIS=====*/
 import crmMediaRepository from 'apis/crm/post';
+import { useParams } from "react-router";
 
 export const useMediaPost = ({
     params = {},
@@ -11,7 +12,6 @@ export const useMediaPost = ({
     isFetchTags = false,
     isFetchMenu = false,
 }: any): any => {
-
     const { mutateAsync: insertAsync } =
         useMutation((payload: any) =>
             crmMediaRepository.insert(payload)
@@ -34,6 +34,13 @@ export const useMediaPost = ({
         });
 
     const info = detailData?.data;
+
+    const { data: dataPostById, isLoading: isLoadingDetail, refetch: refetchDetail } =
+        useQuery("media_post_detail", () => crmMediaRepository.getDetailList(params), {
+            refetchOnWindowFocus: false,
+            enabled: !!params.mediaID,
+        });
+
     // Fetch tags from the API /api/medias/tag
     const { data: tagsData, isLoading: isLoadingTags, refetch: refetchTags } =
         useQuery("media_tags", () => crmMediaRepository.getTags(params),
@@ -81,14 +88,12 @@ export const useMediaPost = ({
             .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
-        const tag = []
-        .concat(...(data?.pages || [])
-            .map((d: any) => d.data?.listRecords))
+    const listTags = [].concat(tagsData || []).map((d: any) => d.data?.listRecords)
         .filter(Boolean);
-        const menu = []
-        .concat(...(data?.pages || [])
-            .map((d: any) => d.data?.listRecords))
+
+    const listMenus = [].concat(menuData || []).map((d: any) => d.data?.listRecords)
         .filter(Boolean);
+
     const listWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
@@ -118,6 +123,7 @@ export const useMediaPost = ({
         isLoadingInfo,
         isLoadingTags,
         isLoadingMenu,
+        isLoadingDetail,
         list,
         listWithPager,
         info,
@@ -128,6 +134,7 @@ export const useMediaPost = ({
         refetchInfo,
         refetchTags,
         refetchMenu,
+        refetchDetail,
         fetchNextPage,
         insertAsync,
         insertTag,
@@ -136,7 +143,8 @@ export const useMediaPost = ({
         downloadTemplateExcelAsync,
         importExcelAsync,
         exportExcelAsync,
-        tag,
-        menu
+        listTags,
+        listMenus,
+        dataPostById
     }
 }

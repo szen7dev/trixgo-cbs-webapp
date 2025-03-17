@@ -42,6 +42,7 @@ import {
 } from "views/crm/pages";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { CrmPostPage } from "views/crm/pages/CrmPostPage";
+import { CrmPostDetailPage } from "views/crm/pages/CrmPostDetailPage";
 
 const CrmRouter: FC = () => {
     return (
@@ -80,7 +81,7 @@ const CrmRouter: FC = () => {
                     <Route exact path="/crm/business/:id?" component={() => CrmJourneyPage({ })}/>
                     <Route exact path="/crm/booking" component={CrmBookingPage}/>
                     <Route exact path="/crm/post" component={CrmPostPage}/>
-                    <Route exact path="/crm/post/:postID" component={CrmVoucherDetailPage}/>
+                    <Route exact path="/crm/post/:mediaID" component={CrmPostDetailPage}/>
                     <Route exact path="/crm/order" component={() => FnBHomePage({})}/>
                     <Route exact path="/crm/affiliate" component={CrmAffiliatePage}/>
 
