@@ -146,13 +146,14 @@ export const CrmPostDetailPage: FC = () => {
 
   // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
   const handleConfirmCreateOrUpdate = () => refetch();
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async () => {
     try {
       const tagIds = inputValues.tags?.map((tag: any) => tag._id);
       const dataInsert = {
-        ...values,
+        ...inputValues,
         thumbnailID: inputValues.thumbnailID || "",
         tags: tagIds,
+        mediaID: mediaId,
       };
       const response = await updateAsync(dataInsert);
       console.log('Insert successful:', response);
