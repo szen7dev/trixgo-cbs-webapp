@@ -3,7 +3,6 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 /*=====2.TYPING/APIS=====*/
 import crmMediaRepository from 'apis/crm/post';
-import { useParams } from "react-router";
 
 export const useMediaPost = ({
     params = {},
@@ -38,9 +37,8 @@ export const useMediaPost = ({
     const { data: dataPostById, isLoading: isLoadingDetail, refetch: refetchDetail } =
         useQuery("media_post_detail", () => crmMediaRepository.getDetailList(params), {
             refetchOnWindowFocus: false,
-            enabled: !!params.mediaID,
+            enabled: isFetchInfo,
         });
-
     // Fetch tags from the API /api/medias/tag
     const { data: tagsData, isLoading: isLoadingTags, refetch: refetchTags } =
         useQuery("media_tags", () => crmMediaRepository.getTags(params),

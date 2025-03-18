@@ -27,6 +27,7 @@ import { useUpload } from "services/hooks/useUpload";
 import { useInputChange } from "shareComponents/common/InputChange";
 import { useMediaPost } from "services/hooks/crm/useMediaPost";
 import crmMediaRepository from 'apis/crm/post';
+import API from "apis/repository";
 
 const MEDIA_APP_ID = "5df4ce16506d9b3c587948ca";
 interface InputState {
@@ -54,7 +55,7 @@ export const CrmPostDetailPage: FC = () => {
 
   const history = useHistory();
   const { user } = useAuth();
-  const { mediaID } = useParams<{ mediaID: string }>();
+  const { mediaId } = useParams<{ mediaId: string }>();
   const [keyword, setKeyword] = useState('');
   const [image, setImage] = useState("/logo_medgo.png");
   const { inputValues, handleInputChange, setInputValues } = useInputChange({
@@ -124,14 +125,16 @@ export const CrmPostDetailPage: FC = () => {
     listTags,
     listMenus,
     dataPostById,
+    list,
+    info,
     listWithPager
   } = useMediaPost({
     params: {
-      mediaID,
+      mediaId,
       keyword,
       populates: {
-        path: "parent category userUpdate userCreate images thumbnail author",
-        select: "name fullname parent createAt path",
+        path: "category userUpdate userCreate images thumbnail author",
+        select: "name fullname createAt path",
         populate: {
           path: "parent",
           select: "name",
@@ -140,6 +143,7 @@ export const CrmPostDetailPage: FC = () => {
     },
     isFetchList: true,
   });
+
   // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
   const handleConfirmCreateOrUpdate = () => refetch();
   const handleSubmit = async (values: any) => {
@@ -150,7 +154,7 @@ export const CrmPostDetailPage: FC = () => {
         thumbnailID: inputValues.thumbnailID || "",
         tags: tagIds,
       };
-      const response = await updateAsync(dataInsert); 
+      const response = await updateAsync(dataInsert);
       console.log('Insert successful:', response);
       clickBack();
     } catch (error: any) {
@@ -163,7 +167,7 @@ export const CrmPostDetailPage: FC = () => {
       event.preventDefault();
       const newTag = event.target.value;
       try {
-        const data = await insertTag({name:newTag});
+        const data = await insertTag({ name: newTag });
         if (!data.error) {
           // getTags();
           setInputValues((prev) => ({
@@ -184,320 +188,325 @@ export const CrmPostDetailPage: FC = () => {
   }, [dataPostById]);
 
   useEffect(() => {
-      const getData = async () => {
-        try {
-          // Gửi yêu cầu API
-          const {
-            content,
-            description,
-            summary,
-            slug,
-            status,
-            title,
-            tags,
-            category,
-            author,
-            thumbnail,
-          } = dataPostById;
-  
-          const values: any = {
-            mediaID,
-            content: content,
-            description,
-            summary,
-            slug,
-            status,
-            title,
-            tags,
-            categoryID: category,
-            author,
-          };
-          console.log("values", values);
-          setInputValues(values);
-          if (!!thumbnail) {
-            const thumbnailUrl = `${process.env.NEXT_PUBLIC_URL_S3}${thumbnail.path}`;
-            setImage(thumbnailUrl);
-          }
-        } catch (error: any) {
-          toast.error(error.message);
+    const getData = async () => {
+      try {
+        const populates = JSON.stringify({
+          path: 'author tags thumbnail',
+        });
+        const data = await API.get(`/api/medias?mediaId=${mediaId}&populates=${populates}`)
+          .then((res) => res.data?.data?.listRecords);
+        const firstItemAsObject  = data.length > 0 ? data[0] : {};
+        // Gửi yêu cầu API
+        const {
+          content,
+          description,
+          summary,
+          slug,
+          status,
+          title,
+          tags,
+          category,
+          author,
+          thumbnail,
+        } = firstItemAsObject;
+
+        const values: any = {
+          mediaId,
+          content,
+          description,
+          summary,
+          slug,
+          status,
+          title,
+          tags,
+          categoryID: category,
+          author,
+        };
+        console.log("values", values);
+        setInputValues(values);
+        if (!!thumbnail) {
+          const thumbnailUrl = `${process.env.NEXT_PUBLIC_URL_S3}${thumbnail.path}`;
+          setImage(thumbnailUrl);
         }
-      };
-  
-      mediaID && getData();
-    }, [mediaID, dataPostById]);
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+    };
+    mediaId && getData();
+  }, [mediaId, dataPostById]);
   return (
     <main className="relative h-full">
       <Container>
-      <Typography>
-        <Button onClick={clickBack}>
-          <ArrowBackIosNewIcon />
-        </Button>
-        Bài viết
-      </Typography>
-      <br />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography sx={{ fontSize: '26px', fontWeight: '700' }}>
-          Bao nhiêu năng lượng cho đủ hoạt động trong 1 ngày
+        <Typography>
+          <Button onClick={clickBack}>
+            <ArrowBackIosNewIcon />
+          </Button>
+          Bài viết
         </Typography>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          sx={{
-            color: 'white',
-            textTransform: 'none',
-          }}
-        >
-          Xác nhận
-        </Button>
-      </Box>
+        <br />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Typography sx={{ fontSize: '26px', fontWeight: '700' }}>
+            Bao nhiêu năng lượng cho đủ hoạt động trong 1 ngày
+          </Typography>
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            sx={{
+              color: 'white',
+              textTransform: 'none',
+            }}
+          >
+            Xác nhận
+          </Button>
+        </Box>
 
-      <br />
-      <Grid container spacing={2}>
-        <Grid item md={8}>
-          <Card sx={{ padding: '22px' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-              <div>
-                <Typography>Tiêu đề bài viết</Typography>
-                <TextField
-                  fullWidth
-                  name="title"
-                  value={inputValues.title}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div>
-                <Typography>Nội dung</Typography>
-                <TextField
-                  multiline
-                  rows={4}
-                  fullWidth
-                  name="content"
-                  value={inputValues.content}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div>
-                <Typography>Tóm tắt</Typography>
-                <TextField
-                  multiline
-                  rows={2}
-                  fullWidth
-                  name="summary"
-                  value={inputValues.summary}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Typography>Tùy chỉnh SEO</Typography>
-                <Typography
-                  sx={{
-                    fontSize: '16px',
-                    fontWeight: '700',
-                    color: 'hsla(245, 86%, 36%, 1)',
-                  }}
-                >
-                  Bao nhiêu năng lượng cho đủ hoạt động trong 1 ngày
-                </Typography>
-                <a href="" style={{ color: 'hsla(139, 100%, 20%, 1)' }}>
-                  https://medgo.trixgo.com/tinh-toan-nang-luong-moi-ngay
-                </a>
-                <Typography>
-                  Chính thức mở bán Khai Trương cửa hàng thứ 24 tại Hà Nội.
-                  Trong thời gian này WINGGO giảm giá 30% cho tổng bill thanh
-                  toán tại cơ sở mới. Thân mời bạn bè ở gần ghé qua địa chỉ 112K
-                  Thái Thịnh
-                </Typography>
-              </Box>
-              <div>
-                <Typography>Tiêu đề trang</Typography>
-                <TextField
-                  fullWidth
-                  name="title"
-                  value={inputValues.title}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div>
-                <Typography>Thẻ mô tả</Typography>
-                <TextField
-                  multiline
-                  rows={4}
-                  fullWidth
-                  name="description"
-                  value={inputValues.description}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div>
-                <Typography>Đường dẫn/Alias</Typography>
-                <TextField
-                  fullWidth
-                  name="slug"
-                  value={inputValues.slug}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </Box>
-          </Card>
-        </Grid>
-        <Grid item md={4}>
-          <Card sx={{ padding: '22px' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-              <FormControl>
-                <FormLabel
-                  id="demo-radio-buttons-group-label"
-                  sx={{ fontWeight: '700' }}
-                >
-                  Trạng thái
-                </FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue={inputValues.status}
-                  name="status"
-                  onChange={handleInputChange}
-                >
-                  <FormControlLabel
-                    value="1"
-                    control={<Radio />}
-                    label="Hiển thị"
+        <br />
+        <Grid container spacing={2}>
+          <Grid item md={8}>
+            <Card sx={{ padding: '22px' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <div>
+                  <Typography>Tiêu đề bài viết</Typography>
+                  <TextField
+                    fullWidth
+                    name="title"
+                    value={inputValues.title}
+                    onChange={handleInputChange}
                   />
-                  <FormControlLabel value="0" control={<Radio />} label="Ẩn" />
-                </RadioGroup>
-              </FormControl>
-              <div>
-                <Typography sx={{ fontWeight: '700' }}>Ảnh bài viết</Typography>
-                <Box
-                  sx={{
-                    textAlign: 'center',
-                    background: 'hsla(0, 0%, 80%, 1)',
-                    padding: '10px',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 200,
-                      height: 200,
-                      position: 'relative',
-                      borderRadius: 1,
-                      overflow: 'hidden',
-                      mb: 2,
-                      border: '1px solid #ccc',
-                      margin: 'auto',
-                    }}
-                  >
-                    <img
-                      src={image ? image : '/no_image.png'}
-                      alt="Uploaded Image"
-                    />
-                  </Box>
-                  <br />
-
-                  {/* Nút Upload */}
-                  <Button
-                    variant="contained"
-                    component="label"
-                    sx={{
-                      background: 'hsla(135, 59%, 49%, 1)',
-                      color: 'white',
-                      textTransform: 'none',
-                    }}
-                  >
-                    Upload ảnh
-                    <input
-                      name="images"
-                      type="file"
-                      accept="image/*"
-                      hidden
-                      onChange={handleImageUpload}
-                    />
-                  </Button>
-                </Box>
-                <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Button sx={{ textTransform: 'none' }}>Cập nhật</Button>
-                  <Button
-                    sx={{ textTransform: 'none' }}
-                    onClick={() => setImage('/no_image.png')}
-                  >
-                    Xóa
-                  </Button>
                 </div>
-              </div>
-              <div>
-                <Typography sx={{ fontWeight: '700' }}>Tác giả</Typography>
-                <Typography>{inputValues.author?.fullname}</Typography>
-              </div>
-              <div>
-                <Typography sx={{ fontWeight: '700' }}>Danh mục</Typography>
-                <br />
-                <FormControl fullWidth>
-                  <InputLabel
-                    id="demo-select-small-label"
+
+                <div>
+                  <Typography>Nội dung</Typography>
+                  <TextField
+                    multiline
+                    rows={4}
+                    fullWidth
+                    name="content"
+                    value={inputValues.content}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div>
+                  <Typography>Tóm tắt</Typography>
+                  <TextField
+                    multiline
+                    rows={2}
+                    fullWidth
+                    name="summary"
+                    value={inputValues.summary}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Typography>Tùy chỉnh SEO</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '16px',
+                      fontWeight: '700',
+                      color: 'hsla(245, 86%, 36%, 1)',
+                    }}
+                  >
+                    Bao nhiêu năng lượng cho đủ hoạt động trong 1 ngày
+                  </Typography>
+                  <a href="" style={{ color: 'hsla(139, 100%, 20%, 1)' }}>
+                    https://medgo.trixgo.com/tinh-toan-nang-luong-moi-ngay
+                  </a>
+                  <Typography>
+                    Chính thức mở bán Khai Trương cửa hàng thứ 24 tại Hà Nội.
+                    Trong thời gian này WINGGO giảm giá 30% cho tổng bill thanh
+                    toán tại cơ sở mới. Thân mời bạn bè ở gần ghé qua địa chỉ 112K
+                    Thái Thịnh
+                  </Typography>
+                </Box>
+                <div>
+                  <Typography>Tiêu đề trang</Typography>
+                  <TextField
+                    fullWidth
+                    name="title"
+                    value={inputValues.title}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div>
+                  <Typography>Thẻ mô tả</Typography>
+                  <TextField
+                    multiline
+                    rows={4}
+                    fullWidth
+                    name="description"
+                    value={inputValues.description}
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                <div>
+                  <Typography>Đường dẫn/Alias</Typography>
+                  <TextField
+                    fullWidth
+                    name="slug"
+                    value={inputValues.slug}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item md={4}>
+            <Card sx={{ padding: '22px' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <FormControl>
+                  <FormLabel
+                    id="demo-radio-buttons-group-label"
                     sx={{ fontWeight: '700' }}
                   >
-                    Danh mục
-                  </InputLabel>
-                  <Select
-                    fullWidth
-                    labelId="demo-select-small-label"
-                    id="demo-select-small"
-                    defaultValue={inputValues.categoryID}
-                    label="Danh mục"
-                    name="categoryID"
-                    onChange={(event) => {
-                      const { name, value } = event.target;
-                      setInputValues((prev: any) => ({
-                        ...prev,
-                        [name]: value,
-                      }));
+                    Trạng thái
+                  </FormLabel>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue={inputValues.status}
+                    name="status"
+                    onChange={handleInputChange}
+                  >
+                    <FormControlLabel
+                      value="1"
+                      control={<Radio />}
+                      label="Hiển thị"
+                    />
+                    <FormControlLabel value="0" control={<Radio />} label="Ẩn" />
+                  </RadioGroup>
+                </FormControl>
+                <div>
+                  <Typography sx={{ fontWeight: '700' }}>Ảnh bài viết</Typography>
+                  <Box
+                    sx={{
+                      textAlign: 'center',
+                      background: 'hsla(0, 0%, 80%, 1)',
+                      padding: '10px',
                     }}
                   >
-                    {!!menus.length &&
-                      menus.map((menu: Record<string, string>) => {
-                        return (
-                          <MenuItem value={menu._id} key={menu._id}>
-                            {menu.name}
-                          </MenuItem>
-                        );
-                      })}
-                  </Select>
-                </FormControl>
-              </div>
-              <div>
-                <Typography sx={{ fontWeight: '700' }}>Tag</Typography>
-                <Autocomplete
-                  multiple
-                  id="tags-outlined"
-                  options={tags}
-                  value={inputValues.tags ?? ''}
-                  defaultValue={inputValues.tags}
-                  getOptionLabel={(option) => option.name}
-                  onChange={(_, val: any) => {
-                    setInputValues((prev: any) => ({
-                      ...prev,
-                      tags: val,
-                    }));
-                  }}
-                  filterSelectedOptions
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      onKeyDown={handleTag}
-                      placeholder="Nhập và enter để tạo tag mới"
-                    />
-                  )}
-                />
-              </div>
-            </Box>
-          </Card>
+                    <Box
+                      sx={{
+                        width: 200,
+                        height: 200,
+                        position: 'relative',
+                        borderRadius: 1,
+                        overflow: 'hidden',
+                        mb: 2,
+                        border: '1px solid #ccc',
+                        margin: 'auto',
+                      }}
+                    >
+                      <img
+                        src={image ? image : '/no_image.png'}
+                        alt="Uploaded Image"
+                      />
+                    </Box>
+                    <br />
+
+                    {/* Nút Upload */}
+                    <Button
+                      variant="contained"
+                      component="label"
+                      sx={{
+                        background: 'hsla(135, 59%, 49%, 1)',
+                        color: 'white',
+                        textTransform: 'none',
+                      }}
+                    >
+                      Upload ảnh
+                      <input
+                        name="images"
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={handleImageUpload}
+                      />
+                    </Button>
+                  </Box>
+                  <div
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    <Button sx={{ textTransform: 'none' }}>Cập nhật</Button>
+                    <Button
+                      sx={{ textTransform: 'none' }}
+                      onClick={() => setImage('/no_image.png')}
+                    >
+                      Xóa
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <Typography sx={{ fontWeight: '700' }}>Tác giả</Typography>
+                  <Typography>{inputValues.author?.fullname}</Typography>
+                </div>
+                <div>
+                  <Typography sx={{ fontWeight: '700' }}>Danh mục</Typography>
+                  <br />
+                  <FormControl fullWidth>
+                    <InputLabel
+                      id="demo-select-small-label"
+                      sx={{ fontWeight: '700' }}
+                    >
+                      Danh mục
+                    </InputLabel>
+                    <Select
+                      fullWidth
+                      labelId="demo-select-small-label"
+                      id="demo-select-small"
+                      defaultValue={inputValues.categoryID}
+                      label="Danh mục"
+                      name="categoryID"
+                      onChange={(event) => {
+                        const { name, value } = event.target;
+                        setInputValues((prev: any) => ({
+                          ...prev,
+                          [name]: value,
+                        }));
+                      }}
+                    >
+                      {!!menus.length &&
+                        menus.map((menu: Record<string, string>) => {
+                          return (
+                            <MenuItem value={menu._id} key={menu._id}>
+                              {menu.name}
+                            </MenuItem>
+                          );
+                        })}
+                    </Select>
+                  </FormControl>
+                </div>
+                <div>
+                  <Typography sx={{ fontWeight: '700' }}>Tag</Typography>
+                  <Autocomplete
+                    multiple
+                    id="tags-outlined"
+                    options={tags}
+                    value={inputValues.tags ?? ''}
+                    defaultValue={inputValues.tags}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(_, val: any) => {
+                      setInputValues((prev: any) => ({
+                        ...prev,
+                        tags: val,
+                      }));
+                    }}
+                    filterSelectedOptions
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        onKeyDown={handleTag}
+                        placeholder="Nhập và enter để tạo tag mới"
+                      />
+                    )}
+                  />
+                </div>
+              </Box>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
     </main>
   );
 };

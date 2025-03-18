@@ -19,12 +19,12 @@ const crmPostRepository = {
         const { data } = await API.get(
             `${URL}`, {
             params: {
-                mediaID: params?.mediaID,
+                mediaId: params.mediaId,
                 ...params
             }
         })
-
-        return data?.data;
+        
+        return data;
     },
 
     async insert(params: any): Promise<any> {
