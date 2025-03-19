@@ -37,6 +37,7 @@ export const OwnerMemberPage: FC = () => {
     fullname: "",
     email: "",
     phone: "",
+    note: "",
     departmentID: "",
     positionID: "",
     level: 1,
@@ -81,6 +82,7 @@ export const OwnerMemberPage: FC = () => {
       fullname: "",
       email: "",
       phone: "",
+      note: "",
       departmentID: "",
       positionID: "",
       level: -1,
@@ -105,13 +107,14 @@ export const OwnerMemberPage: FC = () => {
     };
 
     if (newListIDChecked.length === 1) {
-      const { _id, fullname, email, phone, department, position, level, status, storageUse, startingTime } = newListIDChecked[0];
+      const { _id, fullname, email, phone, note, department, position, level, status, storageUse, startingTime } = newListIDChecked[0];
       setInitialValues({
         userID: _id,
         companyID: companySelected,
         fullname: fullname,
         email: email ? `${email}` : "",
         phone: phone ? `${phone}` : "",
+        note: note ? `${note}` : "",
         startingTime: startingTime ? `${startingTime}` : "",
         departmentID: department?._id,
         positionID: position?._id,
@@ -366,7 +369,10 @@ export const OwnerMemberPage: FC = () => {
                 <p>{item?.phone}</p>
               </td>
               <td className="py-1 px-2">{item.department?.name}</td>
-              <td className="py-1 px-2">{item.position?.name}</td>
+              <td className="py-1 px-2">
+                {item.position?.name}
+                <p><i>{item?.note}</i></p>
+              </td>
               <td className="py-1 px-2">
                 {item.startingTime ? moment(item.startingTime).format('HH:mm') : ''}
               </td>
