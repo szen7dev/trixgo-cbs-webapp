@@ -135,7 +135,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
   const { listDoctypes: listFieldType } = useQueryListDoctype({
     limit: 50,
     type: 7,
-    keyword: searchContractTypeValue,
+    keyword: searchFieldTypeValue,
   });
 
   const { listDoctypes: listContractType } = useQueryListDoctype({
@@ -1539,12 +1539,14 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           </div>
                         )}
                         initialValue={defaultValues?.field}
-                        data={listFieldType.map((field) => ({
-                          value: field._id,
-                          label: field.name,
-                        }))}
+                        data={listFieldType.map((field) => {
+                          return ({
+                            label: `${field.name}`,
+                            value: field._id,
+                          })
+                        })}
                         formatItem={{
-                          id: "_id",
+                          id: "value",
                           text: "label",
                         }}
                         inlineSearch={true}
