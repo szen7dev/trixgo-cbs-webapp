@@ -2,7 +2,7 @@ import React, { UIEvent, FC, useState } from "react";
 import { toast } from "react-toastify";
 import moment from 'moment';
 import { useModal } from "services/hooks/useModal";
-import { useMediaMenu } from "services/hooks/crm/useMediaHabit";
+import { useCrmHabit } from "services/hooks/crm/useCrmHabit";
 import { DropdownSearchable } from "shareComponents/common";
 import debounce from 'lodash/debounce';
 import { useListHuman } from "services/hooks/human/useHuman";
@@ -13,6 +13,7 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
   initialValues = {
     habitID: '',
     contactID: '',
+    parentID: '',
     type: 1,
     status: 1,
     challenge: 0,
@@ -24,8 +25,9 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { refetch: refetchCustomer, insertAsync, updateAsync } = useMediaMenu({});
+  const { refetch: refetchCustomer, insertAsync, updateAsync } = useCrmHabit({});
   const [keywordGoods, setKeywordGoods] = useState('');
+  const [keywordHabit, setKeywordHabit] = useState('');
 
   const { listHuman } = useListHuman({
       params: {
@@ -33,6 +35,16 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
           keyword: keywordGoods,
       },
       isFetchList: true
+  })
+
+  const {
+    list: listData,
+  } = useCrmHabit({
+      params: { 
+        limit: 10,
+        keyword: keywordHabit,
+      },
+      isFetchList: true,
   })
 
   const handleSubmit = async () => {
@@ -87,7 +99,7 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
 
     onConfirm && onConfirm();
     closeModal();
-  };
+  }
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -105,7 +117,7 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "550px",
+        height: "600px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -118,9 +130,10 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
           onClick={closeModal}
         />
       </header>
+
       <section className="px-5 mt-2">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
-            Khách hàng  (*)
+            Khách hàng (*)
           </label>
           <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -155,6 +168,52 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
             initialValue={{
               value: formData?.contact?._id || "",
               label: formData?.contact?.name || "Chọn khách hàng"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
+      </section>
+
+      <section className="px-5 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
+            Thuộc Habit (*)
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    parentID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    parentID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeywordHabit(value), 600)}
+            onScroll={handleScroll}
+            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Chọn Habit"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listData.map((item:any) => ({
+                label: item.name,
+                value: item._id,
+            }))}
+            initialValue={{
+              value: formData?.parent?._id || "",
+              label: formData?.parent?.name || "Chọn Habit"
             }}
             formatItem={{
                 id: "value",

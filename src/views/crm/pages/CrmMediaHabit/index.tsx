@@ -25,7 +25,7 @@ import { ModalCreateOrUpdateHabit } from '../../shareComponents/common';
 /*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useModal } from "services/hooks/useModal";
-import { useMediaMenu } from "services/hooks/crm/useMediaHabit";
+import { useCrmHabit } from "services/hooks/crm/useCrmHabit";
 
 /*=====7.OTHER=====*/
 import { MEDIA_MENU_TYPES, MEDIA_TAG_TYPES, MEDIA_COMBO_TYPES, MEDIA_BANNER_TYPES } from "apis/localdb";
@@ -77,7 +77,7 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
         refetch,
         fetchNextPage,
         totalRecord
-    } = useMediaMenu({
+    } = useCrmHabit({
         params: { 
             parentID,
             keyword, 
@@ -191,7 +191,7 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "550px",
+                    height: "600px",
                 }}
             >
                 <ModalCreateOrUpdateHabit
@@ -291,14 +291,19 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                         </th> */}
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Khách hàng
+                                Danh mục cha
                             </div>
-                        </th>
+                        </th> 
                         <th className="py-1 w-1/6">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>
                         </th> 
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Khách hàng
+                            </div>
+                        </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Ngày bắt đầu
@@ -357,12 +362,15 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                                 {item.type >= 1 ? MEDIA_TAG_TYPES[Number(item.type)-1].text : ""}
                             </td> */}
                             <td className="py-1 px-2">
-                                {item?.contact?.name} - {item?.contact?.phone}
+                                {item?.parent?.name}
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 <Link to={`/crm/habit/${item._id}`}>
                                     {item.name}
                                 </Link>
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.contact?.name} - {item?.contact?.phone}
                             </td>
                             <td className="py-1 px-2">
                                 {moment(item?.date).format('DD/MM/YYYY')}

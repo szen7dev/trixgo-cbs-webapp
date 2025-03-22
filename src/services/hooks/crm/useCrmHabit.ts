@@ -4,7 +4,7 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 /*=====2.TYPING/APIS=====*/
 import crmMenuRepository from 'apis/crm/habit';
 
-export const useMediaMenu = ({
+export const useCrmHabit = ({
     params = {},
     isFetchList = false,
     isFetchInfo = false
