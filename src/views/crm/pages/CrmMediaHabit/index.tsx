@@ -368,6 +368,7 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/crm/habit/${item._id}`}>
                                     {item.name}
                                 </Link>
+                                <p><i>{item._id}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.contact?.name} - {item?.contact?.phone}
