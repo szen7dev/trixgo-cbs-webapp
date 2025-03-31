@@ -20,6 +20,7 @@ import classNames from 'classnames';
 import { toArray } from 'lodash';
 import { FileProps, FilePropsUpload } from 'typings/common';
 import taskUserAvt from "assets/images/task-user.svg";
+import TextareaAutosize from 'react-textarea-autosize';
 
 type Props = {
     task: Task;
@@ -35,8 +36,6 @@ type Props = {
 export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, socket, receiversDefault, onCancelCreateResponse, onConfirmCreate }) => {
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
-
-    // const [rawContent, setRawContent] = useState('');
 
     const initUsersSelected = useMemo(() => {
         if (receiversDefault?.length) return receiversDefault;
@@ -275,8 +274,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
     }
 
     const handlePasteFile = (event: any) => {
-        // event.preventDefault();
-
         if (event.clipboardData?.files?.length) {
             return handleSetFiles(event.clipboardData.files)
         }
@@ -295,13 +292,23 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                         setSelectedUser={setSelectedUser}
                     />
                 </div>
-                <textarea
+                {/* <textarea
                     className="w-full h-8 placeholder-gray-300 focus:outline-none px-3"
                     placeholder="Nhập nội dung"
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                         const value = e.target.value;
                         setContent(value);
                     }}
+                    onPaste={handlePasteFile}
+                    style={{height: "150px"}}
+                /> */}
+                <TextareaAutosize
+                    minRows={3}
+                    maxRows={10}
+                    className="w-full placeholder-gray-300 focus:outline-none px-3"
+                    placeholder="Nhập nội dung"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
                     onPaste={handlePasteFile}
                 />
                 {/* <Editor
