@@ -1,7 +1,7 @@
 import { FC, useRef, useState, useContext, useMemo } from "react";
 import Axios from 'axios';
 import { captureException } from "@sentry/react";
-import { Editor } from "@tinymce/tinymce-react";
+// import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import { SendToMultiSelected } from "views/pcm/shareComponents/common/SendToMultiSelected";
 import { Item } from "shareComponents/common";
@@ -76,6 +76,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
         });
     }, [task, parent, receiversDefault])
 
+    const [content, setContent] = useState('');
     const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
     const [isUploading, setIsUploading] = useState(false);
     const [tokens, setTokens] = useState<any[]>([]);
@@ -169,10 +170,10 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
     }
 
     const handleCreateResponseComment = async () => {
-        if (!editorRef.current) return;
+        // if (!editorRef.current) return;
 
-        const contentRaw = editorRef.current?.getContent({ format: 'raw' });
-        const contentText = editorRef.current?.getContent({ format: 'text' });
+        // const contentRaw = editorRef.current?.getContent({ format: 'raw' });
+        // const contentText = editorRef.current?.getContent({ format: 'text' });
 
         let images: string[] = [];
         let files: string[] = [];
@@ -186,14 +187,14 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
             _id && (files = [...files, _id]);
         }
 
-        if (!files.length && !images.length && !contentText) return;
+        if (!files.length && !images.length && !content) return;
 
         setIsUploading(true)
         try {
             const dataInsert: CommentPayload = {
                 taskID: task?._id,
-                content: contentRaw,
-                rawContent: contentText,
+                content: content,
+                rawContent: content,
                 parentID: parent?._id,
                 type: 1,
                 isOfficial: tab === 2,
@@ -294,7 +295,16 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                         setSelectedUser={setSelectedUser}
                     />
                 </div>
-                <Editor
+                <textarea
+                    className="w-full h-8 placeholder-gray-300 focus:outline-none px-3"
+                    placeholder="Nhập nội dung"
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        const value = e.target.value;
+                        setContent(value);
+                    }}
+                    onPaste={handlePasteFile}
+                />
+                {/* <Editor
                     onInit={(_, editor) => {
                         editorRef.current = editor;
                     }}
@@ -362,7 +372,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                             });
                         },
                     }}
-                />
+                /> */}
             </div>
             <div
                 className={
