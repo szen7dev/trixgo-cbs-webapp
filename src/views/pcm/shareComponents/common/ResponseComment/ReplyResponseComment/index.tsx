@@ -303,8 +303,8 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                     style={{height: "150px"}}
                 /> */}
                 <TextareaAutosize
-                    minRows={3}
-                    maxRows={10}
+                    minRows={5}
+                    maxRows={25}
                     className="w-full placeholder-gray-300 focus:outline-none px-3"
                     placeholder="Nhập nội dung"
                     value={content}
