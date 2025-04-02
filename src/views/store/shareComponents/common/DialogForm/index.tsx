@@ -400,12 +400,12 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                   </div>
                 </div>
                 <div>
-                  <p className="text-primary-gray text-[13px] mb-1">Trạng thái (5-Hoạt động | 6-Hủy)</p>
+                  <p className="text-primary-gray text-[13px] mb-1">Trạng thái (1-Khởi tạo|2-Chờ Ship lấy hàng|3-Đang vận chuyển/giao hàng|4-Giao không thành công|5-Hoạt động|6-Hủy)</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
                     <Field
                       type="text"
                       name="status"
-                      placeholder="5-Hoạt động | 6-Hủy"
+                      placeholder="1-Khởi tạo|2-Chờ Ship lấy hàng|3-Đang vận chuyển/giao hàng|4-Giao không thành công|5-Hoạt động|6-Hủy"
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);
