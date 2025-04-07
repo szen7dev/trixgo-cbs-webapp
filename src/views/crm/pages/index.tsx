@@ -24,3 +24,4 @@ export {CrmMediaHabitStreak} from './CrmMediaHabitStreak';
 export {CrmConfigPage} from './CrmConfigPage';
 export {CrmStorePage} from './CrmStorePage';
 export {CrmStoreDetailPage} from './CrmStoreDetailPage';
+export {CrmGoodsPage} from './CrmGoodsPage';
