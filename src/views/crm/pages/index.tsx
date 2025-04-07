@@ -21,3 +21,6 @@ export {CrmMediaSurvey} from './CrmMediaSurvey';
 export {CrmMediaGrowTrack} from './CrmMediaGrowTrack';
 export {CrmMediaHabit} from './CrmMediaHabit';
 export {CrmMediaHabitStreak} from './CrmMediaHabitStreak';
+export {CrmConfigPage} from './CrmConfigPage';
+export {CrmStorePage} from './CrmStorePage';
+export {CrmStoreDetailPage} from './CrmStoreDetailPage';

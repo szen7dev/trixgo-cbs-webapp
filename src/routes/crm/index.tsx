@@ -38,6 +38,9 @@ import {
   CrmMediaGrowTrack,
   CrmMediaHabit,
   CrmMediaHabitStreak,
+  CrmConfigPage,
+  CrmStorePage,
+  CrmStoreDetailPage,
 } from "views/crm/pages";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { CreateMediaPost } from "views/crm/pages/CrmMediaPost/components/CreateMediaPost";
@@ -113,7 +116,6 @@ const CrmRouter: FC = () => {
             component={() => CrmJourneyPage({})}
           />
           <Route exact path="/crm/booking" component={CrmBookingPage} />
-          <Route exact path="/crm/order" component={() => FnBHomePage({})} />
           <Route exact path="/crm/affiliate" component={CrmAffiliatePage} />
 
           <Route exact path="/crm/risk-report" component={CrmHomePage} />
@@ -153,6 +155,11 @@ const CrmRouter: FC = () => {
 
           <Route exact path="/crm/menu" component={CrmMediaMenu} />
           <Route exact path="/crm/menu/:parentID" component={CrmMediaMenu} />
+
+          <Route exact path="/crm/order" component={() => <CrmStorePage outin={1} type ={5}/>}/>
+          <Route exact path="/crm/order/:id" component={CrmStoreDetailPage}/>
+
+          <Route exact path="/crm/config" component={CrmConfigPage} />
 
           <Route exact path="/crm/banner" component={CrmMediaBanner} />
           <Route exact path="/crm/*" component={ErrorPage} />
