@@ -549,7 +549,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
         />
       </section>
 
-      <section className="px-10">
+      {/* <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtPlatform">
             Phân loại mảng hoạt động
           </label>
@@ -579,7 +579,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
                 <label htmlFor="platform" className={"text-left ml-3"}>Bán qua sàn bán lẻ</label>
             </div>
           </div>
-      </section>
+      </section> */}
 
       <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtCampaign">
@@ -628,7 +628,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
                   checked={formData.internal == 1?true: false}
                   onChange={onChange}
                 />
-                <label htmlFor="internal" className={"text-left ml-3"}>Hệ thống</label>
+                <label htmlFor="internal" className={"text-left ml-3"}>Thuộc công ty</label>
             </div>
             <div className={"flex items-center ml-3"}>
                 <input
@@ -640,12 +640,12 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
                   checked={formData.internal == 2?true: false}
                   onChange={onChange}
                 />
-                <label htmlFor="internal" className={"text-left ml-3"}>Nhượng quyền</label>
+                <label htmlFor="internal" className={"text-left ml-3"}>Đối tác</label>
             </div>
           </div>
       </section>
 
-      <section className="px-10">
+      {/* <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtCampaign">
             Chiến dịch đang hoạt động
           </label>
@@ -667,7 +667,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
               ))
             }
           </div>
-      </section>
+      </section> */}
       
       <footer className="absolute right-0 bottom-0 px-10 py-5">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
