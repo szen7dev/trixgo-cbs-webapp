@@ -80,6 +80,12 @@ export const MEDIA_COMBO_TYPES = [
     { value: 3, text: 'Loại 3' },
 ]
 
+export const MEDIA_CONFIG_TYPES = [
+    { value: 1, text: 'ZNS (Zalo OA)' },
+    { value: 2, text: 'Facebook' },
+    { value: 3, text: 'Contact công ty' },
+]
+
 // NHÓM CHỨC NĂNG ỨNG DỤNG MẶC ĐỊNH (PHỤC VỤ CẤU HÌNH BAN ĐẦU)
 export const PROJECT_ROLES = [
     { value: 21, text: 'Nhóm quản trị Dự án/Phòng ban/Hợp đồng', permission: { read: 1, create: 1, update: 1, deleteIn: 1 } },
