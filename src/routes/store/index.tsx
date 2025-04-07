@@ -83,11 +83,13 @@ const StoreRouter: FC = () => {
 
                     <Route exact path="/store/import-product" component={() => <StorePage outin={2} type ={5}/>}/>
                     <Route exact path="/store/import-product/:id" component={StoreDetailPage}/>
+                    
                     <Route exact path="/store/export-product" component={() => <StorePage outin={1} type ={5}/>}/>
                     <Route exact path="/store/export-product/:id" component={StoreDetailPage}/>
                     
                     <Route exact path="/store/import-stationery" component={() => <StorePage outin={2} type ={6}/>}/>
                     <Route exact path="/store/import-stationery/:id" component={StoreDetailPage}/>
+
                     <Route exact path="/store/export-stationery" component={() => <StorePage outin={1} type ={6}/>}/>
                     <Route exact path="/store/export-stationery/:id" component={StoreDetailPage}/>
 
