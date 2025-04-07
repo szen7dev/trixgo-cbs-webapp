@@ -6,8 +6,6 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { validateFiles } from 'validation/file';
-import { read, utils } from 'xlsx';
-import { formatNumberMoney } from "utils/cmcs";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -18,7 +16,7 @@ import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateMenu, ModalCreateOrUpdateBanner, ModalCreateOrUpdateCombo, ModalCreateOrUpdateTag } from '../../shareComponents/common';
+import { ModalCreateOrUpdateMenu } from '../../shareComponents/common';
  
 /*=====5.TYPINGS=====*/
 
@@ -28,9 +26,8 @@ import { useModal } from "services/hooks/useModal";
 import { useMediaMenu } from "services/hooks/crm/useMediaMenu";
 
 /*=====7.OTHER=====*/
-import { MEDIA_MENU_TYPES, MEDIA_TAG_TYPES, MEDIA_COMBO_TYPES, MEDIA_BANNER_TYPES } from "apis/localdb";
+import { MEDIA_MENU_TYPES } from "apis/localdb";
 import { ImageProps } from "typings/common";
-import { createLinkAndClick } from "utils";
 import { ModalZoomView } from "shareComponents/common";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
@@ -64,6 +61,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
         menuID: '',
         type: '1',
         status: '1',
+        order: '',
         name: '',
         expired: '',
         slug: '',
@@ -99,6 +97,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
             menuID: '',
             type: '',
             status: '',
+            order: '',
             name: '',
             expired: '',
             slug: '',
@@ -128,12 +127,13 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, status, name, expired, slug, note } = newListIDChecked[0];
+            const { _id, type, status, order, name, expired, slug, note } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 menuID: _id,
                 type,
                 status,
+                order,
                 name,
                 expired,
                 slug,
@@ -176,6 +176,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
                 menuID: '',
                 type: '1',
                 status: '1',
+                order: '',
                 name: '',
                 expired: '',
                 slug: '',
@@ -290,6 +291,11 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
                                 Phân loại
                             </div>
                         </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Thứ tự
+                            </div>
+                        </th>
                         <th className="py-1 w-1/6">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Nội dung
@@ -352,6 +358,7 @@ export const CrmMediaMenu: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 {item.type >= 1 ? MEDIA_MENU_TYPES[Number(item.type)-1].text : ""}
                             </td>
+                            <td className="py-1 px-2">{item?.order}</td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 <Link to={`/crm/menu/${item._id}`}>
                                     {item?.childs?.length > 0? <b>{item.name} ({item?.childs?.length})</b>: item.name }

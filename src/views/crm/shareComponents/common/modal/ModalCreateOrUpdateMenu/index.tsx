@@ -11,6 +11,7 @@ export const ModalCreateOrUpdateMenu: FC<any> = ({
     menuID: '',
     type: 1,
     status: 1,
+    order: '',
     name: '',
     expired: '',
     slug: '',
@@ -98,6 +99,20 @@ export const ModalCreateOrUpdateMenu: FC<any> = ({
           onClick={closeModal}
         />
       </header>
+
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
+          Thứ tự hiển thị (*)
+        </label>
+        <input
+          type="text"
+          placeholder="Nội dung"
+          name="order"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.order}
+          onChange={onChange}
+        />
+      </section>
 
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
