@@ -28,7 +28,7 @@ import { useModal } from "services/hooks/useModal";
 import { useMediaConfig } from "services/hooks/crm/useMediaConfig";
 
 /*=====7.OTHER=====*/
-import { MEDIA_MENU_TYPES, MEDIA_TAG_TYPES, MEDIA_COMBO_TYPES, MEDIA_BANNER_TYPES } from "apis/localdb";
+import { MEDIA_CONFIG_TYPES } from "apis/localdb";
 import { ImageProps } from "typings/common";
 import { createLinkAndClick } from "utils";
 import { ModalZoomView } from "shareComponents/common";
@@ -350,7 +350,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {item.type >= 1 ? MEDIA_MENU_TYPES[Number(item.type)-1].text : ""}
+                                {item.type >= 1 ? MEDIA_CONFIG_TYPES[Number(item.type)-1].text : ""}
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 <Link to={`/crm/menu/${item._id}`}>
