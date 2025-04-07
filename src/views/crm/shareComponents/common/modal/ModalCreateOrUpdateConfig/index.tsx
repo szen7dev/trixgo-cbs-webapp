@@ -12,8 +12,23 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
     type: 1,
     status: 1,
     name: '',
-    expired: '',
-    slug: '',
+    channel: '',
+    template: '',
+    secretKey: '',
+    key: '',
+    hotline1: '',
+    hotline2: '',
+    hotline3: '',
+    youtube: '',
+    facebook: '',
+    zalo: '',
+    tiktok: '',
+    shopee: '',
+    address: '',
+    phone: '',
+    email: '',
+    content: '',
+    registration: '',
     note: '',
   }
 }) => {
@@ -85,7 +100,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "500px",
+        height: "1400px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -128,7 +143,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
                   checked={formData.type == 1 ? true : false}
                   onChange={onChange}
                 />
-                <label htmlFor="type" className={"text-left ml-3"}>Trang sản phẩm</label>
+                <label htmlFor="type" className={"text-left ml-3"}>ZNS (Zalo OA)</label>
             </div>
             <div className={"flex items-center ml-3"}>
                 <input
@@ -140,7 +155,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
                   checked={formData.type == 2 ? true : false}
                   onChange={onChange}
                 />
-                <label htmlFor="type" className={"text-left ml-3"}>Trang bài viết</label>
+                <label htmlFor="type" className={"text-left ml-3"}>Facebook</label>
             </div>
             <div className={"flex items-center ml-3"}>
                 <input
@@ -152,39 +167,231 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
                   checked={formData.type == 3 ? true : false}
                   onChange={onChange}
                 />
-                <label htmlFor="type" className={"text-left ml-3"}>Trang khác</label>
+                <label htmlFor="type" className={"text-left ml-3"}>Contact công ty</label>
             </div>
           </div>
       </section>
-
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
-          Thời hạn
-        </label>
-        <input
-          type="date"
-          placeholder="Thời hạn"
-          name="expired"
-          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={moment(formData.expired).format("YYYY-MM-DD")}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
-          Mã hiệu/Slug
+          ID kênh
         </label>
         <input
           type="text"
           placeholder="Nhập nội dung"
-          name="slug"
+          name="channel"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.slug}
+          defaultValue={formData.channel}
           onChange={onChange}
         />
       </section>
-
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+        ID template
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="template"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.template}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Secret Key
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="secretKey"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.secretKey}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+         Token Key
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="key"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.key}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+         Hotline1
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="hotline1"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.hotline1}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+        Hotline2
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="hotline2"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.hotline2}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+        Hotline3
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="hotline3"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.hotline3}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+        Youtube
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="youtube"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.youtube}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+        Facebook
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="facebook"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.facebook}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+        Zalo
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="zalo"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.zalo}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+        Tiktok
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="tiktok"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.tiktok}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+        Shopee
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="shopee"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.shopee}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Địa chỉ
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="address"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.address}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Điện thoại
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="phone"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.phone}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Email
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="email"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.email}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Phụ trách nội dung
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="content"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.content}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Mã số đăng ký kinh doanh
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập nội dung"
+          name="registration"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.registration}
+          onChange={onChange}
+        />
+      </section>
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
           Ghi chú

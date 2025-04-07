@@ -65,8 +65,23 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
         type: '1',
         status: '1',
         name: '',
-        expired: '',
-        slug: '',
+        channel: '',
+        template: '',
+        secretKey: '',
+        key: '',
+        hotline1: '',
+        hotline2: '',
+        hotline3: '',
+        youtube: '',
+        facebook: '',
+        zalo: '',
+        tiktok: '',
+        shopee: '',
+        address: '',
+        phone: '',
+        email: '',
+        content: '',
+        registration: '',
         note: '',
     })
 
@@ -100,8 +115,23 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
             type: '',
             status: '',
             name: '',
-            expired: '',
-            slug: '',
+            channel: '',
+            template: '',
+            secretKey: '',
+            key: '',
+            hotline1: '',
+            hotline2: '',
+            hotline3: '',
+            youtube: '',
+            facebook: '',
+            zalo: '',
+            tiktok: '',
+            shopee: '',
+            address: '',
+            phone: '',
+            email: '',
+            content: '',
+            registration: '',
             note: '',
         }))
     }
@@ -128,16 +158,46 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, status, name, expired, slug, note } = newListIDChecked[0];
+            const { _id, type, status, name, channel, template, secretKey,
+                key,
+                hotline1,
+                hotline2,
+                hotline3,
+                youtube,
+                facebook,
+                zalo,
+                tiktok,
+                shopee,
+                address,
+                phone,
+                email,
+                content,
+                registration,
+                note } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 configID: _id,
                 type,
                 status,
                 name,
-                expired,
-                slug,
-                note
+                channel,
+                template,
+                secretKey,
+                key,
+                hotline1,
+                hotline2,
+                hotline3,
+                youtube,
+                facebook,
+                zalo,
+                tiktok,
+                shopee,
+                address,
+                phone,
+                email,
+                content,
+                registration,
+                note,
             });
         } else {
             clearData();
@@ -177,8 +237,23 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 type: '1',
                 status: '1',
                 name: '',
-                expired: '',
-                slug: '',
+                channel: '',
+                template: '',
+                secretKey: '',
+                key: '',
+                hotline1: '',
+                hotline2: '',
+                hotline3: '',
+                youtube: '',
+                facebook: '',
+                zalo: '',
+                tiktok: '',
+                shopee: '',
+                address: '',
+                phone: '',
+                email: '',
+                content: '',
+                registration: '',
                 note: '',
             }
         }
@@ -187,7 +262,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "500px",
+                    height: "1400px",
                 }}
             >
                 <ModalCreateOrUpdateConfig
@@ -276,7 +351,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
                         <th className={cn("py-1 text-center", styles.theadInput)}>
-                            <div className="border-r-2 border-gray-300 flex items-center justify-center">
+                            <div className="border-gray-300 flex items-center justify-center">
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
@@ -286,52 +361,57 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Phân loại
                             </div>
                         </th>
                         <th className="py-1 w-1/6">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>
                         </th> 
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Mã hiệu/Slug
+                            <div className="border-gray-300 font-normal pl-2">
+                                ID kênh, ID template, Secret Key, Token Key
                             </div>
                         </th> 
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Danh mục cha 1
-                            </div>
-                        </th> 
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Danh mục cha 2
-                            </div>
-                        </th> 
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Thời hạn
+                            <div className="border-gray-300 font-normal pl-2">
+                                Số hotline (1, 2, 3)
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2 break-words whitespace-pre-line">
+                                Kênh social
+                            </div>
+                        </th>
+                        <th className="py-1 break-words whitespace-pre-line">
+                            <div className="border-gray-300 font-normal pl-2">
+                                Địa chỉ, Điện thoại, Email, Phụ trách nội dung
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-gray-300 font-normal pl-2">
+                                Đăng ký doanh nghiệp
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Ghi chú
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Hình ảnh
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Trạng thái
                             </div>
                         </th>
                         <th className="py-1 font-normal">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Cập nhật lần cuối
                             </div>
                         </th>
@@ -357,12 +437,31 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                                     {item?.childs?.length > 0? <b>{item.name} ({item?.childs?.length})</b>: item.name }
                                 </Link>
                             </td>
-                            <td className="py-1 px-2">{item?.slug}</td>
-                            <td className="py-1 px-2">{item?.parent?.name}</td>
-                            <td className="py-1 px-2">{item?.parent?.parent?.name}</td>
                             <td className="py-1 px-2">
-                                {moment(item?.expired).format('DD/MM/YYYY HH:mm')}
+                                {item?.channel}
+                                <p>{item?.template}</p>
+                                <p>{item?.secretKey}</p>
+                                <p>{item?.key}</p>
                             </td>
+                            <td className="py-1 px-2">
+                                {item?.hotline1}
+                                <p>{item?.hotline2}</p>
+                                <p>{item?.hotline3}</p>
+                            </td>
+                            <td className="py-1 px-2 break-words whitespace-pre-line">
+                                <p><a className="text-primary" href={item?.youtube}>{item?.youtube}</a></p>
+                                <p><a className="text-primary" href={item?.facebook}>{item?.facebook}</a></p>
+                                <p><a className="text-primary" href={item?.zalo}>{item?.zalo}</a></p>
+                                <p><a className="text-primary" href={item?.tiktok}>{item?.tiktok}</a></p>
+                                <p><a className="text-primary" href={item?.shopee}>{item?.shopee}</a></p>
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.address}
+                                <p>{item?.phone}</p>
+                                <p>{item?.email}</p>
+                                <p>{item?.content}</p>
+                            </td>
+                            <td className="py-1 px-2">{item?.registration}</td>
                             <td className="py-1 px-2">{item.note}</td>
                             <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>
