@@ -18,7 +18,7 @@ import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateMenu, ModalCreateOrUpdateBanner, ModalCreateOrUpdateCombo, ModalCreateOrUpdateTag } from '../../shareComponents/common';
+import { ModalCreateOrUpdateConfig } from '../../shareComponents/common';
  
 /*=====5.TYPINGS=====*/
 
@@ -61,7 +61,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
 
     const [initialValues, setInitialValues] = useState({
         parent: parentID,
-        menuID: '',
+        configID: '',
         type: '1',
         status: '1',
         name: '',
@@ -96,7 +96,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
     const clearData = () => {
         setInitialValues(previousValue => ({
             ...previousValue,
-            menuID: '',
+            configID: '',
             type: '',
             status: '',
             name: '',
@@ -131,7 +131,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
             const { _id, type, status, name, expired, slug, note } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
-                menuID: _id,
+                configID: _id,
                 type,
                 status,
                 name,
@@ -173,7 +173,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
             clearData();
             initValues = {
                 parentID,
-                menuID: '',
+                configID: '',
                 type: '1',
                 status: '1',
                 name: '',
@@ -190,7 +190,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                     height: "500px",
                 }}
             >
-                <ModalCreateOrUpdateMenu
+                <ModalCreateOrUpdateConfig
                     modalType={modalType}
                     initialValues={initValues}
                     onConfirm={handleConfirmCreateOrUpdate}
@@ -199,7 +199,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
         )
     }
 
-    const handleUploadAttach = async (filesSelected: FileList | null, menuID: string) => {
+    const handleUploadAttach = async (filesSelected: FileList | null, configID: string) => {
         if (!filesSelected || !filesSelected.length) return;
 
         const validation = await validateFiles(filesSelected);
@@ -228,7 +228,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
         await API.put(
             `/api/medias/menu`,
             {
-                menuID,
+                configID,
                 imagesID,
             }
         );
