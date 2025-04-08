@@ -27,6 +27,8 @@ import { useUpload } from "services/hooks/useUpload";
 import { useInputChange } from "shareComponents/common/InputChange";
 import { useMediaPost } from "services/hooks/crm/useMediaPost";
 
+import { QuillEditor } from "shareComponents/common/QuillEditor";
+
 const MEDIA_APP_ID = "5df4ce16506d9b3c587948ca";
 
 export const CreateMediaPost: FC = () => {
@@ -42,7 +44,7 @@ export const CreateMediaPost: FC = () => {
   };
   const validationSchema = Yup.object({
     title: Yup.string().required("Tiêu đề không được để trống"),
-    content: Yup.string().required("Nội dung không được để trống"),
+    // content: Yup.string().required("Nội dung không được để trống"),
     summary: Yup.string().required("Tóm tắt không được để trống"),
     description: Yup.string().required("Mô tả không được để trống"),
     slug: Yup.string().required("Đường dẫn/Alias không được để trống"),
@@ -55,6 +57,7 @@ export const CreateMediaPost: FC = () => {
   const [keyword] = useState("");
   const [image, setImage] = useState("/logo_medgo.png");
   const { inputValues, setInputValues } = useInputChange({
+    content: "",
     status: "1",
     tags: [],
   });
@@ -110,6 +113,32 @@ export const CreateMediaPost: FC = () => {
     }
   };
 
+  const handleUploadImageEditor = async (file: any) => {
+    if (!file) {
+      toast.warn("Không tìm thấy file");
+      return "";
+    }
+
+    try {
+      const result = await addFileToUpload({
+        files: file as any,
+        fileType: 2,
+        useCompress: true,
+      });
+
+      if (!result.path) {
+        toast.warn("Upload thumbnail failed");
+        return "";
+      }
+
+      const imageUrl = `${process.env.REACT_APP_URL_S3}${result.path}`;
+      return imageUrl;
+    } catch (error: any) {
+      toast.error(error.message);
+      return "";
+    }
+  };
+
   const clickBack = () => {
     history.push("/crm/post");
   };
@@ -133,9 +162,16 @@ export const CreateMediaPost: FC = () => {
 
   const handleSubmit = async (values: any) => {
     try {
+      const content = inputValues.content?.trim();
+
+      if (!content) {
+        return toast.warn("Nội dung không được để trống");
+      }
+
       const tagIds = inputValues.tags?.map((tag: any) => tag._id);
       const dataInsert = {
         ...values,
+        content,
         thumbnailID: inputValues.thumbnailID || "",
         tags: tagIds,
       };
@@ -197,7 +233,7 @@ export const CreateMediaPost: FC = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ handleChange, handleBlur }) => (
+          {({ values, handleChange, handleBlur }) => (
             <Form
               // onSubmit={handleSubmit}
               style={{
@@ -255,7 +291,19 @@ export const CreateMediaPost: FC = () => {
 
                       <div>
                         <Typography>Nội dung</Typography>
-                        <Field
+                        <QuillEditor
+                          placeholder="Biên soạn nội dung"
+                          onChange={(content) => {
+                            setInputValues((prev: any) => ({
+                              ...prev,
+                              content,
+                            }));
+                          }}
+                          value={inputValues.content}
+                          onUploadImage={handleUploadImageEditor}
+                        />
+
+                        {/* <Field
                           as={TextField}
                           multiline
                           rows={4}
@@ -263,7 +311,7 @@ export const CreateMediaPost: FC = () => {
                           name="content"
                           onChange={handleChange}
                           onBlur={handleBlur}
-                        />
+                        /> */}
                         <ErrorMessage name="content">
                           {(msg) => (
                             <Typography className="error-text text-red-500">
@@ -306,18 +354,12 @@ export const CreateMediaPost: FC = () => {
                             fontWeight: "700",
                             color: "hsla(245, 86%, 36%, 1)",
                           }}
-                        >
-                          
-                        </Typography>
+                        ></Typography>
                         <a
                           href="#!"
                           style={{ color: "hsla(139, 100%, 20%, 1)" }}
-                        >
-                          
-                        </a>
-                        <Typography>
-                          
-                        </Typography>
+                        ></a>
+                        <Typography></Typography>
                       </Box>
                       <div>
                         <Typography>Thẻ mô tả</Typography>
