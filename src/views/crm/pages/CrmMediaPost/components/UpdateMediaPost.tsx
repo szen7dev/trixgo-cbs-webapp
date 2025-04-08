@@ -26,6 +26,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useUpload } from "services/hooks/useUpload";
 import { useInputChange } from "shareComponents/common/InputChange";
 import { useMediaPost } from "services/hooks/crm/useMediaPost";
+import { QuillEditor } from "shareComponents/common/QuillEditor";
 
 const MEDIA_APP_ID = "5df4ce16506d9b3c587948ca";
 
@@ -93,6 +94,32 @@ export const UpdateMediaPost: FC = () => {
       }
     } catch (error: any) {
       toast.error(error.message);
+    }
+  };
+
+  const handleUploadImageEditor = async (file: any) => {
+    if (!file) {
+      toast.warn("Không tìm thấy file");
+      return "";
+    }
+
+    try {
+      const result = await addFileToUpload({
+        files: file as any,
+        fileType: 2,
+        useCompress: true,
+      });
+
+      if (!result.path) {
+        toast.warn("Upload thumbnail failed");
+        return "";
+      }
+
+      const imageUrl = `${process.env.REACT_APP_URL_S3}${result.path}`;
+      return imageUrl;
+    } catch (error: any) {
+      toast.error(error.message);
+      return "";
     }
   };
 
@@ -293,7 +320,20 @@ export const UpdateMediaPost: FC = () => {
 
                       <div>
                         <Typography>Nội dung</Typography>
-                        <Field
+
+                        <QuillEditor
+                          placeholder="Biên soạn nội dung"
+                          onChange={(content) => {
+                            setInputValues((prev: any) => ({
+                              ...prev,
+                              content,
+                            }));
+                          }}
+                          value={inputValues.content}
+                          onUploadImage={handleUploadImageEditor}
+                        />
+
+                        {/* <Field
                           as={TextField}
                           multiline
                           rows={4}
@@ -302,7 +342,7 @@ export const UpdateMediaPost: FC = () => {
                           value={inputValues.content}
                           onChange={handleInputChange}
                           onBlur={handleBlur}
-                        />
+                        /> */}
                         <ErrorMessage name="content">
                           {(msg) => (
                             <Typography className="error-text text-red-500">
@@ -353,7 +393,7 @@ export const UpdateMediaPost: FC = () => {
                           href="#!"
                           style={{ color: "hsla(139, 100%, 20%, 1)" }}
                         >
-                         /{inputValues.slug}
+                          /{inputValues.slug}
                         </a>
                         <Typography>{inputValues.description}</Typography>
                       </Box>
