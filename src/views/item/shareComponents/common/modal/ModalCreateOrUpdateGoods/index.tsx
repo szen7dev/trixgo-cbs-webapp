@@ -56,9 +56,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
   const {
       list: listGoods,
       hasNextPage,
-      refetch,
       fetchNextPage,
-      totalRecord,
       insertAsync, 
       updateAsync
   } = useGoods({
