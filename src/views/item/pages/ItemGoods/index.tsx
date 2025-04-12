@@ -68,7 +68,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
     })
 
 	const history = useHistory();
-    const { closeModal, openModal } = useModal();
+    const {  openModal } = useModal();
     const [keyword, setKeyword] = useState('');
 	const { parentID } = useParams<{ parentID: string }>();
 
