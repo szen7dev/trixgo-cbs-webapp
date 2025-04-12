@@ -1,6 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, useRef, useState, useCallback, useEffect, ChangeEvent } from "react";
-import cn from "classnames";
+import { FC, useRef, useState, useEffect, ChangeEvent } from "react";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
@@ -13,14 +12,14 @@ import { formatNumberMoney } from "utils/cmcs";
 import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
-import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
+// import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
 import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
 
 /*=====5.TYPINGS=====*/
-import { Storage } from "typings/items";
+// import { Storage } from "typings/items";
 
 /*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -73,9 +72,9 @@ export const CrmGoodsPage: FC<{ type: number }> = ({ type }) => {
         fetchNextPage,
         totalRecord
     } = useGoods({
-        params: { 
-            keyword, 
-            isListParentOfListChilds: "1", 
+        params: {
+            keyword,
+            isListParentOfListChilds: "1",
             parentID
         },
         isFetchList: true
@@ -136,7 +135,7 @@ export const CrmGoodsPage: FC<{ type: number }> = ({ type }) => {
 		try {
             setStateExport({ isExporting: true });
             const { error, data } = await downloadTemplateExcelAsync({
-                filterParams: {  
+                filterParams: {
                 }
             });
 
@@ -164,12 +163,12 @@ export const CrmGoodsPage: FC<{ type: number }> = ({ type }) => {
 
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    
+
                     // Set data để Import
                     setDataImport(rows)
                 }
             }
-            
+
             reader.readAsArrayBuffer(file);
         }
 
@@ -261,11 +260,14 @@ export const CrmGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 <p>{USAGE[item.usage-1]?.text}</p>
                             </td>
                             <td className="py-1 px-2">
-                                <Link to={`/crm/goods/${item._id}`} className="text-cbs-highlight-color">
+                                <Link to={`/crm/goods/detail/${item._id}`} className="text-cbs-highlight-color">
                                     { item.name }
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                                 <p className="text-primary-gray text-[14px] text-cbs-highlight-color font-bold">Chuyên mục: {item?.category?.name}</p>
+                                {/* <Link to={`/crm/goods/detail/${item._id}`} className="inline-block mt-2 px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
+                                    Go to Detail
+                                </Link> */}
                                 <div>
                                     <p className="text-primary-gray">Mô tả sản phẩm</p>
                                     <p>{item?.description}</p>
@@ -350,9 +352,9 @@ export const CrmGoodsPage: FC<{ type: number }> = ({ type }) => {
 											alt="Camera"
 											className="w-[15px] h-[13px]"
 											/>
-											<input 
-												type="file" 
-												className="hidden" 
+											<input
+												type="file"
+												className="hidden"
 												accept="image/*"
 												onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
 											/>
