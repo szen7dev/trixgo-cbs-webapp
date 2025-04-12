@@ -43,6 +43,7 @@ import {
   CrmStoreDetailPage,
   CrmGoodsPage
 } from "views/crm/pages";
+import { CrmGoodsDetail } from "views/crm/pages/CrmGoodsDetail";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { CreateMediaPost } from "views/crm/pages/CrmMediaPost/components/CreateMediaPost";
 import { UpdateMediaPost } from "views/crm/pages/CrmMediaPost/components/UpdateMediaPost";
@@ -161,7 +162,8 @@ const CrmRouter: FC = () => {
           <Route exact path="/crm/order/:id" component={CrmStoreDetailPage}/>
 
           <Route exact path="/crm/goods" component={CrmGoodsPage}/>
-          <Route exact path="/crm/goods/:id" component={CrmGoodsPage}/>
+          <Route exact path="/crm/goods/:parentID" component={CrmGoodsPage}/>
+          <Route exact path="/crm/goods/detail/:id" component={CrmGoodsDetail}/>
 
           <Route exact path="/crm/config" component={CrmConfigPage} />
 
