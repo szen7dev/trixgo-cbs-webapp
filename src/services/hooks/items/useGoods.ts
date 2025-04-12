@@ -20,6 +20,7 @@ interface useGoods {
     downloadTemplateExcelAsync: (payload: any) => Promise<any>;
     importExcelAsync: (payload: any) => Promise<any>;
     exportExcelAsync: (payload: any) => Promise<any>;
+    refetchInfo: () => void;
 }
 
 // Khai báo params cho hook
@@ -54,7 +55,7 @@ export const useGoods = ({
         );
 
     // Get info
-    const { data: infoGoods } =
+    const { data: infoGoods, refetch: refetchInfo } =
         useQuery("Goods__info", () => GoodsRepository.fetchDetailGoods(params.goodsID || ''), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
@@ -124,6 +125,7 @@ export const useGoods = ({
         deleteAsync,
         downloadTemplateExcelAsync,
         importExcelAsync,
-        exportExcelAsync
+        exportExcelAsync,
+        refetchInfo
     }
 }
