@@ -29,7 +29,7 @@ const MobileRouter: FC = () => {
                     }
                 />
 
-                <Route exact path="/mobile/activity/:id/:rad" component={FnbPage} />
+                {/* <Route exact path="/mobile/activity/:id/:rad" component={FnbPage} /> */}
                 <Route exact path="/mobile/register" component={RegisterContactPage} />
 
                 <ProtectedRoute path="/item/*" component={ErrorPage} />
