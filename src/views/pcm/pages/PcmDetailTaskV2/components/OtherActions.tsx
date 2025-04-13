@@ -39,6 +39,10 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
     const { updateTaskAsync } = useTask({});
 	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
     
+    const today = new Date();
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+    const currentMonth = new Date().getMonth()
+
     const handleDownloadTemplateImportExcel = async (param: any) => {
 		try {
 			setStateExport({ isExporting: true })
@@ -46,6 +50,8 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                 option: param.option,
                 projectID: task.project._id,
                 taskID: task._id,
+                fromDate: `${new Date(new Date().getFullYear(), Number(currentMonth - 1), 1)}`,
+                toDate: `${lastDayOfMonth}`
             })
 			if(error) {
 				return toast.warn(data?.message)
