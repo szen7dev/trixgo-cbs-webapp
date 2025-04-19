@@ -15,7 +15,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
     channel: '',
     template: '',
     secretKey: '',
-    key: '',
+    tokenKey: '',
     hotline1: '',
     hotline2: '',
     hotline3: '',
@@ -217,9 +217,9 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
         <input
           type="text"
           placeholder="Nhập nội dung"
-          name="key"
+          name="tokenKey"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.key}
+          defaultValue={formData.tokenKey}
           onChange={onChange}
         />
       </section>
