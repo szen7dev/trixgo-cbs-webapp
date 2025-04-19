@@ -68,7 +68,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
         channel: '',
         template: '',
         secretKey: '',
-        key: '',
+        tokenKey: '',
         hotline1: '',
         hotline2: '',
         hotline3: '',
@@ -118,7 +118,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
             channel: '',
             template: '',
             secretKey: '',
-            key: '',
+            tokenKey: '',
             hotline1: '',
             hotline2: '',
             hotline3: '',
@@ -159,7 +159,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
 
         if (newListIDChecked.length === 1) {
             const { _id, type, status, name, channel, template, secretKey,
-                key,
+                tokenKey,
                 hotline1,
                 hotline2,
                 hotline3,
@@ -183,7 +183,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 channel,
                 template,
                 secretKey,
-                key,
+                tokenKey,
                 hotline1,
                 hotline2,
                 hotline3,
@@ -240,7 +240,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 channel: '',
                 template: '',
                 secretKey: '',
-                key: '',
+                tokenKey: '',
                 hotline1: '',
                 hotline2: '',
                 hotline3: '',
@@ -365,7 +365,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                                 Phân loại
                             </div>
                         </th>
-                        <th className="py-1 w-1/6">
+                        <th className="py-1">
                             <div className="border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>
@@ -441,7 +441,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                                 {item?.channel}
                                 <p>{item?.template}</p>
                                 <p>{item?.secretKey}</p>
-                                <p>{item?.key}</p>
+                                <p>{item?.tokenKey}</p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.hotline1}
