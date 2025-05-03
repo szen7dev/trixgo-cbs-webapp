@@ -113,6 +113,7 @@ export type TimeSheetChild = {
     assignee?: User
     budgetWork?: strinstring | null
     note?: string
+    history?: string
     createAt?: string | null
     modifyAt?: string | null
     userCreate?: any
