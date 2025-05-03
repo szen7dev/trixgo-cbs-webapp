@@ -170,7 +170,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
               <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
                 <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullname">
-                    Họ và tên
+                    Họ và tên (*)
                   </label>
                   <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fullname" placeholder="Nhập họ và tên" {...getFieldProps('fullname')} />
                   <ErrorMessage
@@ -181,7 +181,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                 </div>
                 <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                    Email
+                    Email (*)
                   </label>
                   <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" placeholder="Nhập email" {...getFieldProps('email')} />
                   <ErrorMessage
@@ -193,7 +193,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
 
                 <div className="mb-2">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
-                    Điện thoại
+                    Điện thoại (*)
                   </label>
                   <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" placeholder="Điện thoại" {...getFieldProps('phone')} />
                   <ErrorMessage
