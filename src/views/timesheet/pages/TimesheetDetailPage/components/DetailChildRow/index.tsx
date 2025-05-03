@@ -422,6 +422,7 @@ export const DetailChildRow: FC<Props> = ({
         >
           {rowData.note}
         </p>
+        <p>{rowData?.history}</p>
       </div>
     </div>
   )
