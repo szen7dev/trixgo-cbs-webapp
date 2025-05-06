@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import debounce from "lodash/debounce";
 import { convertCurrency } from "utils/converter";
@@ -72,6 +72,35 @@ export const DetailChildRow: FC<Props> = ({
     },
     [onUpdatedTimeSheetChild, rowData, hasPermission]
   );
+
+  const LogViewer = (log: any) => {
+    const [expanded, setExpanded] = useState(false);
+  
+    return (
+      <div className="my-4">
+        {!expanded ? (
+          <button
+            onClick={() => setExpanded(true)}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          >
+            Xem thêm
+          </button>
+        ) : (
+          <div>
+            <pre className="bg-gray-100 p-4 rounded overflow-x-auto whitespace-pre-wrap">
+              {log}
+            </pre>
+            <button
+              onClick={() => setExpanded(false)}
+              className="mt-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+            >
+              Thu gọn
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -422,7 +451,11 @@ export const DetailChildRow: FC<Props> = ({
         >
           {rowData.note}
         </p>
-        <p>{rowData?.history}</p>
+        {/* <div className="p-8">
+          <h1 className="text-xl font-bold mb-4">Chi tiết log</h1>
+          <LogViewer log='dgfdgfdgfdgfd' />
+        </div> */}
+        {/* <p>{rowData?.history}</p> */}
       </div>
     </div>
   )
