@@ -1,0 +1,69 @@
+/* Add resize handle styles */
+.quill-editor-container {
+  position: relative;
+  margin-bottom: 30px;
+  resize: none; /* Disable default resize */
+}
+
+.quill-editor-container .resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 15px;
+  height: 15px;
+  cursor: nwse-resize;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 50%,
+    #ccc 50%,
+    #ccc 100%
+  );
+  z-index: 2;
+}
+
+.quill-editor-container.resizing {
+  user-select: none;
+}
+
+.quill-editor-container.resizing .ql-editor {
+  pointer-events: none;
+}
+
+/* Ensure the editor fills the container */
+.quill-editor-container .ql-container {
+  height: calc(100% - 42px) !important; /* 42px is the toolbar height */
+  min-height: 100px;
+  overflow-y: auto;
+}
+
+/* Hide resize handle when auto-resize is enabled */
+.quill-editor-container.auto-resize .resize-handle {
+  display: none;
+}
+
+/* Fix for editor content overlapping with bottom elements */
+.ql-editor {
+  overflow-y: auto;
+  padding-bottom: 40px !important;
+}
+
+/* Ensure the toolbar stays at the top */
+.ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+}
+
+/* Add these styles for auto-resize support */
+.quill-editor-container.auto-resize .ql-container {
+  height: auto !important;
+  min-height: 100px;
+}
+
+.quill-editor-container.auto-resize .ql-editor {
+  overflow-y: visible;
+  height: auto !important;
+  min-height: 100px;
+}

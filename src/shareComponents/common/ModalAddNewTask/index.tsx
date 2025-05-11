@@ -47,6 +47,7 @@ import iconAttach from "assets/images/icons8-attach-48.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
 import { GroupSearchable } from "../GroupSearchable";
 import { useSocket } from "services/hooks/useSocket";
+import { QuillEditor } from "../QuillEditor";
 // import { useSocket } from "services/hooks/useSocket";
 // import { Popover } from "@mui/material";
 // import { borderRadius } from "@mui/system";
@@ -885,7 +886,14 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
               </div>
 
               <div className={"px-6 my-3"}>
-                <textarea
+                <QuillEditor
+                  placeholder="Nhập nội dung"
+                  value={values.description}
+                  onChange={(value) => setFieldValue("description", value)}
+                  height="250px"
+                />
+
+                {/* <textarea
                   {...formik.getFieldProps('description')}
                   onChange={(event) => {
                     const value = event.target.value;
@@ -893,8 +901,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                     setFieldValue("descriptioncv", value)
                   }}
                   className="t-add-new-task-dialog-content p-2 w-full"
-                  placeholder="Nhập nội dung..."
-                ></textarea>
+                  placeholder="Nhập nội dung 2123..."
+                ></textarea> */}
+
                 {/* <Editor
                   onEditorChange={(_, editor) => {
                     const contentRaw = editor.getContent({ format: 'raw' });

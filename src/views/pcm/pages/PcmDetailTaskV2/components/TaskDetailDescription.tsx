@@ -16,6 +16,7 @@ import { ModalZoomView } from "shareComponents/common";
 import { ImageProps } from "typings/common";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import { useFileCore } from 'services/hooks/useFileCore';
+import { QuillEditor } from "shareComponents/common/QuillEditor";
 
 type Props = {
     task: Task;
@@ -179,16 +180,22 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                 },
                                             }}
                                         /> */}
-                                        <textarea
+
+                                        <QuillEditor
+                                            placeholder="Nhập nội dung"
+                                            value={description}
+                                            onChange={(value) => setDescription(value)}
+                                            height="350px"
+                                        />
+
+                                        {/* <textarea
                                             className={"w-full h-[350px] p-2 border border-primary-border rounded"}
                                             defaultValue={task.description}
                                             onChange={(e) => {
                                                 setDescription(e.target.value);
-                                                // if (editorRef.current) {
-                                                //     editorRef.current.setContent(e.target.value);
-                                                // }
                                             }}
-                                        />
+                                        /> */}
+
                                         <div className={"flex items-center justify-end mt-2"}>
                                             <button
                                                 onClick={() => setEditDescription(false)}
