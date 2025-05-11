@@ -294,7 +294,6 @@ export const CreateMediaPost: FC = () => {
                         <QuillEditor
                           placeholder="Biên soạn nội dung"
                           onChange={(content) => {
-                            console.log({ content });
                             setInputValues((prev: any) => ({
                               ...prev,
                               content,
