@@ -226,7 +226,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
     return (
         <div className={"task-detail-title"}>
             <span className={"text-xl"}>
-                {task.name} 
+                {task.name}
             </span>
             <span className={"inline-block ml-2 mx-2"}>
                 <button onClick={handleMarkInterest}>
