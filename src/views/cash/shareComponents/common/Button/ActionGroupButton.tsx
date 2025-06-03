@@ -4,7 +4,7 @@ import CreateOrEditDialog from "../DialogForm";
 
 import { useModal } from "services/hooks/useModal";
 
-import type { StoreParent } from "typings/store";
+import type { StoreParent } from "typings/lot";
 
 interface ActionGroupButtonProps {
   recordSelected?: StoreParent;
@@ -42,6 +42,13 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
                 customer: record.customer,
                 warehouse: record.warehouse,
                 assignee: record.assignee,
+                referrer: record.referrer,
+                salesLeader: record.salesLeader,
+                sales: record.sales,
+                seller: record.seller,
+                affiliate: record.affiliate,
+                customerCare: record.customerCare,
+                lot: record.lot,
                 link: record.link,
                 name: record.name,
                 note: record.note,

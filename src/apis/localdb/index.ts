@@ -742,6 +742,15 @@ export const STORE_TYPES = [
     { value: 8, text: 'Quỹ ngân hàng' },
 ]
 
+export const STORE_STATUS = [
+    { value: 1, text: 'Khởi tạo' },
+    { value: 2, text: 'Chờ ship lấy hàng' },
+    { value: 3, text: 'Đang vận chuyển' },
+    { value: 4, text: 'Giao không thành công' },
+    { value: 5, text: 'Hoàn thành' },
+    { value: 6, text: 'Hủy' },
+]
+
 export const CASH_TYPES = [
     { value: 7, text: 'Quỹ tiền mặt' },
     { value: 8, text: 'Quỹ ngân hàng' },
