@@ -73,6 +73,13 @@ export type InsertStoreParentPayload = {
   warehouse: Warehouse;
   contract: Contract;
   customer: Contact;
+  referrer: Contact;
+  salesLeader: Contact;
+  sales: Contact;
+  seller: Contact;
+  affiliate: Contact;
+  customerCare: Contact;
+  lot: Contact;
   link: Contract;
   outin: number;
   type: number;
