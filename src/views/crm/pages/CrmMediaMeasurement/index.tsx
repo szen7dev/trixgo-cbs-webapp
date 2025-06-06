@@ -301,6 +301,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 return toast.error(data.message)
             }
             fetchData()
+
+            refetch();
         }
     }, [dataImport])
 
