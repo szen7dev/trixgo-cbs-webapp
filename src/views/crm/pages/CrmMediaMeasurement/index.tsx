@@ -263,6 +263,49 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         refetch();
     }
 
+    const { importExcelAsync} = useMediaMenu({});
+
+    //_____Import, export excel
+    const [dataImport, setDataImport] = useState([]);
+
+    //_____Import excel
+    const handleImport = ($event: any) => {
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=0 (Sheet 1 từ trái sang)
+                    setDataImport(rows) // Set data để Import
+                }
+            }
+            reader.readAsArrayBuffer(file)
+        }
+        $event.target.value = null; // Đọc xong xóa value trong Input đi
+    }
+
+    //_____Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport), option: 1 })
+                setDataImport([])
+
+                if(!data.error){
+                    return toast.success("Import thành công")
+                }
+                return toast.error(data.message)
+            }
+            fetchData()
+
+            refetch();
+        }
+    }, [dataImport])
+
     return (
         <main className="relative h-full">
             <header className="sticky top-0 bg-primary-light z-10">
@@ -289,6 +332,13 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             </button>
                         ) : ''}
                     </div>
+
+                    <button className={"flex items-center justify-center mx-3 ml-3"}>
+                        <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                        accept=".xlsx, .xlsm, .xls, .csv"/>
+                        <label className="custom-file-label" htmlFor="inputGroupFile">Import excel đo cao</label>
+                    </button>
+
                     <div className="flex items-center">
                         <button
                             className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
