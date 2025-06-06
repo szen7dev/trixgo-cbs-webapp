@@ -104,7 +104,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
     { label: 'Khởi tạo', color: 'bg-gray-400' },
     { label: 'Chờ Ship lấy hàng', color: 'bg-yellow-400' },
     { label: 'Đang giao hàng', color: 'bg-blue-400' },
-    { label: 'Giao không thành công', color: 'bg-orange-500' },
+    { label: 'Giao không thành công', color: 'bg-dark' },
     { label: 'Hoàn thành', color: 'bg-green-500' },
     { label: 'Hủy', color: 'bg-red-400' }
   ]

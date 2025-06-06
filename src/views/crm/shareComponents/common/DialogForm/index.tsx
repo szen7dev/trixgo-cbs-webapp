@@ -5,22 +5,19 @@ import Close from "assets/icons/Close";
 import { DropdownSearchable } from "shareComponents/common";
 import { useModal } from "services/hooks/useModal";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import { useUserSystem } from "services/hooks/users/useUserSystem";
-import { TIMESHEET_TYPES } from "apis/localdb";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import {
-	useQueryListWarehouse,
-	useQueryListContact,
-	// useQueryListContract,
-	// useQueryListBudgetWork,
-	// useQueryListAccount,
-	// useQueryListGood
+  useQueryListWarehouse,
+  useQueryListContact,
+  // useQueryListContract,
+  // useQueryListBudgetWork,
+  // useQueryListAccount,
+  // useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
-import {
-  useQueryListStoreParent,
-} from "services/hooks/useStore";
+import { useQueryListStoreLot } from "services/hooks/useStoreLot";
+import { useQueryListStoreParent } from "services/hooks/useStore";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 import type { InsertStoreParentPayload } from "typings/store";
 interface CreateOrEditDialogProps {
@@ -62,28 +59,26 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   }, true);
 
   const { listWarehouse } = useQueryListWarehouse({
-		limit: LIMIT_DROPDOWN,
-		keyword: warehouseKeyword,
-	});
+    limit: LIMIT_DROPDOWN,
+    keyword: warehouseKeyword,
+  });
 
   const { listContact } = useQueryListContact({
-		limit: LIMIT_DROPDOWN,
-		keyword: contactKeyword,
-	})
+    limit: LIMIT_DROPDOWN,
+    keyword: contactKeyword,
+  })
 
   const {
-		data: listDocumentPackage,
-	} = useDocumentPackage({
-		isShowAll: "1",
-		keyword: packageKeyword
-	}, true, false)
+    data: listDocumentPackage,
+  } = useDocumentPackage({
+    isShowAll: "1",
+    keyword: packageKeyword
+  }, true, false)
 
   const {
     data,
-  } = useQueryListStoreParent({
+  } = useQueryListStoreLot({
     keyword, 
-    outin: 2, 
-    type, 
   })
 
   const initialValues = {
@@ -120,7 +115,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "750px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "1200px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center border-b bg-cbs-table-header p-2"}
@@ -147,6 +142,38 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
           return (
             <Form>
               <div className="px-5 pt-20 pb-4 flex flex-col space-y-2 overflow-scroll">
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Thuộc lô hàng
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={data.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.lot}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("lotID", value.id)
+                    }
+                  />
+                </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Nội dung (*)
@@ -210,7 +237,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       _id: item._id,
                       name: `${item.sign}.${item.name}`,
                     }))}
-                    // onScroll={handleScrollAssginee}
                     initialValue={defaultValues?.warehouse}
                     formatItem={{
                       id: "_id",
@@ -241,7 +267,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     renderSelectedItem={(item) => <span>{item.text}</span>}
                     data={listContact.map((item: any) => ({
                       _id: item._id,
-                      name: `${item.sign}.${item.name}`,
+                      name: `${item.phone}.${item.name}`,
                     }))}
                     initialValue={defaultValues?.customer}
                     formatItem={{
@@ -254,6 +280,198 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     )}
                     onchangeValue={(value) =>
                       setFieldValue("customerID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Người giới thiệu (*)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listContact.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.phone}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.referrer}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setContactKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("referrerID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Trưởng nhóm sale công ty (*)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listContact.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.phone}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.salesLeader}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setContactKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("salesLeaderID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Sale công ty (*)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listContact.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.phone}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.sales}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setContactKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("salesID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Nhà bán hàng (*)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listContact.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.phone}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.seller}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setContactKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("sellerID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Người làm Affiliate (*)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listContact.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.phone}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.affiliate}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setContactKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("affiliateID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Nhân viên chăm sóc khách hàng (*)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listContact.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.phone}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.customerCare}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setContactKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("customerCareID", value.id)
                     }
                   />
                 </div>
