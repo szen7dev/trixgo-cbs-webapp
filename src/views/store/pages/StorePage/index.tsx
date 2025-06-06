@@ -100,6 +100,28 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
     // toDate: inputFilter.toDate,
   });
 
+  const statusMap = [
+    { label: 'Khởi tạo', color: 'bg-gray-400' },
+    { label: 'Chờ Ship lấy hàng', color: 'bg-yellow-400' },
+    { label: 'Đang giao hàng', color: 'bg-blue-400' },
+    { label: 'Giao không thành công', color: 'bg-orange-500' },
+    { label: 'Hoàn thành', color: 'bg-green-500' },
+    { label: 'Hủy', color: 'bg-red-400' }
+  ]
+
+  const renderStatusBadge = (status: any) => {
+  const s = statusMap[Number(status) - 1];
+  if (!s) return null;
+
+  return (
+    <div className="relative z-5 inline-block -translate-y-1">
+        <span className={`text-[10px] text-white rounded px-1 py-0.5 mx-1 ${s.color}`}>
+          {s.label}
+        </span>
+      </div>
+    );
+  };
+
   const [userKeyword, setUserKeyword] = useState("");
   const [projectKeyword, setProjectKeyword] = useState("");
   const [warehouseKeyword, setWarehouseKeyword] = useState("");
@@ -478,21 +500,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Phân loại
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
               Nguồn
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Kho bãi
             </div>
             <div
               className={
@@ -572,15 +580,19 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                       <></>
                     )}
                   </NavLink>
-                  <p className={"mt-1 text-gray-500"}>
-                    {item?.userCreate?.fullname}{" "}
-                    {moment(item.createAt).format(DATE_FORMAT)}
-                  </p>
-                  <p className={"mt-1 text-gray-500"}>
-                    {item?.userUpdate?.fullname}{" "}
-                    {moment(item.modifyAt).format(DATE_FORMAT)}
-                  </p>
-                   <p>{STORE_STATUS[Number(item.type - 1)].text}</p>
+                    <p className={"mt-1 text-gray-500"}>
+                      {item?.userCreate?.fullname}{" "}
+                      {moment(item.createAt).format(DATE_FORMAT)}
+                    </p>
+                    <p className={"mt-1 text-gray-500"}>
+                      {item?.userUpdate?.fullname}{" "}
+                      {moment(item.modifyAt).format(DATE_FORMAT)}
+                    </p>
+                    {/* <p>Trạng thái: {STORE_STATUS[Number(item.status - 1)].text}</p> */}
+                    <p>{renderStatusBadge(item.status)}</p>
+                    <p>{item?.warehouse?.name}</p>
+                    <p>Phiếu: {STORE_OUTIN[Number(item.outin - 1)].text}</p>
+                    <p>Phân loại: {STORE_TYPES[Number(item.type - 1)].text}</p>
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
                   {item?.customer?.name}
@@ -590,17 +602,13 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                   {item?.lot ? (
                     <p className="text-cbs-highlight-color">
                       <i>
-                        {item?.lot?.name} - {item?.lot?.sign} |{" "}
-                        Hạn: {moment(item?.lot?.expired).format('DD/MM/YYYY')}
+                        Lô hàng: {item?.lot?.name} - {item?.lot?.sign} |{" "}
+                        Hạn sử dụng: {moment(item?.lot?.expired).format('DD/MM/YYYY')}
                       </i>
                     </p>
                   ) : (
                     <></>
                   )}
-                </div>
-                <div className={"px-2 py-2 table-cell box-border border-b"}>
-                  {STORE_OUTIN[Number(item.outin - 1)].text}
-                  <p>{STORE_TYPES[Number(item.type - 1)].text}</p>
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
                   {item?.referrer ? (
@@ -633,10 +641,6 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                       CSKH: {item?.customerCare?.name}-{item?.customerCare?.phone}
                     </p>
                   ) : ( <></>)}
-                </div>
-                <div className={"px-2 py-2 table-cell box-border border-b"}>
-                  {item?.warehouse?.name}
-                  {/* <p className="text-gray-500"><i>{item?.warehouse?._id}</i></p> */}
                 </div>
                 <div
                   className={
