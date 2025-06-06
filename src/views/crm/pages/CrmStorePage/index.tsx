@@ -5,7 +5,7 @@ import debounce from "lodash/debounce";
 import PaginateV2, {
   RefPaginateHandle,
 } from "shareComponents/common/PaginateV2";
-import { STORE_OUTIN, STORE_TYPES } from "apis/localdb";
+import { STORE_OUTIN, STORE_TYPES, STORE_STATUS } from "apis/localdb";
 import { convertCurrency } from "utils/converter";
 import { useModal } from "services/hooks/useModal";
 import { toast } from "react-toastify";
@@ -17,7 +17,7 @@ import {
   SearchInput,
   DialogForm,
   ActionGroupButton,
-} from "views/crm/shareComponents/common";
+} from "views/store/shareComponents/common";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { DropdownSearchableV2 } from "shareComponents/common";
@@ -34,6 +34,7 @@ import {
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { useLocation } from "react-router-dom";
 import fileIcon from "assets/images/icons8-attach.svg";
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface StoreHomePageProps {
@@ -55,15 +56,23 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
   const [pageIndex, setPageIndex] = useState(0);
 
   const [userID, setUserID] = useState<string | null>();
+  const [projectID, setProjectID] = useState<string | null>();
   const [warehouseID, setWarehouseID] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
+  const [packageID, setPackageID] = useState<string | null>();
+  const [toPackageID, setToPackageID] = useState<string | null>();
 
   const { openModal, closeModal } = useModal();
 
-  const [inputFilter, setInputFilter] = useState({
-    fromDate: new Date(new Date().getFullYear(), 0, 1),
-    toDate: new Date(new Date().getFullYear(), 11, 31)
-  })
+  // const today = new Date();
+  // const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  // const currentMonth = new Date().getMonth()
+  // const [inputFilter, setInputFilter] = useState({
+  //   // fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+  //   // toDate: lastDayOfMonth,
+  //   fromDate: new Date(new Date().getFullYear(), 0, 1),
+  //   toDate: new Date(new Date().getFullYear(), 11, 31)
+  // })
 
   // Danh sách mẩu tin
   const {
@@ -77,21 +86,47 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
     loading,
     hasNextPage,
   } = useQueryListStoreParent({
+    projectID,
     warehouseID,
     customerID,
+    packageID,
+    toPackageID,
     userCreateID: userID,
     keyword,
     outin,
     type,
     sortOption: 2,
-    fromDate: inputFilter.fromDate,
-    toDate: inputFilter.toDate,
+    // fromDate: inputFilter.fromDate,
+    // toDate: inputFilter.toDate,
   });
+
+  const statusMap = [
+    { label: 'Khởi tạo', color: 'bg-gray-400' },
+    { label: 'Chờ Ship lấy hàng', color: 'bg-yellow-400' },
+    { label: 'Đang giao hàng', color: 'bg-blue-400' },
+    { label: 'Giao không thành công', color: 'bg-dark' },
+    { label: 'Hoàn thành', color: 'bg-green-500' },
+    { label: 'Hủy', color: 'bg-red-400' }
+  ]
+
+  const renderStatusBadge = (status: any) => {
+  const s = statusMap[Number(status) - 1];
+  if (!s) return null;
+
+  return (
+    <div className="relative z-5 inline-block -translate-y-1">
+        <span className={`text-[10px] text-white rounded px-1 py-0.5 mx-1 ${s.color}`}>
+          {s.label}
+        </span>
+      </div>
+    );
+  };
 
   const [userKeyword, setUserKeyword] = useState("");
   const [projectKeyword, setProjectKeyword] = useState("");
   const [warehouseKeyword, setWarehouseKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
+  const [packageKeyword, setPackageKeyword] = useState("");
 
   const { list: listCustomer } = useContact({
     params: { keyword: contactKeyword, limit: 10 },
@@ -105,12 +140,34 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
       isFetch: true,
     },
     true
-  )
+  );
+
+  const { listDepartments } = useQueryListDepartments(
+    {
+      keyword: projectKeyword,
+    },
+    true
+  );
 
   const { listWarehouse } = useQueryListWarehouse({
     limit: LIMIT_DROPDOWN,
     keyword: warehouseKeyword,
-  })
+  });
+
+  const {
+    data: listDocumentPackage,
+    // fetchNextPage: fetchNextPageDocumentPackage,
+    // hasNextPage: hasNextPageDocumentPackage,
+    // totalRecord,
+  } = useDocumentPackage(
+    {
+      // departmentID: projectID,
+      isShowAll: "1",
+      keyword: packageKeyword,
+    },
+    true,
+    false
+  );
 
   const { onCreateStoreParentAsync, onUpdateStoreParentAsync } =
     useMutationStoreParent();
@@ -153,13 +210,13 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
     [closeModal, onUpdateStoreParentAsync, refreshListStore]
   );
 
-  const handleOnChangeDate = useCallback((date, input) => {
-    if (input) {
-      setInputFilter((value) => ({ ...value, toDate: date }))
-    } else {
-      setInputFilter((value) => ({ ...value, fromDate: date }))
-    }
-    }, [])
+  // const handleOnChangeDate = useCallback((date, input) => {
+  //   if (input) {
+  //     setInputFilter((value) => ({ ...value, toDate: date }))
+  //   } else {
+  //     setInputFilter((value) => ({ ...value, fromDate: date }))
+  //   }
+  //   }, [])
 
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
@@ -174,6 +231,37 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
             onChange={debounce((e) => {
               setKeyword(e.target.value);
             }, 1000)}
+          />
+          <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Dự án"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listDepartments.map((item: any) => ({
+              _id: item._id,
+              name: `${item.sign}.${item.name}`,
+            }))}
+            formatItem={{
+              id: "_id",
+              text: "name",
+            }}
+            onSearchInputChange={debounce(
+              (valueSearch) => setProjectKeyword(valueSearch),
+              500
+            )}
+            onClearData={() => {
+              setProjectID("");
+            }}
+            onchangeValue={(item) => {
+              setProjectID(item._id);
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
           />
           <DropdownSearchableV2
             ref={accountRef}
@@ -237,6 +325,62 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
           <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Gói thầu giao"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listDocumentPackage}
+            formatItem={{
+              id: "_id",
+              text: "name",
+            }}
+            onSearchInputChange={debounce(
+              (valueSearch) => setPackageKeyword(valueSearch),
+              500
+            )}
+            onClearData={() => {
+              setPackageID("");
+            }}
+            onchangeValue={(item) => {
+              setPackageID(item._id);
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+          />
+          <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Gói thầu nhận"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listDocumentPackage}
+            formatItem={{
+              id: "_id",
+              text: "name",
+            }}
+            onSearchInputChange={debounce(
+              (valueSearch) => setPackageKeyword(valueSearch),
+              500
+            )}
+            onClearData={() => {
+              setToPackageID("");
+            }}
+            onchangeValue={(item) => {
+              setToPackageID(item._id);
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+          />
+          <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Người tạo"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -262,7 +406,7 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
             )}
             selectOneByOne={true}
           />
-          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+          {/* <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} /> */}
 
           {Object.keys(recordSelected).length > 1 && (
             <>
@@ -342,6 +486,13 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
+              Mã khách
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
               Số phiếu
             </div>
             <div
@@ -349,21 +500,7 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Phân loại
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Kho bãi
-            </div>
-            <div
-              className={
-                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Mã khách
+              Nguồn
             </div>
             <div
               className={
@@ -443,22 +580,30 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                       <></>
                     )}
                   </NavLink>
-                  <p className={"mt-1 text-gray-500"}>
-                    {item?.userCreate?.fullname}{" "}
-                    {moment(item.createAt).format(DATE_FORMAT)}
-                  </p>
-                  <p className={"mt-1 text-gray-500"}>
-                    {item?.userUpdate?.fullname}{" "}
-                    {moment(item.modifyAt).format(DATE_FORMAT)}
-                  </p>
+                    <p className={"mt-1 text-gray-500"}>
+                      {item?.userCreate?.fullname}{" "}
+                      {moment(item.createAt).format(DATE_FORMAT)}
+                    </p>
+                    <p className={"mt-1 text-gray-500"}>
+                      {item?.userUpdate?.fullname}{" "}
+                      {moment(item.modifyAt).format(DATE_FORMAT)}
+                    </p>
+                    {/* <p>Trạng thái: {STORE_STATUS[Number(item.status - 1)].text}</p> */}
+                    <p>{renderStatusBadge(item.status)}</p>
+                    <p>{item?.warehouse?.name}</p>
+                    <p>Phiếu: {STORE_OUTIN[Number(item.outin - 1)].text}</p>
+                    <p>Phân loại: {STORE_TYPES[Number(item.type - 1)].text}</p>
+                </div>
+                <div className={"px-2 py-2 table-cell box-border border-b"}>
+                  {item?.customer?.name}
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
                   {item.sign}
-                  {item?.link ? (
+                  {item?.lot ? (
                     <p className="text-cbs-highlight-color">
                       <i>
-                        {item?.link?.sign}.{item?.link?.name} |{" "}
-                        {moment(item?.link?.date).format(DATE_FORMAT)}
+                        Lô hàng: {item?.lot?.name} - {item?.lot?.sign} |{" "}
+                        Hạn sử dụng: {moment(item?.lot?.expired).format('DD/MM/YYYY')}
                       </i>
                     </p>
                   ) : (
@@ -466,15 +611,36 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                   )}
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
-                  {STORE_OUTIN[Number(item.outin - 1)].text}
-                  <p>{STORE_TYPES[Number(item.type - 1)].text}</p>
-                </div>
-                <div className={"px-2 py-2 table-cell box-border border-b"}>
-                  {item?.warehouse?.name}
-                  <p className="text-gray-500"><i>{item?.warehouse?._id}</i></p>
-                </div>
-                <div className={"px-2 py-2 table-cell box-border border-b"}>
-                  {item?.customer?.name}
+                  {item?.referrer ? (
+                    <p className="text-cbs-highlight-color">
+                      Giới thiệu: {item?.referrer?.name}-{item?.referrer?.phone}
+                    </p>
+                  ) : ( <></>)}
+                  {item?.salesLeader ? (
+                    <p className="text-cbs-highlight-color">
+                      Trưởng sale: {item?.salesLeader?.name}-{item?.salesLeader?.phone}
+                    </p>
+                  ) : ( <></>)}
+                  {item?.sales ? (
+                    <p className="text-cbs-highlight-color">
+                      Sale: {item?.sales?.name}-{item?.sales?.phone}
+                    </p>
+                  ) : ( <></>)}
+                  {item?.seller ? (
+                    <p className="text-cbs-highlight-color">
+                      Nhà bán hàng: {item?.seller?.name}-{item?.seller?.phone}
+                    </p>
+                  ) : ( <></>)}
+                  {item?.affiliate ? (
+                    <p className="text-cbs-highlight-color">
+                      Affiliate: {item?.affiliate?.name}-{item?.affiliate?.phone}
+                    </p>
+                  ) : ( <></>)}
+                  {item?.customerCare ? (
+                    <p className="text-cbs-highlight-color">
+                      CSKH: {item?.customerCare?.name}-{item?.customerCare?.phone}
+                    </p>
+                  ) : ( <></>)}
                 </div>
                 <div
                   className={
@@ -492,4 +658,4 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
       </div>
     </div>
   );
-}
+};
