@@ -1140,7 +1140,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 Tải đơn hàng
               </button>
               <button onClick={() => handleExportExcel3({ option: 1 })} title="Tải dữ liệu Excel">
-                Tải sản phẩm
+                Tải sản phẩm (1)
+              </button>
+              <button onClick={() => handleExportExcel3({ option: 4 })} title="Tải dữ liệu Excel">
+                Tải sản phẩm (2)
               </button>
               <button onClick={() => handleExportExcel3({ option: 2 })} title="Tải phân loại sản phẩm">
                 Tải DM1
