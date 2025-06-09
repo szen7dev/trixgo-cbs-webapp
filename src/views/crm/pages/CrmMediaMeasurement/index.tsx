@@ -263,10 +263,32 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         refetch();
     }
 
-    const { importExcelAsync} = useMediaMenu({});
+    const { importExcelAsync, exportExcelAsync } = useMediaMenu({});
 
     //_____Import, export excel
     const [dataImport, setDataImport] = useState([]);
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+        isExporting: false,
+    });
+
+    const exportExcel = async () => {
+        try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportExcelAsync({
+                filterParams: {  }
+            });
+
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+    }
 
     //_____Import excel
     const handleImport = ($event: any) => {
@@ -332,11 +354,17 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             </button>
                         ) : ''}
                     </div>
+                    
+                    <button className={"flex items-center justify-center mx-3 ml-3"}
+                            onClick={exportExcel}
+                        >
+                        Tải mẫu Import
+                    </button>
 
                     <button className={"flex items-center justify-center mx-3 ml-3"}>
                         <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
                         accept=".xlsx, .xlsm, .xls, .csv"/>
-                        <label className="custom-file-label" htmlFor="inputGroupFile">Import excel đo cao</label>
+                        <label className="custom-file-label" htmlFor="inputGroupFile">Import excel Đo cao</label>
                     </button>
 
                     <div className="flex items-center">
