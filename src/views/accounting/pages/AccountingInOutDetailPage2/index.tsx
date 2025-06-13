@@ -33,6 +33,8 @@ export const AccountingInOutDetailPage2: FC = () => {
   const [fundaKeyword, setFundaKeyword] = useState("");
   const [warehouseKeyword, setWarehouseKeyword] = useState("");
 
+  console.log(pageIndex)
+
   const today = new Date();
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
   const currentMonth = new Date().getMonth()
@@ -126,7 +128,7 @@ export const AccountingInOutDetailPage2: FC = () => {
 
   let balance = tonDauKy, quantityBalance = klTonDauKy
 
-  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
+  const { listDataWithPager, nextCursor, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
@@ -140,6 +142,9 @@ export const AccountingInOutDetailPage2: FC = () => {
     },
     isFetchList: true
   })
+
+  // console.log({totalPage})
+  // console.log({nextCursor})
 
   const handleOnChangeDate = useCallback((date, input) => {
     if (input) {
@@ -237,30 +242,6 @@ export const AccountingInOutDetailPage2: FC = () => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          {/* <div className={"relative z-5 inline-block"}>
-            <button onClick={() => setShowOption(!showOption)} 
-              className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
-              >
-                <DotsVerticalIcon/>
-            </button>
-            {
-                showOption &&
-                <div className={"absolute right-0 z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
-                    <div className={"flex items-center mx-4 py-2 border-b-0.5 border-primary-border"}>
-                        <div className={"flex-1"}>Chức năng khác</div>
-                        <button onClick={() => setShowOption(false)}>
-                            <Close/>
-                        </button>
-                    </div>
-
-                    <div className={"mb-4"}>
-                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
-                            Tải excel
-                        </button>
-                    </div>
-                </div>
-            }
-          </div> */}
           <div className="absolute right-0">
             <PaginateV2
                 ref={ref}
@@ -419,10 +400,10 @@ export const AccountingInOutDetailPage2: FC = () => {
                       {formatNumberMoney(item?.quantity)}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {formatNumberMoney(item?.unitprice)} 
+                      {formatNumberMoney(Number(item?.unitprice).toFixed(2))} 
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {formatNumberMoney(item?.amount)}
+                      {formatNumberMoney(Number(item?.amount).toFixed(0))}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
                       
@@ -437,7 +418,7 @@ export const AccountingInOutDetailPage2: FC = () => {
                       {formatNumberMoney(quantityBalance)}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {quantityBalance != 0 ? formatNumberMoney(balance/quantityBalance) : 0}
+                      {quantityBalance != 0 ? formatNumberMoney(Number(balance/quantityBalance).toFixed(2)) : 0}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
                       {formatNumberMoney(balance.toFixed(0))}
@@ -492,16 +473,16 @@ export const AccountingInOutDetailPage2: FC = () => {
                       {formatNumberMoney(item?.quantity)}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {formatNumberMoney(item?.unitprice)} 
+                      {formatNumberMoney(Number(item?.unitprice).toFixed(2))} 
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {formatNumberMoney(item?.amount)}
+                      {formatNumberMoney(Number(item?.amount).toFixed(0))}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
                       {formatNumberMoney(quantityBalance)}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {quantityBalance != 0 ? formatNumberMoney(balance/quantityBalance) : 0}
+                      {quantityBalance != 0 ? formatNumberMoney(Number(balance/quantityBalance).toFixed(2)) : 0}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
                       {formatNumberMoney(balance.toFixed(0))}
@@ -528,25 +509,25 @@ export const AccountingInOutDetailPage2: FC = () => {
                 {formatNumberMoney(klNhapTrongKy)}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
-               {klNhapTrongKy != 0 ? formatNumberMoney(nhapTrongKy/klNhapTrongKy) : 0}
+               {klNhapTrongKy != 0 ? formatNumberMoney(Number(nhapTrongKy/klNhapTrongKy).toFixed(2)) : 0}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(nhapTrongKy)}
+                {formatNumberMoney(Number(nhapTrongKy).toFixed(0))}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(klXuatTrongKy)}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
-               {klXuatTrongKy != 0 ? formatNumberMoney(xuatTrongKy/klXuatTrongKy) : 0}
+               {klXuatTrongKy != 0 ? formatNumberMoney(Number(xuatTrongKy/klXuatTrongKy).toFixed(2)) : 0}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(xuatTrongKy)}
+                {formatNumberMoney(Number(xuatTrongKy).toFixed(0))}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(klTonCuoiKy)}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
-                {klTonCuoiKy != 0 ? formatNumberMoney(tonCuoiKy/klTonCuoiKy) : 0}
+                {klTonCuoiKy != 0 ? formatNumberMoney(Number(tonCuoiKy/klTonCuoiKy).toFixed(2)) : 0}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(tonCuoiKy.toFixed(0))}
