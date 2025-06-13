@@ -960,6 +960,24 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     }
                                     label={<span className="text-[13px]" title="Shopee Food">Shopee F</span>}
                                   />
+                                   <FormControlLabel
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
+                                    value="3"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 7);
+                                          setFieldValue("paymentMethod", "2");
+                                          setService("2");
+                                        }}
+                                        checked={(values.salesChannel === 7) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]" title="Be">Be</span>}
+                                  />
                                   <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="3"

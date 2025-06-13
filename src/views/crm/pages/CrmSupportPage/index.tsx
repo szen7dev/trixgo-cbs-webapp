@@ -67,7 +67,7 @@ export const CrmSupportPage: FC = () => {
         { _id: 4, text: 'Gojek'},
         { _id: 5, text: 'Baemin'},
         { _id: 6, text: 'Loship'},
-        { _id: 7, text: 'Bee'},
+        { _id: 7, text: 'Be'},
         // { _id: 8, text: 'TikTok'},
         // { _id: 9, text: 'Shopee'},
         // { _id: 10, text: 'Lazada'},
