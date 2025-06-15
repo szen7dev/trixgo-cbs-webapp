@@ -22,6 +22,8 @@ import gojekChannelIcon from "assets/images/fnb/gojek.svg";
 import baemineChannelIcon from "assets/images/fnb/baemin.svg";
 import loshipChannelIcon from "assets/images/fnb/loship.svg";
 import beeChannelIcon from "assets/images/fnb/bee.svg";
+import egetsChannelIcon from "assets/images/fnb/egets.svg";
+import xanhngonChannelIcon from "assets/images/fnb/xanhngon.svg";
 import { IconImage } from 'views/media/shareComponents/common';
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconRefresh from "assets/images/icons8-refresh.png";
@@ -90,6 +92,12 @@ export const getIconApp = (salesChannel: number) => {
 
     case 7:
       return beeChannelIcon
+
+    case 12:
+      return xanhngonChannelIcon
+      
+    case 13:
+      return egetsChannelIcon
 
     default:
       return offlineChannelIcon

@@ -57,7 +57,7 @@ export const AccountingDiaryPage: FC = () => {
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
-        limit: 20,
+        limit: 500,
         forward: 0,
         cancel: 0,
         fundaID: fundaId,
@@ -196,7 +196,7 @@ export const AccountingDiaryPage: FC = () => {
                 ref={ref}
                 totalRecord={totalRecord}
                 totalPages={totalPage}
-                limit={20}
+                limit={500}
                 hasNextPage={hasNextPage}
                 isFetching={isLoading}
                 nextPageAction={() => {
