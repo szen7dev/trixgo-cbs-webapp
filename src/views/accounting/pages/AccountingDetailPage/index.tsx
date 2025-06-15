@@ -83,7 +83,7 @@ export const AccountingDetailPage: FC = () => {
 
   const { listDataWithPager, isLoading: isLoadingJournallList, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
     params: {
-        limit: 50,
+        limit: 500,
         forward: 0,
         cancel: 0,
         fromDate: inputFilter.fromDate,
@@ -318,7 +318,7 @@ export const AccountingDetailPage: FC = () => {
                 ref={ref}
                 totalRecord={totalRecord}
                 totalPages={totalPage}
-                limit={50}
+                limit={500}
                 hasNextPage={hasNextPage}
                 isFetching={isLoadingJournallList}
                 nextPageAction={() => {
