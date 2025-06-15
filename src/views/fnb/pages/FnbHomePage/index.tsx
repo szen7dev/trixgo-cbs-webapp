@@ -94,10 +94,10 @@ export const getIconApp = (salesChannel: number) => {
       return beeChannelIcon
 
     case 12:
-      return egetsChannelIcon
-
-    case 13:
       return xanhngonChannelIcon
+      
+    case 13:
+      return egetsChannelIcon
 
     default:
       return offlineChannelIcon
