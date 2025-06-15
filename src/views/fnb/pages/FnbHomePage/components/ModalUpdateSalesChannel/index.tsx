@@ -141,20 +141,6 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                                         className="flex justify-between	"
                                                                         sx={{ flexWrap: "nowrap" }}
                                                                     >
-                                                                        {/* <FormControlLabel
-                                                                            sx={{ marginLeft: "0", width: "75px" }}
-                                                                            value="1"
-                                                                            control={
-                                                                                <Radio
-                                                                                    style={{}}
-                                                                                    icon={<img src={RadioEmpty} alt="" />}
-                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
-                                                                                    onChange={() => setFieldValue("salesChannel", 1)}
-                                                                                    checked={(values?.salesChannel === 1) ? true : false}
-                                                                                />
-                                                                            }
-                                                                            label={<span className="text-[13px]">Offline</span>}
-                                                                        /> */}
                                                                         <FormControlLabel
                                                                             sx={{ marginLeft: "0", width: "75px" }}
                                                                             value="2"
@@ -169,7 +155,7 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                                             }
                                                                             label={<span className="text-[13px]">Grab</span>}
                                                                         />
-                                                                         <FormControlLabel
+                                                                        <FormControlLabel
                                                                             sx={{ marginLeft: "0", width: "75px" }}
                                                                             value="3"
                                                                             control={
@@ -183,49 +169,7 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                                             }
                                                                             label={<span className="text-[13px]">Shopee</span>}
                                                                         />
-                                                                         <FormControlLabel
-                                                                            sx={{ marginLeft: "0", width: "75px" }}
-                                                                            value="4"
-                                                                            control={
-                                                                                <Radio
-                                                                                    style={{}}
-                                                                                    icon={<img src={RadioEmpty} alt="" />}
-                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
-                                                                                    onChange={() => setFieldValue("salesChannel", 4)}
-                                                                                    checked={(values?.salesChannel === 4) ? true : false}
-                                                                                />
-                                                                            }
-                                                                            label={<span className="text-[13px]">Gojek</span>}
-                                                                        />
                                                                         <FormControlLabel
-                                                                            sx={{ marginLeft: "0", width: "75px" }}
-                                                                            value="5"
-                                                                            control={
-                                                                                <Radio
-                                                                                    style={{}}
-                                                                                    icon={<img src={RadioEmpty} alt="" />}
-                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
-                                                                                    onChange={() => setFieldValue("salesChannel", 5)}
-                                                                                    checked={(values?.salesChannel === 5) ? true : false}
-                                                                                />
-                                                                            }
-                                                                            label={<span className="text-[13px]">Baemin</span>}
-                                                                        />
-                                                                         <FormControlLabel
-                                                                            sx={{ marginLeft: "0", width: "75px" }}
-                                                                            value="6"
-                                                                            control={
-                                                                                <Radio
-                                                                                    style={{}}
-                                                                                    icon={<img src={RadioEmpty} alt="" />}
-                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
-                                                                                    onChange={() => setFieldValue("salesChannel", 6)}
-                                                                                    checked={(values?.salesChannel === 6) ? true : false}
-                                                                                />
-                                                                            }
-                                                                            label={<span className="text-[13px]">Loship</span>}
-                                                                        />
-                                                                         <FormControlLabel
                                                                             sx={{ marginLeft: "0", width: "75px" }}
                                                                             value="7"
                                                                             control={
@@ -237,7 +181,35 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                                                     checked={(values?.salesChannel === 7) ? true : false}
                                                                                 />
                                                                             }
-                                                                            label={<span className="text-[13px]">Bee</span>}
+                                                                            label={<span className="text-[13px]">Be</span>}
+                                                                        />
+                                                                        <FormControlLabel
+                                                                            sx={{ marginLeft: "0", width: "75px" }}
+                                                                            value="5"
+                                                                            control={
+                                                                                <Radio
+                                                                                    style={{}}
+                                                                                    icon={<img src={RadioEmpty} alt="" />}
+                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
+                                                                                    onChange={() => setFieldValue("salesChannel", 12)}
+                                                                                    checked={(values?.salesChannel === 12) ? true : false}
+                                                                                />
+                                                                            }
+                                                                            label={<span className="text-[13px]">Xanh Ngon</span>}
+                                                                        />
+                                                                        <FormControlLabel
+                                                                            sx={{ marginLeft: "0", width: "75px" }}
+                                                                            value="6"
+                                                                            control={
+                                                                                <Radio
+                                                                                    style={{}}
+                                                                                    icon={<img src={RadioEmpty} alt="" />}
+                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
+                                                                                    onChange={() => setFieldValue("salesChannel", 13)}
+                                                                                    checked={(values?.salesChannel === 13) ? true : false}
+                                                                                />
+                                                                            }
+                                                                            label={<span className="text-[13px]">E-GetS</span>}
                                                                         />
                                                                     </RadioGroup>
                                                                 </FormControl>
