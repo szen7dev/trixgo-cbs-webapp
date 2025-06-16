@@ -71,3 +71,38 @@ build-docker-prod:
   only:
     refs:
       - main
+
+build-docker-lamin-admin-prod:
+  extends: .build-docker-multiple-stage-template
+  before_script:
+    - _DOCKER_CACHE_IMAGE_TAG=`echo $CI_COMMIT_REF_NAME | sed -E 's/[^a-z0-9._-]+/__/g'`
+    - _DOCKER_RELEASE_IMAGE_TAG="$_DOCKER_CACHE_IMAGE_TAG-`printf %010d $CI_PIPELINE_ID`-$CI_COMMIT_SHORT_SHA"
+    - |
+      cat <<EOF > .env
+      HTTPS=http
+      PORT=3000
+      HOST=localhost
+      NODE_ENV=production
+      REACT_APP_ENV=staging
+      REACT_APP_WEBSITE_NAME="Trixgo | Quản lý dự án"
+      REACT_APP_API_DOMAIN_LOCAL=http://localhost:3003
+      REACT_APP_API_DOMAIN_STAGING=https://api.lamin.com.vn
+      REACT_APP_URL_S3=https://dntdurzwr12tp.cloudfront.net
+      REACT_APP_URL_S3_USER=https://dntdurzwr12tp.cloudfront.net/files/db/users
+      REACT_APP_URL_S3_COMPANY=https://dntdurzwr12tp.cloudfront.net/files/db/companys
+      REACT_APP_URL_S3_CONTACT=https://dntdurzwr12tp.cloudfront.net/files/db/contacts
+      REACT_APP_URL_S3_PROJECT=https://dntdurzwr12tp.cloudfront.net/files/db/projects
+      REACT_APP_URL_SOCKET_LOCAL=http://localhost:4000
+      REACT_APP_URL_SOCKET_STAGING=https://socket.lamin.com.vn
+      REACT_APP_ONESIGNAL_APP_ID_LOCAL=21ce042a-1b27-4072-b719-98a78e75b0ba
+      REACT_APP_ONESIGNAL_APP_ID_STAGING=8d5db406-1628-4a23-bf40-8bb53bf582ba
+      REACT_APP_PLATFORM=1
+      REACT_APP_DOMAIN=https://app.lamin.com.vn
+      REACT_APP_TINYMCE_API_KEY=nxvkz0u0f8ouh2h6c2dzigm8u31g42vm0bakd5gi8zao3x5i
+      REACT_APP_SENTRY_DSN=https://a6b2135ab06543f58500130a5ea06d09@o1167997.ingest.sentry.io/6294307
+      EOF
+  tags:
+    - docker-xlarge
+  only:
+    refs:
+      - main
