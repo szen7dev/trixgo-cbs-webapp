@@ -317,48 +317,6 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
                     }
                     label={<span className="text-[13px]">Shopee</span>}
                   />
-                  <FormControlLabel
-                    sx={{ marginLeft: "0" }}
-                    value={4}
-                    control={
-                      <Radio
-                        style={{}}
-                        icon={<img src={RadioEmpty} alt="" />}
-                        checkedIcon={<img src={RadioChecked} alt="" />}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
-                        checked={(formData.salesChannel == 4) ? true : false}
-                      />
-                    }
-                    label={<span className="text-[13px]">Gojek</span>}
-                  />
-                  <FormControlLabel
-                    sx={{ marginLeft: "0" }}
-                    value={5}
-                    control={
-                      <Radio
-                        style={{}}
-                        icon={<img src={RadioEmpty} alt="" />}
-                        checkedIcon={<img src={RadioChecked} alt="" />}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
-                        checked={(formData.salesChannel == 5) ? true : false}
-                      />
-                    }
-                    label={<span className="text-[13px]">Baemin</span>}
-                  />
-                  <FormControlLabel
-                    sx={{ marginLeft: "0" }}
-                    value={6}
-                    control={
-                      <Radio
-                        style={{}}
-                        icon={<img src={RadioEmpty} alt="" />}
-                        checkedIcon={<img src={RadioChecked} alt="" />}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
-                        checked={(formData.salesChannel == 6) ? true : false}
-                      />
-                    }
-                    label={<span className="text-[13px]">Loship</span>}
-                  />
                 </RadioGroup>
               </FormControl>
             </div>

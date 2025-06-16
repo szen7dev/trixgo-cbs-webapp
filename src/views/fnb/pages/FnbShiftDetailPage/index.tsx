@@ -286,22 +286,17 @@ export const FnbShiftDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Doanh số Gojek
+								Doanh số Be
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Doanh số Baemin
+								Doanh số Xanh Ngon
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Doanh số Loship
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
-							<div className="pl-2">
-								Doanh số Bee
+								Doanh số Egets
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border w-[200px]">
@@ -358,7 +353,7 @@ export const FnbShiftDetailPage: FC = () => {
 								<p className="text-cbs-subtext text-[12px]"><i>Số lỗi mắc phải: <b>{item?.numberOfMistakes}</b></i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Tổng doanh số: <b>{formatNumberMoney(item?.total)}</b></i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>- Offline: {formatNumberMoney(item?.total1)}</i></p>
-								<p className="text-cbs-subtext text-[12px]"><i>- App: {formatNumberMoney(Number(item?.total2 + item?.total3 + item?.total4 + item?.total5 + item?.total6 + item?.total7))}</i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>- App: {formatNumberMoney(Number(item?.total2 + item?.total3 + item?.total4 + item?.total5 + item?.total6))}</i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Đơn hủy: <b style={{color:"red"}}>{formatNumberMoney(item?.totalOfCancelOrders)}</b></i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
@@ -396,9 +391,6 @@ export const FnbShiftDetailPage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.total6)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.total7)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{item?.note}

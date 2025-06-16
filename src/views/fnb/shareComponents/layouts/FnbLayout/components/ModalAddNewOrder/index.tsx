@@ -969,11 +969,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
                                         onChange={() => {
-                                          setFieldValue("salesChannel", 7);
+                                          setFieldValue("salesChannel", 4);
                                           setFieldValue("paymentMethod", "2");
                                           setService("2");
                                         }}
-                                        checked={(values.salesChannel === 7) ? true : false}
+                                        checked={(values.salesChannel === 4) ? true : false}
                                       />
                                     }
                                     label={<span className="text-[13px]" title="Be">Be</span>}
@@ -987,11 +987,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
                                         onChange={() => {
-                                          setFieldValue("salesChannel", 12);
+                                          setFieldValue("salesChannel", 5);
                                           setFieldValue("paymentMethod", "2");
                                           setService("2");
                                         }}
-                                        checked={(values.salesChannel === 12) ? true : false}
+                                        checked={(values.salesChannel === 5) ? true : false}
                                       />
                                     }
                                     label={<span className="text-[13px]" title="Xanh Ngon">Xanh Ngon</span>}
@@ -1005,11 +1005,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
                                         onChange={() => {
-                                          setFieldValue("salesChannel", 13);
+                                          setFieldValue("salesChannel", 6);
                                           setFieldValue("paymentMethod", "2");
                                           setService("2");
                                         }}
-                                        checked={(values.salesChannel === 13) ? true : false}
+                                        checked={(values.salesChannel === 6) ? true : false}
                                       />
                                     }
                                     label={<span className="text-[13px]" title="E-GetS">E-GetS</span>}
