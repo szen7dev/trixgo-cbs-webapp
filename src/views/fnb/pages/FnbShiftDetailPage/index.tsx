@@ -392,9 +392,6 @@ export const FnbShiftDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.total6)}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.total7)}
-							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{item?.note}
 							</td>
