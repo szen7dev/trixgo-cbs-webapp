@@ -64,9 +64,16 @@ export const CrmSupportPage: FC = () => {
         { _id: 1, text: 'Offline' },
         { _id: 2, text: 'Grab Food'},
         { _id: 3, text: 'Shopee Food'},
-        { _id: 4, text: 'Be'},
-        { _id: 5, text: 'Xanh Ngon'},
-        { _id: 6, text: 'Egets'},
+        { _id: 4, text: 'Gojek'},
+        { _id: 5, text: 'Baemin'},
+        { _id: 6, text: 'Loship'},
+        { _id: 7, text: 'Be'},
+        { _id: 8, text: 'TikTok Shop'},
+        { _id: 9, text: 'Shopee'},
+        { _id: 10, text: 'Lazada'},
+        { _id: 11, text: 'Reels'},
+        { _id: 12, text: 'Xanh Ngon'},
+        { _id: 13, text: 'Egets'},
     ]
 
     const [pageIndex, setPageIndex] = useState(0)
