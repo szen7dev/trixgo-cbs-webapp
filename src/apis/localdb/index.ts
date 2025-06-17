@@ -794,9 +794,16 @@ export const FNB_CHANNEL = [
     { value: 1, text: 'Offline', sign: "of" },
     { value: 2, text: 'Grab', sign: "gf"  },
     { value: 3, text: 'Shopee Food', sign: "spf"  },
-    { value: 4, text: 'Be', sign: "be"  },
-    { value: 5, text: 'Xanh Ngon', sign: "xn"  },
-    { value: 6, text: 'Egets', sign: "eget"  },
+    { value: 4, text: 'Gojek', sign: "go"  },
+    { value: 5, text: 'Baemin', sign: "bae"  },
+    { value: 6, text: 'Loship', sign: "lo"  },
+    { value: 7, text: 'Be', sign: "be"  },
+    { value: 8, text: 'TikTok Shop', sign: "tts"  },
+    { value: 9, text: 'Shopee', sign: "sp"  },
+    { value: 10, text: 'Lazada', sign: "laz"  },
+    { value: 11, text: 'Reels', sign: "ree"  },
+    { value: 12, text: 'Xanh Ngon', sign: "xn"  },
+    { value: 13, text: 'Egets', sign: "eget"  },
 ]
 
 export const FNB_BOOK_PLAN = [

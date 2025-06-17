@@ -353,7 +353,7 @@ export const FnbShiftDetailPage: FC = () => {
 								<p className="text-cbs-subtext text-[12px]"><i>Số lỗi mắc phải: <b>{item?.numberOfMistakes}</b></i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Tổng doanh số: <b>{formatNumberMoney(item?.total)}</b></i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>- Offline: {formatNumberMoney(item?.total1)}</i></p>
-								<p className="text-cbs-subtext text-[12px]"><i>- App: {formatNumberMoney(Number(item?.total2 + item?.total3 + item?.total4 + item?.total5 + item?.total6))}</i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>- App: {formatNumberMoney(Number(item?.total2 + item?.total3 + item?.total4 + item?.total12 + item?.total13))}</i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Đơn hủy: <b style={{color:"red"}}>{formatNumberMoney(item?.totalOfCancelOrders)}</b></i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>

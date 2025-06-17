@@ -78,13 +78,13 @@ export const getIconApp = (salesChannel: number) => {
     case 3:
       return shopeeChannelIcon
 
-    case 4:
+    case 7:
       return beeChannelIcon
 
-    case 5:
+    case 12:
       return xanhngonChannelIcon
       
-    case 6:
+    case 13:
       return egetsChannelIcon
 
     default:
