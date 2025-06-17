@@ -177,8 +177,8 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                                                     style={{}}
                                                                                     icon={<img src={RadioEmpty} alt="" />}
                                                                                     checkedIcon={<img src={RadioChecked} alt="" />}
-                                                                                    onChange={() => setFieldValue("salesChannel", 4)}
-                                                                                    checked={(values?.salesChannel === 4) ? true : false}
+                                                                                    onChange={() => setFieldValue("salesChannel", 7)}
+                                                                                    checked={(values?.salesChannel === 7) ? true : false}
                                                                                 />
                                                                             }
                                                                             label={<span className="text-[13px]">Be</span>}
@@ -191,8 +191,8 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                                                     style={{}}
                                                                                     icon={<img src={RadioEmpty} alt="" />}
                                                                                     checkedIcon={<img src={RadioChecked} alt="" />}
-                                                                                    onChange={() => setFieldValue("salesChannel", 5)}
-                                                                                    checked={(values?.salesChannel === 5) ? true : false}
+                                                                                    onChange={() => setFieldValue("salesChannel", 12)}
+                                                                                    checked={(values?.salesChannel === 12) ? true : false}
                                                                                 />
                                                                             }
                                                                             label={<span className="text-[13px]">Xanh Ngon</span>}
@@ -205,8 +205,8 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                                                     style={{}}
                                                                                     icon={<img src={RadioEmpty} alt="" />}
                                                                                     checkedIcon={<img src={RadioChecked} alt="" />}
-                                                                                    onChange={() => setFieldValue("salesChannel", 6)}
-                                                                                    checked={(values?.salesChannel === 6) ? true : false}
+                                                                                    onChange={() => setFieldValue("salesChannel", 13)}
+                                                                                    checked={(values?.salesChannel === 13) ? true : false}
                                                                                 />
                                                                             }
                                                                             label={<span className="text-[13px]">E-GetS</span>}
