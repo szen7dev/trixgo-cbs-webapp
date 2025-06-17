@@ -206,6 +206,38 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                   </div>
                 </div>
                 <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Dự án, phòng ban (*)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listDepartments.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.project}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setDepartmentKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("projectID", value.id)
+                    }
+                  />
+                </div>
+                <div>
                   <p className="text-primary-gray text-[13px] mb-1">Số hiệu</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
                     <Field

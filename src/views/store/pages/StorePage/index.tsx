@@ -590,6 +590,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                     </p>
                     {/* <p>Trạng thái: {STORE_STATUS[Number(item.status - 1)].text}</p> */}
                     <p>{renderStatusBadge(item.status)}</p>
+                    <p>{item?.project?.name}</p>
                     <p>{item?.warehouse?.name}</p>
                     <p>Phiếu: {STORE_OUTIN[Number(item.outin - 1)].text}</p>
                     <p>Phân loại: {STORE_TYPES[Number(item.type - 1)].text}</p>
