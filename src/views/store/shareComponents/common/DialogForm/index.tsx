@@ -20,6 +20,7 @@ import { useQueryListStoreLot } from "services/hooks/useStoreLot";
 import { useQueryListStoreParent } from "services/hooks/useStore";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 import type { InsertStoreParentPayload } from "typings/store";
+import { useDoctype } from "services/hooks/items/useDoctype";
 interface CreateOrEditDialogProps {
   outin: any,
   type: any,
@@ -51,6 +52,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   const [contactKeyword, setContactKeyword] = useState(customerName);
   const [packageKeyword, setPackageKeyword] = useState("");
   const [keyword, setKeyword] = useState("");
+  const [keywordDoctype, setKeywordDoctype] = useState('');
 
   const { closeModal } = useModal();
 
@@ -79,6 +81,15 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     data,
   } = useQueryListStoreLot({
     keyword, 
+  })
+
+  const { list: listSubType } = useDoctype({
+    params: {
+      limit: LIMIT_DROPDOWN,
+      type: 24,
+      keyword: keywordDoctype
+      },
+    isFetchList: true
   })
 
   const initialValues = {
@@ -115,7 +126,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "1200px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "1300px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center border-b bg-cbs-table-header p-2"}
@@ -144,7 +155,84 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
               <div className="px-5 pt-20 pb-4 flex flex-col space-y-2 overflow-scroll">
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Thuộc lô hàng
+                    Nội dung (*)
+                  </p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="name"
+                      placeholder="Nhập nội dung"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Số hiệu</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="sign"
+                      placeholder="Số hiệu..."
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-primary-gray text-[13px] mb-1">Ngày</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <DatePicker
+                      className="w-full h-6 outline-none"
+                      selected={values.date ? new Date(values.date) : null}
+                      placeholderText="Ngày/tháng/năm"
+                      name="date"
+                      onChange={(date: Date | null) => {
+                        setFieldValue("date", date);
+                      }}
+                      dateFormat="dd/MM/yyyy"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Dự án, phòng ban (chỉ áp dụng khi cần quản lý theo dự án)
+                  </p>
+                  <DropdownSearchable
+                    className={
+                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
+                    }
+                    focusedClass={"border-b border-primary"}
+                    maxWidthInput={"max-w-none"}
+                    inlineSearch
+                    showTriangle
+                    allowClearValueSingleInput
+                    renderSelectedItem={(item) => <span>{item.text}</span>}
+                    data={listDepartments.map((item: any) => ({
+                      _id: item._id,
+                      name: `${item.sign}.${item.name}`,
+                    }))}
+                    initialValue={defaultValues?.project}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                      (value) => setDepartmentKeyword(value),
+                      1000
+                    )}
+                    onchangeValue={(value) =>
+                      setFieldValue("projectID", value.id)
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] text-primary-gray mb-1">
+                    Lô hàng (* áp dụng cho phiếu xuất để quản lý date và tồn kho theo lô)
                   </p>
                   <DropdownSearchable
                     className={
@@ -176,38 +264,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Nội dung (*)
-                  </p>
-                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
-                    <Field
-                      type="text"
-                      name="name"
-                      placeholder="Nhập nội dung"
-                      className="w-full h-6 outline-none"
-                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                        handleBlur(e);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-primary-gray text-[13px] mb-1">Ngày</p>
-                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
-                    <DatePicker
-                      className="w-full h-6 outline-none"
-                      selected={values.date ? new Date(values.date) : null}
-                      placeholderText="Ngày/tháng/năm"
-                      name="date"
-                      onChange={(date: Date | null) => {
-                        setFieldValue("date", date);
-                      }}
-                      dateFormat="dd/MM/yyyy"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-[13px] text-primary-gray mb-1">
-                    Dự án, phòng ban (*)
+                    Kênh bán hàng (* áp dụng cho phiếu xuất)
                   </p>
                   <DropdownSearchable
                     className={
@@ -215,41 +272,27 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     }
                     focusedClass={"border-b border-primary"}
                     maxWidthInput={"max-w-none"}
-                    inlineSearch
                     showTriangle
+                    inlineSearch
                     allowClearValueSingleInput
                     renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={listDepartments.map((item: any) => ({
-                      _id: item._id,
-                      name: `${item.sign}.${item.name}`,
+                    data={listSubType.map((item: any) => ({
+                      _id: item._id, 
+                      name: `${item.name}`,
                     }))}
-                    initialValue={defaultValues?.project}
+                    initialValue={defaultValues?.channel}
                     formatItem={{
                       id: "_id",
                       text: "name",
                     }}
                     onSearchInputChange={debounce(
-                      (value) => setDepartmentKeyword(value),
-                      1000
+                      (value) => setKeywordDoctype(value),
+                      500
                     )}
                     onchangeValue={(value) =>
-                      setFieldValue("projectID", value.id)
+                      setFieldValue("channelID", value.id)
                     }
                   />
-                </div>
-                <div>
-                  <p className="text-primary-gray text-[13px] mb-1">Số hiệu</p>
-                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
-                    <Field
-                      type="text"
-                      name="sign"
-                      placeholder="Số hiệu..."
-                      className="w-full h-6 outline-none"
-                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                        handleBlur(e);
-                      }}
-                    />
-                  </div>
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
@@ -477,7 +520,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Nhân viên chăm sóc khách hàng (*)
+                    Nhân viên chăm sóc khách hàng công ty (*)
                   </p>
                   <DropdownSearchable
                     className={

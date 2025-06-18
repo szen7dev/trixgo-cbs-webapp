@@ -62,15 +62,15 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
 
   const { openModal, closeModal } = useModal();
 
-	// const today = new Date();
-	// const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-	// const currentMonth = new Date().getMonth()
-  // const [inputFilter, setInputFilter] = useState({
-	//   // fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
-	//   // toDate: lastDayOfMonth,
-  //   fromDate: new Date(new Date().getFullYear(), 0, 1),
-  //   toDate: new Date(new Date().getFullYear(), 11, 31)
-	// })
+	const today = new Date();
+	const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+	const currentMonth = new Date().getMonth()
+  const [inputFilter, setInputFilter] = useState({
+	  // fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+	  // toDate: lastDayOfMonth,
+    fromDate: new Date(new Date().getFullYear(), 0, 1),
+    toDate: new Date(new Date().getFullYear(), 11, 31)
+	})
 
   // Danh sách mẩu tin
   const {
@@ -92,8 +92,8 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
     outin, 
     type, 
     sortOption: 2,
-    // fromDate: inputFilter.fromDate,
-    // toDate: inputFilter.toDate,
+    fromDate: inputFilter.fromDate,
+    toDate: inputFilter.toDate,
   })
 
   const [userKeyword, setUserKeyword] = useState("");  
@@ -164,13 +164,13 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
     [closeModal, onUpdateStoreParentAsync, refreshListStore]
   );
 
-  // const handleOnChangeDate = useCallback((date, input) => {
-  //   if (input) {
-  //     setInputFilter((value) => ({ ...value, toDate: date }))
-  //   } else {
-  //     setInputFilter((value) => ({ ...value, fromDate: date }))
-  //   }
-  //   }, [])
+  const handleOnChangeDate = useCallback((date, input) => {
+    if (input) {
+      setInputFilter((value) => ({ ...value, toDate: date }))
+    } else {
+      setInputFilter((value) => ({ ...value, fromDate: date }))
+    }
+    }, [])
   
   const toggleModalCopy = (param: any) => {
     openModal(
@@ -340,7 +340,7 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
               )}
               selectOneByOne={true}
           />
-          {/* <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} /> */}
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           
           {Object.keys(recordSelected).length > 1 && (
             <>

@@ -19,10 +19,16 @@ import timesheetLogo from "assets/logos/timesheet.png";
 import workshopLogo from "assets/logos/workshop.png";
 import messagesLogo from "assets/logos/messages.png";
 import budgetLogo from "assets/logos/budget.png";
-import inspectionLogo from "assets/logos/inspection.png";
+import habitLogo from "assets/logos/habit.png";
 import defaultLogo from "assets/logos/default.png";
 
 export const APP_INFO = new Map([
+    ['61e04a0dfdebf77b072d1b18', {
+        key: "61e04a0dfdebf77b072d1b18",
+        name: "Habit",
+        icon: habitLogo,
+        route: '/habit/home'
+    }],
     /* Ứng dụng Payment */
     ['5e4785eb8b50843d34481d49', {
         key: "5e4785eb8b50843d34481d49",
