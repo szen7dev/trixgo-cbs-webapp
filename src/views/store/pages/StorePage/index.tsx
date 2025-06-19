@@ -89,8 +89,8 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
     projectID,
     warehouseID,
     customerID,
-    packageID,
-    toPackageID,
+    // packageID,
+    // toPackageID,
     userCreateID: userID,
     keyword,
     outin,
@@ -322,7 +322,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
             )}
             selectOneByOne={true}
           />
-          <DropdownSearchableV2
+          {/* <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Gói thầu giao"}
@@ -377,7 +377,7 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
             selectOneByOne={true}
-          />
+          /> */}
           <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
@@ -612,6 +612,11 @@ export const StorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                   )}
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
+                  {item?.channel ? (
+                    <p className="text-cbs-highlight-color">
+                      Kênh: {item?.channel?.name}
+                    </p>
+                  ) : ( <></>)}
                   {item?.referrer ? (
                     <p className="text-cbs-highlight-color">
                       Giới thiệu: {item?.referrer?.name}-{item?.referrer?.phone}
