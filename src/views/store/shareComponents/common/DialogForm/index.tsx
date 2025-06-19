@@ -360,7 +360,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Người giới thiệu (*)
+                    Người giới thiệu
                   </p>
                   <DropdownSearchable
                     className={
@@ -392,7 +392,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Trưởng nhóm sale công ty (*)
+                    Trưởng nhóm sale công ty
                   </p>
                   <DropdownSearchable
                     className={
@@ -424,7 +424,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Sale công ty (*)
+                    Sale công ty
                   </p>
                   <DropdownSearchable
                     className={
@@ -456,7 +456,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Nhà bán hàng (*)
+                    Nhà bán hàng
                   </p>
                   <DropdownSearchable
                     className={
@@ -488,7 +488,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Người làm Affiliate (*)
+                    Người làm Affiliate
                   </p>
                   <DropdownSearchable
                     className={
@@ -520,7 +520,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
-                    Nhân viên chăm sóc khách hàng công ty (*)
+                    Nhân viên chăm sóc khách hàng công ty
                   </p>
                   <DropdownSearchable
                     className={
