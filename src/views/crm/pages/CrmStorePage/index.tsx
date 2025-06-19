@@ -89,8 +89,8 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
     projectID,
     warehouseID,
     customerID,
-    packageID,
-    toPackageID,
+    // packageID,
+    // toPackageID,
     userCreateID: userID,
     keyword,
     outin,
@@ -322,7 +322,7 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
             )}
             selectOneByOne={true}
           />
-          <DropdownSearchableV2
+          {/* <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Gói thầu giao"}
@@ -377,7 +377,7 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
               <p className={"min-w-[300px]"}>{item.text}</p>
             )}
             selectOneByOne={true}
-          />
+          /> */}
           <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
@@ -590,6 +590,7 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                     </p>
                     {/* <p>Trạng thái: {STORE_STATUS[Number(item.status - 1)].text}</p> */}
                     <p>{renderStatusBadge(item.status)}</p>
+                    <p>{item?.project?.name}</p>
                     <p>{item?.warehouse?.name}</p>
                     <p>Phiếu: {STORE_OUTIN[Number(item.outin - 1)].text}</p>
                     <p>Phân loại: {STORE_TYPES[Number(item.type - 1)].text}</p>
@@ -611,6 +612,11 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                   )}
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
+                  {item?.channel ? (
+                    <p className="text-cbs-highlight-color">
+                      Kênh: {item?.channel?.name}
+                    </p>
+                  ) : ( <></>)}
                   {item?.referrer ? (
                     <p className="text-cbs-highlight-color">
                       Giới thiệu: {item?.referrer?.name}-{item?.referrer?.phone}
