@@ -35,6 +35,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
               customerName={record?.customer?.name}
               defaultValues={{
                 funda: record.funda,
+                channel: record.channel,
                 project: record.project,
                 package: record.package,
                 toPackage: record.toPackage,

@@ -41,6 +41,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
                 contract: record.contract,
                 customer: record.customer,
                 warehouse: record.warehouse,
+                channel: record.channel,
                 assignee: record.assignee,
                 referrer: record.referrer,
                 salesLeader: record.salesLeader,

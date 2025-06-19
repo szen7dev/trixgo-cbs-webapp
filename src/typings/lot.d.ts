@@ -7,6 +7,7 @@ import { Warehouse } from "./items/warehouse";
 import { Contact } from "./items/contact";
 import { Goods } from "./items/goods";
 import { Contract } from "./items/contract";
+import { Doctype } from "./items/doctype";
 
 export type StoreParent = {
   _id: string;
@@ -27,6 +28,7 @@ export type StoreParent = {
   name: string;
   assignee: User;
   funda: Funda;
+  channel: Doctype;
   project: Project;
   package: Project;
   toPackage: Project;
