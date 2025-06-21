@@ -27,6 +27,7 @@ import {
     StoreDetailedReportPage,
     StoreInventoryPage,
     StoreDetailPage,
+    StoreLotPage,
 } from "views/store/pages";
 
 const StoreRouter: FC = () => {
@@ -60,6 +61,9 @@ const StoreRouter: FC = () => {
                     />
                     <Route exact path="/store/home" component={StoreHomePage}/>
                     <Route exact path="/store/home/:id" component={StoreDetailPage}/>
+
+                    <Route exact path="/store/lot" component={StoreLotPage}/>
+                    <Route exact path="/store/lot/:id" component={StoreLotPage}/>
 
                     <Route exact path="/store/dashboard" component={StoreDashboardPage}/>
                     <Route exact path="/store/inventory" component={StoreInventoryPage}/>  
