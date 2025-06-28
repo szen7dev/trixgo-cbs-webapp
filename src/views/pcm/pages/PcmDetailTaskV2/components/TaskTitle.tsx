@@ -170,7 +170,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
         },
         {
             id: 8,
-            text: "Chất lượng kiểm tra không đạt 222",
+            text: "Chất lượng kiểm tra không đạt",
             color: "#ffb3b3"
         },
     ]
@@ -178,7 +178,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
     // Hiển thị thanh trạng thái cho Phép ai được Bấm Hoàn Thành
     if
         (([0,1,4,6,7,7,9,10,11].includes(task?.subtype) && task?.author?._id === userId) ||
-        ([2,3,5].includes(task?.subtype) && task?.assignee?._id === userId)) {
+        ([2,3,5,9].includes(task?.subtype) && task?.assignee?._id === userId)) {
         options = [
             {
                 id: 1,
