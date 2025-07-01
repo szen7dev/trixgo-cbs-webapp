@@ -464,10 +464,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                 {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
-                                <a href={`https://lamin.com.vn/do-cao/ket-qua/${item._id}`}>{item?.name}</a>
-                                {/* <Link to={`https://lamin.com.vn/do-cao/ket-qua/${item._id}`}>
-                                    {item?.name}
-                                </Link> */}
+                                <a href={`https://lamin.com.vn/do-cao-cdc/ket-qua/${item._id}`}>{item?.name}</a>
                             </td>
                             <td className="py-1 px-2">
                                 {item.gender >= 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}
