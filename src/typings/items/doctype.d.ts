@@ -8,6 +8,7 @@ export type Doctype = {
     sign: string;
     description: string;
     type: number;
+    subType: number;
     grade?: number;
     amount: number;
     alert: number;
@@ -87,6 +88,7 @@ interface ModalProps {
         amount: number;
         alert: number;
         salesChannel: number;
+        subType: number;
     }
     onConfirm?(): void
 }

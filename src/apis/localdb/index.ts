@@ -700,6 +700,12 @@ export const TYPE_MISTAKE = [
     { _id: 2, text: 'Khách hàng phát hiện' },
 ]
 
+export const TYPE_SUBTYPE= [
+    { _id: 1, text: 'Chung' },
+    { _id: 2, text: 'Khảo sát khách hàng' },
+    { _id: 3, text: 'Hành trình trải nghiệm' },
+]
+
 export const STATUS_MISTAKE = [
     { _id: 1, text: 'Hoàn thành' },
     { _id: 2, text: 'Hủy' },
