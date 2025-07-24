@@ -526,6 +526,7 @@ export const PCM_STATUS_TASK = [
     { value: 6, text: 'Tiếp tục theo dõi', class: 'bg-blue-300', backgroud: '5bc0de', key: 'follow_up' },
     { value: 7, text: 'Chưa đủ điều kiện duyệt', class: 'bg-yellow-300', backgroud: 'f6bb29', key: 'lock' },
     { value: 8, text: 'Chất lượng kiểm tra không đạt', class: 'bg-red-400', backgroud: 'ffb3b3', key: 'lock' },
+    { value: 9, text: 'Hủy bỏ', class: 'bg-red-400', backgroud: 'ffb3b3', key: 'lock' },
 ]
 
 // TRẠNG THÁI CHECKLIST

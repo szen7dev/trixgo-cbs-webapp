@@ -62,6 +62,10 @@ const initialState: any = {
         {
           label: `${PCM_STATUS_TASK[7]?.text}`, // Chất lượng kiểm tra không đạt
           id: 8,
+        },
+        {
+          label: `${PCM_STATUS_TASK[8]?.text}`, // Hủy bỏ
+          id: 9,
         }
       ],
       subtypes: [],

@@ -303,6 +303,10 @@ const PcmPrintTaskTypeFour: FC = () => {
                                   id: 8,
                                   text: "Chất lượng kiểm tra không đạt",
                                 },
+                                {
+                                  id: 9,
+                                  text: "Hủy bỏ",
+                                },
                               ]}
                           />
                         </div>
