@@ -8,15 +8,15 @@ import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
-// import {
-// 	useQueryListWarehouse,
-// 	useQueryListGood
-// } from "services/hooks/cmcs/useContractIncome";
-import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import { CASH_OUTIN, CASH_TYPES } from "apis/localdb";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import { toast } from "react-toastify";
+import { createLinkAndClick } from "utils";
 import {
+  useProductCustom,
   useQueryListStoreChild,
 } from "services/hooks/useStoreProduct";
+import { useQueryListDepartments } from "services/hooks/items/useDepartment";
+import { CASH_OUTIN, CASH_TYPES } from "apis/localdb";
 import {
 	useQueryListContract,
 	useQueryListAccount,
@@ -137,6 +137,47 @@ export const CashDetailedReportPage: FC<Props> = () => {
 		keyword: keywordWork,
 	})
 
+  //_____Import, export excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  })
+  const { exportByFilterAsync } = useProductCustom();
+  const handleExportByFilter = async (param: any) => {
+    try {
+        setStateExport({ isExporting: true });
+        const { error, data } = await exportByFilterAsync({
+          option: param.option,
+          filterParams: {
+            option: 2, // Sổ quỹ
+            limit: 500,
+            type, 
+            status: 5, // Hoàn thành
+            projectID,
+            contractID,
+            accountID,
+            customerID,
+            // goodsID,
+            // assetsID,
+            outin,
+            workID,
+            subtypeID,
+            userCreateID: userID,
+            sortKey: JSON.stringify(['date__1', 'createAt__1']),
+                  }
+        })
+
+        if(error) {
+            return toast.warn(data?.message);
+        }
+
+        data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+        toast.error(error.message)
+    } finally {
+        setStateExport({ isExporting: false });
+    }
+  }
+
   let inventory = 0
   let tongThu = 0, tongChi = 0
   {
@@ -150,7 +191,6 @@ export const CashDetailedReportPage: FC<Props> = () => {
       }
     })
   }
-  // console.log({tongThu, tongChi})
   
   return (
     <div>
@@ -424,6 +464,9 @@ export const CashDetailedReportPage: FC<Props> = () => {
               )}
               selectOneByOne={true}
           />
+          <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 2})}>
+              Download <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
+          </button>
           <PaginateV2
               ref={ref}
               totalRecord={totalRecord}

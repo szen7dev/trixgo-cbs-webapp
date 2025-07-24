@@ -120,20 +120,6 @@ export const StoreDetailedReportPage: FC<Props> = () => {
 		keyword: goodsKeyword,
 	})
 
-  // const { listBudgetWork } = useQueryListBudgetWork({
-	// 	limit: LIMIT_DROPDOWN,
-	// 	keyword: keywordWork,
-	// })
-
-  // const { list: listSubType } = useDoctype({
-	// 	params: {
-	// 		limit: LIMIT_DROPDOWN,
-	// 		type: 23,
-	// 		keyword: keywordDoctype
-	// 	 },
-	// 	isFetchList: true
-	// })
-
   //_____Import, export excel
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
       isExporting: false,
