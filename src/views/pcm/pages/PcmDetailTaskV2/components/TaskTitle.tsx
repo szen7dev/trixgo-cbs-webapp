@@ -173,6 +173,11 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             text: "Chất lượng kiểm tra không đạt",
             color: "#ffb3b3"
         },
+        {
+            id: 9,
+            text: "Hủy bỏ",
+            color: "#ffb3b3"
+        },
     ]
 
     // Hiển thị thanh trạng thái cho Phép ai được Bấm Hoàn Thành
@@ -218,6 +223,11 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             {
                 id: 8,
                 text: "Chất lượng kiểm tra không đạt",
+                color: "#ffb3b3"
+            },
+            {
+                id: 9,
+                text: "Hủy bỏ",
                 color: "#ffb3b3"
             },
         ];
