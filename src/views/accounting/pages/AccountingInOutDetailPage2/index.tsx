@@ -33,8 +33,6 @@ export const AccountingInOutDetailPage2: FC = () => {
   const [fundaKeyword, setFundaKeyword] = useState("");
   const [warehouseKeyword, setWarehouseKeyword] = useState("");
 
-  console.log(pageIndex)
-
   const today = new Date();
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
   const currentMonth = new Date().getMonth()
@@ -142,10 +140,7 @@ export const AccountingInOutDetailPage2: FC = () => {
     },
     isFetchList: true
   })
-
-  // console.log({totalPage})
-  // console.log({nextCursor})
-
+  
   const handleOnChangeDate = useCallback((date, input) => {
     if (input) {
       setInputFilter((value) => ({ ...value, toDate: date }))
