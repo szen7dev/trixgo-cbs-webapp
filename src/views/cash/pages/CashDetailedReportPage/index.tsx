@@ -61,7 +61,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
     refetch: onRefreshStoreChild,
   } = useQueryListStoreChild({
     option: 2, // Sổ quỹ
-    limit: 50,
+    limit: 500,
     type, 
     status: 5, // Hoàn thành
     projectID,
@@ -429,7 +429,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
               totalRecord={totalRecord}
               totalPages={totalPages}
               hasNextPage={hasNextPage}
-              limit={limit}
+              limit={500}
               isFetching={isFetchStoreChild}
               nextPageAction={() => {
                 setPageIndex((oldState) => oldState + 1);
