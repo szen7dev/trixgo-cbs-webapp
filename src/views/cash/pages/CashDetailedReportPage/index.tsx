@@ -148,7 +148,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
         const { error, data } = await exportByFilterAsync({
           option: param.option,
           filterParams: {
-            option: 2, // Sổ quỹ
+            option: param.option,
             limit: 500,
             type, 
             status: 5, // Hoàn thành
@@ -464,7 +464,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
               )}
               selectOneByOne={true}
           />
-          <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 2})}>
+          <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 3})}>
               Download <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
           </button>
           <PaginateV2
