@@ -4,6 +4,8 @@ import { FilterDateGroup }  from "views/accounting/shareComponents/common";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from "utils";
+// import moment from "moment";
+import moment from "moment-timezone";
 import {
   useProductCustom,
   useQueryListByPropertyStoreChild
@@ -21,12 +23,13 @@ export const CashInventoryPage: FC<Props> = ({ outin }) => {
     toDate: lastDayOfMonth
   })
 
+  const TIMEZONE = "Asia/Ho_Chi_Minh"; // GMT+7
   const {
     data,
   }: any = useQueryListByPropertyStoreChild({
     option: 2,
-    fromDate: inputFilter.fromDate,
-    toDate: inputFilter.toDate,
+    fromDate: moment.tz(inputFilter.fromDate, TIMEZONE).startOf("day").toISOString(), // 00:00:00 GMT+7 → chính xác
+    toDate: moment.tz(inputFilter.toDate, TIMEZONE).endOf("day").toISOString(),       // 23:59:59.999 GMT+7
   })
 
   let tonDauKy = 0, nhapTrongKy = 0, xuatTrongKy = 0, tonCuoiKy = 0
