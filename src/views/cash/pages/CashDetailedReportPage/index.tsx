@@ -8,15 +8,15 @@ import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { DropdownSearchableV2 } from "shareComponents/common";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
-// import {
-// 	useQueryListWarehouse,
-// 	useQueryListGood
-// } from "services/hooks/cmcs/useContractIncome";
-import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import { CASH_OUTIN, CASH_TYPES } from "apis/localdb";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import { toast } from "react-toastify";
+import { createLinkAndClick } from "utils";
 import {
+  useProductCustom,
   useQueryListStoreChild,
 } from "services/hooks/useStoreProduct";
+import { useQueryListDepartments } from "services/hooks/items/useDepartment";
+import { CASH_OUTIN, CASH_TYPES } from "apis/localdb";
 import {
 	useQueryListContract,
 	useQueryListAccount,
@@ -61,7 +61,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
     refetch: onRefreshStoreChild,
   } = useQueryListStoreChild({
     option: 2, // Sổ quỹ
-    limit: 50,
+    limit: 500,
     type, 
     status: 5, // Hoàn thành
     projectID,
@@ -76,8 +76,6 @@ export const CashDetailedReportPage: FC<Props> = () => {
     userCreateID: userID,
     sortKey: JSON.stringify(['date__1', 'createAt__1']),
   })
-
-  console.log(listDataWithPager)
 
   const [userKeyword, setUserKeyword] = useState("");  
   const [projectKeyword, setProjectKeyword] = useState("");
@@ -139,20 +137,60 @@ export const CashDetailedReportPage: FC<Props> = () => {
 		keyword: keywordWork,
 	})
 
+  //_____Import, export excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  })
+  const { exportByFilterAsync } = useProductCustom();
+  const handleExportByFilter = async (param: any) => {
+    try {
+        setStateExport({ isExporting: true });
+        const { error, data } = await exportByFilterAsync({
+          option: param.option,
+          filterParams: {
+            option: param.option,
+            limit: 500,
+            type, 
+            status: 5, // Hoàn thành
+            projectID,
+            contractID,
+            accountID,
+            customerID,
+            // goodsID,
+            // assetsID,
+            outin,
+            workID,
+            subtypeID,
+            userCreateID: userID,
+            sortKey: JSON.stringify(['date__1', 'createAt__1']),
+                  }
+        })
+
+        if(error) {
+            return toast.warn(data?.message);
+        }
+
+        data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+        toast.error(error.message)
+    } finally {
+        setStateExport({ isExporting: false });
+    }
+  }
+
   let inventory = 0
-  let tongNhap = 0, tongXuat = 0
+  let tongThu = 0, tongChi = 0
   {
     (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {
-      if(item?.outin == 1){
-        tongNhap = Number(tongNhap) + Number(item?.amount)
+      if(item?.outin == 2){
+        tongThu = Number(tongThu) + Number(item?.amount)
       }
   
-      if(item?.outin == 2){
-        tongXuat = Number(tongXuat) + Number(item?.amount)
+      if(item?.outin == 1){
+        tongChi = Number(tongChi) + Number(item?.amount)
       }
     })
   }
-  // console.log({tongNhap, tongXuat})
   
   return (
     <div>
@@ -426,12 +464,15 @@ export const CashDetailedReportPage: FC<Props> = () => {
               )}
               selectOneByOne={true}
           />
+          <button className={"flex items-center justify-center mx-1"} onClick={() => handleExportByFilter({option: 3})}>
+              Download <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
+          </button>
           <PaginateV2
               ref={ref}
               totalRecord={totalRecord}
               totalPages={totalPages}
               hasNextPage={hasNextPage}
-              limit={limit}
+              limit={500}
               isFetching={isFetchStoreChild}
               nextPageAction={() => {
                 setPageIndex((oldState) => oldState + 1);
@@ -464,9 +505,9 @@ export const CashDetailedReportPage: FC<Props> = () => {
               <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center"></th>
               <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center"></th>
               <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center"></th>
-              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center text-right">{formatNumberMoney(tongNhap)}</th>
-              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center text-right">{formatNumberMoney(tongXuat)}</th>
-              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center text-right">{formatNumberMoney(tongNhap - tongXuat)}</th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center text-right">{formatNumberMoney(tongThu)}</th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center text-right">{formatNumberMoney(tongChi)}</th>
+              <th className="py-1 px-2 border-r border-l border-b border-primary-border text-center text-right">{formatNumberMoney(tongThu - tongChi)}</th>
             </tr>
         </thead>
         <tbody>
@@ -474,7 +515,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
               (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {
                 const jsx = [];
 
-                if(item?.outin == 1){
+                if(item?.outin == 2){
                   inventory = Number(inventory) + Number(item?.amount)
 
                   jsx.push(
@@ -504,7 +545,7 @@ export const CashDetailedReportPage: FC<Props> = () => {
                   )
                 }
 
-                if(item?.outin == 2){
+                if(item?.outin == 1){
                   inventory = Number(inventory) - Number(item?.amount)
 
                   jsx.push(

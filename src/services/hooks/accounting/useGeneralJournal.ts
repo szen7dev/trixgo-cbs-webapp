@@ -115,6 +115,8 @@ export const useJournalList = ({ params = {},  isFetchList = false }: any): UseQ
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
     const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
 
+    // console.log({nextCursor})
+
     return {
         isLoading,
         listData,

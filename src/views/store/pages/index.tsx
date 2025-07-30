@@ -6,3 +6,4 @@ export {StoreInventoryPage} from './StoreInventoryPage';
 export {StoreDetailPage} from './StoreDetailPage';
 export {StoreSupportToolsPage} from './StoreSupportToolsPage';
 export {StoreDetailedReportPage} from './StoreDetailedReportPage';
+export {StoreLotPage} from './StoreLotPage';

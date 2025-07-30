@@ -370,7 +370,7 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
                         ref={ref}
                         totalRecord={totalRecord}
                         totalPages={totalPage}
-                        limit={300}
+                        limit={5}
                         hasNextPage={hasNextPage}
                         isFetching={isLoading}
                         nextPageAction={() => {

@@ -11,7 +11,7 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import Axios from "axios";
-import FormControlLabel from '@mui/material/FormControlLabel';
+// import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 /**
@@ -41,12 +41,13 @@ import Close from "assets/icons/Close";
 import fakeThumbnail from "assets/images/avatar.jpg";
 
 import "react-day-picker/lib/style.css";
-import { Editor } from "@tinymce/tinymce-react";
+// import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
 import { GroupSearchable } from "../GroupSearchable";
 import { useSocket } from "services/hooks/useSocket";
+import { QuillEditor } from "../QuillEditor";
 // import { useSocket } from "services/hooks/useSocket";
 // import { Popover } from "@mui/material";
 // import { borderRadius } from "@mui/system";
@@ -885,7 +886,25 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
               </div>
 
               <div className={"px-6 my-3"}>
-                <Editor
+                <QuillEditor
+                  placeholder="Nhập nội dung"
+                  value={values.description}
+                  onChange={(value) => setFieldValue("description", value)}
+                  height="250px"
+                />
+
+                {/* <textarea
+                  {...formik.getFieldProps('description')}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    setFieldValue("description", value)
+                    setFieldValue("descriptioncv", value)
+                  }}
+                  className="t-add-new-task-dialog-content p-2 w-full"
+                  placeholder="Nhập nội dung 2123..."
+                ></textarea> */}
+
+                {/* <Editor
                   onEditorChange={(_, editor) => {
                     const contentRaw = editor.getContent({ format: 'raw' });
                     const contentRawCv = editor.getContent({ format: 'text' });
@@ -937,7 +956,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       });
                     },
                   }}
-                />
+                /> */}
                 <ErrorMessage
                   name="description"
                   component="div"

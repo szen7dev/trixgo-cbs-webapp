@@ -13,7 +13,17 @@ export interface Goods {
     sellingUnitprice: string | null;
     userUpdate: string | null;
     convertQuantity: number
-    project?: any
+    project?: any;
+    ingredients?: string;
+    benefits?: string;
+    features?: string;
+    instructions?: string;
+    sideEffects?: string;
+    warnings?: string;
+    storage?: string;
+    expired?: string;
+    listedUnitprice?: number;
+    images?: any;
 }
 
 export type GoodsQueryPayload = QueryParam & {
@@ -22,6 +32,7 @@ export type GoodsQueryPayload = QueryParam & {
     projectID?: string;
     isListParentOfListChilds?: string;
     goodsID?: string;
+    usage?: any;
     // populates?: any;
 };
 

@@ -22,6 +22,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
     linkItem: '',
     description: '',
     type: 1,
+    subType: 1,
     grade: 1,
     salesChannel: 1,
     amount: 0,
@@ -206,6 +207,20 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
       </section>
 
       <section className="px-5 mt-1">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtSign">
+          Phân loại
+        </label>
+        <input
+          type="number"
+          placeholder="1-Chung | 2-Khảo sát khách hàng | 3-Hành trình trải nghiệm"
+          name="subType"
+          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.subType}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
+        />
+      </section>
+
+      <section className="px-5 mt-1">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Mô tả, ghi chú
         </label>
@@ -316,48 +331,6 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
                       />
                     }
                     label={<span className="text-[13px]">Shopee</span>}
-                  />
-                  <FormControlLabel
-                    sx={{ marginLeft: "0" }}
-                    value={4}
-                    control={
-                      <Radio
-                        style={{}}
-                        icon={<img src={RadioEmpty} alt="" />}
-                        checkedIcon={<img src={RadioChecked} alt="" />}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
-                        checked={(formData.salesChannel == 4) ? true : false}
-                      />
-                    }
-                    label={<span className="text-[13px]">Gojek</span>}
-                  />
-                  <FormControlLabel
-                    sx={{ marginLeft: "0" }}
-                    value={5}
-                    control={
-                      <Radio
-                        style={{}}
-                        icon={<img src={RadioEmpty} alt="" />}
-                        checkedIcon={<img src={RadioChecked} alt="" />}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
-                        checked={(formData.salesChannel == 5) ? true : false}
-                      />
-                    }
-                    label={<span className="text-[13px]">Baemin</span>}
-                  />
-                  <FormControlLabel
-                    sx={{ marginLeft: "0" }}
-                    value={6}
-                    control={
-                      <Radio
-                        style={{}}
-                        icon={<img src={RadioEmpty} alt="" />}
-                        checkedIcon={<img src={RadioChecked} alt="" />}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
-                        checked={(formData.salesChannel == 6) ? true : false}
-                      />
-                    }
-                    label={<span className="text-[13px]">Loship</span>}
                   />
                 </RadioGroup>
               </FormControl>

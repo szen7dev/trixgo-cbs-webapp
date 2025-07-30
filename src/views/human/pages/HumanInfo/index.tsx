@@ -76,6 +76,10 @@ export const HumanInfo: FC = () => {
                 value: defaultValues?.position?._id,
                 label: defaultValues?.position?.name
               },
+              field: defaultValues?.field && {
+                value: defaultValues?.field?._id,
+                label: defaultValues?.field?.name
+              },
               area: defaultValues?.area && {
                 value: defaultValues?.area?._id,
                 label: defaultValues?.area?.name
@@ -157,17 +161,8 @@ export const HumanInfo: FC = () => {
       );
     },
     [handleFinishForm, openModal]
-  );
-
-  // useEffect(() => {
-  //   if(!user || !Object.keys(detailHuman).length || !dataUserAccess) return;
-
-  //   if(!detailHuman.department?.members?.includes(user._id) && dataUserAccess?.level !== 0) {
-  //     history.push('/human/home');
-  //     toast.error('Bạn không có quyền xem thông tin người dùng này');
-  //   }
-  // }, [detailHuman, dataUserAccess])
-
+  )
+  
   if (loading) {
     return <Loader className="border-primary" />;
   }
@@ -250,6 +245,7 @@ export const HumanInfo: FC = () => {
             department: detailHuman.department,
             birthday: detailHuman.birthday,
             position: detailHuman?.position,
+            field: detailHuman?.field,
             identity: detailHuman.identity,
             address: detailHuman.address,
             dateProvice: detailHuman.dateProvice,

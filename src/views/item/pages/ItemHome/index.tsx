@@ -12,7 +12,7 @@ import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { Doctype } from "typings/items";
 import { Link } from "react-router-dom";
-import { GRADE_MISTAKE } from "apis/localdb/index";
+import { GRADE_MISTAKE, TYPE_SUBTYPE } from "apis/localdb/index";
 
 export const ItemHome: FC<{ type: number }> = ({ type }) => {
     const { openModal } = useModal();
@@ -30,6 +30,7 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
         unitprice: '',
         sellingUnitprice: '',
         type: +type,
+        subType: 1,
         grade: 1,
         salesChannel: 1,
         amount: 0,
@@ -96,13 +97,14 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, linkItem, name, sign, unit, note, description, type, salesChannel, amount, alert, grade, unitprice, sellingUnitprice } = newListIDChecked[0];
+            const { _id, linkItem, name, sign, unit, note, description, type, subType, salesChannel, amount, alert, grade, unitprice, sellingUnitprice } = newListIDChecked[0];
             setInitialValues({
                 doctypeID: _id,
                 linkItem,
                 name,
                 sign,
                 type,
+                subType,
                 grade: grade ? grade : 1,
                 salesChannel,
                 amount,
@@ -132,6 +134,7 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
                 unit: '',
                 description: '',
                 type,
+                subType: 1,
                 grade: 1,
                 salesChannel: 1,
                 amount: 0,
@@ -142,7 +145,7 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
         openModal(
             <div
                 className={"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
-                style={{height: "700px"}}>
+                style={{height: "750px"}}>
                 <ModalCreateOrUpdateDoctype
                     modalType={modalType}
                     initialValues={initValues}
@@ -151,40 +154,6 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
             </div>
         )
     }
-
-    // const handleClick = (item: any) => {
-    //     getStateChecked(item._id)
-    //     onClickCheckButton(item)
-
-    //     if(doctypesChecked.length === 1){
-    //         handleOpenModalCreateOrUpdate("update")
-    //     }
-
-    //     // console.log(doctype)
-
-    //     // // Gọi setInitialValues
-    //     // setInitialValues({
-    //     //   doctypeID: doctype._id,
-    //     //   linkItem: doctype.linkItem,
-    //     //   name: doctype.name,
-    //     //   sign: doctype.sign,
-    //     //   unit: doctype.unit,
-    //     //   description: doctype.description,
-    //     //   type: doctype.type,
-    //     //   grade: doctype.grade,
-    //     //   salesChannel: doctype.salesChannel,
-    //     //   amount: doctype.amount,
-    //     //   alert: doctype.alert,
-    //     // });
-    
-    //     // Gọi handleOpenModalCreateOrUpdate
-    //     // handleOpenModalCreateOrUpdate("update");
-
-    //     // // Đảm bảo mở modal sau khi state đã cập nhật
-    //     // setTimeout(() => {
-    //     //     handleOpenModalCreateOrUpdate("update");
-    //     // }, 500); // Đảm bảo React cập nhật state trước khi mở modal
-    //   }
 
     //_____Import excel
     const [dataImport, setDataImport] = useState([]);
@@ -281,7 +250,7 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1" style={{width: "20px"}}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Danh mục cha
+                                Danh mục cha/Phân loại
                             </div>
                         </th>
                         <th className="py-1" style={{width: "20px"}}>
@@ -352,7 +321,10 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
                                 <p className="text-cbs-highlight-color text-[12px]"><i>Cấp độ: {item?.grade ? GRADE_MISTAKE[Number(item?.grade) - 1].text : ''}</i></p>
                                 <p className="text-primary-gray text-[12px]"><i>{item?.userUpdate?.fullname} {moment(item.modifyAt).format('DD/MM/YYYY - HH:mm')}</i></p>
                             </td>
-                            <td className="py-1 px-2">{item?.parent?.name}</td>
+                            <td className="py-1 px-2">
+                                {item?.parent?.name}
+                                <p><i>{item?.subType ? TYPE_SUBTYPE[Number(item?.subType) - 1].text : ''}</i></p>
+                            </td>
                             <td className="py-1 px-2">{item?.linkItem?.name}</td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.unit}</td>

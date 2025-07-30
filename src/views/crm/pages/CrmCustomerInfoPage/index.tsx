@@ -1,7 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC, useState, useRef, useCallback, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
@@ -66,6 +65,10 @@ export const CrmCustomerInfoPage: FC = () => {
               position: defaultValues?.position && {
                 value: defaultValues?.position?._id,
                 label: defaultValues?.position?.name
+              },
+              field: defaultValues?.field && {
+                value: defaultValues?.field?._id,
+                label: defaultValues?.field?.name
               },
               area: defaultValues?.area && {
                 value: defaultValues?.area?._id,
@@ -197,6 +200,7 @@ export const CrmCustomerInfoPage: FC = () => {
             department: detailHuman.department,
             birthday: detailHuman.birthday,
             position: detailHuman?.position,
+            field: detailHuman?.field,
             identity: detailHuman.identity,
             address: detailHuman.address,
             dateProvice: detailHuman.dateProvice,

@@ -94,6 +94,8 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
     React.useState(initialValues?.workingStatus?.label || "");
   const [searchContractTypeValue, setSearchContractTypeValue] =
     React.useState(initialValues?.contractType?.label || "");
+  const [searchFieldTypeValue, setSearchFieldTypeValue] =
+    React.useState(initialValues?.field?.label || "");
   const [searchAreaValue, setSearchAreaValue] = React.useState(
     initialValues?.area?.label || ""
   );
@@ -130,16 +132,22 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
   } = usePosition({ keyword: searchPositionValue }, true);
 
   // Status
-  const { listDoctypes: listWorkingStatus } = useQueryListDoctype({
+  const { listDoctypes: listFieldType } = useQueryListDoctype({
     limit: 50,
-    type: 9,
-    keyword: searchWorkingStatusValue,
+    type: 7,
+    keyword: searchFieldTypeValue,
   });
 
   const { listDoctypes: listContractType } = useQueryListDoctype({
     limit: 50,
     type: 8,
     keyword: searchContractTypeValue,
+  });
+
+  const { listDoctypes: listWorkingStatus } = useQueryListDoctype({
+    limit: 50,
+    type: 9,
+    keyword: searchWorkingStatusValue,
   });
 
   const { listAreas: area } = useFetchListArea({
@@ -162,6 +170,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       type: 1,
       department: "",
       position: "",
+      field: "",
       gender: 1,
       workingStatus: "",
       realStatus: 1,
@@ -266,6 +275,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         area2: values?.area2?.value,
         department: values?.department?.value,
         position: values?.position?.value,
+        field: values?.field?.value,
         workingStatus: values?.workingStatus?.value,
         linkUser: values?.linkUser?.value,
         parent: values?.parent?.value,
@@ -1490,31 +1500,80 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     
-                    <div className="w-1/5 flex items-center">
-
-                    </div>
-
-                    <div className="w-1/5 flex items-center">
-
-                    </div>
-
-                    <div className="w-1/5 flex items-center">
-
+                  <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Lĩnh vực chuyên môn
+                      </span>
+                      <DropdownSearchable
+                        onchangeValue={(value) => {
+                          setFieldValue("field", value)
+                        }
+                        }
+                        onSearchInputChange={debounce(
+                          (value) => setSearchFieldTypeValue(value),
+                          500
+                        )}
+                        placeholder="Lĩnh vực chuyên môn..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div
+                            style={{ width: 100 }}
+                            className="flex items-center"
+                          >
+                            <p
+                              style={{
+                                textOverflow: "ellipsis",
+                                maxWidth: "100%",
+                                minWidth: 0,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                flex: "1 1 auto",
+                              }}
+                            >
+                              {item.text}
+                            </p>
+                          </div>
+                        )}
+                        initialValue={defaultValues?.field}
+                        data={listFieldType.map((field) => {
+                          return ({
+                            label: `${field.name}`,
+                            value: field._id,
+                          })
+                        })}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        inlineSearch={true}
+                      />
                     </div>
 
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
-                        Số ngày nghỉ phép phát sinh
-                      </span>
-                      <Field
-                        type="text"
-                        name="numberOnLeavePlus"
-                        placeholder="Việc Hỉ, Sinh, Hiếu"
-                        className="w-full h-6 outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
+                          Số ngày nghỉ phép phát sinh
+                        </span>
+                        <Field
+                          type="text"
+                          name="numberOnLeavePlus"
+                          placeholder="Việc Hỉ, Sinh, Hiếu"
+                          className="w-full h-6 outline-none pl-3"
+                          onBlur={(e: FormEvent<HTMLInputElement>) => {
+                            handleBlur(e);
+                          }}
+                        />
+                    </div>
+
+                    <div className="w-1/5 flex items-center">
+
+                    </div>
+
+                    <div className="w-1/5 flex items-center">
+                      
                     </div>
 
                   </div>

@@ -1,8 +1,9 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState } from "react";
+import { FC, useCallback, useState, useEffect } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -16,6 +17,10 @@ import { SearchInput } from "shareComponents/common";
 
 /*=====6.HOOKS/APIS=====*/
 import { useFunda } from "services/hooks/items/useFunda";
+import { createLinkAndClick } from "utils";
+import moment from "moment";
+import { useJournalList, useJournal } from "services/hooks/accounting/useGeneralJournal";
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
 
 export const AccountingHomePage: FC = () => {
   const [keyword, setKeyword] = useState('');
@@ -37,6 +42,49 @@ export const AccountingHomePage: FC = () => {
     setKeyword(event.target.value);
   }, 500);
 
+  const today = new Date();
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  const currentMonth = new Date().getMonth()
+  const [inputFilter, setInputFilter] = useState({
+    fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+    toDate: lastDayOfMonth
+  })
+
+  //_____Excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  })
+  const { exportExcelAsync } = useJournal({})
+  const handleExportExcel = async (param: any) => {
+    try {
+        console.log('Clicked with parameter:', param);
+          setStateExport({ isExporting: true })
+          const { error, data } = await exportExcelAsync({
+              type: param.option,
+              fromDate: inputFilter.fromDate,
+              toDate: inputFilter.toDate,
+            })
+
+          if(error) {
+              return toast.warn(data?.message);
+          }
+
+          data && createLinkAndClick(data, '_self')
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+          setStateExport({ isExporting: false })
+    }
+  }
+
+  const handleOnChangeDate = useCallback((date, input) => {
+  if (input) {
+    setInputFilter((value) => ({ ...value, toDate: date }))
+  } else {
+    setInputFilter((value) => ({ ...value, fromDate: date }))
+  }
+  }, [])
+
   return (
     <main className="relative h-full">
       <header className="sticky top-0 bg-primary-light z-10">
@@ -48,6 +96,12 @@ export const AccountingHomePage: FC = () => {
               classNameInput="outline-none w-[296px]"
               onChange={onChangeSearch}
             />
+            <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+            <button className={"ml-10 px-4 py-2 text-left hover:bg-cbs-table-header text-cbs-highlight-color"}
+              onClick={() => handleExportExcel({option: 4})}
+            >
+                Tải Báo cáo nhập liệu
+            </button>
           </div>
 
         </div>

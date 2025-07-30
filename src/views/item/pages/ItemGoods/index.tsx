@@ -60,17 +60,15 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
 	    images: [] as ImageProps[],
 	    index: 0,
 	    createAt: ""
-  	});
-
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
+  	})
+    const fileInputRef = useRef<HTMLInputElement>(null)
     const { addFileToUpload } = useUpload({
         appID: APP_ID.ITEM.id,
         companyID: user?.company?._id,
-    });
+    })
 
 	const history = useHistory();
-    const { closeModal, openModal } = useModal();
+    const {  openModal } = useModal();
     const [keyword, setKeyword] = useState('');
 	const { parentID } = useParams<{ parentID: string }>();
 
@@ -94,6 +92,15 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         convert: '',
         category: '',
         convertQuantity: 1,
+        description: '',
+        features: '',
+        ingredients: '',
+        benefits: '',
+        instructions: '',
+        sideEffects: '',
+        warnings: '',
+        storage: '',
+        expired: '',
     })
 
     const {
@@ -106,11 +113,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         params: { 
             keyword, 
             isListParentOfListChilds: "1", 
-            parentID,
-            // populates: JSON.stringify({
-            //     path: 'parent',
-            //     select: '_id name sign path'
-            // })
+            parentID
         },
         isFetchList: true
     })
@@ -146,7 +149,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, category, convertQuantity, status, usage } = newListIDChecked[0];
+            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, category, convertQuantity, status, usage, description, features, ingredients, benefits, instructions, sideEffects, warnings, storage, expired } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 type,
@@ -165,7 +168,16 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 note,
                 convert,
                 category,
-                convertQuantity
+                convertQuantity,
+                description, 
+                features, 
+                ingredients,
+                benefits,
+                instructions,
+                sideEffects,
+                warnings,
+                storage,
+                expired
             });
         } else {
             clearData();
@@ -214,15 +226,24 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 unitPrice2: 0,
                 unitPrice3: 0,
                 unitPrice4: 0,
-                note: ''
-            };
+                note: '',
+                description: '',
+                features: '',
+                ingredients: '',
+                benefits: '',
+                instructions: '',
+                sideEffects: '',
+                warnings: '',
+                storage: '',
+                expired: '',
+            }
         }
 
         openModal(
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1200px",
+                    height: "1700px",
                 }}
             >
                 <ModalCreateOrUpdateGoods
@@ -498,11 +519,50 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 <Link to={`/item/goods/${item._id}`}>
                                     {item.amountChilds>0? <b>{item?.name} ({item.amountChilds})</b>: item.name }
-                                    <p>{item?.namecv}</p>
+                                    {/* <p>{item?.namecv}</p> */}
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
-                                <p className="text-primary-gray text-[12px] text-cbs-highlight-color font-bold">{item?.project?.name}</p>
-                                <p className="text-primary-gray text-[14px] text-cbs-highlight-color font-bold">{item?.category?.name}</p>
+                                <p className="text-primary-gray text-[12px] text-cbs-highlight-color font-bold">Dự án: {item?.project?.name}</p>
+                                <p className="text-primary-gray text-[14px] text-cbs-highlight-color font-bold">Chuyên mục: {item?.category?.name}</p>
+                                <div>
+                                    <p className="text-primary-gray">Mô tả sản phẩm</p>
+                                    <p>{item?.description}</p>
+                                    <hr />
+                                </div>
+                                <div>
+                                    <p className="text-primary-gray">Đặc điểm nổi bật</p>
+                                    <p>{item?.features}</p>
+                                </div>
+                                <div>
+                                    <p className="text-primary-gray">Thành phần</p>
+                                    <p>{item?.ingredients}</p>
+                                    <hr />
+                                </div>
+                                <div>
+                                    <p className="text-primary-gray">Công dụng/lợi ích</p>
+                                    <p>{item?.benefits}</p>
+                                    <hr />
+                                </div>
+                                <div>
+                                    <p className="text-primary-gray">Cách dùng</p>
+                                    <p>{item?.instructions}</p>
+                                    <hr />
+                                </div>
+                                <div>
+                                    <p className="text-primary-gray">Tác dụng phụ</p>
+                                    <p>{item?.sideEffects}</p>
+                                    <hr />
+                                </div>
+                                <div>
+                                    <p className="text-primary-gray">Lưu ý</p>
+                                    <p>{item?.warnings}</p>
+                                    <hr />
+                                </div>
+                                <div className="text-primary-gray">
+                                    <p>Bảo quản</p>
+                                    <p>{item?.storage}</p>
+                                    <hr />
+                                </div>
                                 <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
@@ -512,7 +572,9 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.sellingUnitprice)}
+                                <hr />
                                 <p><i>{formatNumberMoney(item?.listedUnitprice)}</i></p>
+                                <p className="text-left"><i>Thời hạn ưu đãi: {item?.expired ? moment(item?.expired).format('DD/MM/YYYY HH:mm') : ''}</i></p>
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.unitPrice)}
@@ -536,7 +598,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 {item.note}
                             </td>
                             <td className="py-1 px-2">
-                            <div style={{display: "flex"}}>
+                                <div style={{display: "flex"}}>
 									{item?.images?.map((image: any, i: number) => {
 										return (
 											<div

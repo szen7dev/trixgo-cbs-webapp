@@ -960,63 +960,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     }
                                     label={<span className="text-[13px]" title="Shopee Food">Shopee F</span>}
                                   />
-                                  <FormControlLabel
+                                   <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="4"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 4);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 4) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Gojek</span>}
-                                  />
-                                  {/* <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="5"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 5);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 5) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Baemin</span>}
-                                  /> */}
-                                  {/* <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="6"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 6);
-                                          setFieldValue("paymentMethod", "2");
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 6) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Loship</span>}
-                                  /> */}
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="7"
+                                    value="3"
                                     control={
                                       <Radio
                                         style={{}}
@@ -1030,88 +976,44 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         checked={(values.salesChannel === 7) ? true : false}
                                       />
                                     }
-                                    label={<span className="text-[13px] mr-1.5">Bee</span>}
-                                  />
-
-                                  {/* <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    title="Sàn TikTok Shop"
-                                    value="8"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 8);
-                                          setFieldValue("paymentMethod", "2")
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 8) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">TikTok</span>}
+                                    label={<span className="text-[13px]" title="Be">Be</span>}
                                   />
                                   <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    title="Sàn Shopee (không phải Shopee Food)"
-                                    value="9"
+                                    value="3"
                                     control={
                                       <Radio
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
                                         onChange={() => {
-                                          setFieldValue("salesChannel", 9);
+                                          setFieldValue("salesChannel", 12);
                                           setFieldValue("paymentMethod", "2");
                                           setService("2");
                                         }}
-                                        checked={(values.salesChannel === 9) ? true : false}
+                                        checked={(values.salesChannel === 12) ? true : false}
                                       />
                                     }
-                                    label={<span className="text-[13px]">Shopee S</span>}
+                                    label={<span className="text-[13px]" title="Xanh Ngon">Xanh Ngon</span>}
                                   />
-                                  
                                   <FormControlLabel
                                     sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    title="Sàn Lazada"
-                                    value="10"
+                                    value="3"
                                     control={
                                       <Radio
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
                                         onChange={() => {
-                                          setFieldValue("salesChannel", 10);
-                                          setFieldValue("paymentMethod", "2")
+                                          setFieldValue("salesChannel", 13);
+                                          setFieldValue("paymentMethod", "2");
                                           setService("2");
                                         }}
-                                        checked={(values.salesChannel === 10) ? true : false}
+                                        checked={(values.salesChannel === 13) ? true : false}
                                       />
                                     }
-                                    label={<span className="text-[13px]">Lazada</span>}
-                                  /> */}
-{/*                                   
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    title="Sàn Reels"
-                                    value="11"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("salesChannel", 11);
-                                          setFieldValue("paymentMethod", "2")
-                                          setService("2");
-                                        }}
-                                        checked={(values.salesChannel === 11) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Reels</span>}
-                                  /> */}
-
+                                    label={<span className="text-[13px]" title="E-GetS">E-GetS</span>}
+                                  />
                                 </RadioGroup>
                               </FormControl>
                             </div>

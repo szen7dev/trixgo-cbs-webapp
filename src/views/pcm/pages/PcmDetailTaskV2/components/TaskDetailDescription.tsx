@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import iconNote from "assets/images/icons8-note-48.svg";
-import { Editor } from "@tinymce/tinymce-react";
-import { Editor as EditorType } from "tinymce";
+// import { Editor } from "@tinymce/tinymce-react";
+// import { Editor as EditorType } from "tinymce";
 import { Task } from "typings/task";
 import { useTask } from "services/hooks/useTask";
 import { humanFileSize } from 'utils/converter';
@@ -16,6 +16,7 @@ import { ModalZoomView } from "shareComponents/common";
 import { ImageProps } from "typings/common";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import { useFileCore } from 'services/hooks/useFileCore';
+import { QuillEditor } from "shareComponents/common/QuillEditor";
 
 type Props = {
     task: Task;
@@ -33,8 +34,9 @@ function checkCreateAtWith60minute(time: any){
 }
 
 export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
-    const editorRef = useRef<EditorType>();
+    // const editorRef = useRef<EditorType>();
     const { updateFileAsync } = useFileCore();
+    const [description, setDescription] = useState(task.description);
     const [editDescription, setEditDescription] = useState(false);
     const [isHasPermissionUpdateDescription, setIsPermissionUpdateDescription] = useState(false);
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
@@ -48,19 +50,28 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
     const { updateTaskAsync } = useTask({});
 
     const handleUpdateDescription = async () => {
-        if (editorRef.current) {
-            const contentRaw = editorRef.current.getContent({ format: 'raw' });
-            const contentRawCv = editorRef.current.getContent({ format: 'text' });
+        await updateTaskAsync({
+            taskID: task._id,
+            isUpdateNews: true,
+            description: description,
+            descriptioncv: description,
+        });
+        refetchInfo?.();
+        setEditDescription(false);
 
-            await updateTaskAsync({
-                taskID: task._id,
-                isUpdateNews: true,
-                description: contentRaw,
-                descriptioncv: contentRawCv,
-            });
-            refetchInfo?.();
-            setEditDescription(false);
-        }
+        // if (editorRef.current) {
+        //     const contentRaw = editorRef.current.getContent({ format: 'raw' });
+        //     const contentRawCv = editorRef.current.getContent({ format: 'text' });
+
+        //     await updateTaskAsync({
+        //         taskID: task._id,
+        //         isUpdateNews: true,
+        //         description: contentRaw,
+        //         descriptioncv: contentRawCv,
+        //     });
+        //     refetchInfo?.();
+        //     setEditDescription(false);
+        // }
     }
 
     const handleClickImage = (file: any, index: number) => {
@@ -108,7 +119,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                             </div> : (
                                 isHasPermissionUpdateDescription ? (
                                     <>
-                                        <Editor
+                                        {/* <Editor
                                             onInit={(evt, editor) => {
                                                 editorRef.current = editor;
                                             }}
@@ -168,7 +179,23 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                     });
                                                 },
                                             }}
+                                        /> */}
+
+                                        <QuillEditor
+                                            placeholder="Nhập nội dung"
+                                            value={description}
+                                            onChange={(value) => setDescription(value)}
+                                            height="350px"
                                         />
+
+                                        {/* <textarea
+                                            className={"w-full h-[350px] p-2 border border-primary-border rounded"}
+                                            defaultValue={task.description}
+                                            onChange={(e) => {
+                                                setDescription(e.target.value);
+                                            }}
+                                        /> */}
+
                                         <div className={"flex items-center justify-end mt-2"}>
                                             <button
                                                 onClick={() => setEditDescription(false)}

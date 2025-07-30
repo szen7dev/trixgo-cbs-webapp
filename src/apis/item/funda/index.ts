@@ -35,8 +35,7 @@ async function fetchListFunda(params: any) {
             },
             ...params
         }
-    }
-    )
+    })
     return data;
 }
 

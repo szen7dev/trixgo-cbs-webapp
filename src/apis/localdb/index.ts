@@ -47,6 +47,45 @@ export const APP_ROLES = [
     { value: 14, text: 'Nhóm khách mời của công ty', permission: { read: 1, create: 0, update: 0, deleteIn: 0 } },
 ]
 
+// LOẠI MEDIA MENU
+export const MEDIA_MENU_TYPES = [
+    { value: 1, text: 'Trang sản phẩm' },
+    { value: 2, text: 'Trang bài viết' },
+    { value: 3, text: 'Trang khác' },
+]
+
+export const MEDIA_TAG_TYPES = [
+    { value: 1, text: 'Loại 1' },
+    { value: 2, text: 'Loại 2' },
+    { value: 3, text: 'Loại 3' },
+]
+
+export const MEDIA_BANNER_TYPES = [
+    { value: 1, text: 'Banner 1' },
+    { value: 2, text: 'Banner 2' },
+    { value: 3, text: 'Banner 3' },
+    { value: 4, text: 'Banner 4' },
+    { value: 5, text: 'Banner 5' },
+    { value: 6, text: 'Slide' },
+    { value: 7, text: 'Chức năng phổ biến' },
+    { value: 8, text: 'Footer 1' },
+    { value: 9, text: 'Footer 2' },
+    { value: 10, text: 'Footer 3' },
+    { value: 11, text: 'Footer 4' },
+]
+
+export const MEDIA_COMBO_TYPES = [
+    { value: 1, text: 'Loại 1' },
+    { value: 2, text: 'Loại 2' },
+    { value: 3, text: 'Loại 3' },
+]
+
+export const MEDIA_CONFIG_TYPES = [
+    { value: 1, text: 'ZNS (Zalo OA)' },
+    { value: 2, text: 'Facebook' },
+    { value: 3, text: 'Contact công ty' },
+]
+
 // NHÓM CHỨC NĂNG ỨNG DỤNG MẶC ĐỊNH (PHỤC VỤ CẤU HÌNH BAN ĐẦU)
 export const PROJECT_ROLES = [
     { value: 21, text: 'Nhóm quản trị Dự án/Phòng ban/Hợp đồng', permission: { read: 1, create: 1, update: 1, deleteIn: 1 } },
@@ -136,8 +175,7 @@ export const PROJECT_CAPITAL = [
 ]
 
 // LOẠI DANH BẠ
-// export const ACCESS_SALARY_TEMP = ['6046bcf1b55525368b11ab79','658cdaab5c952c00131287db','6046bcf1b55525368b11ab91','65a057f21120870012cc60e5']
-export const ACCESS_SALARY_TEMP = ['6046bcf1b55525368b11ab79','658cdaab5c952c00131287db','6046bcf1b55525368b11ab91','65a057f21120870012cc60e5','66c68f46d1fd64001345ee11','654202aea7b45500126c97a6','63f036dde3e82d0012c161f8','67cdd53ddf1f3d0012a14396']
+export const ACCESS_SALARY_TEMP = ['6046bcf1b55525368b11ab79','658cdaab5c952c00131287db','6046bcf1b55525368b11ab91','65a057f21120870012cc60e5','66c68f46d1fd64001345ee11','654202aea7b45500126c97a6','63f036dde3e82d0012c161f8','63b2a54c1b78e400126f0b7a','63b7777eaa898e0012b99f56','5ee5ef476d009825b19ecc34','67cdd53ddf1f3d0012a14396']
 
 // LOẠI DANH BẠ
 export const CONTACT_TYPES = [
@@ -488,6 +526,7 @@ export const PCM_STATUS_TASK = [
     { value: 6, text: 'Tiếp tục theo dõi', class: 'bg-blue-300', backgroud: '5bc0de', key: 'follow_up' },
     { value: 7, text: 'Chưa đủ điều kiện duyệt', class: 'bg-yellow-300', backgroud: 'f6bb29', key: 'lock' },
     { value: 8, text: 'Chất lượng kiểm tra không đạt', class: 'bg-red-400', backgroud: 'ffb3b3', key: 'lock' },
+    { value: 9, text: 'Hủy bỏ', class: 'bg-red-400', backgroud: 'ffb3b3', key: 'lock' },
 ]
 
 // TRẠNG THÁI CHECKLIST
@@ -662,6 +701,12 @@ export const TYPE_MISTAKE = [
     { _id: 2, text: 'Khách hàng phát hiện' },
 ]
 
+export const TYPE_SUBTYPE= [
+    { _id: 1, text: 'Chung' },
+    { _id: 2, text: 'Khảo sát khách hàng' },
+    { _id: 3, text: 'Hành trình trải nghiệm' },
+]
+
 export const STATUS_MISTAKE = [
     { _id: 1, text: 'Hoàn thành' },
     { _id: 2, text: 'Hủy' },
@@ -702,6 +747,15 @@ export const STORE_TYPES = [
     { value: 6, text: 'Văn phòng phẩm' },
     { value: 7, text: 'Quỹ tiền mặt' },
     { value: 8, text: 'Quỹ ngân hàng' },
+]
+
+export const STORE_STATUS = [
+    { value: 1, text: 'Khởi tạo' },
+    { value: 2, text: 'Chờ ship lấy hàng' },
+    { value: 3, text: 'Đang vận chuyển' },
+    { value: 4, text: 'Giao không thành công' },
+    { value: 5, text: 'Hoàn thành' },
+    { value: 6, text: 'Hủy' },
 ]
 
 export const CASH_TYPES = [
@@ -746,11 +800,17 @@ export const FNB_SHIFT = [
 export const FNB_CHANNEL = [
     { value: 1, text: 'Offline', sign: "of" },
     { value: 2, text: 'Grab', sign: "gf"  },
-    { value: 3, text: 'Shopee', sign: "sp"  },
+    { value: 3, text: 'Shopee Food', sign: "spf"  },
     { value: 4, text: 'Gojek', sign: "go"  },
-    { value: 5, text: 'Baemin', sign: "bm"  },
-    { value: 6, text: 'Loship', sign: "ls"  },
-    { value: 7, text: 'Bee', sign: "be"  },
+    { value: 5, text: 'Baemin', sign: "bae"  },
+    { value: 6, text: 'Loship', sign: "lo"  },
+    { value: 7, text: 'Be', sign: "be"  },
+    { value: 8, text: 'TikTok Shop', sign: "tts"  },
+    { value: 9, text: 'Shopee', sign: "sp"  },
+    { value: 10, text: 'Lazada', sign: "laz"  },
+    { value: 11, text: 'Reels', sign: "ree"  },
+    { value: 12, text: 'Xanh Ngon', sign: "xn"  },
+    { value: 13, text: 'Egets', sign: "eget"  },
 ]
 
 export const FNB_BOOK_PLAN = [

@@ -25,10 +25,10 @@ export const GoodsRepository: GoodsRepository = {
     updateGoods: (params: any) => updateGoods(params),
     deleteGoods: (ids: Array<string>) => deleteGoods(ids),
     fetchListGoods: async (params) => fetchListGoods(params),
-    fetchDetailGoods: async (GoodsID, params) => fetchListGoods(params),
-    downloadTemplateExcel: params => downloadTemplateExcel(params), 
-    importExcel: params => importExcel(params), 
-    exportExcel: params => exportExcel(params), 
+    fetchDetailGoods: async (GoodsID, params) => fetchListGoods({ ...params, goodsID: GoodsID }),
+    downloadTemplateExcel: params => downloadTemplateExcel(params),
+    importExcel: params => importExcel(params),
+    exportExcel: params => exportExcel(params),
 }
 
 /*=====APIS=====*/

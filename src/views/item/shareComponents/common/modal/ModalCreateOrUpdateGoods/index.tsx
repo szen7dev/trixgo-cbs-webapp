@@ -4,6 +4,7 @@ import { useModal } from "services/hooks/useModal";
 import { useGoods } from "services/hooks/items/useGoods";
 import { toast } from "react-toastify";
 import { DropdownSearchable } from "shareComponents/common";
+import moment from 'moment';
 import API from "../../../../../../apis/repository";
 
 export const ModalCreateOrUpdateGoods: FC<any> = ({
@@ -28,6 +29,14 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     convert: '',
     category: '',
     convertQuantity: 1,
+    description: '',
+    features: '',
+    ingredients: '',
+    benefits: '',
+    instructions: '',
+    sideEffects: '',
+    warnings: '',
+    storage: '',
   }
 }) => {
   const { closeModal } = useModal()
@@ -47,9 +56,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
   const {
       list: listGoods,
       hasNextPage,
-      refetch,
       fetchNextPage,
-      totalRecord,
       insertAsync, 
       updateAsync
   } = useGoods({
@@ -63,7 +70,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         const data = await API
           .get('/api/medias/menu', {
             params: {
-
+              status: 1
             },
           })
           .then((res) => res.data?.data);
@@ -429,6 +436,107 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </section>
 
+      <section className="px-5 py-1">
+        <p>Mô tả sản phẩm</p>
+        <input
+          type="text"
+          placeholder="Mô tả sản phẩm"
+          name="description"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData.description}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 py-1">
+        <p>Đặc điểm nổi bật</p>
+        <input
+          type="text"
+          placeholder="Đặc điểm nổi bật"
+          name="features"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData.features}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 py-1">
+        <p>Thành phần</p>
+        <input
+          type="text"
+          placeholder="Thành phần"
+          name="ingredients"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData.ingredients}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 py-1">
+        <p>Công dụng/lợi ích</p>
+        <input
+          type="text"
+          placeholder="Công dụng/lợi ích"
+          name="benefits"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData.benefits}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 py-1">
+        <p>Cách dùng</p>
+        <input
+          type="text"
+          placeholder="Cách dùng"
+          name="instructions"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData.instructions}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 py-1">
+        <p>Tác dụng phụ</p>
+        <input
+          type="text"
+          placeholder="Tác dụng phụ"
+          name="sideEffects"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData.sideEffects}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 py-1">
+        <p>Lưu ý</p>
+        <input
+          type="text"
+          placeholder="Lưu ý"
+          name="warnings"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData.warnings}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 py-1">
+        <p>Bảo quản</p>
+        <input
+          type="text"
+          placeholder="Bảo quản"
+          name="storage"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData.storage}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Thời hạn ưu đãi
+        </label>
+        <input
+          type="date"
+          placeholder="Thời hạn ưu đãi"
+          name="expired"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={moment(formData.expired).format("YYYY-MM-DD")}
+          onChange={onChange}
+        />
+      </section>
       <footer className="absolute right-0 bottom-3 px-5 py-1">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
           onClick={handleSubmit}>

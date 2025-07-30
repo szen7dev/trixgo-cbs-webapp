@@ -1313,6 +1313,10 @@ export const DashboardV2: FC<Props> = () => {
                   id: 8,
                   text: "Chất lượng kiểm tra không đạt",
                 },
+                {
+                  id: 9,
+                  text: "Hủy bỏ",
+                },
               ]}
             />
           )}

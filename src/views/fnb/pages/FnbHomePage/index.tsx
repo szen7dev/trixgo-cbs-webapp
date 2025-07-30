@@ -18,10 +18,9 @@ import "views/pcm/styles/pcm.module.css";
 import offlineChannelIcon from "assets/images/fnb/offline.svg";
 import grabChannelIcon from "assets/images/fnb/grab.svg";
 import shopeeChannelIcon from "assets/images/fnb/shopee.svg";
-import gojekChannelIcon from "assets/images/fnb/gojek.svg";
-import baemineChannelIcon from "assets/images/fnb/baemin.svg";
-import loshipChannelIcon from "assets/images/fnb/loship.svg";
 import beeChannelIcon from "assets/images/fnb/bee.svg";
+import egetsChannelIcon from "assets/images/fnb/egets.svg";
+import xanhngonChannelIcon from "assets/images/fnb/xanhngon.svg";
 import { IconImage } from 'views/media/shareComponents/common';
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconRefresh from "assets/images/icons8-refresh.png";
@@ -79,17 +78,14 @@ export const getIconApp = (salesChannel: number) => {
     case 3:
       return shopeeChannelIcon
 
-    case 4:
-      return gojekChannelIcon
-
-    case 5:
-      return baemineChannelIcon
-
-    case 6:
-      return loshipChannelIcon
-
     case 7:
       return beeChannelIcon
+
+    case 12:
+      return xanhngonChannelIcon
+      
+    case 13:
+      return egetsChannelIcon
 
     default:
       return offlineChannelIcon
@@ -1008,50 +1004,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               )
             }
           />
-
-          {/* <DropdownSearchableV2
-            reset={reset}
-            selectOneByOne={true}
-            className={"mr-1 border border-primary-border rounded-lg"}
-            placeholder={"Lỗi"}
-            showTriangle={true}
-            isMultiple={false}
-            disableSearch={true}
-            formatItem={{
-              id: "value",
-              text: "label",
-            }}
-            renderItem={(item) => (
-              <p className={"min-w-[300px]"}>{item.text}</p>
-            )}
-            data={[{
-              value: 0, text: 'Không lỗi',
-            },
-            {
-              value: 1, text: 'Có lỗi'
-            }].map((item: any) => ({
-              label: `${item.text}`,
-              value: item.value,
-            }))}
-            onchangeValue={(value) => {
-              dispatch(
-                setQueryFnb({
-                  ...queryFnb,
-                  isMistake: value.id,
-                })
-              );
-              setPageIndex(0);
-              ref.current && ref.current.resetPaginate();
-            }}
-            onClearData={() =>
-              dispatch(
-                setQueryFnb({
-                  ...queryFnb,
-                  isMistake: 0,
-                })
-              )
-            }
-          /> */}
         </div>
 
         <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
@@ -1140,7 +1092,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 Tải đơn hàng
               </button>
               <button onClick={() => handleExportExcel3({ option: 1 })} title="Tải dữ liệu Excel">
-                Tải sản phẩm
+                Tải sản phẩm (1)
+              </button>
+              <button onClick={() => handleExportExcel3({ option: 4 })} title="Tải dữ liệu Excel">
+                Tải sản phẩm (2)
               </button>
               <button onClick={() => handleExportExcel3({ option: 2 })} title="Tải phân loại sản phẩm">
                 Tải DM1
@@ -1157,12 +1112,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   Tải Phân loại doanh số
                 </button>
               )}
-
-              {/* {(fnbAccessData.includes(`${user?.email}`)) && (
-                <button onClick={handleExportExcel22} title="Tải dữ liệu Excel">
-                  Tải Khách hàng
-                </button>
-              )} */}
 
               {idsChecked.length === 1 && (
                 <label className="w-8 h-8 rounded-md flex justify-center items-center cursor-pointer">

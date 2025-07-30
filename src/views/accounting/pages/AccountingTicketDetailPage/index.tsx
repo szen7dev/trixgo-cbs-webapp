@@ -85,34 +85,34 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
     return true;
   }
 
-    //_____Excel
-    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-      isExporting: false,
-    })
-    const { exportExcelAsync } = useJournal({})
-    const handleExportExcel = async (param: any) => {
-      try {
-          console.log('Clicked with parameter:', param);
-            setStateExport({ isExporting: true })
-            const { error, data } = await exportExcelAsync({
-              type: param.option,
-              voucherID: params.id,
-              filterParams: {
-                voucherID: params.id
-              }
-             })
-
-            if(error) {
-                return toast.warn(data?.message);
+  //_____Excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  })
+  const { exportExcelAsync } = useJournal({})
+  const handleExportExcel = async (param: any) => {
+    try {
+        console.log('Clicked with parameter:', param);
+          setStateExport({ isExporting: true })
+          const { error, data } = await exportExcelAsync({
+            type: param.option,
+            voucherID: params.id,
+            filterParams: {
+              voucherID: params.id
             }
+            })
 
-            data && createLinkAndClick(data, '_self')
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false })
-      }
+          if(error) {
+              return toast.warn(data?.message);
+          }
+
+          data && createLinkAndClick(data, '_self')
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+          setStateExport({ isExporting: false })
     }
+  }
 
   const openModalUpdate = () => {
     openModal(

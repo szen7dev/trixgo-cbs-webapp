@@ -59,17 +59,6 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
     return badge.amountUnreadTask || data?.data?.amountUnreadTask || 0;
   }, [data?.data?.amountUnreadTask, badge.amountUnreadTask])
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setEnabled(true);
-  //   }, 300);
-  //   if (firstRoute !== "messages") {
-  //     setTimeout(() => {
-  //       getListConversation({ keyword: "" });
-  //     }, 300);
-  //   }
-  // }, []);
-
   useEffect(() => {
 
     if (!socket) return;
@@ -272,8 +261,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           </div>
           <span className={"text-primary-gray mt-1"}>{t("menu:fnb")}</span>
         </Link> : <></>}
-         {/* Show acc with 5f52341f880c2f26c8df8c10 = Store */}
-        {(profile?.company?._id.toString() === '6046bedeb55525368b11c5c3' && checkPermissionApp('5f52341f880c2f26c8df8c10')) ?
+        {checkPermissionApp('61e049aefdebf77b072d1b12') ?
         <Link to={`/accounting/home`} className={"flex flex-col items-center mb-3"}>
           <div
             className={
