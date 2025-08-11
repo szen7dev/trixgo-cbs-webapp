@@ -130,7 +130,7 @@ export const AccountingInOutDetailPage2: FC = () => {
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
-        limit: 500,
+        limit: 1000,
         forward: 0,
         cancel: 0,
         fundaID: fundaId,
@@ -242,7 +242,7 @@ export const AccountingInOutDetailPage2: FC = () => {
                 ref={ref}
                 totalRecord={totalRecord}
                 totalPages={totalPage}
-                limit={500}
+                limit={1000}
                 hasNextPage={hasNextPage}
                 isFetching={isLoading}
                 nextPageAction={() => {
