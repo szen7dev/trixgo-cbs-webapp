@@ -25,6 +25,7 @@ const FileRepository = {
     },
     async uploadFileToS3(payload: UploadPayload): Promise<{ id: string }> {
         axiosS3.defaults.headers['Content-Type'] = payload.file.type;
+        axiosS3.defaults.headers['x-amz-acl'] = "public-read";
 
         const { data } = await axiosS3.put<{ id: string }>(
             payload.signedUrl,
