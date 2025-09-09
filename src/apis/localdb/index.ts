@@ -795,6 +795,7 @@ export const FNB_SHIFT = [
     { value: 1, text: 'Ca sáng' },
     { value: 2, text: 'Ca chiều' },
     { value: 3, text: 'Ca tối' },
+    { value: 4, text: 'Ca đêm' },
 ]
 
 export const FNB_CHANNEL = [
