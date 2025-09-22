@@ -10,11 +10,10 @@ jobs:
   curl:
     runs-on: ubuntu-latest
     container:
-      image: alpine:latest
+      image: curlimages/curl:latest
     steps:
       - name: curl
         run: |
-          apk add curl bash
           IMAGE_TAG="${{ github.ref_name }}-${{ github.run_id }}-${GITHUB_SHA::7}"
           curl -f -X POST \
             -H "Accept: application/vnd.github.v3+json" \
