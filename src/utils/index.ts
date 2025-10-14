@@ -70,11 +70,12 @@ export const nl2p = function (text: string){
 
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const urlHasHrefRegex = /(href="https?:\/\/[^\s]+)/g;
+    const imgTagRegex = /(<img[^>]*>)/g;
     const arr = text?.split("\n") ?? [];
     let paragraphs = '';
 
     for (const item of arr) {
-        if(urlHasHrefRegex.test(item)) {
+        if(urlHasHrefRegex.test(item) || imgTagRegex.test(item)) {
             paragraphs = paragraphs + '<p>' + item + '</p>';
         } else{
             paragraphs = paragraphs + '<p>' + item.replace(urlRegex, '<a style="font-weight: normal;" href="$1" target="_blank" rel="noopener noreferrer">$1</a>') + '</p>';
