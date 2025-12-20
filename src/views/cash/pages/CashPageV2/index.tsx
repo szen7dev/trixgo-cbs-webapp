@@ -21,7 +21,7 @@ interface CashDataItem {
       _id: string;
       name: string;
     };
-  };
+  } | string;
 }
 
 interface TableRow {
@@ -32,6 +32,7 @@ interface TableRow {
   expense: number;
   closing: number;
   companyId?: string;
+  accountId?: string;
 }
 
 export const CashPageV2: FC = () => {
@@ -73,16 +74,20 @@ export const CashPageV2: FC = () => {
         // Determine account display based on view type
         let accountDisplay = 'N/A';
         let itemCompanyId: string | undefined;
+        let itemAccountId: string | undefined;
 
         if (companyId) {
           // Detail view: show {name}-{description}
           const name = item.name || '';
           const description = item.description || '';
           accountDisplay = name && description ? `${name}-${description}` : name || description || 'N/A';
+          itemAccountId = typeof item._id === 'string' ? item._id : undefined;
         } else {
           // Summary view: show company name
-          accountDisplay = item._id?.company?.name || 'N/A';
-          itemCompanyId = item._id?.company?._id;
+          if (typeof item._id !== 'string') {
+            accountDisplay = item._id?.company?.name || 'N/A';
+            itemCompanyId = item._id?.company?._id;
+          }
         }
 
         return {
@@ -92,7 +97,8 @@ export const CashPageV2: FC = () => {
           income,
           expense,
           closing,
-          companyId: itemCompanyId
+          companyId: itemCompanyId,
+          accountId: itemAccountId
         };
       });
 
@@ -121,8 +127,11 @@ export const CashPageV2: FC = () => {
   }, [companyId]);
 
   const handleAccountClick = (row: TableRow) => {
-    if (row.companyId && !companyId) {
-      // Navigate to detail view
+    if (companyId && row.accountId) {
+      // Navigate to account detail view
+      history.push(`/cash/receipt-detail-v2/${row.accountId}`);
+    } else if (row.companyId && !companyId) {
+      // Navigate to company summary view
       history.push(`/cash/new-receipt/${row.companyId}`);
     }
   };
@@ -215,7 +224,7 @@ export const CashPageV2: FC = () => {
               <div
                 className={`${styles.cellText} ${styles.colAccount} ${styles.cellAccount}`}
                 onClick={() => handleAccountClick(item)}
-                style={{ cursor: item.companyId ? 'pointer' : 'default' }}
+                style={{ cursor: (item.companyId || (companyId && item.accountId)) ? 'pointer' : 'default' }}
               >
                 {item.account}
               </div>
