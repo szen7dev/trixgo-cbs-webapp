@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+.receiptDetailContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 10px;
+  background-color: #FAFAFA;
+  font-family: 'Inter', sans-serif;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.mainLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* --- Top Header Section --- */
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+.leftTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.backButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04)), #FFFFFF;
+  border-radius: 100px;
+  cursor: pointer;
+  border: none;
+}
+
+.pageTitle {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 130%;
+  color: #1A1A1A;
+}
+
+.paginationControl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.paginationText {
+  font-weight: 500;
+  font-size: 14px;
+  color: #808080;
+}
+
+.paginationArrows {
+  display: flex;
+  gap: 10px;
+}
+
+.arrowBtn {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Controls Row (Search & Actions) --- */
+.controlsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+  width: 600px;
+  height: 40px;
+  background: #FFFFFF;
+  border: 1px solid #E6E6E6;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  font-family: 'Inter';
+  font-size: 14px;
+  color: #1A1A1A;
+  flex: 1;
+}
+
+.searchInput::placeholder {
+  color: #4D4D4D;
+}
+
+.searchIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.downloadBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+  height: 40px;
+  background: #FFFFFF;
+  border: 1px solid #E6E6E6; /* Assumed border based on style */
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: #0052A4; /* Fallback */
+}
+
+.downloadBtnText {
+    background: linear-gradient(135deg, #458DD4 0%, #0052A4 70%, #063462 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.createBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+  height: 40px;
+  background: #0060E1;
+  border-radius: 12px;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+/* --- Table Section --- */
+.tableContainer {
+  background: #FFFFFF;
+  border-radius: 16px; /* inferred from main frame radius */
+  flex: 1;
+  overflow: auto;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05); /* Optional enhancement */
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.tableHeader {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #F9FAFB; /* Light gray header bg */
+  height: 44px;
+}
+
+.th {
+  text-align: left;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #4D4D4D;
+  border-bottom: 1px solid #E6E6E6;
+  white-space: nowrap;
+}
+
+.tr {
+  height: 56px;
+  transition: background 0.2s;
+}
+
+.tr:hover {
+  background: #FAFAFA;
+}
+
+.td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #F2F2F2;
+  font-size: 14px;
+  color: #1A1A1A;
+  vertical-align: middle;
+}
+
+/* Editing Row Styles */
+.editingRow {
+  background: #F0F7FF; /* Light blue tint for editing */
+}
+
+.inputField {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #E6E6E6;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+}
+
+.inputField:focus {
+  border-color: #0060E1;
+  box-shadow: 0 0 0 2px rgba(0, 96, 225, 0.1);
+}
+
+.selectField {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #E6E6E6;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  background: white;
+}
+
+/* Status Badges */
+.statusBadge {
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.statusSuccess {
+  background: #E6F7EF;
+  color: #00A650;
+}
+
+.statusPending {
+  background: #FFF8E6;
+  color: #FFB302;
+}
+
+.statusCancel {
+  background: #FFEEED;
+  color: #FF4D4F;
+}
+
+/* Icons */
+.icon {
+    display: inline-block;
+}
