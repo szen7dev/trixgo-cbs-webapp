@@ -1,8 +1,8 @@
-import React, { FC, useRef, useState, useCallback } from "react";
+import React, { FC, useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
-import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 import { CASH_OUTIN, STORE_TYPES } from "apis/localdb";
 import { convertCurrency } from "utils/converter";
 import { useModal } from "services/hooks/useModal";
@@ -10,13 +10,13 @@ import { toast } from "react-toastify";
 import iconCopy from "assets/images/icons8-copy-96.svg";
 import { ModalConfirm } from "shareComponents/common";
 import {
-    useQueryListStoreParent,
-    useMutationStoreParent,
-  } from "services/hooks/useStore";
+  useQueryListStoreParent,
+  useMutationStoreParent,
+} from "services/hooks/useStore";
 import {
-    SearchInput,
-    DialogForm,
-    ActionGroupButton,
+  SearchInput,
+  DialogForm,
+  ActionGroupButton,
 } from "views/cash/shareComponents/common";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
@@ -24,12 +24,12 @@ import { DropdownSearchableV2 } from "shareComponents/common";
 import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import {
-	useQueryListWarehouse,
-	// useQueryListContact,
-	useQueryListContract,
-	// useQueryListBudgetWork,
-	// useQueryListAccount,
-	// useQueryListGood
+  useQueryListWarehouse,
+  // useQueryListContact,
+  useQueryListContract,
+  // useQueryListBudgetWork,
+  // useQueryListAccount,
+  // useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { useLocation } from "react-router-dom";
@@ -38,14 +38,14 @@ import API from "apis/repository";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface StoreHomePageProps {
-    outin?: number
-    type?: number
+  outin?: number
+  type?: number
 }
 
 export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
   const location = useLocation();
   const { pathname: currentPathname } = location;
-  
+
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -62,15 +62,15 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
 
   const { openModal, closeModal } = useModal();
 
-	const today = new Date();
-	const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-	const currentMonth = new Date().getMonth()
+  const today = new Date();
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  const currentMonth = new Date().getMonth()
   const [inputFilter, setInputFilter] = useState({
-	  // fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
-	  // toDate: lastDayOfMonth,
+    // fromDate: new Date(new Date().getFullYear(), currentMonth, 1),
+    // toDate: lastDayOfMonth,
     fromDate: new Date(new Date().getFullYear(), 0, 1),
     toDate: new Date(new Date().getFullYear(), 11, 31)
-	})
+  })
 
   // Danh sách mẩu tin
   const {
@@ -88,15 +88,15 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
     warehouseID,
     customerID,
     userCreateID: userID,
-    keyword, 
-    outin, 
-    type, 
+    keyword,
+    outin,
+    type,
     sortOption: 2,
     fromDate: inputFilter.fromDate,
     toDate: inputFilter.toDate,
   })
 
-  const [userKeyword, setUserKeyword] = useState("");  
+  const [userKeyword, setUserKeyword] = useState("");
   const [projectKeyword, setProjectKeyword] = useState("");
   const [contractKeyword, setContractKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
@@ -116,10 +116,10 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
     keyword: projectKeyword,
   }, true);
 
-	const { listContract } = useQueryListContract({
-		limit: LIMIT_DROPDOWN,
-		keyword: contractKeyword,
-	});
+  const { listContract } = useQueryListContract({
+    limit: LIMIT_DROPDOWN,
+    keyword: contractKeyword,
+  });
 
   const {
     onCreateStoreParentAsync,
@@ -170,8 +170,8 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
     } else {
       setInputFilter((value) => ({ ...value, fromDate: date }))
     }
-    }, [])
-  
+  }, [])
+
   const toggleModalCopy = (param: any) => {
     openModal(
       <div
@@ -181,7 +181,7 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
       >
         <ModalConfirm
           title="Bạn có muốn xác nhận Copy phiếu không"
-          description= "Dữ liệu phiếu cũ sẽ được Copy sang phiếu mới"
+          description="Dữ liệu phiếu cũ sẽ được Copy sang phiếu mới"
           onConfirm={() => handleConfirmSync({ option: param.option, orderID: param.orderID })}
           defaultText={false}
           onCancel={closeModal}
@@ -195,11 +195,11 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
 
     const { data, status } = await API.post(
       `/api/timesheet/expert_salary/sync-data`, {
-        option: param.option,
-        orderID: param.orderID,
-      }
+      option: param.option,
+      orderID: param.orderID,
+    }
     )
-   
+
     if (status !== 200 || data.error) {
       return toast.warn('Sao chép thất bại')
     }
@@ -216,132 +216,132 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
         }
       >
         <div className={"filter-bar flex flex-wrap px-4 py-1"}>
-            <SearchInput
-              classNameWrapper={"mr-2"}
-              onChange={debounce((e) => {
-                setKeyword(e.target.value);
-              }, 1000)}
-            />
-            <DropdownSearchableV2
-                ref={accountRef}
-                className={"mr-1 border border-primary-border rounded-lg"}
-                placeholder={"Dự án"}
-                isMultiple={false}
-                allowClearValueSingleInput={true}
-                data={listDepartments.map((item: any) => ({
-                  _id: item._id,
-                  name: `${item.sign}.${item.name}`,
-                }))}
-                formatItem={{
-                    id: "_id",
-                    text: "name",
-                }}
-                onSearchInputChange={debounce(
-                    (valueSearch) => setProjectKeyword(valueSearch),
-                    500
-                )}
-                onClearData={() => {
-                  setProjectID("");
-                }}
-                onchangeValue={item => {
-                  setProjectID(item._id);
-                    setPageIndex(0);
-                    ref.current&&ref.current.resetPaginate();
-                }}
-                renderItem={(item) => (
-                    <p className={"min-w-[300px]"}>{item.text}</p>
-                )}
-                selectOneByOne={true}
-            />
-            <DropdownSearchableV2
-              ref={accountRef}
-              className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Mã khách"}
-              isMultiple={false}
-              allowClearValueSingleInput={true}
-              data={listCustomer.map((item: any) => ({
-                _id: item._id,
-                name: `${item.name}.${item.phone}.${item.taxid}`,
-              }))}
-              formatItem={{
-                  id: "_id",
-                  text: "name",
-              }}
-              onSearchInputChange={debounce(
-                  (valueSearch) => setContactKeyword(valueSearch),
-                  500
-              )}
-              onClearData={() => {
-                setCustomerID("");
-              }}
-              onchangeValue={item => {
-                  setCustomerID(item._id);
-                  setPageIndex(0);
-                  ref.current&&ref.current.resetPaginate();
-              }}
-              renderItem={(item) => (
-                  <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-              selectOneByOne={true}
+          <SearchInput
+            classNameWrapper={"mr-2"}
+            onChange={debounce((e) => {
+              setKeyword(e.target.value);
+            }, 1000)}
           />
           <DropdownSearchableV2
-              ref={accountRef}
-              className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Hợp đồng"}
-              isMultiple={false}
-              allowClearValueSingleInput={true}
-              data={listContract}
-              formatItem={{
-                  id: "_id",
-                  text: "name",
-              }}
-              onSearchInputChange={debounce(
-                  (valueSearch) => setContractKeyword(valueSearch),
-                  500
-              )}
-              onClearData={() => {
-                setWarehouseID("");
-              }}
-              onchangeValue={item => {
-                setWarehouseID(item._id);
-                  setPageIndex(0);
-                  ref.current&&ref.current.resetPaginate();
-              }}
-              renderItem={(item) => (
-                  <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-              selectOneByOne={true}
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Dự án"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listDepartments.map((item: any) => ({
+              _id: item._id,
+              name: `${item.sign}.${item.name}`,
+            }))}
+            formatItem={{
+              id: "_id",
+              text: "name",
+            }}
+            onSearchInputChange={debounce(
+              (valueSearch) => setProjectKeyword(valueSearch),
+              500
+            )}
+            onClearData={() => {
+              setProjectID("");
+            }}
+            onchangeValue={item => {
+              setProjectID(item._id);
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
           />
           <DropdownSearchableV2
-              ref={accountRef}
-              className={"mr-1 border border-primary-border rounded-lg"}
-              placeholder={"Người tạo"}
-              isMultiple={false}
-              allowClearValueSingleInput={true}
-              data={listUser}
-              formatItem={{
-                  id: "_id",
-                  text: "fullname",
-              }}
-              onSearchInputChange={debounce(
-                  (valueSearch) => setUserKeyword(valueSearch),
-                  500
-              )}
-              onClearData={() => {
-                setUserID("");
-              }}
-              onchangeValue={item => {
-                  setUserID(item._id);
-                  setPageIndex(0);
-                  ref.current&&ref.current.resetPaginate();
-              }}
-              renderItem={(item) => (
-                  <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-              selectOneByOne={true}
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Mã khách"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listCustomer.map((item: any) => ({
+              _id: item._id,
+              name: `${item.name}.${item.phone}.${item.taxid}`,
+            }))}
+            formatItem={{
+              id: "_id",
+              text: "name",
+            }}
+            onSearchInputChange={debounce(
+              (valueSearch) => setContactKeyword(valueSearch),
+              500
+            )}
+            onClearData={() => {
+              setCustomerID("");
+            }}
+            onchangeValue={item => {
+              setCustomerID(item._id);
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+          />
+          <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Hợp đồng"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listContract}
+            formatItem={{
+              id: "_id",
+              text: "name",
+            }}
+            onSearchInputChange={debounce(
+              (valueSearch) => setContractKeyword(valueSearch),
+              500
+            )}
+            onClearData={() => {
+              setWarehouseID("");
+            }}
+            onchangeValue={item => {
+              setWarehouseID(item._id);
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+          />
+          <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Người tạo"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listUser}
+            formatItem={{
+              id: "_id",
+              text: "fullname",
+            }}
+            onSearchInputChange={debounce(
+              (valueSearch) => setUserKeyword(valueSearch),
+              500
+            )}
+            onClearData={() => {
+              setUserID("");
+            }}
+            onchangeValue={item => {
+              setUserID(item._id);
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
           />
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          
+
           {Object.keys(recordSelected).length > 1 && (
             <>
               <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
@@ -505,11 +505,11 @@ export const CashPage: FC<StoreHomePageProps> = ({ outin, type }) => {
                 {Number(item.forward) == 1 ? <div className="relative z-5 inline-block -translate-y-1"><button className="text-[10px] text-white rounded px-1 py-0.5 mx-1 bg-blue-400">Phiếu đầu kỳ</button></div> : <></>}
                 <NavLink to={`${currentPathname}/${item._id}`} className="font-bold text-medium">
                   {Number(item.forward) == 1 ? (
-                      <span style={{"color": "orange"}}>{item.name}</span>
-                    ) : (
-                      <span className="text-cbs-highlight-color">{item.name}</span>
-                    )}
-                  {item?.files?.length ? <span className="text-gray-500"><img src={fileIcon} alt="" className="h-6 w-6 px-1 inline"/>({item?.files?.length})</span> : <></>}
+                    <span style={{ "color": "orange" }}>{item.name}</span>
+                  ) : (
+                    <span className="text-cbs-highlight-color">{item.name}</span>
+                  )}
+                  {item?.files?.length ? <span className="text-gray-500"><img src={fileIcon} alt="" className="h-6 w-6 px-1 inline" />({item?.files?.length})</span> : <></>}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
                   {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}

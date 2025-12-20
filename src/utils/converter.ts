@@ -32,22 +32,24 @@ export const humanFileSize = (bytes = 0, si = true, dp = 1) => {
   const thresh = si ? 1000 : 1024;
 
   if (Math.abs(bytes) < thresh) {
-    return bytes + ' B';
+    return bytes + " B";
   }
 
   const units = si
-    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-    : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+    : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
   let u = -1;
   const r = 10 ** dp;
 
   do {
     bytes /= thresh;
     ++u;
-  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+  } while (
+    Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1
+  );
 
-  return bytes.toFixed(dp) + ' ' + units[u];
-}
+  return bytes.toFixed(dp) + " " + units[u];
+};
 
 /**
  * Convert Blob to File again
@@ -60,14 +62,14 @@ export const blobToFile = (theBlob: Blob, fileName: string): File => {
   b.name = fileName;
 
   // Cast to a File() type
-  return <File>theBlob;
-}
+  return <File> theBlob;
+};
 
 export const formatNumberMoney = (number: number | string): string => {
   // 'de-DE'
   // return (Number(number || 0).toLocaleString('en-US')) || "" // EN
-  return (Number(number || 0).toLocaleString('it-IT')) || "" // VN
-}
+  return (Number(number || 0).toLocaleString("it-IT")) || ""; // VN
+};
 
 export const formatNaNToZero = (number: number): number => {
   if (!number || isNaN(number)) {
@@ -75,18 +77,22 @@ export const formatNaNToZero = (number: number): number => {
   }
 
   return number;
-}
+};
 
 export const convertCurrency = (number: string | number = 0): string => {
-  if (typeof number === 'string' && number.search(',')) {
-    number = number.replaceAll(',', '')
+  if (typeof number === "string" && number.search(",")) {
+    number = number.replaceAll(",", "");
   }
 
-  const formatter = new Intl.NumberFormat('en-US');
+  const formatter = new Intl.NumberFormat("en-US");
   // const formatter = new Intl.NumberFormat('vi-VN');
   return formatter.format(+number);
-}
+};
 
 export const convertCurrencyToNumber = (currency: string): number => {
-  return +currency.replaceAll(',', '');
-}
+  return +currency.replaceAll(",", "");
+};
+
+export const formatCurrency = (value: number): string => {
+  return value.toLocaleString("vi-VN");
+};
