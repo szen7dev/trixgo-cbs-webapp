@@ -253,4 +253,3 @@ export const CashPageV2: FC = () => {
 };
 
 export default CashPageV2;
-
