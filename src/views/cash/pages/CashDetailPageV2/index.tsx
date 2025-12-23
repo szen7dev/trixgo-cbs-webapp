@@ -1,24 +1,28 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import debounce from 'lodash/debounce';
 import { DateTimePicker } from './components/DateTimePicker';
 import { EditableRow } from './components/EditableRow';
 import './styles.css';
 import API from 'apis/repository';
-import { ReceiptRecord, AccountInfo, Contact, DropdownOption, ContactsResponse, SubType, SubTypesResponse, Funda, FundasResponse } from './shared/types';
+import { ReceiptRecord, AccountInfo, DropdownOption } from './shared/types';
 import {
   CUSTOMER_OPTIONS,
   FEE_ITEM_OPTIONS,
   FACILITY_OPTIONS,
   TYPE_OPTIONS,
-  STATUS_CODES
+  STATUS_CODES,
+  STATUS_OPTIONS
 } from './shared';
 import {
   getStatusLabel,
   getForwardLabel,
+  getForwardColor,
   formatDate,
   formatDateTime,
   dateToISOString
 } from './shared/utils';
+import { fetchDropdownData } from './shared/api';
 
 export const CashDetailPageV2: React.FC = () => {
   const history = useHistory();
@@ -34,6 +38,14 @@ export const CashDetailPageV2: React.FC = () => {
   const [subTypesNextCursor, setSubTypesNextCursor] = useState<string | null>(null);
   const [facilityOptions, setFacilityOptions] = useState<DropdownOption[]>(FACILITY_OPTIONS);
   const [fundasNextCursor, setFundasNextCursor] = useState<string | null>(null);
+
+  // Loading states for dropdowns
+  const [isSearchingContacts, setIsSearchingContacts] = useState(false);
+  const [isSearchingSubTypes, setIsSearchingSubTypes] = useState(false);
+  const [isSearchingFundas, setIsSearchingFundas] = useState(false);
+
+  // Search keyword for records list
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   // State for the new row being created - only date and content
   const [newRecord, setNewRecord] = useState<Partial<{ date: Date; name: string }>>({
@@ -123,6 +135,9 @@ export const CashDetailPageV2: React.FC = () => {
       if (updatedFields.note !== undefined) {
         apiPayload.note = updatedFields.note;
       }
+      if (updatedFields.status !== undefined) {
+        apiPayload.status = updatedFields.status;
+      }
 
       console.log('API Payload:', apiPayload);
 
@@ -147,10 +162,6 @@ export const CashDetailPageV2: React.FC = () => {
     }
   };
 
-  const handleCancelEdit = () => {
-    setEditingId(null);
-  };
-
   // Handle focus out (blur) from the new row
   const handleBlur = (e: React.FocusEvent) => {
     if (createRowRef.current && createRowRef.current.contains(e.relatedTarget as Node)) {
@@ -169,7 +180,7 @@ export const CashDetailPageV2: React.FC = () => {
     }
   };
 
-  const fetchRecords = async () => {
+  const fetchRecords = async (keyword?: string) => {
     if (!accountId) return;
 
     try {
@@ -179,9 +190,14 @@ export const CashDetailPageV2: React.FC = () => {
         select: "_id fullname name phone"
       });
 
-      const { data: result } = await API.get(
-        `/api/store/order_products?accountID=${accountId}&outin=2&populates=${populates}`
-      );
+      let apiUrl = `/api/store/order_products?accountID=${accountId}&outin=2&populates=${populates}`;
+
+      // Add keyword to URL if provided
+      if (keyword) {
+        apiUrl += `&keyword=${encodeURIComponent(keyword)}`;
+      }
+
+      const { data: result } = await API.get(apiUrl);
 
       if (result?.data?.listRecords) {
         setRecords(result.data.listRecords);
@@ -196,68 +212,120 @@ export const CashDetailPageV2: React.FC = () => {
   const loadMoreContacts = async () => {
     if (!contactsNextCursor || !accountInfo?.company) return;
 
-    try {
-      const { data: { data: contactsData } } = await API.get(
-        `/api/item/contacts?companyID=${accountInfo.company}&lastestID=${contactsNextCursor}`
-      );
+    const result = await fetchDropdownData({
+      type: 'contacts',
+      companyId: accountInfo.company,
+      lastestId: contactsNextCursor
+    });
 
-      if (contactsData?.listRecords && Array.isArray(contactsData.listRecords)) {
-        const newContactOptions: DropdownOption[] = contactsData.listRecords.map((contact: Contact) => ({
-          id: contact._id,
-          text: contact.phone ? `${contact.name} - ${contact.phone}` : contact.name
-        }));
-
-        setCustomerOptions(prev => [...prev, ...newContactOptions]);
-        setContactsNextCursor(contactsData.nextCursor);
-      }
-    } catch (error) {
-      console.error('Error loading more contacts:', error);
-    }
+    setCustomerOptions(prev => [...prev, ...result.options]);
+    setContactsNextCursor(result.nextCursor);
   };
 
   const loadMoreSubTypes = async () => {
     if (!subTypesNextCursor || !accountInfo?.company) return;
 
-    try {
-      const { data: { data: subTypesData } } = await API.get(
-        `/api/item/doctypes?type=23&companyID=${accountInfo.company}&lastestID=${subTypesNextCursor}`
-      );
+    const result = await fetchDropdownData({
+      type: 'subtypes',
+      companyId: accountInfo.company,
+      lastestId: subTypesNextCursor
+    });
 
-      if (subTypesData?.listRecords && Array.isArray(subTypesData.listRecords)) {
-        const newSubTypeOptions: DropdownOption[] = subTypesData.listRecords.map((subType: SubType) => ({
-          id: subType._id,
-          text: subType.name
-        }));
-
-        setFeeItemOptions(prev => [...prev, ...newSubTypeOptions]);
-        setSubTypesNextCursor(subTypesData.nextCursor);
-      }
-    } catch (error) {
-      console.error('Error loading more subtypes:', error);
-    }
+    setFeeItemOptions(prev => [...prev, ...result.options]);
+    setSubTypesNextCursor(result.nextCursor);
   };
 
   const loadMoreFundas = async () => {
     if (!fundasNextCursor || !accountInfo?.company) return;
 
-    try {
-      const { data: { data: fundasData } } = await API.get(
-        `/api/item/fundas?companyID=${accountInfo.company}&lastestID=${fundasNextCursor}`
-      );
+    const result = await fetchDropdownData({
+      type: 'fundas',
+      companyId: accountInfo.company,
+      lastestId: fundasNextCursor
+    });
 
-      if (fundasData?.listRecords && Array.isArray(fundasData.listRecords)) {
-        const newFundaOptions: DropdownOption[] = fundasData.listRecords.map((funda: Funda) => ({
-          id: funda._id,
-          text: funda.phone ? `${funda.name} - ${funda.phone}` : funda.name
-        }));
-
-        setFacilityOptions(prev => [...prev, ...newFundaOptions]);
-        setFundasNextCursor(fundasData.nextCursor);
-      }
-    } catch (error) {
-      console.error('Error loading more fundas:', error);
-    }
+    setFacilityOptions(prev => [...prev, ...result.options]);
+    setFundasNextCursor(result.nextCursor);
   };
+
+  // Search handlers with keyword parameter - debounced with lodash
+  const handleSearchContacts = useCallback(async (keyword: string) => {
+    if (!accountInfo?.company) return;
+
+    setIsSearchingContacts(true);
+    try {
+      const result = await fetchDropdownData({
+        type: 'contacts',
+        companyId: accountInfo.company,
+        keyword
+      });
+
+      setCustomerOptions(result.options);
+      setContactsNextCursor(result.nextCursor);
+    } finally {
+      setIsSearchingContacts(false);
+    }
+  }, [accountInfo?.company]);
+
+  const handleSearchSubTypes = useCallback(async (keyword: string) => {
+    if (!accountInfo?.company) return;
+
+    setIsSearchingSubTypes(true);
+    try {
+      const result = await fetchDropdownData({
+        type: 'subtypes',
+        companyId: accountInfo.company,
+        keyword
+      });
+
+      setFeeItemOptions(result.options);
+      setSubTypesNextCursor(result.nextCursor);
+    } finally {
+      setIsSearchingSubTypes(false);
+    }
+  }, [accountInfo?.company]);
+
+  const handleSearchFundas = useCallback(async (keyword: string) => {
+    if (!accountInfo?.company) return;
+
+    setIsSearchingFundas(true);
+    try {
+      const result = await fetchDropdownData({
+        type: 'fundas',
+        companyId: accountInfo.company,
+        keyword
+      });
+
+      setFacilityOptions(result.options);
+      setFundasNextCursor(result.nextCursor);
+    } finally {
+      setIsSearchingFundas(false);
+    }
+  }, [accountInfo?.company]);
+
+  // Create debounced versions using useMemo to maintain stable references
+  const searchContacts = useMemo(
+    () => debounce(handleSearchContacts, 700),
+    [handleSearchContacts]
+  );
+
+  const searchSubTypes = useMemo(
+    () => debounce(handleSearchSubTypes, 700),
+    [handleSearchSubTypes]
+  );
+
+  const searchFundas = useMemo(
+    () => debounce(handleSearchFundas, 700),
+    [handleSearchFundas]
+  );
+
+  // Debounced search for records list
+  const debouncedSearchRecords = useMemo(
+    () => debounce((keyword: string) => {
+      fetchRecords(keyword);
+    }, 700),
+    [accountId]
+  );
 
   useEffect(() => {
     if (!accountId) return;
@@ -272,51 +340,31 @@ export const CashDetailPageV2: React.FC = () => {
         if (accountData) {
           setAccountInfo(accountData);
 
-          // Fetch contacts for customer dropdown
+          // Fetch initial dropdown data using shared function
           if (accountData.company) {
-            const { data: { data: contactsData } } = await API.get(
-              `/api/item/contacts?companyID=${accountData.company}`
-            );
-
-            if (contactsData?.listRecords && Array.isArray(contactsData.listRecords)) {
-              const contactOptions: DropdownOption[] = contactsData.listRecords.map((contact: Contact) => ({
-                id: contact._id,
-                text: contact.phone ? `${contact.name} - ${contact.phone}` : contact.name
-              }));
-
-              setCustomerOptions(contactOptions);
-              setContactsNextCursor(contactsData.nextCursor);
-            }
+            // Fetch contacts for customer dropdown
+            const contactsResult = await fetchDropdownData({
+              type: 'contacts',
+              companyId: accountData.company
+            });
+            setCustomerOptions(contactsResult.options);
+            setContactsNextCursor(contactsResult.nextCursor);
 
             // Fetch subtypes for fee item dropdown
-            const { data: { data: subTypesData } } = await API.get(
-              `/api/item/doctypes?type=23&companyID=${accountData.company}`
-            );
-
-            if (subTypesData?.listRecords && Array.isArray(subTypesData.listRecords)) {
-              const subTypeOptions: DropdownOption[] = subTypesData.listRecords.map((subType: SubType) => ({
-                id: subType._id,
-                text: subType.name
-              }));
-
-              setFeeItemOptions(subTypeOptions);
-              setSubTypesNextCursor(subTypesData.nextCursor);
-            }
+            const subTypesResult = await fetchDropdownData({
+              type: 'subtypes',
+              companyId: accountData.company
+            });
+            setFeeItemOptions(subTypesResult.options);
+            setSubTypesNextCursor(subTypesResult.nextCursor);
 
             // Fetch fundas for facility dropdown
-            const { data: { data: fundasData } } = await API.get(
-              `/api/item/fundas?companyID=${accountData.company}`
-            );
-
-            if (fundasData?.listRecords && Array.isArray(fundasData.listRecords)) {
-              const fundaOptions: DropdownOption[] = fundasData.listRecords.map((funda: Funda) => ({
-                id: funda._id,
-                text: funda.phone ? `${funda.name} - ${funda.phone}` : funda.name
-              }));
-
-              setFacilityOptions(fundaOptions);
-              setFundasNextCursor(fundasData.nextCursor);
-            }
+            const fundasResult = await fetchDropdownData({
+              type: 'fundas',
+              companyId: accountData.company
+            });
+            setFacilityOptions(fundasResult.options);
+            setFundasNextCursor(fundasResult.nextCursor);
           }
         }
 
@@ -327,6 +375,26 @@ export const CashDetailPageV2: React.FC = () => {
       }
     })();
   }, [accountId]);
+
+  // Trigger search when keyword changes
+  useEffect(() => {
+    if (searchKeyword) {
+      debouncedSearchRecords(searchKeyword);
+    } else {
+      // If search is cleared, fetch all records
+      fetchRecords();
+    }
+  }, [searchKeyword]);
+
+  // Cleanup debounced functions on unmount
+  useEffect(() => {
+    return () => {
+      searchContacts.cancel();
+      searchSubTypes.cancel();
+      searchFundas.cancel();
+      debouncedSearchRecords.cancel();
+    };
+  }, [searchContacts, searchSubTypes, searchFundas, debouncedSearchRecords]);
 
   return (
     <div className="receiptDetailContainer">
@@ -365,7 +433,12 @@ export const CashDetailPageV2: React.FC = () => {
                 <path d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" stroke="#4D4D4D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M22 22L20 20" stroke="#4D4D4D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <input className="searchInput" placeholder="Tìm kiếm" />
+              <input
+                className="searchInput"
+                placeholder="Tìm kiếm"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+              />
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 7H21" stroke="#808080" strokeWidth="1.5" strokeLinecap="round" />
                 <path d="M6 12H18" stroke="#808080" strokeWidth="1.5" strokeLinecap="round" />
@@ -454,9 +527,16 @@ export const CashDetailPageV2: React.FC = () => {
                       feeItemOptions={feeItemOptions}
                       facilityOptions={facilityOptions}
                       typeOptions={TYPE_OPTIONS}
+                      statusOptions={STATUS_OPTIONS}
                       onLoadMoreCustomers={loadMoreContacts}
                       onLoadMoreFeeItems={loadMoreSubTypes}
                       onLoadMoreFacilities={loadMoreFundas}
+                      onSearchCustomers={searchContacts}
+                      onSearchFeeItems={searchSubTypes}
+                      onSearchFacilities={searchFundas}
+                      isSearchingCustomers={isSearchingContacts}
+                      isSearchingFeeItems={isSearchingSubTypes}
+                      isSearchingFacilities={isSearchingFundas}
                     />
                   ) : (
                     <tr
@@ -506,7 +586,7 @@ export const CashDetailPageV2: React.FC = () => {
                         </span>
                       </td>
                       <td className="td">
-                        <div style={{ background: '#FFF8E6', padding: '6px 12px', borderRadius: '6px', minWidth: '80px', textAlign: 'center' }}>
+                        <div style={{ background: getForwardColor(record.forward), padding: '6px 12px', borderRadius: '6px', minWidth: '80px', textAlign: 'center' }}>
                           {getForwardLabel(record.forward)}
                         </div>
                       </td>
