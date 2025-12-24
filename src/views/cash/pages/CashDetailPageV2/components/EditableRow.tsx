@@ -3,8 +3,7 @@ import { DropdownSearchable } from './DropdownSearchable';
 import { DateTimePicker } from './DateTimePicker';
 import { CurrencyInput } from './CurrencyInput';
 import { ReceiptRecord, DropdownOption } from '../shared/types';
-import { getStatusLabel, isoStringToDate, dateToISOString } from '../shared/utils';
-import { STATUS_CODES } from '../shared'
+import { isoStringToDate, dateToISOString } from '../shared/utils';
 
 interface EditableRowProps {
   record: ReceiptRecord;
@@ -13,9 +12,16 @@ interface EditableRowProps {
   feeItemOptions: Array<DropdownOption>;
   facilityOptions: Array<DropdownOption>;
   typeOptions: Array<DropdownOption>;
+  statusOptions: Array<DropdownOption>;
   onLoadMoreCustomers?: () => void;
   onLoadMoreFeeItems?: () => void;
   onLoadMoreFacilities?: () => void;
+  onSearchCustomers?: (keyword: string) => void;
+  onSearchFeeItems?: (keyword: string) => void;
+  onSearchFacilities?: (keyword: string) => void;
+  isSearchingCustomers?: boolean;
+  isSearchingFeeItems?: boolean;
+  isSearchingFacilities?: boolean;
 }
 
 export const EditableRow: React.FC<EditableRowProps> = ({
@@ -25,9 +31,16 @@ export const EditableRow: React.FC<EditableRowProps> = ({
   feeItemOptions,
   facilityOptions,
   typeOptions,
+  statusOptions,
   onLoadMoreCustomers,
   onLoadMoreFeeItems,
-  onLoadMoreFacilities
+  onLoadMoreFacilities,
+  onSearchCustomers,
+  onSearchFeeItems,
+  onSearchFacilities,
+  isSearchingCustomers,
+  isSearchingFeeItems,
+  isSearchingFacilities
 }) => {
   const [editData, setEditData] = useState(record);
   const editRowRef = useRef<HTMLTableRowElement>(null);
@@ -68,11 +81,13 @@ export const EditableRow: React.FC<EditableRowProps> = ({
         />
       </td>
       <td className="td">
-        <input
+        <textarea
           className="inputField"
           value={editData.name}
           onChange={(e) => handleFieldChange('name', e.target.value)}
           autoFocus
+          rows={2}
+          style={{ resize: 'vertical', minHeight: '50px' }}
         />
       </td>
       <td className="td">
@@ -86,6 +101,8 @@ export const EditableRow: React.FC<EditableRowProps> = ({
           }}
           placeholder="Chọn khách hàng"
           onLoadMore={onLoadMoreCustomers}
+          onSearch={onSearchCustomers}
+          isSearching={isSearchingCustomers}
         />
       </td>
       <td className="td">
@@ -105,14 +122,18 @@ export const EditableRow: React.FC<EditableRowProps> = ({
           }}
           placeholder="Chọn khoản mục"
           onLoadMore={onLoadMoreFeeItems}
+          onSearch={onSearchFeeItems}
+          isSearching={isSearchingFeeItems}
         />
       </td>
       <td className="td">
-        <input
+        <textarea
           className="inputField"
           value={editData.note || ''}
           onChange={(e) => handleFieldChange('note', e.target.value)}
           placeholder="Nhập ghi chú"
+          rows={2}
+          style={{ resize: 'vertical', minHeight: '50px' }}
         />
       </td>
       <td className="td">
@@ -126,15 +147,21 @@ export const EditableRow: React.FC<EditableRowProps> = ({
           }}
           placeholder="Chọn cơ sở"
           onLoadMore={onLoadMoreFacilities}
+          onSearch={onSearchFacilities}
+          isSearching={isSearchingFacilities}
         />
       </td>
       <td className="td">
-        <span className={`statusBadge ${editData.status === STATUS_CODES.COMPLETED ? 'statusSuccess' :
-          editData.status === STATUS_CODES.CANCELLED ? 'statusCancel' :
-            'statusPending'
-          }`}>
-          {getStatusLabel(editData.status)}
-        </span>
+        <DropdownSearchable
+          data={statusOptions}
+          value={statusOptions.find(opt => parseInt(String(opt.id)) === editData.status)}
+          onChange={(item) => {
+            if (item) {
+              handleFieldChange('status', parseInt(String(item.id)));
+            }
+          }}
+          placeholder="Chọn trạng thái"
+        />
       </td>
       <td className="td">
         <DropdownSearchable

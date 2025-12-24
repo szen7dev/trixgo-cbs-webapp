@@ -1,4 +1,4 @@
-import { FORWARD_MAP, STATUS_MAP, TYPE_MAP } from "./constants";
+import { FORWARD_COLORS, FORWARD_MAP, STATUS_MAP, TYPE_MAP } from "./constants";
 import { ReceiptStatus } from "./types";
 
 /**
@@ -15,6 +15,14 @@ export const getStatusLabel = (status: number): ReceiptStatus => {
  */
 export const getForwardLabel = (forward: number): string => {
   return FORWARD_MAP[forward] || "Bình thường";
+};
+
+/**
+ * Get forward color from forward code
+ * 0 = #F0F7FF, 1 = #FFF8E6
+ */
+export const getForwardColor = (forward: number): string => {
+  return FORWARD_COLORS[forward] || "#F0F7FF";
 };
 
 /**

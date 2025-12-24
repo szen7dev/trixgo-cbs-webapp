@@ -126,6 +126,20 @@ export const GeneralInfo: FC<Props> = memo((props) => {
             </tr>
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
+                Support, chăm sóc khách hàng
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.support?.name}
+              </td>
+              <td className="border text-primary-gray w-1/6 pl-4">
+                
+              </td>
+              <td className="border w-2/6 pl-4">
+                
+              </td>
+            </tr>
+            <tr className="border h-7 leading-7">
+              <td className="border text-primary-gray w-1/6 pl-4">
                 Link tài khoản
               </td>
               <td className="border w-2/6 pl-4">

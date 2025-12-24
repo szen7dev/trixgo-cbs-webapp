@@ -82,4 +82,11 @@ export interface FundasResponse {
   nextCursor: string | null;
 }
 
-export type ReceiptStatus = "Hoàn thành" | "Hủy" | "Khởi tạo";
+export type ReceiptStatus =
+  | "Khởi tạo"
+  | "Chờ Ship lấy hàng/Mang hàng tới Ship"
+  | "Đang vận chuyển/giao hàng"
+  | "Giao không thành công"
+  | "Đã giao/Hoàn thành"
+  | "Hủy bỏ"
+  | "Trả hàng/Hoàn tiền";
