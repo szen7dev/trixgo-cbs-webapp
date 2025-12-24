@@ -217,6 +217,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       insuranceFee: "",
       annualWorkingHours: "",
       parent: "",
+      support: "",
       dataSource: "",
       ...initialValues,
     };
@@ -279,6 +280,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         workingStatus: values?.workingStatus?.value,
         linkUser: values?.linkUser?.value,
         parent: values?.parent?.value,
+        support: values?.support?.value,
         dataSource: values?.dataSource?.value,
         contractType: values?.contractType?.value,
       };
@@ -1569,7 +1571,53 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
 
                     <div className="w-1/5 flex items-center">
-
+                        <span className="w-6/12 text-primary-gray">
+                          Hỗ trợ, CSKH
+                        </span>
+                        <DropdownSearchable
+                          onchangeValue={(value) =>
+                            setFieldValue("support", value)
+                          }
+                          onSearchInputChange={debounce(
+                            (value) => setSearchContact(value),
+                            500
+                          )}
+                          placeholder="Hỗ trợ, CSKH"
+                          className="w-full pl-0 -mb-1 outline-none"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-none"
+                          renderSelectedItem={(item) => (
+                            <div
+                              style={{ width: 100 }}
+                              className="flex items-center"
+                            >
+                              <p
+                                style={{
+                                  textOverflow: "ellipsis",
+                                  maxWidth: "100%",
+                                  minWidth: 0,
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  flex: "1 1 auto",
+                                }}
+                              >
+                                {item.text}
+                              </p>
+                            </div>
+                          )}
+                          initialValue={defaultValues?.support}
+                          data={contacts.map((support) => ({
+                            value: support._id,
+                            label: support.name,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
+                        />
                     </div>
 
                     <div className="w-1/5 flex items-center">
@@ -1579,7 +1627,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                   </div>
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
-                  <div className="w-1/5 flex items-center">
+                    <div className="w-1/5 flex items-center">
                         <span className="w-6/12 text-primary-gray">
                           Link với tài khoản
                         </span>

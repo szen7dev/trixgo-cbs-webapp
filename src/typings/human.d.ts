@@ -172,6 +172,7 @@ export type Human = {
     other?: Other;
     workingStatus?: WorkingStatus;
     linkUser?: any;
+    support?: any;
     userCreate?: userCreate;
     userUpdate?: userUpdate;
     contractType?: ContractType;

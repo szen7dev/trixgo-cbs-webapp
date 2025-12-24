@@ -90,6 +90,10 @@ export const CrmCustomerInfoPage: FC = () => {
                 value: defaultValues?.linkUser?._id,
                 label: defaultValues?.linkUser?.fullname
               },
+              support: defaultValues?.support && {
+                value: defaultValues?.support?._id,
+                label: defaultValues?.support?.name
+              },
               dataSource: defaultValues?.dataSource && {
                 value: defaultValues?.dataSource?._id,
                 label: defaultValues?.dataSource?.name
@@ -225,6 +229,7 @@ export const CrmCustomerInfoPage: FC = () => {
             contractDate: detailHuman.contractDate,
             workingStatus: detailHuman.workingStatus,
             linkUser: detailHuman.linkUser,
+            support: detailHuman.support,
             dataSource: detailHuman.dataSource,
             parent: detailHuman.parent,
             userCreate: detailHuman.userCreate,
