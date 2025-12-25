@@ -43,6 +43,11 @@ enum PERSONAL_STATUS {
   "A",
 }
 
+enum PERSONAL_STATUS2 {
+  "Đang hoạt động" = 1,
+  "Tạm dừng",
+}
+
 enum INSURANCE_STATUS {
   "Chưa nộp" = 1,
   "Đã nộp",
@@ -174,6 +179,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       gender: 1,
       workingStatus: "",
       realStatus: 1,
+      status: 1,
       insuranceStatus: 1,
       familyPolicy: 1,
       bankAccount: "",
@@ -274,6 +280,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         type: values?.type?.toString(),
         gender: values?.gender?.toString(),
         realStatus: values?.realStatus?.toString(),
+        status: values?.status?.toString(),
         insuranceStatus: values?.insuranceStatus?.toString() || "",
         familyPolicy: values?.familyPolicy?.toString() || "",
         area: values?.area?.value,
@@ -1804,6 +1811,52 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             value: field._id,
                           })
                         })}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        inlineSearch={true}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                     <div className="w-1/5 flex items-center">
+                      <span className="w-6/12 text-primary-gray">
+                        Trạng thái
+                      </span>
+                      <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("status", value.id)
+                        }
+                        placeholder="Trạng thái..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div
+                            style={{ width: 100 }}
+                            className="flex items-center"
+                          >
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
+                            <p
+                              style={{
+                                textOverflow: "ellipsis",
+                                maxWidth: "100%",
+                                minWidth: 0,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                flex: "1 1 auto",
+                              }}
+                            >
+                              {item.text}
+                            </p>
+                          </div>
+                        )}
+                        initialValue={convertEnumToArray(PERSONAL_STATUS2).find(elm => elm.value === (defaultValues?.status || 1))}
+                        data={convertEnumToArray(PERSONAL_STATUS2)}
                         formatItem={{
                           id: "value",
                           text: "label",

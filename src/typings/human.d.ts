@@ -157,6 +157,7 @@ type documents = {
 
 export type Human = {
     type?: number;
+    status?: number;
     company?: Company;
     position?: Position;
     department?: Department;

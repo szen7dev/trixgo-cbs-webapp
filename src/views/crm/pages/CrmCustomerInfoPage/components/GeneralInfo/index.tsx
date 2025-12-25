@@ -156,6 +156,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 Ghi chú
               </td>
               <td className="border w-2/6 pl-4">
+                {info.status == 2 ? <div><button className="text-[10px] text-white rounded px-1 bg-red-400">Tạm dừng</button></div> : <></>}
                 {info?.note}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">

@@ -11,6 +11,7 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
     email: string;
     birthday: string;
     gender: number;
+    support?: any;
     area?: any;
     area1?: any;
     area2?: any;
@@ -63,7 +64,7 @@ interface HumanInsertPayload {
     "date": string;
     "receivedDate": string;
     "style": string;
-    "status": string;
+    "status": number;
     "amount": number;
     "amountDelivery": number;
     "requestResponse": number;
@@ -114,7 +115,9 @@ export interface HumanQueryPayload extends QueryParam {
         datahubContactsID?: string[];
         types?: string[];
         genders?: string[];
+        statuss?: string[];
         departmentsID?: string[];
+        supportsID?: string[];
         directions?: string[];
         contractsID?: string[];
         keyword?: string;

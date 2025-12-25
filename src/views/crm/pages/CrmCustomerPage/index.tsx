@@ -5,8 +5,8 @@ import moment from "moment";
 import { DropdownSearchableV2, Loader } from "shareComponents/common";
 
 // ========== Utils ========== //
-import { GENDER_TYPES } from 'apis/localdb';
-import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+import { GENDER_TYPES, CONTACT_STATUS2 } from 'apis/localdb';
+// import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
@@ -18,6 +18,7 @@ import CameraIcon from "assets/images/camera-icon.svg";
 
 // ========== Hooks ========== //
 import { useHumanCustom, useListHuman } from "services/hooks/human/useHuman";
+import { useContact } from "services/hooks/items/useContact";
 import { useProjectCustom } from "services/hooks/items/useProject";
 import { ModalCreateOrUpdateCustomer } from 'views/item/shareComponents/common';
 import { useCustomer } from "services/hooks/items/useCustomer";
@@ -28,7 +29,7 @@ interface HumanHomePageProps {
 
 type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
-type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
+// type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
 
 export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
     const [keyword, setKeyword] = useState('');
@@ -63,8 +64,11 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
     const location = useLocation()
 
     const [genders, setGenders] = useState<string[]>([]);
+    const [statuss, setStatuss] = useState<string[]>([]);
 
     const [projectKeyword, setProjectKeyword] = useState("");
+    const [contactKeyword, setContactKeyword] = useState("");
+    const [supportsID, setSupportsID] = useState<string[]>([]);
     const [departmentsID, setDepartmentsID] = useState<string[]>([]);
 
     const { listProjectsUserIsMember } = useProjectCustom({
@@ -72,12 +76,19 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
         isFetchProjectsUserIsMember: true
     });
 
+    const { list: listCustomer } = useContact({
+        params: { keyword: contactKeyword, limit: 20 },
+        isFetchList: true
+    })
+
     const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs, refetchListHuman } = useListHuman({
         params: {
             // ...fromToDate,
             limit: 10,
             genders,
+            statuss,
             departmentsID,
+            supportsID,
             keyword,
         },
         isFetchList: true
@@ -164,6 +175,95 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                             onChange={onChangeSearch}
                             />
                         </div>
+
+                        <DropdownSearchableV2
+                            ref={datahubRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Support chăm sóc"}
+                            isMultiple={true}
+                            allowClearValueSingleInput={true}
+                            data={listCustomer}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(
+                                (valueSearch) => setContactKeyword(valueSearch),
+                                500
+                            )}
+                            onchangeValue={item => {
+                                const cloneIDs = [...supportsID];
+                                cloneIDs.push(item._id);
+                                setSupportsID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setSupportsID([]);
+                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...supportsID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setSupportsID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+
+                        <DropdownSearchableV2
+                            ref={typeRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Trạng thái"}
+                            isMultiple={true}
+                            disableSearch={true}
+                            allowClearValueSingleInput={true}
+                            data={CONTACT_STATUS2}
+                            formatItem={{
+                                "id": "value"
+                            }}
+                            onchangeValue={item => {
+                                const cloneIDs = [...statuss];
+                                cloneIDs.push(item.value);
+                                setStatuss(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setStatuss([]);
+                                dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...statuss];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setStatuss(newList);
+                                dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+
                         <DropdownSearchableV2
                             ref={typeRef}
                             className={"mr-1 border border-primary-border rounded-lg mb-2"}
@@ -374,14 +474,16 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                                 {`${item.name}`}
                                                 - {(item?.gender && item?.gender >= 1) && GENDER_TYPES[item?.gender -1].text}
                                             </p>
+                                            <p className="mt-1">Support: { item?.support != null && item?.support?.name}</p>
                                             <p className="text-primary-gray mt-1">{item?.identity != null && item?.identity }</p>
                                             <p className="text-primary-gray mt-1">Ngày sinh: { item?.birthday != null && moment(item?.birthday).format("DD/MM/YYYY")}</p>
                                         </Link>
                                         <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
-                                        <button className={str}>Affiliate</button>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {moment(item?.joinedDate).format('DD/MM/YYYY HH:mm')}
+                                        <div><button className={str}>Affiliate</button></div>
+                                        {item.status == 2 ? <div><button className="text-[10px] text-white rounded px-1 bg-red-400">Tạm dừng</button></div> : <></>}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {item?.phone}

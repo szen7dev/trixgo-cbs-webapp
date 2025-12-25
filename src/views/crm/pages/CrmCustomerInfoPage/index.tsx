@@ -109,6 +109,7 @@ export const CrmCustomerInfoPage: FC = () => {
               type: defaultValues.type,
               gender: defaultValues.gender,
               realStatus: defaultValues.realStatus,
+              status: defaultValues.status,
               insuranceStatus: defaultValues.insuranceStatus,
               familyPolicy: defaultValues.familyPolicy,
               contractSign: defaultValues.contractSign,
@@ -254,6 +255,7 @@ export const CrmCustomerInfoPage: FC = () => {
             bankAccount: detailHuman.bankAccount,
             insuranceFee: detailHuman.insuranceFee,
             annualWorkingHours: detailHuman.annualWorkingHours,
+            status: detailHuman.status,
           }}
         />
         <JourneyInfo
