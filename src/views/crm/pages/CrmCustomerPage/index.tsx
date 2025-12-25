@@ -18,6 +18,7 @@ import CameraIcon from "assets/images/camera-icon.svg";
 
 // ========== Hooks ========== //
 import { useHumanCustom, useListHuman } from "services/hooks/human/useHuman";
+import { useContact } from "services/hooks/items/useContact";
 import { useProjectCustom } from "services/hooks/items/useProject";
 import { ModalCreateOrUpdateCustomer } from 'views/item/shareComponents/common';
 import { useCustomer } from "services/hooks/items/useCustomer";
@@ -65,6 +66,8 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
     const [genders, setGenders] = useState<string[]>([]);
 
     const [projectKeyword, setProjectKeyword] = useState("");
+    const [contactKeyword, setContactKeyword] = useState("");
+    const [supportsID, setSupportsID] = useState<string[]>([]);
     const [departmentsID, setDepartmentsID] = useState<string[]>([]);
 
     const { listProjectsUserIsMember } = useProjectCustom({
@@ -72,12 +75,18 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
         isFetchProjectsUserIsMember: true
     });
 
+    const { list: listCustomer } = useContact({
+        params: { keyword: contactKeyword, limit: 20 },
+        isFetchList: true
+    })
+
     const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs, refetchListHuman } = useListHuman({
         params: {
             // ...fromToDate,
             limit: 10,
             genders,
             departmentsID,
+            supportsID,
             keyword,
         },
         isFetchList: true
@@ -242,6 +251,52 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setDepartmentsID(newList);
                                 dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+
+                        <DropdownSearchableV2
+                            ref={datahubRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Support chăm sóc"}
+                            isMultiple={true}
+                            allowClearValueSingleInput={true}
+                            data={listCustomer}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(
+                                (valueSearch) => setContactKeyword(valueSearch),
+                                500
+                            )}
+                            onchangeValue={item => {
+                                const cloneIDs = [...supportsID];
+                                cloneIDs.push(item._id);
+                                setSupportsID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setSupportsID([]);
+                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...supportsID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setSupportsID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: newList}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();

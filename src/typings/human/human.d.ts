@@ -116,6 +116,7 @@ export interface HumanQueryPayload extends QueryParam {
         types?: string[];
         genders?: string[];
         departmentsID?: string[];
+        supportsID?: string[];
         directions?: string[];
         contractsID?: string[];
         keyword?: string;
