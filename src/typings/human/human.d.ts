@@ -63,7 +63,7 @@ interface HumanInsertPayload {
     "date": string;
     "receivedDate": string;
     "style": string;
-    "status": string;
+    "status": number;
     "amount": number;
     "amountDelivery": number;
     "requestResponse": number;
