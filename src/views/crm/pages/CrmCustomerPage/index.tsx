@@ -379,11 +379,11 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                             <p className="text-primary-gray mt-1">Ngày sinh: { item?.birthday != null && moment(item?.birthday).format("DD/MM/YYYY")}</p>
                                         </Link>
                                         <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
-                                        <button className={str}>Affiliate</button>
-                                        {item.status == 2 ? <div><button className="text-[10px] text-white rounded px-1 bg-red-400">Tạm dừng</button></div> : <></>}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {moment(item?.joinedDate).format('DD/MM/YYYY HH:mm')}
+                                        <div><button className={str}>Affiliate</button></div>
+                                        {item.status == 2 ? <div><button className="text-[10px] text-white rounded px-1 bg-red-400">Tạm dừng</button></div> : <></>}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {item?.phone}
