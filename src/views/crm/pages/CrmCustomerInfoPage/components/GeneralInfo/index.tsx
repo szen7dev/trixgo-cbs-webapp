@@ -34,10 +34,10 @@ export const GeneralInfo: FC<Props> = memo((props) => {
           <tbody>
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
-                ID Hệ thống
+                ID Hệ thống/Mã hiệu
               </td>
               <td className="border w-2/6 pl-4">
-                {info?._id}
+                {info?._id} | {info?.sign}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("phone")}
@@ -49,10 +49,10 @@ export const GeneralInfo: FC<Props> = memo((props) => {
 
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("sign")}
+                Địa chỉ
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.sign}
+                {info?.area?.name}, {info?.area?.parent?.name}, {info?.area?.parent?.parent?.name}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("email")}
