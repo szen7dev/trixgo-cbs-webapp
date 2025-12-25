@@ -190,6 +190,7 @@ export type Human = {
     realStatus?: number;
     pubertyOnsetDate?: string;
     birthday?: string;
+    joinedDate?: string;
     identity?: string;
     address?: string;
     dateProvice?: string;

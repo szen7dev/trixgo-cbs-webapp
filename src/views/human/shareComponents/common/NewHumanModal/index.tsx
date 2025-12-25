@@ -193,6 +193,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       phone: "",
       email: "",
       birthday: "",
+      joinedDate: "",
       pubertyOnsetDate: "",
       identity: "",
       dateProvice: "",
@@ -241,6 +242,10 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         birthday:
           (moment(values.birthday).isValid() &&
             moment(values.birthday).toJSON()) ||
+          "",
+        joinedDate:
+          (moment(values.joinedDate).isValid() &&
+            moment(values.joinedDate).toJSON()) ||
           "",
         pubertyOnsetDate:
           (moment(values.pubertyOnsetDate).isValid() &&
@@ -1864,6 +1869,24 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         inlineSearch={true}
                       />
                     </div>
+                    <div className="w-1/5 flex items-center">
+                        <span className="mr-4 text-primary-gray">Ngày tham gia</span>
+                          <DatePicker
+                            name="joinedDate"
+                            selected={
+                              values.joinedDate
+                                ? new Date(values.joinedDate)
+                                : defaultValues.joinedDate && new Date(defaultValues.joinedDate)}
+                            onChange={(date: Date | null) => setFieldValue("joinedDate", date)}
+                            onSelect={(date: Date | null) => setFieldValue("joinedDate", date)}
+                            isClearable={false}
+                            closeOnScroll
+                            autoComplete="off"
+                            dateFormat="dd/MM/yyyy"
+                            placeholderText="Ngày tham gia..."
+                            className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
+                          />
+                      </div>
                   </div>
 
                   <div className="absolute flex justify-end items-center bottom-0 -ml-6 px-6 h-12 w-full border-t border-gray-300 text-primary-light">
