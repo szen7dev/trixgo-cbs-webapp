@@ -378,7 +378,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                             <p className="text-primary-gray mt-1">{item?.identity != null && item?.identity }</p>
                                             <p className="text-primary-gray mt-1">Ngày sinh: { item?.birthday != null && moment(item?.birthday).format("DD/MM/YYYY")}</p>
                                         </Link>
-                                        {/* <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p> */}
+                                        <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                                         <button className={str}>Affiliate</button>
                                         {item.status == 2 ? <div><button className="text-[10px] text-white rounded px-1 bg-red-400">Tạm dừng</button></div> : <></>}
                                     </td>
