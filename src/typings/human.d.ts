@@ -185,7 +185,9 @@ export type Human = {
     note?: string;
     email?: string;
     gender?: number;
+    boneAge?: number;
     realStatus?: number;
+    pubertyOnsetDate?: string;
     birthday?: string;
     identity?: string;
     address?: string;

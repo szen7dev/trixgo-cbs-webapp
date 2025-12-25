@@ -1,7 +1,6 @@
 import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { formatNumberMoney } from "utils/cmcs";
 import type { Human } from 'typings/human';
 
 type Props = {
@@ -26,7 +25,6 @@ export enum INSURANCE_STATUS {
 export const GeneralInfo: FC<Props> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
   const { info } = props;
-
   return (
     <div className="px-4 mt-5">
       {/* Thông tin khách hàng */}
@@ -36,7 +34,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
           <tbody>
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
-                {i18n("id")}
+                ID Hệ thống
               </td>
               <td className="border w-2/6 pl-4">
                 {info?._id}
@@ -95,21 +93,22 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {info?.position?.name}
               </td>
             </tr>
+
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
-                Ghi chú
+                Ngày dậy thì
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.note}
+                {info?.pubertyOnsetDate ? moment(info?.pubertyOnsetDate).isValid() && moment(info?.pubertyOnsetDate).format(DATE_FORMAT) : ''}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
-                Lĩnh vực chuyên ngành
+                Tuổi xương thực
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.field?.name}
+                {info?.boneAge}
               </td>
-              
             </tr>
+
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
                 Danh mục cha
@@ -132,10 +131,10 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 {info?.support?.name}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
-                
+                Lĩnh vực chuyên ngành
               </td>
               <td className="border w-2/6 pl-4">
-                
+                {info?.field?.name}
               </td>
             </tr>
             <tr className="border h-7 leading-7">
@@ -144,6 +143,20 @@ export const GeneralInfo: FC<Props> = memo((props) => {
               </td>
               <td className="border w-2/6 pl-4">
                 {info?.linkUser?.fullname}
+              </td>
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Khởi tạo
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.userCreate?.fullname} - {moment(info?.createAt).isValid() && moment(info?.createAt).format("DD/MM/YYYY hh:mm")}
+              </td>
+            </tr>
+            <tr className="border h-7 leading-7">
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Ghi chú
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.note}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 Cập nhật lần cuối

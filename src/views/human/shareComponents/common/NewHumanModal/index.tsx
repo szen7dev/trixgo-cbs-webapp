@@ -187,6 +187,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       phone: "",
       email: "",
       birthday: "",
+      pubertyOnsetDate: "",
       identity: "",
       dateProvice: "",
       place: "",
@@ -234,6 +235,10 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         birthday:
           (moment(values.birthday).isValid() &&
             moment(values.birthday).toJSON()) ||
+          "",
+        pubertyOnsetDate:
+          (moment(values.pubertyOnsetDate).isValid() &&
+            moment(values.pubertyOnsetDate).toJSON()) ||
           "",
         changeSallaryDate:
           (moment(values.changeSallaryDate).isValid() &&
@@ -1158,7 +1163,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           handleBlur(e);
                         }}
                       />
-                    </div> : <span className="w-2/12 text-primary-gray">Lương</span>}
+                    </div > : <span className="w-2/12 text-primary-gray">Lương</span>}
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
                         Mức lương đóng Bảo hiểm
@@ -1502,57 +1507,54 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     
-                  <div className="w-1/5 flex items-center">
-                      <span className="w-4/12 text-primary-gray">
-                        Lĩnh vực chuyên môn
-                      </span>
-                      <DropdownSearchable
-                        onchangeValue={(value) => {
-                          setFieldValue("field", value)
-                        }
-                        }
-                        onSearchInputChange={debounce(
-                          (value) => setSearchFieldTypeValue(value),
-                          500
-                        )}
-                        placeholder="Lĩnh vực chuyên môn..."
-                        className="w-full pl-0 -mb-1 outline-none"
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        showTriangle={false}
-                        maxWidthInput="max-w-none"
-                        renderSelectedItem={(item) => (
-                          <div
-                            style={{ width: 100 }}
-                            className="flex items-center"
-                          >
-                            <p
-                              style={{
-                                textOverflow: "ellipsis",
-                                maxWidth: "100%",
-                                minWidth: 0,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                flex: "1 1 auto",
-                              }}
+                    <div className="w-1/5 flex items-center">
+                        <span className="w-6/12 text-primary-gray">
+                          Danh mục cha
+                        </span>
+                        <DropdownSearchable
+                          onchangeValue={(value) =>
+                            setFieldValue("parent", value)
+                          }
+                          onSearchInputChange={debounce(
+                            (value) => setSearchContact(value),
+                            500
+                          )}
+                          placeholder="Danh mục cha"
+                          className="w-full pl-0 -mb-1 outline-none"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-none"
+                          renderSelectedItem={(item) => (
+                            <div
+                              style={{ width: 100 }}
+                              className="flex items-center"
                             >
-                              {item.text}
-                            </p>
-                          </div>
-                        )}
-                        initialValue={defaultValues?.field}
-                        data={listFieldType.map((field) => {
-                          return ({
-                            label: `${field.name}`,
-                            value: field._id,
-                          })
-                        })}
-                        formatItem={{
-                          id: "value",
-                          text: "label",
-                        }}
-                        inlineSearch={true}
-                      />
+                              <p
+                                style={{
+                                  textOverflow: "ellipsis",
+                                  maxWidth: "100%",
+                                  minWidth: 0,
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  flex: "1 1 auto",
+                                }}
+                              >
+                                {item.text}
+                              </p>
+                            </div>
+                          )}
+                          initialValue={defaultValues?.parent}
+                          data={contacts.map((parent) => ({
+                            value: parent._id,
+                            label: parent.name,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
+                        />
                     </div>
 
                     <div className="w-1/5 flex items-center">
@@ -1571,6 +1573,43 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
 
                     <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Số giờ làm quy định/năm
+                      </span>
+                      <Field
+                        type="text"
+                        name="annualWorkingHours"
+                        placeholder="Số giờ làm quy định/năm"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div>
+
+                   <div className="w-1/5 flex items-center">
+                      <span className="mr-4 text-primary-gray">Ngày dậy thì</span>
+                      <DatePicker
+                        name="birthday"
+                        selected={
+                          values.pubertyOnsetDate
+                            ? new Date(values.pubertyOnsetDate)
+                            : defaultValues.pubertyOnsetDate && new Date(defaultValues.pubertyOnsetDate)}
+                        onChange={(date: Date | null) => setFieldValue("pubertyOnsetDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("pubertyOnsetDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày dậy thì..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
+                      />
+                    </div>
+
+                  </div>
+
+                  <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                     <div className="w-1/5 flex items-center">
                         <span className="w-6/12 text-primary-gray">
                           Hỗ trợ, CSKH
                         </span>
@@ -1619,14 +1658,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           inlineSearch={true}
                         />
                     </div>
-
-                    <div className="w-1/5 flex items-center">
-                      
-                    </div>
-
-                  </div>
-
-                  <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                    
                     <div className="w-1/5 flex items-center">
                         <span className="w-6/12 text-primary-gray">
                           Link với tài khoản
@@ -1668,56 +1700,6 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           data={listUsersSystem.map((linkUser) => ({
                             value: linkUser._id,
                             label: linkUser.fullname,
-                          }))}
-                          formatItem={{
-                            id: "value",
-                            text: "label",
-                          }}
-                          inlineSearch={true}
-                        />
-                    </div>
-                    
-                    <div className="w-1/5 flex items-center">
-                        <span className="w-6/12 text-primary-gray">
-                          Danh mục cha
-                        </span>
-                        <DropdownSearchable
-                          onchangeValue={(value) =>
-                            setFieldValue("parent", value)
-                          }
-                          onSearchInputChange={debounce(
-                            (value) => setSearchContact(value),
-                            500
-                          )}
-                          placeholder="Danh mục cha"
-                          className="w-full pl-0 -mb-1 outline-none"
-                          isMultiple={false}
-                          allowClearValueSingleInput={true}
-                          showTriangle={false}
-                          maxWidthInput="max-w-none"
-                          renderSelectedItem={(item) => (
-                            <div
-                              style={{ width: 100 }}
-                              className="flex items-center"
-                            >
-                              <p
-                                style={{
-                                  textOverflow: "ellipsis",
-                                  maxWidth: "100%",
-                                  minWidth: 0,
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  flex: "1 1 auto",
-                                }}
-                              >
-                                {item.text}
-                              </p>
-                            </div>
-                          )}
-                          initialValue={defaultValues?.parent}
-                          data={contacts.map((parent) => ({
-                            value: parent._id,
-                            label: parent.name,
                           }))}
                           formatItem={{
                             id: "value",
@@ -1776,18 +1758,57 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           inlineSearch={true}
                         />
                     </div>
+                    
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
-                        Số giờ làm quy định/năm
+                        Lĩnh vực chuyên môn
                       </span>
-                      <Field
-                        type="text"
-                        name="annualWorkingHours"
-                        placeholder="Số giờ làm quy định/năm"
-                        className="w-full h-6 outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
+                      <DropdownSearchable
+                        onchangeValue={(value) => {
+                          setFieldValue("field", value)
+                        }
+                        }
+                        onSearchInputChange={debounce(
+                          (value) => setSearchFieldTypeValue(value),
+                          500
+                        )}
+                        placeholder="Lĩnh vực chuyên môn..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div
+                            style={{ width: 100 }}
+                            className="flex items-center"
+                          >
+                            <p
+                              style={{
+                                textOverflow: "ellipsis",
+                                maxWidth: "100%",
+                                minWidth: 0,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                flex: "1 1 auto",
+                              }}
+                            >
+                              {item.text}
+                            </p>
+                          </div>
+                        )}
+                        initialValue={defaultValues?.field}
+                        data={listFieldType.map((field) => {
+                          return ({
+                            label: `${field.name}`,
+                            value: field._id,
+                          })
+                        })}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
                         }}
+                        inlineSearch={true}
                       />
                     </div>
                   </div>
