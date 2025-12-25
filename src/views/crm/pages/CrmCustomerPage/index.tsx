@@ -5,7 +5,7 @@ import moment from "moment";
 import { DropdownSearchableV2, Loader } from "shareComponents/common";
 
 // ========== Utils ========== //
-import { GENDER_TYPES } from 'apis/localdb';
+import { GENDER_TYPES, CONTACT_STATUS2 } from 'apis/localdb';
 // import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { debounce } from "lodash";
@@ -64,6 +64,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
     const location = useLocation()
 
     const [genders, setGenders] = useState<string[]>([]);
+    const [statuss, setStatuss] = useState<string[]>([]);
 
     const [projectKeyword, setProjectKeyword] = useState("");
     const [contactKeyword, setContactKeyword] = useState("");
@@ -85,6 +86,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
             // ...fromToDate,
             limit: 10,
             genders,
+            statuss,
             departmentsID,
             supportsID,
             keyword,
@@ -173,6 +175,95 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                             onChange={onChangeSearch}
                             />
                         </div>
+
+                        <DropdownSearchableV2
+                            ref={datahubRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Support chăm sóc"}
+                            isMultiple={true}
+                            allowClearValueSingleInput={true}
+                            data={listCustomer}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(
+                                (valueSearch) => setContactKeyword(valueSearch),
+                                500
+                            )}
+                            onchangeValue={item => {
+                                const cloneIDs = [...supportsID];
+                                cloneIDs.push(item._id);
+                                setSupportsID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setSupportsID([]);
+                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...supportsID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setSupportsID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+
+                        <DropdownSearchableV2
+                            ref={typeRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Trạng thái"}
+                            isMultiple={true}
+                            disableSearch={true}
+                            allowClearValueSingleInput={true}
+                            data={CONTACT_STATUS2}
+                            formatItem={{
+                                "id": "value"
+                            }}
+                            onchangeValue={item => {
+                                const cloneIDs = [...statuss];
+                                cloneIDs.push(item.value);
+                                setStatuss(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setStatuss([]);
+                                dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...statuss];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setStatuss(newList);
+                                dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+
                         <DropdownSearchableV2
                             ref={typeRef}
                             className={"mr-1 border border-primary-border rounded-lg mb-2"}
@@ -251,52 +342,6 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setDepartmentsID(newList);
                                 dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
-                            selectOneByOne={true}
-                        />
-
-                        <DropdownSearchableV2
-                            ref={datahubRef}
-                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Support chăm sóc"}
-                            isMultiple={true}
-                            allowClearValueSingleInput={true}
-                            data={listCustomer}
-                            formatItem={{
-                                id: "_id",
-                                text: "name"
-                            }}
-                            onSearchInputChange={debounce(
-                                (valueSearch) => setContactKeyword(valueSearch),
-                                500
-                            )}
-                            onchangeValue={item => {
-                                const cloneIDs = [...supportsID];
-                                cloneIDs.push(item._id);
-                                setSupportsID(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: cloneIDs}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onClearData={() => {
-                                setSupportsID([]);
-                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: []}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={id => {
-                                const cloneIDs = [...supportsID];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setSupportsID(newList);
-                                dispatch(setFilterDropdown({keyFilter: "supportsID", dataFilter: newList}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();

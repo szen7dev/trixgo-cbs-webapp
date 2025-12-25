@@ -214,6 +214,11 @@ export const CONTACT_TA = [
     { value: 2, text: 'A' },
 ]
 
+export const CONTACT_STATUS2 = [
+    { value: 1, text: 'Hoạt động' },
+    { value: 2, text: 'Tạm dừng' },
+]
+
 // PHÂN LOẠI CHÍNH SÁCH
 export const CONTACT_POLICY = [
     { value: 1, text: 'Không' },
