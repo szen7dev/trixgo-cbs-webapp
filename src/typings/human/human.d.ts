@@ -10,6 +10,7 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
     phone: string;
     email: string;
     birthday: string;
+    joinedDate: string;
     gender: number;
     support?: any;
     area?: any;
