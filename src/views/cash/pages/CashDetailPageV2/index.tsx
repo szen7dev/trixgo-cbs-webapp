@@ -557,6 +557,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
                             {record.userUpdate.fullname} - {formatDateTime(record.modifyAt)}
                           </div>
                         )}
+                        <p style={{ fontSize: '12px', color: '#808080', fontWeight: 'normal', fontStyle: 'italic', marginTop: '4px' }}><i>{record._id}</i></p>
                       </td>
                       <td className="td">
                         {record.customer && (
