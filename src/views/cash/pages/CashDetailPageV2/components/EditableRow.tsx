@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { DropdownSearchable } from './DropdownSearchable';
-import { DateTimePicker } from './DateTimePicker';
+import { DateTimePicker } from 'shareComponents/common/DateTimePicker';
 import { CurrencyInput } from './CurrencyInput';
 import { ReceiptRecord, DropdownOption } from '../shared/types';
 import { isoStringToDate, dateToISOString } from '../shared/utils';

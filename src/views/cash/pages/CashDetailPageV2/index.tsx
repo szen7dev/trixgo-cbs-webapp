@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import debounce from 'lodash/debounce';
-import { DateTimePicker } from './components/DateTimePicker';
+import { DateTimePicker } from 'shareComponents/common/DateTimePicker';
 import { EditableRow } from './components/EditableRow';
 import './styles.css';
 import API from 'apis/repository';
@@ -24,7 +24,11 @@ import {
 } from './shared/utils';
 import { fetchDropdownData } from './shared/api';
 
-export const CashDetailPageV2: React.FC = () => {
+interface CashDetailPageProps {
+  outin?: number
+}
+
+export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
   const history = useHistory();
   const { accountId } = useParams<{ accountId: string }>();
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
@@ -79,7 +83,7 @@ export const CashDetailPageV2: React.FC = () => {
       setLoading(true);
       const { data } = await API.post('/api/store/order_products', {
         accountID: accountId,
-        outin: 2,
+        outin,
         name: newRecord.name,
         date: dateToISOString(newRecord.date)
       });
@@ -113,7 +117,7 @@ export const CashDetailPageV2: React.FC = () => {
       // Map the updated fields to API schema
       const apiPayload: any = {
         orderProductID: id,
-        quantity: 1
+        quantity: 1,
       };
 
       // Only include fields that were actually updated
@@ -190,7 +194,7 @@ export const CashDetailPageV2: React.FC = () => {
         select: "_id fullname name phone"
       });
 
-      let apiUrl = `/api/store/order_products?accountID=${accountId}&outin=2&populates=${populates}`;
+      let apiUrl = `/api/store/order_products?accountID=${accountId}&outin=${outin}&populates=${populates}`;
 
       // Add keyword to URL if provided
       if (keyword) {
