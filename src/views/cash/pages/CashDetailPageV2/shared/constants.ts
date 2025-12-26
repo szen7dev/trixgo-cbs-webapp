@@ -6,7 +6,7 @@ export const STATUS_MAP: Record<number, ReceiptStatus> = {
   2: "Chờ Ship lấy hàng/Mang hàng tới Ship",
   3: "Đang vận chuyển/giao hàng",
   4: "Giao không thành công",
-  5: "Đã giao/Hoàn thành",
+  5: "Hoàn thành",
   6: "Hủy bỏ",
   7: "Trả hàng/Hoàn tiền",
 };
@@ -35,7 +35,7 @@ export const STATUS_OPTIONS = [
   { id: "2", text: "Chờ Ship lấy hàng/Mang hàng tới Ship" },
   { id: "3", text: "Đang vận chuyển/giao hàng" },
   { id: "4", text: "Giao không thành công" },
-  { id: "5", text: "Đã giao/Hoàn thành" },
+  { id: "5", text: "Hoàn thành" },
   { id: "6", text: "Hủy bỏ" },
   { id: "7", text: "Trả hàng/Hoàn tiền" },
 ];

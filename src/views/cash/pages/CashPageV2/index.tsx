@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import styles from './CashPageV2.module.css';
 import API from 'apis/repository';
@@ -7,6 +7,7 @@ import ArrowDownIcon from 'assets/icons/ArrowDownIcon';
 import ChevronLeftIcon from 'assets/icons/ChevronLeftIcon';
 import ChevronRightIcon from 'assets/icons/ChevronRightIcon';
 import BackIcon from 'assets/icons/BackIconV2';
+import { DateRangePicker, DateRange } from 'shareComponents/common/DateTimePicker';
 
 // Type definitions
 interface CashDataItem {
@@ -35,7 +36,13 @@ interface TableRow {
   accountId?: string;
 }
 
-export const CashPageV2: FC = () => {
+interface CashPageProps {
+  outin?: number
+}
+
+export const CashPageV2: FC<CashPageProps> = ({ outin }) => {
+  console.log({ outin });
+
   const { companyId } = useParams<{ companyId?: string }>();
   const history = useHistory();
   const [tableData, setTableData] = useState<TableRow[]>([]);
@@ -47,14 +54,20 @@ export const CashPageV2: FC = () => {
     closing: 0
   });
 
+  // Date range state
+  const [dateRange, setDateRange] = useState<DateRange>({
+    from: new Date(new Date().getFullYear(), 0, 1), // January 1st of current year
+    to: new Date() // Today
+  });
+
   const fetchCashData = async () => {
     try {
       setLoading(true);
 
       // Build API URL based on whether we have a companyId
       const apiUrl = companyId
-        ? `/api/store/order_products/get-amount-by-property?option=1&companyID=${companyId}`
-        : `/api/store/order_products/get-amount-by-property`;
+        ? `/api/store/order_products/get-amount-by-property?outin=${outin}&option=1&companyID=${companyId}`
+        : `/api/store/order_products/get-amount-by-property?outin=${outin}`;
 
       const { data: { data, error } } = await API.get(apiUrl);
 
@@ -129,15 +142,24 @@ export const CashPageV2: FC = () => {
   const handleAccountClick = (row: TableRow) => {
     if (companyId && row.accountId) {
       // Navigate to account detail view
-      history.push(`/cash/receipt-detail-v2/${row.accountId}`);
+      const path = outin === 1 ? '/cash/new-payment-detail' : '/cash/new-receipt-detail';
+      history.push(`${path}/${row.accountId}`);
     } else if (row.companyId && !companyId) {
       // Navigate to company summary view
-      history.push(`/cash/new-receipt/${row.companyId}`);
+      const path = outin === 1 ? '/cash/new-payment' : '/cash/new-receipt';
+      history.push(`${path}/${row.companyId}`);
     }
   };
 
   const handleBackClick = () => {
-    history.push('/cash/new-receipt');
+    const path = outin === 1 ? '/cash/new-payment' : '/cash/new-receipt';
+    history.push(path);
+  };
+
+  const handleDateRangeChange = (range: DateRange) => {
+    setDateRange(range);
+    // TODO: Implement API call with date range filter
+    console.log('Date range changed:', range);
   };
 
   return (
@@ -176,15 +198,12 @@ export const CashPageV2: FC = () => {
 
       {/* Filter & Action Bar */}
       <div className={styles.filterBar}>
-        <div className={styles.dateFilterWrapper}>
-          <div className={styles.dateGroup}>
-            <span className={styles.dateLabel}>Từ ngày</span>
-            <div className={styles.dateValue}>01/01/2025</div>
-          </div>
-          <div className={styles.dateGroup}>
-            <span className={styles.dateLabel}>Đến ngày</span>
-            <div className={styles.dateValue}>14/12/2025</div>
-          </div>
+        <div>
+          <DateRangePicker
+            value={dateRange}
+            onChange={handleDateRangeChange}
+            placeholder="Chọn khoảng thời gian"
+          />
         </div>
         <button className={styles.downloadBtn}>
           <span>Tải xuống</span>

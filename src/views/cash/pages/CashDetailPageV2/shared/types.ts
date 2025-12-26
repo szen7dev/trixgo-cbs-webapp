@@ -87,6 +87,6 @@ export type ReceiptStatus =
   | "Chờ Ship lấy hàng/Mang hàng tới Ship"
   | "Đang vận chuyển/giao hàng"
   | "Giao không thành công"
-  | "Đã giao/Hoàn thành"
+  | "Hoàn thành"
   | "Hủy bỏ"
   | "Trả hàng/Hoàn tiền";

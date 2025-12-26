@@ -1,11 +1,11 @@
-/* DateTimePicker Custom Styles - Matching Design System */
+/* DateRangePicker Custom Styles - Matching Design System */
 
-.date-time-picker-wrapper {
+.date-range-picker-wrapper {
   position: relative;
   font-family: 'Inter', sans-serif;
 }
 
-.date-time-picker-input {
+.date-range-picker-input {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #E6E6E6;
@@ -19,32 +19,32 @@
   min-height: 40px;
 }
 
-.date-time-picker-input:hover:not(.disabled) {
+.date-range-picker-input:hover:not(.disabled) {
   border-color: #0060E1;
 }
 
-.date-time-picker-input.focused {
+.date-range-picker-input.focused {
   border-color: #0060E1;
   box-shadow: 0 0 0 2px rgba(0, 96, 225, 0.1);
 }
 
-.date-time-picker-input.disabled {
+.date-range-picker-input.disabled {
   opacity: 0.5;
   cursor: not-allowed;
   background: #F9FAFB;
 }
 
-.date-time-picker-input .has-value {
+.date-range-picker-input .has-value {
   color: #1A1A1A;
   font-size: 14px;
 }
 
-.date-time-picker-input .placeholder {
+.date-range-picker-input .placeholder {
   color: #808080;
   font-size: 14px;
 }
 
-.date-time-picker-icons {
+.date-range-picker-icons {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -70,7 +70,7 @@
   color: #808080;
 }
 
-.date-time-picker-popover {
+.date-range-picker-popover {
   position: absolute;
   z-index: 50;
   margin-top: 4px;
@@ -83,15 +83,15 @@
 }
 
 /* Override react-day-picker styles to match design system */
-.date-time-picker-popover .DayPicker {
+.date-range-picker-popover .DayPicker {
   font-family: 'Inter', sans-serif;
 }
 
-.date-time-picker-popover .DayPicker-wrapper {
+.date-range-picker-popover .DayPicker-wrapper {
   padding: 0;
 }
 
-.date-time-picker-popover .DayPicker-Caption {
+.date-range-picker-popover .DayPicker-Caption {
   text-align: center;
   margin-bottom: 12px;
 }
@@ -124,7 +124,7 @@
   box-shadow: 0 0 0 2px rgba(0, 96, 225, 0.1);
 }
 
-.date-time-picker-popover .DayPicker-NavButton {
+.date-range-picker-popover .DayPicker-NavButton {
   position: absolute;
   top: 0;
   width: 28px;
@@ -140,30 +140,30 @@
   border-radius: 6px;
 }
 
-.date-time-picker-popover .DayPicker-NavButton:hover {
+.date-range-picker-popover .DayPicker-NavButton:hover {
   background-color: #F9FAFB;
 }
 
-.date-time-picker-popover .DayPicker-NavButton--prev {
+.date-range-picker-popover .DayPicker-NavButton--prev {
   left: 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M15 18L9 12L15 6' stroke='%231A1A1A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-.date-time-picker-popover .DayPicker-NavButton--next {
+.date-range-picker-popover .DayPicker-NavButton--next {
   right: 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M9 18L15 12L9 6' stroke='%231A1A1A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-.date-time-picker-popover .DayPicker-Weekdays {
+.date-range-picker-popover .DayPicker-Weekdays {
   margin-top: 8px;
 }
 
-.date-time-picker-popover .DayPicker-WeekdaysRow {
+.date-range-picker-popover .DayPicker-WeekdaysRow {
   display: flex;
   justify-content: space-around;
 }
 
-.date-time-picker-popover .DayPicker-Weekday {
+.date-range-picker-popover .DayPicker-Weekday {
   color: #808080;
   font-size: 12px;
   font-weight: 600;
@@ -171,20 +171,20 @@
   padding: 8px 0;
 }
 
-.date-time-picker-popover .DayPicker-Weekday abbr {
+.date-range-picker-popover .DayPicker-Weekday abbr {
   text-decoration: none;
 }
 
-.date-time-picker-popover .DayPicker-Body {
+.date-range-picker-popover .DayPicker-Body {
   margin-top: 4px;
 }
 
-.date-time-picker-popover .DayPicker-Week {
+.date-range-picker-popover .DayPicker-Week {
   display: flex;
   justify-content: space-around;
 }
 
-.date-time-picker-popover .DayPicker-Day {
+.date-range-picker-popover .DayPicker-Day {
   width: 36px;
   height: 36px;
   display: flex;
@@ -199,69 +199,55 @@
   background: transparent;
 }
 
-.date-time-picker-popover .DayPicker-Day:hover:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected) {
+.date-range-picker-popover .DayPicker-Day:hover:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected) {
   background-color: #F9FAFB;
 }
 
-.date-time-picker-popover .DayPicker-Day--today {
+.date-range-picker-popover .DayPicker-Day--today {
   font-weight: 600;
   color: #0060E1;
 }
 
-.date-time-picker-popover .DayPicker-Day--selected:not(.DayPicker-Day--disabled) {
+.date-range-picker-popover .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  background-color: #E6F2FF !important;
+  color: #0060E1 !important;
+}
+
+.date-range-picker-popover .DayPicker-Day--start {
   background-color: #0060E1 !important;
   color: white !important;
   font-weight: 600;
+  border-radius: 8px 0 0 8px !important;
 }
 
-.date-time-picker-popover .DayPicker-Day--outside {
+.date-range-picker-popover .DayPicker-Day--end {
+  background-color: #0060E1 !important;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 0 8px 8px 0 !important;
+}
+
+.date-range-picker-popover .DayPicker-Day--start.DayPicker-Day--end {
+  border-radius: 8px !important;
+}
+
+.date-range-picker-popover .DayPicker-Day--outside {
   color: #CCCCCC;
 }
 
-.date-time-picker-popover .DayPicker-Day--disabled {
+.date-range-picker-popover .DayPicker-Day--disabled {
   color: #CCCCCC;
   cursor: not-allowed;
 }
 
-/* Time Picker Section */
-.time-picker-section {
+/* Range Confirm Section */
+.range-confirm-section {
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid #E6E6E6;
 }
 
-.time-picker-inputs {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.time-input {
-  width: 60px;
-  padding: 8px;
-  text-align: center;
-  border: 1px solid #E6E6E6;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: 'Inter', sans-serif;
-  outline: none;
-  transition: all 0.2s;
-}
-
-.time-input:focus {
-  border-color: #0060E1;
-  box-shadow: 0 0 0 2px rgba(0, 96, 225, 0.1);
-}
-
-.time-separator {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1A1A1A;
-}
-
-.time-confirm-button {
+.range-confirm-button {
   width: 100%;
   padding: 10px 16px;
   background: #0060E1;
@@ -275,10 +261,16 @@
   font-family: 'Inter', sans-serif;
 }
 
-.time-confirm-button:hover {
+.range-confirm-button:hover:not(:disabled) {
   background: #0052C9;
 }
 
-.time-confirm-button:active {
+.range-confirm-button:active:not(:disabled) {
   background: #0046B0;
+}
+
+.range-confirm-button:disabled {
+  background: #CCCCCC;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
