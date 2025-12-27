@@ -7,9 +7,6 @@ import './styles.css';
 import API from 'apis/repository';
 import { ReceiptRecord, AccountInfo, DropdownOption } from './shared/types';
 import {
-  CUSTOMER_OPTIONS,
-  FEE_ITEM_OPTIONS,
-  FACILITY_OPTIONS,
   TYPE_OPTIONS,
   STATUS_CODES,
   STATUS_OPTIONS
@@ -23,9 +20,13 @@ import {
   dateToISOString
 } from './shared/utils';
 import { fetchDropdownData } from './shared/api';
+import { createLinkAndClick } from "utils";
+import { toast } from "react-toastify";
+import { useProductCustom } from 'services/hooks/useStoreProduct';
 
 interface CashDetailPageProps {
   outin?: number
+  type?: number
 }
 
 export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
@@ -36,11 +37,11 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
   const [loading, setLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [customerOptions, setCustomerOptions] = useState<DropdownOption[]>(CUSTOMER_OPTIONS);
+  const [customerOptions, setCustomerOptions] = useState<DropdownOption[]>([]);
   const [contactsNextCursor, setContactsNextCursor] = useState<string | null>(null);
-  const [feeItemOptions, setFeeItemOptions] = useState<DropdownOption[]>(FEE_ITEM_OPTIONS);
+  const [feeItemOptions, setFeeItemOptions] = useState<DropdownOption[]>([]);
   const [subTypesNextCursor, setSubTypesNextCursor] = useState<string | null>(null);
-  const [facilityOptions, setFacilityOptions] = useState<DropdownOption[]>(FACILITY_OPTIONS);
+  const [facilityOptions, setFacilityOptions] = useState<DropdownOption[]>([]);
   const [fundasNextCursor, setFundasNextCursor] = useState<string | null>(null);
 
   // Loading states for dropdowns
@@ -50,6 +51,45 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
 
   // Search keyword for records list
   const [searchKeyword, setSearchKeyword] = useState('');
+
+  // Export state
+  const [, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  });
+
+  const { exportByFilterAsync } = useProductCustom();
+
+  const handleDownloadExcel = async () => {
+    try {
+      setStateExport({ isExporting: true });
+
+      const { error, data } = await exportByFilterAsync({
+        filterParams: {
+          accountID: accountId,
+          sortKey: JSON.stringify(['date__1', 'createAt__1']),
+        }
+      })
+
+      if (error) {
+        return toast.warn(data?.message);
+      }
+
+      data && createLinkAndClick(data, "_self");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+  };
+
+  // Pagination states
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [pageSize] = useState(5);
+
+  // Cursor history for backward navigation
+  const cursorHistoryRef = useRef<(string | null)[]>([]);
 
   // State for the new row being created - only date and content
   const [newRecord, setNewRecord] = useState<Partial<{ date: Date; name: string }>>({
@@ -85,7 +125,8 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
         accountID: accountId,
         outin,
         name: newRecord.name,
-        date: dateToISOString(newRecord.date)
+        date: dateToISOString(newRecord.date),
+        ...[outin === 2 ? { type: 7 } : {}]
       });
 
       if (data?.data) {
@@ -142,8 +183,12 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
       if (updatedFields.status !== undefined) {
         apiPayload.status = updatedFields.status;
       }
+      if (updatedFields.forward !== undefined) {
+        apiPayload.forward = updatedFields.forward;
+      }
 
       console.log('API Payload:', apiPayload);
+      console.log('updatedFields', updatedFields);
 
       // Make PUT request to update the record
       const { data } = await API.put('/api/store/order_products', apiPayload);
@@ -184,7 +229,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
     }
   };
 
-  const fetchRecords = async (keyword?: string) => {
+  const fetchRecords = async (keyword?: string, cursor?: string | null, direction: 'next' | 'prev' | 'initial' = 'initial') => {
     if (!accountId) return;
 
     try {
@@ -194,22 +239,63 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
         select: "_id fullname name phone"
       });
 
-      let apiUrl = `/api/store/order_products?accountID=${accountId}&outin=${outin}&populates=${populates}`;
+      let apiUrl = `/api/store/order_products?accountID=${accountId}&outin=${outin}&populates=${populates}&limit=${pageSize}`;
 
       // Add keyword to URL if provided
       if (keyword) {
         apiUrl += `&keyword=${encodeURIComponent(keyword)}`;
       }
 
+      // Add cursor for pagination
+      if (cursor) {
+        apiUrl += `&lastestID=${cursor}`;
+      }
+
       const { data: result } = await API.get(apiUrl);
 
       if (result?.data?.listRecords) {
         setRecords(result.data.listRecords);
+        setTotalRecords(result.data.totalRecord || 0);
+
+        // Update cursors based on response
+        const newNextCursor = result.data.listRecords.length === pageSize
+          ? result.data.listRecords[result.data.listRecords.length - 1]._id
+          : null;
+        setNextCursor(newNextCursor);
+
+        // Update page number and cursor history
+        if (direction === 'next') {
+          setCurrentPage(prev => prev + 1);
+          // Store the cursor used to fetch this page in the history
+          cursorHistoryRef.current.push(cursor ?? null);
+        } else if (direction === 'prev') {
+          setCurrentPage(prev => Math.max(1, prev - 1));
+          // Remove the last cursor from history when going back
+          cursorHistoryRef.current.pop();
+        } else {
+          // Reset for initial load
+          setCurrentPage(1);
+          cursorHistoryRef.current = [];
+        }
       }
     } catch (error) {
       console.error('Error fetching records:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (nextCursor) {
+      fetchRecords(searchKeyword, nextCursor, 'next');
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      // Get the cursor for the previous page from history
+      const prevPageCursor = cursorHistoryRef.current[cursorHistoryRef.current.length - 2] ?? null;
+      fetchRecords(searchKeyword, prevPageCursor, 'prev');
     }
   };
 
@@ -223,7 +309,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
     });
 
     setCustomerOptions(prev => [...prev, ...result.options]);
-    setContactsNextCursor(result.nextCursor);
+    setContactsNextCursor(result.nextCursor ?? null);
   };
 
   const loadMoreSubTypes = async () => {
@@ -236,7 +322,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
     });
 
     setFeeItemOptions(prev => [...prev, ...result.options]);
-    setSubTypesNextCursor(result.nextCursor);
+    setSubTypesNextCursor(result.nextCursor ?? null);
   };
 
   const loadMoreFundas = async () => {
@@ -249,7 +335,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
     });
 
     setFacilityOptions(prev => [...prev, ...result.options]);
-    setFundasNextCursor(result.nextCursor);
+    setFundasNextCursor(result.nextCursor ?? null);
   };
 
   // Search handlers with keyword parameter - debounced with lodash
@@ -265,7 +351,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
       });
 
       setCustomerOptions(result.options);
-      setContactsNextCursor(result.nextCursor);
+      setContactsNextCursor(result.nextCursor ?? null);
     } finally {
       setIsSearchingContacts(false);
     }
@@ -283,7 +369,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
       });
 
       setFeeItemOptions(result.options);
-      setSubTypesNextCursor(result.nextCursor);
+      setSubTypesNextCursor(result.nextCursor ?? null);
     } finally {
       setIsSearchingSubTypes(false);
     }
@@ -301,7 +387,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
       });
 
       setFacilityOptions(result.options);
-      setFundasNextCursor(result.nextCursor);
+      setFundasNextCursor(result.nextCursor ?? null);
     } finally {
       setIsSearchingFundas(false);
     }
@@ -352,7 +438,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
               companyId: accountData.company
             });
             setCustomerOptions(contactsResult.options);
-            setContactsNextCursor(contactsResult.nextCursor);
+            setContactsNextCursor(contactsResult.nextCursor ?? null);
 
             // Fetch subtypes for fee item dropdown
             const subTypesResult = await fetchDropdownData({
@@ -360,7 +446,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
               companyId: accountData.company
             });
             setFeeItemOptions(subTypesResult.options);
-            setSubTypesNextCursor(subTypesResult.nextCursor);
+            setSubTypesNextCursor(subTypesResult.nextCursor ?? null);
 
             // Fetch fundas for facility dropdown
             const fundasResult = await fetchDropdownData({
@@ -368,7 +454,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
               companyId: accountData.company
             });
             setFacilityOptions(fundasResult.options);
-            setFundasNextCursor(fundasResult.nextCursor);
+            setFundasNextCursor(fundasResult.nextCursor ?? null);
           }
         }
 
@@ -412,19 +498,41 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
                   <path d="M15 19.9201L8.47997 13.4001C7.70997 12.6301 7.70997 11.3701 8.47997 10.6001L15 4.08008" stroke="#292D32" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
-              <span className="pageTitle">{accountInfo ? `${accountInfo.name}-${accountInfo.description}` : ''}</span>
+              <span className="pageTitle">
+                {outin === 1 ? 'Quỹ thu' : outin === 2 ? 'Quỹ chi' : ''}
+                {accountInfo && ` - ${accountInfo.name}-${accountInfo.description}`}
+              </span>
             </div>
             <div className="paginationControl">
-              <span className="paginationText">1 - 50 trong số 100</span>
+              <span className="paginationText">
+                {records.length > 0
+                  ? `${(currentPage - 1) * pageSize + 1} - ${(currentPage - 1) * pageSize + records.length} trong số ${totalRecords}`
+                  : '0 trong số 0'
+                }
+              </span>
               <div className="paginationArrows">
-                <div className="arrowBtn">
+                <div
+                  className={`arrowBtn ${currentPage === 1 ? 'disabled' : ''}`}
+                  onClick={handlePrevPage}
+                  style={{
+                    cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                    opacity: currentPage === 1 ? 0.5 : 1
+                  }}
+                >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 19.9201L8.47997 13.4001C7.70997 12.6301 7.70997 11.3701 8.47997 10.6001L15 4.08008" stroke="#808080" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M15 19.9201L8.47997 13.4001C7.70997 12.6301 7.70997 11.3701 8.47997 10.6001L15 4.08008" stroke={currentPage === 1 ? "#808080" : "#1A1A1A"} strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <div className="arrowBtn">
+                <div
+                  className={`arrowBtn ${!nextCursor ? 'disabled' : ''}`}
+                  onClick={handleNextPage}
+                  style={{
+                    cursor: !nextCursor ? 'not-allowed' : 'pointer',
+                    opacity: !nextCursor ? 0.5 : 1
+                  }}
+                >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8.91003 19.9201L15.43 13.4001C16.2 12.6301 16.2 11.3701 15.43 10.6001L8.91003 4.08008" stroke="#1A1A1A" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8.91003 19.9201L15.43 13.4001C16.2 12.6301 16.2 11.3701 15.43 10.6001L8.91003 4.08008" stroke={!nextCursor ? "#808080" : "#1A1A1A"} strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
               </div>
@@ -450,7 +558,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
               </svg>
             </div>
             <div className="actionButtons">
-              <button className="downloadBtn">
+              <button className="downloadBtn" onClick={handleDownloadExcel}>
                 <span className="downloadBtnText">Tải xuống</span>
               </button>
               <button className="createBtn" onClick={handleCreateNew}>

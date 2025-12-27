@@ -74,7 +74,7 @@ export const CashDetailPage: FC = () => {
     refetch,
     loading,
   } = useQueryDetailStoreParent(orderID);
-  
+
   const {
     dataNotFilter: listStoreChild,
     loading: isFetchStoreChild,
@@ -175,18 +175,18 @@ export const CashDetailPage: FC = () => {
 
   // Gọi tới API để đẩy data lên
   useEffect(() => {
-      if(dataImport.length){
-          const fetchData = async () => {
-              const data = await importExcelAsync({ option: "2", parentID: orderID, dataImport: JSON.stringify(dataImport) });
-              setDataImport([]);
+    if (dataImport.length) {
+      const fetchData = async () => {
+        const data = await importExcelAsync({ option: "2", parentID: orderID, dataImport: JSON.stringify(dataImport) });
+        setDataImport([]);
 
-              if(!data.error){
-                  return toast.success("Import thành công");
-              }
-              return toast.error(data.message);
-          }
-          fetchData();
+        if (!data.error) {
+          return toast.success("Import thành công");
+        }
+        return toast.error(data.message);
       }
+      fetchData();
+    }
   }, [JSON.stringify(dataImport)])
 
   /**
@@ -205,7 +205,7 @@ export const CashDetailPage: FC = () => {
       if (!event.target.files || !event.target.files.length) return;
 
       const validation = await validateFiles(event.target.files);
-      if(validation.error) return toast.warn(validation.message);
+      if (validation.error) return toast.warn(validation.message);
 
       const arrFileID: any = []
 
@@ -240,42 +240,42 @@ export const CashDetailPage: FC = () => {
 
   const toggleModalOpenSign = () => {
     openModal(
-        <div
-          className={
-            "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-          }
-        >
-          <ModalConfirm
-            title="Bạn có muốn xác nhận không?"
-            description="Thông tin xác nhận của bạn sẽ được hiển thị trong chi tiết"
-            onConfirm={handleConfirmSignature}
-            defaultText={false}
-            onCancel={closeModal}
-          />
-        </div>
-      );
+      <div
+        className={
+          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title="Bạn có muốn xác nhận không?"
+          description="Thông tin xác nhận của bạn sẽ được hiển thị trong chi tiết"
+          onConfirm={handleConfirmSignature}
+          defaultText={false}
+          onCancel={closeModal}
+        />
+      </div>
+    );
   };
 
   const handleConfirmSignature = useCallback(async () => {
     try {
-        const { error, data } = await onUpdateStoreParentAsync({
-          orderID,
-          isAddSignature: true
-        })
+      const { error, data } = await onUpdateStoreParentAsync({
+        orderID,
+        isAddSignature: true
+      })
 
-        closeModal();
-        if (error) {
-            return toast.warning(data.message);
-        }
-        refetch()
-        toast.success('Ký xác nhận thành công');
+      closeModal();
+      if (error) {
+        return toast.warning(data.message);
+      }
+      refetch()
+      toast.success('Ký xác nhận thành công');
     } catch (error) {
-        closeModal();
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
+      closeModal();
+      if (typeof error === "string") {
+        toast.error(error);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   }, [storeInfo?._id])
 
@@ -295,24 +295,24 @@ export const CashDetailPage: FC = () => {
           </div>
           <p className={"text-gray-400"}>
             Chỉnh sửa {" "}
-              {moment(storeInfo.modifyAt).isValid() &&
+            {moment(storeInfo.modifyAt).isValid() &&
               moment(storeInfo.modifyAt).fromNow()}{" "}
             bởi {storeInfo.userUpdate?.fullname}
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
-          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 6})}>
+          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({ option: 6 })}>
             Tải excel Phiếu
           </button>
         </div>
       </div>
 
       <div className="flex-1 flex items-center justify-end">
-      <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} 
-         onClick={toggleModalOpenSign}
+        <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"}
+          onClick={toggleModalOpenSign}
         >
-            <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
-            <span>Xác nhận</span>
+          <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
+          <span>Xác nhận</span>
         </button>
         <PaginateV2
           ref={ref}
@@ -481,7 +481,7 @@ export const CashDetailPage: FC = () => {
         </table>
 
         {
-            storeInfo?.signatures?.length ? <SignatureDetail task={storeInfo} />: <></>
+          storeInfo?.signatures?.length ? <SignatureDetail task={storeInfo} /> : <></>
         }
 
       </div>
