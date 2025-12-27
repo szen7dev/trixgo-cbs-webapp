@@ -14,7 +14,7 @@ export const STATUS_MAP: Record<number, ReceiptStatus> = {
 // Type mapping
 export const TYPE_MAP: Record<number, string> = {
   1: "Đầu kỳ",
-  0: "Cuối kỳ",
+  0: "Bình thường",
 };
 
 // Status codes
@@ -59,5 +59,5 @@ export const TYPE_CODES = {
 
 export const TYPE_OPTIONS = [
   { id: "1", text: "Đầu kỳ" },
-  { id: "0", text: "Cuối kỳ" },
+  { id: "0", text: "Bình thường" },
 ];

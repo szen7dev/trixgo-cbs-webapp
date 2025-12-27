@@ -69,8 +69,8 @@ const CashRouter: FC = () => {
                     <Route exact path="/cash/new-payment" component={() => <CashPageV2 outin={1} />} />
                     <Route exact path="/cash/new-receipt/:companyId" component={() => <CashPageV2 outin={2} type={7} />} />
                     <Route exact path="/cash/new-payment/:companyId" component={() => <CashPageV2 outin={1} />} />
-                    <Route exact path="/cash/new-receipt-detail/:accountId" component={() => <CashDetailPageV2 outin={2} type={7} />} />
-                    <Route exact path="/cash/new-payment-detail/:accountId" component={() => <CashDetailPageV2 outin={1} />} />
+                    <Route exact path="/cash/new-receipt/detail/:accountId" component={() => <CashDetailPageV2 outin={2} type={7} />} />
+                    <Route exact path="/cash/new-payment/detail/:accountId" component={() => <CashDetailPageV2 outin={1} />} />
 
                     <Route exact path="/cash/receipt" component={() => <CashPage outin={2} type={7} />} />
                     <Route exact path="/cash/receipt/:id" component={CashDetailPage} />

@@ -393,6 +393,39 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
     }
   }, [accountInfo?.company]);
 
+  // Handler functions to ensure current record values exist in dropdown options
+  const ensureCustomerOption = (option: DropdownOption) => {
+    setCustomerOptions(prev => {
+      // Check if option already exists
+      const exists = prev.some(opt => opt.id === option.id);
+      if (!exists) {
+        // Add at the beginning so it's easily visible
+        return [option, ...prev];
+      }
+      return prev;
+    });
+  };
+
+  const ensureFeeItemOption = (option: DropdownOption) => {
+    setFeeItemOptions(prev => {
+      const exists = prev.some(opt => opt.id === option.id);
+      if (!exists) {
+        return [option, ...prev];
+      }
+      return prev;
+    });
+  };
+
+  const ensureFacilityOption = (option: DropdownOption) => {
+    setFacilityOptions(prev => {
+      const exists = prev.some(opt => opt.id === option.id);
+      if (!exists) {
+        return [option, ...prev];
+      }
+      return prev;
+    });
+  };
+
   // Create debounced versions using useMemo to maintain stable references
   const searchContacts = useMemo(
     () => debounce(handleSearchContacts, 700),
@@ -499,7 +532,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
                 </svg>
               </button>
               <span className="pageTitle">
-                {outin === 1 ? 'Quỹ thu' : outin === 2 ? 'Quỹ chi' : ''}
+                {outin === 2 ? 'Quỹ thu' : outin === 1 ? 'Quỹ chi' : ''}
                 {accountInfo && ` - ${accountInfo.name}-${accountInfo.description}`}
               </span>
             </div>
@@ -649,6 +682,9 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
                       isSearchingCustomers={isSearchingContacts}
                       isSearchingFeeItems={isSearchingSubTypes}
                       isSearchingFacilities={isSearchingFundas}
+                      onEnsureCustomerOption={ensureCustomerOption}
+                      onEnsureFeeItemOption={ensureFeeItemOption}
+                      onEnsureFacilityOption={ensureFacilityOption}
                     />
                   ) : (
                     <tr
