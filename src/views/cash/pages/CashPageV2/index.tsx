@@ -141,7 +141,7 @@ export const CashPageV2: FC<CashPageProps> = ({ outin }) => {
   const handleAccountClick = (row: TableRow) => {
     if (companyId && row.accountId) {
       // Navigate to account detail view
-      const path = outin === 1 ? '/cash/new-payment-detail' : '/cash/new-receipt-detail';
+      const path = outin === 1 ? '/cash/new-payment/detail' : '/cash/new-receipt/detail';
       history.push(`${path}/${row.accountId}`);
     } else if (row.companyId && !companyId) {
       // Navigate to company summary view
@@ -186,7 +186,9 @@ export const CashPageV2: FC<CashPageProps> = ({ outin }) => {
               <span>Quay lại</span>
             </button>
           )}
-          <div className={styles.title}>Phiếu thu</div>
+          <div className={styles.title}>
+            {outin === 2 ? 'Quỹ thu' : outin === 1 ? 'Quỹ chi' : ''}
+          </div>
         </div>
         <div className={styles.pagination}>
           <span>1 - {tableData.length} trong số {tableData.length}</span>

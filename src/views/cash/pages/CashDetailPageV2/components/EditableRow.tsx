@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { DropdownSearchable } from './DropdownSearchable';
 import { DateTimePicker } from 'shareComponents/common/DateTimePicker';
 import { CurrencyInput } from './CurrencyInput';
@@ -22,6 +22,9 @@ interface EditableRowProps {
   isSearchingCustomers?: boolean;
   isSearchingFeeItems?: boolean;
   isSearchingFacilities?: boolean;
+  onEnsureCustomerOption?: (option: DropdownOption) => void;
+  onEnsureFeeItemOption?: (option: DropdownOption) => void;
+  onEnsureFacilityOption?: (option: DropdownOption) => void;
 }
 
 export const EditableRow: React.FC<EditableRowProps> = ({
@@ -40,10 +43,53 @@ export const EditableRow: React.FC<EditableRowProps> = ({
   onSearchFacilities,
   isSearchingCustomers,
   isSearchingFeeItems,
-  isSearchingFacilities
+  isSearchingFacilities,
+  onEnsureCustomerOption,
+  onEnsureFeeItemOption,
+  onEnsureFacilityOption
 }) => {
   const [editData, setEditData] = useState(record);
   const editRowRef = useRef<HTMLTableRowElement>(null);
+
+  // Ensure current values exist in dropdown options when component mounts
+  // Only run when the record changes (different record being edited), not when options arrays change
+  useEffect(() => {
+    console.log({ record, customerOptions, feeItemOptions, facilityOptions });
+
+    // Check and add customer if exists and not in options
+    if (record.customer && onEnsureCustomerOption) {
+      const exists = customerOptions.some(opt => opt.id === record.customer?._id);
+      if (!exists) {
+        onEnsureCustomerOption({
+          id: record.customer._id,
+          text: `${record.customer.name}${record.customer.phone ? ' - ' + record.customer.phone : ''}`
+        });
+      }
+    }
+
+    // Check and add subtype if exists and not in options
+    if (record.subtype && onEnsureFeeItemOption) {
+      const exists = feeItemOptions.some(opt => opt.id === record.subtype?._id);
+      if (!exists) {
+        onEnsureFeeItemOption({
+          id: record.subtype._id,
+          text: record.subtype.name
+        });
+      }
+    }
+
+    // Check and add funda if exists and not in options
+    if (record.funda && onEnsureFacilityOption) {
+      const exists = facilityOptions.some(opt => opt.id === record.funda?._id);
+      if (!exists) {
+        onEnsureFacilityOption({
+          id: record.funda._id,
+          text: record.funda.name
+        });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [record._id]);
 
   const handleFieldChange = (field: keyof ReceiptRecord, value: any) => {
     setEditData(prev => ({ ...prev, [field]: value }));
@@ -166,7 +212,7 @@ export const EditableRow: React.FC<EditableRowProps> = ({
       <td className="td">
         <DropdownSearchable
           data={typeOptions}
-          value={typeOptions.find(opt => parseInt(String(opt.id)) === editData.type)}
+          value={typeOptions.find(opt => parseInt(String(opt.id)) === editData.forward)}
           onChange={(item) => {
             if (item) {
               handleFieldChange('forward', parseInt(String(item.id)));
