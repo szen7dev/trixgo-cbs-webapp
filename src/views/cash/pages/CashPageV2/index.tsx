@@ -38,11 +38,10 @@ interface TableRow {
 
 interface CashPageProps {
   outin?: number
+  type?: number
 }
 
 export const CashPageV2: FC<CashPageProps> = ({ outin }) => {
-  console.log({ outin });
-
   const { companyId } = useParams<{ companyId?: string }>();
   const history = useHistory();
   const [tableData, setTableData] = useState<TableRow[]>([]);

@@ -14,8 +14,7 @@ export const STATUS_MAP: Record<number, ReceiptStatus> = {
 // Type mapping
 export const TYPE_MAP: Record<number, string> = {
   1: "Đầu kỳ",
-  2: "Trong kỳ",
-  3: "Cuối kỳ",
+  0: "Cuối kỳ",
 };
 
 // Status codes
@@ -58,27 +57,7 @@ export const TYPE_CODES = {
   ENDING: 3,
 } as const;
 
-// Mock dropdown data - TODO: Replace with API data
-export const CUSTOMER_OPTIONS = [
-  { id: "1", text: "Nguyễn Hoàng Anh - 0988115999" },
-  { id: "2", text: "Trần Văn Nam - 0912345678" },
-  { id: "3", text: "Lê Thị Mai - 0987654321" },
-];
-
-export const FEE_ITEM_OPTIONS = [
-  { id: "1", text: "Khoản mục 1" },
-  { id: "2", text: "Khoản mục 2" },
-  { id: "3", text: "Khoản mục 3" },
-];
-
-export const FACILITY_OPTIONS = [
-  { id: "1", text: "Cơ sở Lương Định Của" },
-  { id: "2", text: "Cơ sở Trần Phú" },
-  { id: "3", text: "Cơ sở Nguyễn Huệ" },
-];
-
 export const TYPE_OPTIONS = [
   { id: "1", text: "Đầu kỳ" },
-  { id: "2", text: "Trong kỳ" },
-  { id: "3", text: "Cuối kỳ" },
+  { id: "0", text: "Cuối kỳ" },
 ];

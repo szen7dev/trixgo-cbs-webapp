@@ -169,7 +169,7 @@ export const EditableRow: React.FC<EditableRowProps> = ({
           value={typeOptions.find(opt => parseInt(String(opt.id)) === editData.type)}
           onChange={(item) => {
             if (item) {
-              handleFieldChange('type', parseInt(String(item.id)));
+              handleFieldChange('forward', parseInt(String(item.id)));
             }
           }}
           placeholder="Chọn loại"
