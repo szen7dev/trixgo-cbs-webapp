@@ -6,8 +6,6 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { validateFiles } from 'validation/file';
-import { read, utils } from 'xlsx';
-import { formatNumberMoney } from "utils/cmcs";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -30,7 +28,6 @@ import { useMediaConfig } from "services/hooks/crm/useMediaConfig";
 /*=====7.OTHER=====*/
 import { MEDIA_CONFIG_TYPES } from "apis/localdb";
 import { ImageProps } from "typings/common";
-import { createLinkAndClick } from "utils";
 import { ModalZoomView } from "shareComponents/common";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
@@ -80,6 +77,10 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
         address: '',
         phone: '',
         email: '',
+        email1: '',
+        email2: '',
+        email3: '',
+        email4: '',
         content: '',
         registration: '',
         note: '',
@@ -130,6 +131,10 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
             address: '',
             phone: '',
             email: '',
+            email1: '',
+            email2: '',
+            email3: '',
+            email4: '',
             content: '',
             registration: '',
             note: '',
@@ -158,7 +163,13 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, status, name, channel, template, secretKey,
+            const { _id, 
+                type, 
+                status, 
+                name, 
+                channel, 
+                template, 
+                secretKey,
                 tokenKey,
                 hotline1,
                 hotline2,
@@ -171,9 +182,14 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 address,
                 phone,
                 email,
+                email1,
+                email2,
+                email3,
+                email4,
                 content,
                 registration,
                 note } = newListIDChecked[0];
+
             setInitialValues({
                 parent: parentID,
                 configID: _id,
@@ -195,6 +211,10 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 address,
                 phone,
                 email,
+                email1,
+                email2,
+                email3,
+                email4,
                 content,
                 registration,
                 note,
