@@ -484,10 +484,49 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                                 <p>{item?.phone}</p>
                                 <p>{item?.email}</p>
                                 <hr />
-                                <p><b>BOD:</b> {item?.email1}</p>
-                                <p><b>Tài chính:</b> {item?.email2}</p>
-                                <p><b>CSKH:</b> {item?.email3}</p>
-                                <p><b>Quản lý:</b> {item?.email4}</p>
+                                <b>BOD:</b>
+                                {item?.email1 ? (
+                                    item.email1.split(',').map((email: any, index: any) => (
+                                    <p key={index} className="ml-2 mb-0 text-sm">
+                                        {email.trim()}
+                                    </p>
+                                    ))
+                                ) : (
+                                    <span> Trống</span>
+                                )}
+                                <hr />
+                                <b>Tài chính:</b>
+                                {item?.email2 ? (
+                                    item.email2.split(',').map((email: any, index: any) => (
+                                    <p key={index} className="ml-2 mb-0 text-sm">
+                                        {email.trim()}
+                                    </p>
+                                    ))
+                                ) : (
+                                    <span> Trống</span>
+                                )}
+                                <hr />
+                                <b>CSKH:</b> 
+                               {item?.email3 ? (
+                                    item.email3.split(',').map((email: any, index: any) => (
+                                    <p key={index} className="ml-2 mb-0 text-sm">
+                                        {email.trim()}
+                                    </p>
+                                    ))
+                                ) : (
+                                    <span> Trống</span>
+                                )}
+                                <hr />
+                                <b>Quản lý:</b>
+                                {item?.email4 ? (
+                                    item.email4.split(',').map((email: any, index: any) => (
+                                    <p key={index} className="ml-2 mb-0 text-sm">
+                                        {email.trim()}
+                                    </p>
+                                    ))
+                                ) : (
+                                    <span> Trống</span>
+                                )}
                                 <hr />
                                 <p>{item?.content}</p>
                             </td>
