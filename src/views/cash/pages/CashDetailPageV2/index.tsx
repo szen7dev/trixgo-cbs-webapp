@@ -126,7 +126,8 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
         outin,
         name: newRecord.name,
         date: dateToISOString(newRecord.date),
-        ...[outin === 2 ? { type: 7 } : {}]
+        type: 7,
+        // ...[outin === 2 ? { type: 7 } : {}]
       });
 
       if (data?.data) {
