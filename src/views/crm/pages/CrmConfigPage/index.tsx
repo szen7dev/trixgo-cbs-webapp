@@ -252,6 +252,10 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 address: '',
                 phone: '',
                 email: '',
+                email1: '',
+                email2: '',
+                email3: '',
+                email4: '',
                 content: '',
                 registration: '',
                 note: '',
@@ -262,7 +266,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1400px",
+                    height: "1650px",
                 }}
             >
                 <ModalCreateOrUpdateConfig
@@ -459,6 +463,12 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                                 {item?.address}
                                 <p>{item?.phone}</p>
                                 <p>{item?.email}</p>
+                                <hr />
+                                <p><b>BOD:</b> {item?.email1}</p>
+                                <p><b>Tài chính:</b> {item?.email2}</p>
+                                <p><b>CSKH:</b> {item?.email3}</p>
+                                <p><b>Quản lý:</b> {item?.email4}</p>
+                                <hr />
                                 <p>{item?.content}</p>
                             </td>
                             <td className="py-1 px-2">{item?.registration}</td>

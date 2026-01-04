@@ -27,6 +27,10 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
     address: '',
     phone: '',
     email: '',
+    email1: '',
+    email2: '',
+    email3: '',
+    email4: '',
     content: '',
     registration: '',
     note: '',
@@ -100,7 +104,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "1400px",
+        height: "1650px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -143,7 +147,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
                   checked={formData.type == 1 ? true : false}
                   onChange={onChange}
                 />
-                <label htmlFor="type" className={"text-left ml-3"}>ZNS (Zalo OA)</label>
+                <label htmlFor="type" className={"text-left ml-3"}>ZNS</label>
             </div>
             <div className={"flex items-center ml-3"}>
                 <input
@@ -168,6 +172,18 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
                   onChange={onChange}
                 />
                 <label htmlFor="type" className={"text-left ml-3"}>Contact công ty</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={4}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 4 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Email phân quyền</label>
             </div>
           </div>
       </section>
@@ -363,6 +379,58 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
           name="email"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.email}
+          onChange={onChange}
+        />
+      </section>
+            <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Email1 - BOD
+        </label>
+        <input
+          type="text"
+          placeholder="Các email phân cách nhau bởi dấu ,"
+          name="email1"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.email1}
+          onChange={onChange}
+        />
+      </section>
+            <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Email2 - Tài chính
+        </label>
+        <input
+          type="text"
+          placeholder="Các email phân cách nhau bởi dấu ,"
+          name="email2"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.email2}
+          onChange={onChange}
+        />
+      </section>
+            <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Email3 - CSKH
+        </label>
+        <input
+          type="text"
+          placeholder="Các email phân cách nhau bởi dấu ,"
+          name="email3"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.email3}
+          onChange={onChange}
+        />
+      </section>
+            <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Email4 - Quản lý điểm bán
+        </label>
+        <input
+          type="text"
+          placeholder="Các email phân cách nhau bởi dấu ,"
+          name="email4"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.email4}
           onChange={onChange}
         />
       </section>

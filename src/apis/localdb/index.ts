@@ -84,6 +84,7 @@ export const MEDIA_CONFIG_TYPES = [
     { value: 1, text: 'ZNS (Zalo OA)' },
     { value: 2, text: 'Facebook' },
     { value: 3, text: 'Contact công ty' },
+    { value: 4, text: 'Email phân quyền' },
 ]
 
 // NHÓM CHỨC NĂNG ỨNG DỤNG MẶC ĐỊNH (PHỤC VỤ CẤU HÌNH BAN ĐẦU)
