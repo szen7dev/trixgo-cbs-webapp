@@ -81,6 +81,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
         email2: '',
         email3: '',
         email4: '',
+        email5: '',
         content: '',
         registration: '',
         note: '',
@@ -135,6 +136,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
             email2: '',
             email3: '',
             email4: '',
+            email5: '',
             content: '',
             registration: '',
             note: '',
@@ -186,6 +188,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 email2,
                 email3,
                 email4,
+                email5,
                 content,
                 registration,
                 note } = newListIDChecked[0];
@@ -215,6 +218,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 email2,
                 email3,
                 email4,
+                email5,
                 content,
                 registration,
                 note,
@@ -276,6 +280,7 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                 email2: '',
                 email3: '',
                 email4: '',
+                email5: '',
                 content: '',
                 registration: '',
                 note: '',
@@ -520,6 +525,17 @@ export const CrmConfigPage: FC<{ type: number }> = ({ type }) => {
                                 <b>Quản lý:</b>
                                 {item?.email4 ? (
                                     item.email4.split(',').map((email: any, index: any) => (
+                                    <p key={index} className="ml-2 mb-0 text-sm">
+                                        {email.trim()}
+                                    </p>
+                                    ))
+                                ) : (
+                                    <span> Trống</span>
+                                )}
+                                <hr />
+                                <b>Giá phiếu kho:</b>
+                                {item?.email5 ? (
+                                    item.email5.split(',').map((email: any, index: any) => (
                                     <p key={index} className="ml-2 mb-0 text-sm">
                                         {email.trim()}
                                     </p>

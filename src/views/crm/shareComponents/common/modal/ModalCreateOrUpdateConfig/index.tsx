@@ -31,6 +31,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
     email2: '',
     email3: '',
     email4: '',
+    email5: '',
     content: '',
     registration: '',
     note: '',
@@ -408,7 +409,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
           onChange={onChange}
         />
       </section>
-            <section className="px-5 mt-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
           Email3 - CSKH
         </label>
@@ -421,7 +422,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
           onChange={onChange}
         />
       </section>
-            <section className="px-5 mt-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
           Email4 - Quản lý điểm bán
         </label>
@@ -431,6 +432,19 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
           name="email4"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.email4}
+          onChange={onChange}
+        />
+      </section>
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Email5 - Giá phiếu kho
+        </label>
+        <input
+          type="text"
+          placeholder="Các email phân cách nhau bởi dấu ,"
+          name="email5"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.email5}
           onChange={onChange}
         />
       </section>
