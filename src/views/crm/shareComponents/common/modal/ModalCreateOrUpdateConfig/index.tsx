@@ -38,7 +38,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { refetch: refetchCustomer, insertAsync, updateAsync } = useMediaConfig({});
+  const { refetch: refetchCustomer, insertAsync, updateAsync } = useMediaConfig({});  
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -382,7 +382,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
           onChange={onChange}
         />
       </section>
-            <section className="px-5 mt-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
           Email1 - BOD
         </label>
@@ -395,7 +395,7 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
           onChange={onChange}
         />
       </section>
-            <section className="px-5 mt-2">
+      <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
           Email2 - Tài chính
         </label>
