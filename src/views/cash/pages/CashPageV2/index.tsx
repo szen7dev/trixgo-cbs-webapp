@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import styles from './CashPageV2.module.css';
 import API from 'apis/repository';
 import { formatCurrency } from 'utils/converter';
@@ -44,6 +44,7 @@ interface CashPageProps {
 export const CashPageV2: FC<CashPageProps> = ({ outin }) => {
   const { companyId } = useParams<{ companyId?: string }>();
   const history = useHistory();
+  const location = useLocation();
   const [tableData, setTableData] = useState<TableRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [totals, setTotals] = useState({
@@ -53,21 +54,52 @@ export const CashPageV2: FC<CashPageProps> = ({ outin }) => {
     closing: 0
   });
 
+  // Initialize date range from URL params or use defaults
+  const getInitialDateRange = (): DateRange => {
+    const params = new URLSearchParams(location.search);
+    const fromParam = params.get('fromDate');
+    const toParam = params.get('toDate');
+
+    return {
+      from: fromParam ? new Date(fromParam) : new Date(new Date().getFullYear(), 0, 1),
+      to: toParam ? new Date(toParam) : new Date()
+    };
+  };
+
   // Date range state
-  const [dateRange, setDateRange] = useState<DateRange>({
-    from: new Date(new Date().getFullYear(), 0, 1), // January 1st of current year
-    to: new Date() // Today
-  });
+  const [dateRange, setDateRange] = useState<DateRange>(getInitialDateRange());
 
   const fetchCashData = async () => {
     try {
       setLoading(true);
 
-      // Build API URL based on whether we have a companyId
-      const apiUrl = companyId
-        ? `/api/store/order_products/get-amount-by-property?outin=${outin}&option=1&companyID=${companyId}`
-        : `/api/store/order_products/get-amount-by-property?outin=${outin}`;
+      // Format dates to YYYY-MM-DD
+      const formatDateForAPI = (date: Date | null): string => {
+        if (!date) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
 
+      // Build query params
+      const params = new URLSearchParams();
+      params.append('outin', String(1));
+
+      if (companyId) {
+        params.append('option', '1');
+        params.append('companyID', companyId);
+      }
+
+      if (dateRange.from) {
+        params.append('fromDate', formatDateForAPI(dateRange.from));
+      }
+
+      if (dateRange.to) {
+        params.append('toDate', formatDateForAPI(dateRange.to));
+      }
+
+      const apiUrl = `/api/store/order_products/get-amount-by-property?${params.toString()}`;
       const { data: { data, error } } = await API.get(apiUrl);
 
       if (error || !data) {
@@ -136,7 +168,7 @@ export const CashPageV2: FC<CashPageProps> = ({ outin }) => {
 
   useEffect(() => {
     fetchCashData();
-  }, [companyId]);
+  }, [companyId, dateRange]);
 
   const handleAccountClick = (row: TableRow) => {
     if (companyId && row.accountId) {
@@ -157,8 +189,29 @@ export const CashPageV2: FC<CashPageProps> = ({ outin }) => {
 
   const handleDateRangeChange = (range: DateRange) => {
     setDateRange(range);
-    // TODO: Implement API call with date range filter
-    console.log('Date range changed:', range);
+
+    // Update URL parameters
+    const params = new URLSearchParams(location.search);
+
+    if (range.from) {
+      const fromDateStr = range.from.toISOString().split('T')[0]; // YYYY-MM-DD
+      params.set('fromDate', fromDateStr);
+    } else {
+      params.delete('fromDate');
+    }
+
+    if (range.to) {
+      const toDateStr = range.to.toISOString().split('T')[0]; // YYYY-MM-DD
+      params.set('toDate', toDateStr);
+    } else {
+      params.delete('toDate');
+    }
+
+    // Update URL without triggering a full page reload
+    const newUrl = `${location.pathname}?${params.toString()}`;
+    history.replace(newUrl);
+
+    // Data will be refetched automatically via useEffect dependency on dateRange
   };
 
   return (
