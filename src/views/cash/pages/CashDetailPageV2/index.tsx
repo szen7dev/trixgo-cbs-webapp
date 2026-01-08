@@ -249,8 +249,6 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
     }
   };
 
-
-
   const fetchRecords = async (keyword?: string, cursor?: string | null, direction: 'next' | 'prev' | 'initial' = 'initial') => {
     if (!accountId) return;
 
