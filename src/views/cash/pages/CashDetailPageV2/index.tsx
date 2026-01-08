@@ -91,44 +91,75 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
   // Cursor history for backward navigation
   const cursorHistoryRef = useRef<(string | null)[]>([]);
 
-  // State for the new row being created - only date and content
-  const [newRecord, setNewRecord] = useState<Partial<{ date: Date; name: string }>>({
-    date: new Date(),
-    name: ''
+  // State for the new row being created - all fields available
+  const [newRecord, setNewRecord] = useState<Partial<ReceiptRecord>>({
+    _id: 'new-record-temp-id',
+    date: dateToISOString(new Date()),
+    name: '',
+    amount: 0,
+    status: STATUS_CODES.COMPLETED,
+    forward: 2,
+    note: ''
   });
-
-  const createRowRef = useRef<HTMLTableRowElement>(null);
 
   const handleCreateNew = () => {
     setIsCreating(true);
     setEditingId(null);
     setNewRecord({
-      date: new Date(),
-      name: ''
+      _id: 'new-record-temp-id',
+      date: dateToISOString(new Date()),
+      name: '',
+      amount: 0,
+      status: STATUS_CODES.COMPLETED,
+      forward: 2,
+      note: ''
     });
-    setTimeout(() => {
-      const firstInput = createRowRef.current?.querySelector('input');
-      if (firstInput) firstInput.focus();
-    }, 0);
   };
 
-  const handleSaveNew = async () => {
-    // Only require date and content for new records
-    if (!newRecord.name || !newRecord.date || !accountId) {
+  const handleSaveNew = async (id: string, updatedFields: Partial<ReceiptRecord>) => {
+    // Only require date and name for new records
+    if (!updatedFields.name || !updatedFields.date || !accountId) {
       setIsCreating(false);
       return;
     }
 
     try {
       setLoading(true);
-      const { data } = await API.post('/api/store/order_products', {
+
+      // Build API payload with all provided fields
+      const apiPayload: any = {
         accountID: accountId,
         outin,
-        name: newRecord.name,
-        date: dateToISOString(newRecord.date),
+        name: updatedFields.name,
+        date: updatedFields.date,
         type: 7,
-        // ...[outin === 2 ? { type: 7 } : {}]
-      });
+      };
+
+      // Add optional fields if provided
+      if (updatedFields.customer?._id) {
+        apiPayload.customerID = updatedFields.customer._id;
+      }
+      if (updatedFields.amount !== undefined) {
+        apiPayload.unitPrice = updatedFields.amount;
+        apiPayload.quantity = 1;
+      }
+      if (updatedFields.subtype?._id) {
+        apiPayload.subtypeID = updatedFields.subtype._id;
+      }
+      if (updatedFields.funda?._id) {
+        apiPayload.fundaID = updatedFields.funda._id;
+      }
+      if (updatedFields.note) {
+        apiPayload.note = updatedFields.note;
+      }
+      if (updatedFields.status !== undefined) {
+        apiPayload.status = updatedFields.status;
+      }
+      if (updatedFields.forward !== undefined) {
+        apiPayload.forward = updatedFields.forward;
+      }
+
+      const { data } = await API.post('/api/store/order_products', apiPayload);
 
       if (data?.data) {
         // Refresh the records list
@@ -136,12 +167,18 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
       }
 
       setNewRecord({
-        date: new Date(),
-        name: ''
+        _id: 'new-record-temp-id',
+        date: dateToISOString(new Date()),
+        name: '',
+        amount: 0,
+        status: STATUS_CODES.COMPLETED,
+        forward: 2,
+        note: ''
       });
       setIsCreating(false);
     } catch (error) {
       console.error('Error creating record:', error);
+      alert('Có lỗi xảy ra khi tạo bản ghi. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -212,23 +249,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
     }
   };
 
-  // Handle focus out (blur) from the new row
-  const handleBlur = (e: React.FocusEvent) => {
-    if (createRowRef.current && createRowRef.current.contains(e.relatedTarget as Node)) {
-      return;
-    }
-    handleSaveNew();
-  };
 
-  const handleNewRecordChange = (field: 'date' | 'name', value: any) => {
-    setNewRecord(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSaveNew();
-    }
-  };
 
   const fetchRecords = async (keyword?: string, cursor?: string | null, direction: 'next' | 'prev' | 'initial' = 'initial') => {
     if (!accountId) return;
@@ -624,30 +645,27 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
             </thead>
             <tbody>
               {isCreating && (
-                <tr
-                  ref={createRowRef}
-                  className="tr editingRow"
-                  onBlur={handleBlur}
-                  onKeyDown={handleKeyDown}
-                  tabIndex={-1}
-                >
-                  <td className="td">
-                    <DateTimePicker
-                      value={newRecord.date}
-                      onChange={(date) => handleNewRecordChange('date', date)}
-                      placeholder="Chọn ngày"
-                    />
-                  </td>
-                  <td className="td" colSpan={8}>
-                    <input
-                      className="inputField"
-                      placeholder="Nhập nội dung"
-                      autoFocus
-                      value={newRecord.name}
-                      onChange={(e) => handleNewRecordChange('name', e.target.value)}
-                    />
-                  </td>
-                </tr>
+                <EditableRow
+                  record={newRecord as ReceiptRecord}
+                  onSave={handleSaveNew}
+                  customerOptions={customerOptions}
+                  feeItemOptions={feeItemOptions}
+                  facilityOptions={facilityOptions}
+                  typeOptions={TYPE_OPTIONS}
+                  statusOptions={STATUS_OPTIONS}
+                  onLoadMoreCustomers={loadMoreContacts}
+                  onLoadMoreFeeItems={loadMoreSubTypes}
+                  onLoadMoreFacilities={loadMoreFundas}
+                  onSearchCustomers={searchContacts}
+                  onSearchFeeItems={searchSubTypes}
+                  onSearchFacilities={searchFundas}
+                  isSearchingCustomers={isSearchingContacts}
+                  isSearchingFeeItems={isSearchingSubTypes}
+                  isSearchingFacilities={isSearchingFundas}
+                  onEnsureCustomerOption={ensureCustomerOption}
+                  onEnsureFeeItemOption={ensureFeeItemOption}
+                  onEnsureFacilityOption={ensureFacilityOption}
+                />
               )}
 
               {loading && records.length === 0 ? (
