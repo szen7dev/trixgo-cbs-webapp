@@ -28,8 +28,11 @@ import { ACCESS_SALARY_TEMP } from "apis/localdb";
 
 enum CLASSIFY {
   "Nhân viên" = 1,
-  "Cộng tác viên",
-  "Chuyên gia",
+  "Khách hàng",
+  "Cộng tác chuyên gia",
+  "Đơn vị cơ sở",
+  "Ba mẹ",
+  "Các bé",
 }
 
 enum GENDER {

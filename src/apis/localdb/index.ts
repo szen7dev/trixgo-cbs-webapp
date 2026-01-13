@@ -198,8 +198,11 @@ export const CUSTOMER_TYPES = [
 // PHÂN LOẠI NHÂN SỰ
 export const CONTACT_SUB_TYPES = [
     { value: 1, text: 'Nhân viên' },
-    { value: 2, text: 'Cộng tác viên' },
-    { value: 3, text: 'Chuyên gia' },
+    { value: 2, text: 'Khách hàng' },
+    { value: 3, text: 'Cộng tác chuyên gia' },
+    { value: 4, text: 'Đơn vị cơ sở' },
+    { value: 5, text: 'Ba mẹ' },
+    { value: 6, text: 'Các bé' },
 ]
 
 // GIỚI TÍNH
