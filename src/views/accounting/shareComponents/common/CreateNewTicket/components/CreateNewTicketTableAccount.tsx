@@ -128,12 +128,12 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Khoản mục phí
 								</div>
-								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
+								{/* <div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Ngân sách
 								</div>
 								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									#
-								</div>
+								</div> */}
 								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Ghi chú
 								</div>
@@ -390,7 +390,7 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[125px]"}
+												className={"w-[150px]"}
 												id="ticket-type" placeholder="Khoản mục phí"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
@@ -422,7 +422,7 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 												inlineSearch={true}
 											/>
 										</div>
-										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
+										{/* <div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[125px]"}
@@ -449,11 +449,11 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 												}}
 												inlineSearch={true}
 											/>
-										</div>
-										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
+										</div> */}
+										{/* <div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field name={`selectedJournals.${index}.updown`} className={"focus:outline-none w-100 border-b w-[40px] border-gray-300"} placeholder={"1, -1"} />
 											<Field name={`selectedJournals.${index}.journalID`} hidden className={"focus:outline-none w-100 border-b w-[80px] border-gray-300"} placeholder={"#"} />
-										</div>
+										</div> */}
 
 										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field name={`selectedJournals.${index}.note`} rows={1} className={"focus:outline-none border-b border-gray-300"} placeholder={"Ghi chú"} />

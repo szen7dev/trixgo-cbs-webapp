@@ -15,7 +15,7 @@ import {
 	useQueryListWarehouse,
 	useQueryListContact,
 	useQueryListContract,
-	useQueryListContractIPC
+	// useQueryListContractIPC
 } from "services/hooks/cmcs/useContractIncome";
 
 import {
@@ -45,6 +45,22 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 		keyword: searchCustomerValue,
 	});
 
+	const [searchReferrerValue, setSearchReferrerValue] = useState(
+		initialValues?.referrer || ""
+	);
+	const { listContact: listReferrer } = useQueryListContact({
+		limit: LIMIT_DROPDOWN,
+		keyword: searchReferrerValue,
+	});
+
+	const [searchSalesValue, setSearchSalesalue] = useState(
+		initialValues?.sales || ""
+	);
+	const { listContact: listSales } = useQueryListContact({
+		limit: LIMIT_DROPDOWN,
+		keyword: searchSalesValue,
+	});
+
 	const [searchContractValue, setSearchContractValue] = useState(
 		initialValues?.contract || ""
 	);
@@ -55,11 +71,11 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 	const [searchContractIPCValue, setSearchContractIPCValue] = useState(
 		initialValues?.ipc || ""
 	);
-	const { listContractIPC } = useQueryListContractIPC({
-		limit: LIMIT_DROPDOWN,
-		keyword: searchContractIPCValue,
-		contractID: values.contract.value || values.contractId
-	});
+	// const { listContractIPC } = useQueryListContractIPC({
+	// 	limit: LIMIT_DROPDOWN,
+	// 	keyword: searchContractIPCValue,
+	// 	contractID: values.contract.value || values.contractId
+	// });
 
 	const [searchSubTypeValue, setSearchSubTypeValue] = useState(
 		initialValues?.subType || ""
@@ -185,7 +201,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 						/>
 					</div>
 					<div className={"w-1/4 flex items-center"}>
-						<div className={"text-left text-gray-500 flex items-center mr-2"}>Cơ sở nội bộ</div>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Xuất sang cơ sở nội bộ</div>
 						<DropdownSearchable
 							onchangeValue={(value: any) => setFieldValue("linkFunda", value)}
 							className={"flex-1"}
@@ -225,7 +241,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							className="font-normal leading-7 text-sm text-negative"
 						/>
 					</div>
-					<div className={"w-1/8 flex items-center"}>
+					<div className={"w-1/5 flex items-center"}>
 						<div className={"w-1/3 flex items-center"}>
 							<Field type="radio" name="vat" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 1)} />
 							<label htmlFor="vat-type-1" className={"text-left ml-3"}>VAT vào</label>
@@ -239,11 +255,11 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							<label htmlFor="vat-type-3" className={"text-left ml-3"}>Không</label>
 						</div>
 					</div>
-					<div className={"w-1/4 flex items-center"}>
-						<div className={"w-1/4 flex items-center"}>
+					<div className={"w-1/3 flex items-center"}>
+						{/* <div className={"w-1/4 flex items-center"}>
 							<Field type="checkbox" id="ticket-type-1" name="advancePayment" className={"form-check-input mt-0"} />
 							<label htmlFor="ticket-type-1" className={"text-left ml-3"}>Tạm ứng</label>
-						</div>
+						</div> */}
 						<div className={"w-1/4 flex items-center"}>
 							<Field type="checkbox" id="ticket-type-2" name="forward" className={"form-check-input mt-0"} />
 							<label htmlFor="ticket-type-2" className={"text-left ml-3"}>Kết chuyển cuối kỳ</label>
@@ -252,9 +268,103 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							<Field type="checkbox" id="ticket-type-3" name="returning" className={"form-check-input mt-0"} />
 							<label htmlFor="ticket-type-3" className={"text-left ml-3"}>Xuất trả hàng mượn</label>
 						</div>
-						<div className={"w-1/4 flex items-center"}>
+						<div className={"w-1/4 flex items-center ml-5"}>
 							<Field type="checkbox" id="ticket-type-4" name="cancel" className={"form-check-input mt-0"} />
 							<label htmlFor="ticket-type-4" className={"text-left ml-3 text-red-600"}>Hủy phiếu</label>
+						</div>
+					</div>
+				</div>
+				<div className={"flex py-1 border-b"}>
+					<div className={"w-1/4 flex items-center"}>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Người giới thiệu</div>
+						<DropdownSearchable
+							onchangeValue={(value: any) => {
+								setFieldValue("referrer", value)
+							}}
+							className={"flex-1"}
+							placeholder="Người giới thiệu"
+							isMultiple={false}
+							allowClearValueSingleInput={true}
+							onClearData={() => setFieldValue("referrer", '')}
+							showTriangle={false}
+							maxWidthInput="max-w-none"
+							renderSelectedItem={(item) => {
+								return (
+									<div className="flex">
+										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
+											<p className="text-1-line-clamp">{`${item.text}`}</p>
+										</Popover>
+									</div>
+								)
+							}}
+							onSearchInputChange={debounce(
+								(value) => setSearchReferrerValue(value),
+								500
+							)}
+							initialValue={initialValues?.referrer}
+							data={listReferrer.map((item: any) => ({
+								label: `${item.name}-${item.phone}`,
+								value: item._id,
+							}))}
+							formatItem={{
+								id: "value",
+								text: "label",
+							}}
+							inlineSearch={true}
+						/>
+						<ErrorMessage
+							name="referrer"
+							component="span"
+							className="font-normal leading-7 text-sm text-negative"
+						/>
+					</div>
+					<div className={"w-1/4 flex items-center"}>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Sales/CSKH</div>
+						<DropdownSearchable
+							onchangeValue={(value: any) => {
+								setFieldValue("sales", value)
+							}}
+							className={"flex-1"}
+							placeholder="Sales/CSKH"
+							isMultiple={false}
+							allowClearValueSingleInput={true}
+							onClearData={() => setFieldValue("sales", '')}
+							showTriangle={false}
+							maxWidthInput="max-w-none"
+							renderSelectedItem={(item) => {
+								return (
+									<div className="flex">
+										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
+											<p className="text-1-line-clamp">{`${item.text}`}</p>
+										</Popover>
+									</div>
+								)
+							}}
+							onSearchInputChange={debounce(
+								(value) => setSearchSalesalue(value),
+								500
+							)}
+							initialValue={initialValues?.sales}
+							data={listSales.map((item: any) => ({
+								label: `${item.name}-${item.phone}`,
+								value: item._id,
+							}))}
+							formatItem={{
+								id: "value",
+								text: "label",
+							}}
+							inlineSearch={true}
+						/>
+						<ErrorMessage
+							name="sales"
+							component="span"
+							className="font-normal leading-7 text-sm text-negative"
+						/>
+					</div>
+					<div className={"w-1/3 flex items-center"}>
+						<div className={"w-1/4 flex items-center"}>
+							<Field type="checkbox" id="ticket-type-5" name="gift" className={"form-check-input mt-0"} />
+							<label htmlFor="ticket-type-5" className={"text-left ml-3"}>Hàng tặng</label>
 						</div>
 					</div>
 				</div>
@@ -438,7 +548,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							inlineSearch={true}
 						/>
 					</div>
-					<div className={"w-1/8 flex items-center"}>
+					{/* <div className={"w-1/8 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Kỳ</div>
 						<DropdownSearchable
 							onchangeValue={(value: any) => setFieldValue("ipc", value)}
@@ -473,7 +583,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							}}
 							inlineSearch={true}
 						/>
-					</div>
+					</div> */}
 				</div>
 				<div className={"flex py-1 border-b"}>
 					<div className={"w-1/4 flex items-center"}>
@@ -548,11 +658,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							className="font-normal leading-7 text-sm text-negative"
 						/>
 					</div>
-					<div className={"w-1/4 flex items-center"}>
-						<div className={"text-left text-gray-500 flex items-center mr-2"}>Ghi chú</div>
-						<Field type="textarea" name="note" rows={2} className={"focus:outline-none flex-1"} placeholder={"Ghi chú"} />
-					</div>
-					<div className={"w-1/4 flex items-center"}>
+					{/* <div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Mã hiệu</div>
 						<Field type="text" name="sign" className={"focus:outline-none"} placeholder={"Mã hiệu"} />
 						<ErrorMessage
@@ -560,11 +666,30 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							component="span"
 							className="font-normal leading-7 text-sm text-negative"
 						/>
+					</div> */}
+					<div className={"w-1/4 flex items-center"}>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Hạn thanh toán</div>
+						<DayPickerInput
+							format={DATE_FORMAT}
+							value={
+								initialValues.paymentDeadline &&
+								moment(initialValues.paymentDeadline).format(DATE_FORMAT)
+							}
+							onDayChange={(day: any) => setFieldValue("paymentDeadline", day)}
+							inputProps={{
+								className: "focus:outline-none placeholder:text-gray-500",
+								placeholder: "Hạn thanh toán",
+							}}
+						/>
 					</div>
 					<div className={"w-1/4 flex items-center"}>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Ghi chú</div>
+						<Field type="textarea" name="note" rows={2} className={"focus:outline-none flex-1"} placeholder={"Ghi chú"} />
+					</div>
+					{/* <div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Tỷ giá USD</div>
 						<Field type="text" name="fcuExRate" className={"focus:outline-none"} placeholder={"Tỷ giá USD"} />
-					</div>
+					</div> */}
 				</div>
 			</div>
 			<CreateNewTicketTableAccount formik={formik} initialValues={initialValues} isEdit={isEdit} />

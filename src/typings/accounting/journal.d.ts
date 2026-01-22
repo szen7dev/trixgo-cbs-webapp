@@ -51,10 +51,19 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
     customer?: {
         _id: string;
         name: string;
-        sign: string;
         phone: string;
         taxid: string;
         address: string;
+    }
+    referrer?: {
+        _id: string;
+        name: string;
+        phone: string;
+    }
+    sales?: {
+        _id: string;
+        name: string;
+        phone: string;
     }
     debit?: {
         _id: string;

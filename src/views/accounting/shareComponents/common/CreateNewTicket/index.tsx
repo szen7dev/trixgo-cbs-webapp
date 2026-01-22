@@ -26,6 +26,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     forward: data.forward ? true : false,
     returning: data.returning ? true : false,
     cancel: data.cancel ? true : false,
+    gift: data.gift ? true : false,
 
     funda: isDataPayLoad ? data?.funda?.value : convertInitialValueDropdown(data?.funda || ''),
     fundaID: data?.funda?.value,
@@ -35,6 +36,10 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     warehouseID: data?.warehouse?.value,
     customer: isDataPayLoad ? data?.customer?.value : convertInitialValueDropdown(data?.customer || ''),
     customerID: data?.customer?.value,
+    referrer: isDataPayLoad ? data?.referrer?.value : convertInitialValueDropdown(data?.referrer || ''),
+    referrerID: data?.referrer?.value,
+    sales: isDataPayLoad ? data?.sales?.value : convertInitialValueDropdown(data?.sales || ''),
+    salesD: data?.sales?.value,
     contract: isDataPayLoad ? data?.contract?.value : convertInitialValueDropdown(data?.contract || ''),
     contractId: data?.contract?.value,
     ipc: isDataPayLoad ? data?.ipc?.value : convertInitialValueDropdown(data?.ipc || ''),
@@ -44,6 +49,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     date: convertDateToString(data.date) || '',
     signInvoice: data.signInvoice || '',
     dateInvoice: convertDateToString(data.dateInvoice) || '',
+    paymentDeadline: convertDateToString(data.paymentDeadline) || '',
     receiver: data.receiver || '',
 
     name: data.name || '',
@@ -115,7 +121,7 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
         `${APP_ACCOUNTING_VOUCHER}?voucherID=${id}`, {
         params: {
           populates: {
-            "path": "funda linkFunda customer contract ipc subtype warehouse",
+            "path": "funda linkFunda customer contract ipc subtype warehouse referrer sales",
             "select": "name description",
           }
         }
