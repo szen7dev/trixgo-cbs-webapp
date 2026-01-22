@@ -279,9 +279,9 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
             <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Hợp đồng/Khoản mục phí
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
+            {/* <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Ngân sách
-            </div>
+            </div> */}
             <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Ghi chú
             </div>
@@ -322,14 +322,10 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
                     </div>
                     <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                       {item?.contract?.name}
-                      <p className="text-primary"><i>{item.subtype?.name}</i></p>
-                    </div>
-                    <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                      {item?.budgetWork?.name}
+                      <p className="">{item.subtype?.name}</p>
                     </div>
                     <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                       {item?.note}
-                      {/* <p><i>{item?.history}</i></p> */}
                     </div>
                 </div>
                 )
@@ -366,9 +362,6 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
             </div>
             <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 font-bold text-right"}>
               {formatNumberMoney(voucherDetail?.amount)}
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-
             </div>
             <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 

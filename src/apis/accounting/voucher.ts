@@ -11,7 +11,7 @@ async function fetchList<T>(params: any): Promise<T> {
             params: {
                 // select: "name date type createAt sign amount note forward forwardIs linkFunda linkVoucher customer userCreate company contract subtype",
                 populates: {
-                    "path": "linkFunda linkVoucher customer userCreate company contract subtype",
+                    "path": "linkFunda linkVoucher customer userCreate contract subtype journals",
                     "select": "name sign fullname"
                 },
                 ...params,

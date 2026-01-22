@@ -336,12 +336,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
       <table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
         <thead className="">
           <tr className="text-primary-gray whitespace-nowrap align-middle text-left relative z-1">
-            {/* <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
-              <input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
-              <button onClick={e => { e.stopPropagation(); }} className="ml-1.5 align-top">
-                <TriangleDown className='inline-block' />
-              </button>
-            </th> */}
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
                 Loại phiếu
@@ -410,6 +404,14 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                             <p className="text-2-line-clamp">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
+                        {item?.journals?.map((journal: any, gIndex: number) => (
+                          journal.goods && (
+                            <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
+                              {journal.goods.name} | {journal.quantity} {journal.goods.unit}
+                            </p>
+                          )
+                        ))}
+                        <hr className="text-gray-500"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
@@ -448,6 +450,14 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                             <p className="text-2-line-clamp text-cbs-highlight-color font-bold">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
+                        {item?.journals?.map((journal: any, gIndex: number) => (
+                          journal.goods && (
+                            <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
+                              {journal.goods.name} | {journal.quantity} {journal.goods.unit}
+                            </p>
+                          )
+                        ))}
+                        <hr className="text-gray-500"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
@@ -493,6 +503,14 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
                         </Popover>
                       </NavLink>
+                      {item?.journals?.map((journal: any, gIndex: number) => (
+                        journal.goods && (
+                          <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
+                            {journal.goods.name} | {journal.quantity} {journal.goods.unit}
+                          </p>
+                        )
+                      ))}
+                      <hr className="text-gray-500"/>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                         {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
