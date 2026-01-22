@@ -108,6 +108,7 @@ export const AccountingDebtDetailPage1: FC = () => {
           const { error, data } = await exportExcelAsync({ 
               type: param.option,
               filterParams: {
+                accountID: accountId,
                 fromDate: inputFilter.fromDate,
                 toDate: inputFilter.toDate,
                 limit: 10,
