@@ -6,15 +6,16 @@ import { formatNumberMoney } from "utils/cmcs";
 import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
-import {
-  useJournalByProperty
-} from "services/hooks/accounting/useGeneralJournal";
 import {debounce} from "lodash";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { useFunda } from "services/hooks/items/useFunda";
+import { useJournalByProperty, useJournal } from "services/hooks/accounting/useGeneralJournal";
+import { createLinkAndClick } from "utils";
+import { toast } from "react-toastify";
 
 export const AccountingDebtPage: FC = () => {
+  const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
@@ -25,8 +26,8 @@ export const AccountingDebtPage: FC = () => {
   const [fundaKeyword, setFundaKeyword] = useState("");
 
   const today = new Date();
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-  const currentMonth = new Date().getMonth()
+  // const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  // const currentMonth = new Date().getMonth()
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
@@ -51,16 +52,48 @@ export const AccountingDebtPage: FC = () => {
     },
     isFetchList: true
   })
-
   // console.log(dataAll)
 
-const handleOnChangeDate = useCallback((date, input) => {
- if (input) {
-   setInputFilter((value) => ({ ...value, toDate: date }))
- } else {
-   setInputFilter((value) => ({ ...value, fromDate: date }))
- }
-}, [])
+  const handleOnChangeDate = useCallback((date, input) => {
+  if (input) {
+    setInputFilter((value) => ({ ...value, toDate: date }))
+  } else {
+    setInputFilter((value) => ({ ...value, fromDate: date }))
+  }
+  }, [])
+
+  //_____Excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  })
+  const { exportExcelAsync } = useJournal({})
+  const handleExportExcel = async (param: any) => {
+    try {
+          console.log('Clicked with parameter:', param)
+          setStateExport({ isExporting: true })
+          const { error, data } = await exportExcelAsync({ 
+              type: param.option,
+              filterParams: {
+                fromDate: inputFilter.fromDate,
+                toDate: inputFilter.toDate,
+                limit: 10,
+                forward: 0,
+                cancel: 0,
+                fundaID: fundaId,
+              }
+            })
+
+          if(error) {
+              return toast.warn(data?.message);
+          }
+
+          data && createLinkAndClick(data, '_self')
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+          setStateExport({ isExporting: false })
+    }
+  }
 
   return (
     <main className="h-full">
@@ -93,7 +126,7 @@ const handleOnChangeDate = useCallback((date, input) => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          {/* <div className={"relative z-5 inline-block"}>
+          <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} 
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -110,13 +143,15 @@ const handleOnChangeDate = useCallback((date, input) => {
                     </div>
 
                     <div className={"mb-4"}>
-                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                          onClick={() => handleExportExcel({option: 5})}
+                        >
                             Tải excel
                         </button>
                     </div>
                 </div>
             }
-          </div> */}
+          </div>
         </div>
       </header>
 

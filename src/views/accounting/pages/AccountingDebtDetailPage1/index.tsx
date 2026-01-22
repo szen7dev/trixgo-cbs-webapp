@@ -14,8 +14,11 @@ import { useFunda } from "services/hooks/items/useFunda";
 import { toast } from "react-toastify";
 import API from "apis/repository";
 const ITEM_ACCOUNT = "/api/item/accounts";
+import { useJournal } from "services/hooks/accounting/useGeneralJournal";
+import { createLinkAndClick } from "utils";
 
 export const AccountingDebtDetailPage1: FC = () => {
+  const [showOption, setShowOption] = useState(false)
   const history = useHistory();
   const [pageIndex, setPageIndex] = useState(0)
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -93,6 +96,39 @@ export const AccountingDebtDetailPage1: FC = () => {
   }
   }, [])
 
+  //_____Excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  })
+  const { exportExcelAsync } = useJournal({})
+  const handleExportExcel = async (param: any) => {
+    try {
+          console.log('Clicked with parameter:', param)
+          setStateExport({ isExporting: true })
+          const { error, data } = await exportExcelAsync({ 
+              type: param.option,
+              filterParams: {
+                fromDate: inputFilter.fromDate,
+                toDate: inputFilter.toDate,
+                limit: 10,
+                forward: 0,
+                cancel: 0,
+                fundaID: fundaId,
+              }
+            })
+
+          if(error) {
+              return toast.warn(data?.message);
+          }
+
+          data && createLinkAndClick(data, '_self')
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+          setStateExport({ isExporting: false })
+    }
+  }
+
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
@@ -148,7 +184,7 @@ export const AccountingDebtDetailPage1: FC = () => {
         />
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          {/* <div className={"relative z-5 inline-block"}>
+          <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} 
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -165,13 +201,15 @@ export const AccountingDebtDetailPage1: FC = () => {
                     </div>
 
                     <div className={"mb-4"}>
-                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                          onClick={() => handleExportExcel({option: 5})}
+                        >
                             Tải excel
                         </button>
                     </div>
                 </div>
             }
-          </div> */}
+          </div>
         </div>
       </header>
 
