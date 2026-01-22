@@ -335,12 +335,12 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
       <table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
         <thead className="">
           <tr className="text-primary-gray whitespace-nowrap align-middle text-left relative z-1">
-            <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
+            {/* <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
               <input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
               <button onClick={e => { e.stopPropagation(); }} className="ml-1.5 align-top">
                 <TriangleDown className='inline-block' />
               </button>
-            </th>
+            </th> */}
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
                 Loại phiếu
@@ -392,9 +392,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 if(item?.forward == 1){
                   return (
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "orange" }}>
-                      <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
+                      {/* <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                         <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-                      </td>
+                      </td> */}
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
                         <p><i>Kết chuyển cuối kỳ</i></p>
@@ -427,9 +427,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 }else{
                   return (
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment">
-                      <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
+                      {/* <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                         <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-                      </td>
+                      </td> */}
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>

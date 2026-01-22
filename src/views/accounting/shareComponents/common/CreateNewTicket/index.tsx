@@ -44,6 +44,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     date: convertDateToString(data.date) || '',
     signInvoice: data.signInvoice || '',
     dateInvoice: convertDateToString(data.dateInvoice) || '',
+    paymentDeadline: convertDateToString(data.paymentDeadline) || '',
     receiver: data.receiver || '',
 
     name: data.name || '',

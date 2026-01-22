@@ -55,11 +55,11 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 	const [searchContractIPCValue, setSearchContractIPCValue] = useState(
 		initialValues?.ipc || ""
 	);
-	const { listContractIPC } = useQueryListContractIPC({
-		limit: LIMIT_DROPDOWN,
-		keyword: searchContractIPCValue,
-		contractID: values.contract.value || values.contractId
-	});
+	// const { listContractIPC } = useQueryListContractIPC({
+	// 	limit: LIMIT_DROPDOWN,
+	// 	keyword: searchContractIPCValue,
+	// 	contractID: values.contract.value || values.contractId
+	// });
 
 	const [searchSubTypeValue, setSearchSubTypeValue] = useState(
 		initialValues?.subType || ""
@@ -185,7 +185,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 						/>
 					</div>
 					<div className={"w-1/4 flex items-center"}>
-						<div className={"text-left text-gray-500 flex items-center mr-2"}>Cơ sở nội bộ</div>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Xuất sang cơ sở nội bộ</div>
 						<DropdownSearchable
 							onchangeValue={(value: any) => setFieldValue("linkFunda", value)}
 							className={"flex-1"}
@@ -438,7 +438,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							inlineSearch={true}
 						/>
 					</div>
-					<div className={"w-1/8 flex items-center"}>
+					{/* <div className={"w-1/8 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Kỳ</div>
 						<DropdownSearchable
 							onchangeValue={(value: any) => setFieldValue("ipc", value)}
@@ -473,7 +473,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							}}
 							inlineSearch={true}
 						/>
-					</div>
+					</div> */}
 				</div>
 				<div className={"flex py-1 border-b"}>
 					<div className={"w-1/4 flex items-center"}>
@@ -562,9 +562,24 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 						/>
 					</div>
 					<div className={"w-1/4 flex items-center"}>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Hạn thanh toán</div>
+						<DayPickerInput
+							format={DATE_FORMAT}
+							value={
+								initialValues.paymentDeadline &&
+								moment(initialValues.paymentDeadline).format(DATE_FORMAT)
+							}
+							onDayChange={(day: any) => setFieldValue("paymentDeadline", day)}
+							inputProps={{
+								className: "focus:outline-none placeholder:text-gray-500",
+								placeholder: "Hạn thanh toán",
+							}}
+						/>
+					</div>
+					{/* <div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Tỷ giá USD</div>
 						<Field type="text" name="fcuExRate" className={"focus:outline-none"} placeholder={"Tỷ giá USD"} />
-					</div>
+					</div> */}
 				</div>
 			</div>
 			<CreateNewTicketTableAccount formik={formik} initialValues={initialValues} isEdit={isEdit} />
