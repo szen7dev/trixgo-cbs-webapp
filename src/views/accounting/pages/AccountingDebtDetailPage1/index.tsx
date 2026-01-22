@@ -13,9 +13,10 @@ import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { useFunda } from "services/hooks/items/useFunda";
 import { toast } from "react-toastify";
 import API from "apis/repository";
-const ITEM_ACCOUNT = "/api/item/accounts";
 import { useJournal } from "services/hooks/accounting/useGeneralJournal";
 import { createLinkAndClick } from "utils";
+
+const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingDebtDetailPage1: FC = () => {
   const [showOption, setShowOption] = useState(false)
