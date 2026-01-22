@@ -336,12 +336,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
       <table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
         <thead className="">
           <tr className="text-primary-gray whitespace-nowrap align-middle text-left relative z-1">
-            {/* <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
-              <input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
-              <button onClick={e => { e.stopPropagation(); }} className="ml-1.5 align-top">
-                <TriangleDown className='inline-block' />
-              </button>
-            </th> */}
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
                 Loại phiếu
