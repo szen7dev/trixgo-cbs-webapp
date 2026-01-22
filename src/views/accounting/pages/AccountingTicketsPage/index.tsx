@@ -404,6 +404,14 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                             <p className="text-2-line-clamp">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
+                        {item?.journals?.map((journal: any, gIndex: number) => (
+                          journal.goods && (
+                            <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
+                              {journal.goods.name} | {journal.quantity} {journal.goods.unit}
+                            </p>
+                          )
+                        ))}
+                        <hr className="text-gray-500"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
@@ -442,6 +450,14 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                             <p className="text-2-line-clamp text-cbs-highlight-color font-bold">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
+                        {item?.journals?.map((journal: any, gIndex: number) => (
+                          journal.goods && (
+                            <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
+                              {journal.goods.name} | {journal.quantity} {journal.goods.unit}
+                            </p>
+                          )
+                        ))}
+                        <hr className="text-gray-500"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
@@ -487,6 +503,14 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
                         </Popover>
                       </NavLink>
+                      {item?.journals?.map((journal: any, gIndex: number) => (
+                        journal.goods && (
+                          <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
+                            {journal.goods.name} | {journal.quantity} {journal.goods.unit}
+                          </p>
+                        )
+                      ))}
+                      <hr className="text-gray-500"/>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                         {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
