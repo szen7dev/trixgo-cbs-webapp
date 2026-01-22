@@ -144,7 +144,7 @@ export const AccountingDebtDetailPage2: FC = () => {
               type: param.option,
               filterParams: {
                 accountID: accountId,
-                customerID: contactId,
+                contactID: contactId,
                 fromDate: inputFilter.fromDate,
                 toDate: inputFilter.toDate,
                 limit: 10,
