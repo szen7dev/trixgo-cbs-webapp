@@ -1060,7 +1060,7 @@ export const MIME_TYPES_PCM = ['mov', 'mp4', 'MP4', 'wav', 'WAV', 'jpg', 'jpeg',
 export const MIME_TYPES_MESSAGE = ['jpg', 'jpeg', 'png', 'gif', 'heic', 'zip', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'dwg', 'mmap', 'mdb', 'rar', 'txt', 'mpp'];
 
 export const DATE_FORMAT = "DD/MM/YYYY";
-export const DATE_FORMAT_TIME = "DD/MM/YYYY HH:MM";
+export const DATE_FORMAT_TIME = "DD/MM/YYYY HH:mm";
 export const LIMIT_DROPDOWN = 20;
 
 /**

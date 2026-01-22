@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useState } from "react";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
-import DotsVerticalIcon from "assets/icons/DotsVertical";
-import Close from "assets/icons/Close";
+// import DotsVerticalIcon from "assets/icons/DotsVertical";
+// import Close from "assets/icons/Close";
 import moment from "moment";
 import { useModal } from "services/hooks/useModal";
 import { formatNumberMoney } from "utils/cmcs";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-import TriangleDown from "assets/icons/TriangleDown";
+// import TriangleDown from "assets/icons/TriangleDown";
 import { Popover } from "shareComponents/common";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import debounce from "lodash/debounce";
@@ -101,6 +101,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     },
     isFetchList: true
   })
+  console.log(listDataWithPager)
 
   const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
   const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
@@ -368,6 +369,11 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
               <span className="pl-2 border-l border-cbs-border">
+                Người giới thiệu/Sales/CSKH
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+              <span className="pl-2 border-l border-cbs-border">
                 Hợp đồng/Khoản mục phí
               </span>
             </th>
@@ -392,9 +398,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 if(item?.forward == 1){
                   return (
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "orange" }}>
-                      {/* <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
-                        <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-                      </td> */}
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
                         <p><i>Kết chuyển cuối kỳ</i></p>
@@ -407,15 +410,24 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                             <p className="text-2-line-clamp">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
-                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
-                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
+                        </p>
+                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
+                        </p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                        {item.contract?.name}
-                        <p className="text-primary"><i>{item.subtype?.name}</i></p>
+                        <p className="">GT: {item.referrer?.name}</p>
+                        <p className="">Sales: {item.sales?.name}</p>
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        <p className="">HĐ: {item.contract?.name}</p>
+                        <p className="">KMP: {item.subtype?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
@@ -427,9 +439,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 }else{
                   return (
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment">
-                      {/* <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
-                        <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-                      </td> */}
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
@@ -439,15 +448,24 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                             <p className="text-2-line-clamp text-cbs-highlight-color font-bold">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
-                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
-                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
+                        </p>
+                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
+                        </p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                        {item.contract?.name}
-                        <p className="text-primary"><i>{item.subtype?.name}</i></p>
+                        <p className="">Sales/CSKH: {item.sales?.name}</p>
+                        <p className="">Giới thiệu: {item.referrer?.name}</p>
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        <p className="">Khoản mục: {item.subtype?.name}</p>
+                        <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
@@ -475,15 +493,24 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
                         </Popover>
                       </NavLink>
-                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
-                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
+                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                        {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
+                      </p>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                        {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
+                      </p>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                        {item.contract?.name}
-                        <p className="text-primary"><i>{item.subtype?.name}</i></p>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        <p className="">Sales/CSKH: {item.sales?.name}</p>
+                        <p className="">Giới thiệu: {item.referrer?.name}</p>
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        <p className="">Khoản mục: {item.subtype?.name}</p>
+                        <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
