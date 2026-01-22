@@ -16,11 +16,14 @@ import { useJournalList } from "services/hooks/accounting/useGeneralJournal";
 import { useFunda } from "services/hooks/items/useFunda";
 import { toast } from "react-toastify";
 import API from "apis/repository";
+import { useJournal } from "services/hooks/accounting/useGeneralJournal";
+import { createLinkAndClick } from "utils";
 
 const ITEM_ACCOUNT = "/api/item/accounts";
 const ITEM_CONTACT = "/api/item/contacts";
 
 export const AccountingDebtDetailPage2: FC = () => {
+  const [showOption, setShowOption] = useState(false)
   const history = useHistory();
   const [pageIndex, setPageIndex] = useState(0)
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -128,6 +131,41 @@ export const AccountingDebtDetailPage2: FC = () => {
     }
   }, [])
 
+  //_____Excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  })
+  const { exportExcelAsync } = useJournal({})
+  const handleExportExcel = async (param: any) => {
+    try {
+          console.log('Clicked with parameter:', param)
+          setStateExport({ isExporting: true })
+          const { error, data } = await exportExcelAsync({ 
+              type: param.option,
+              filterParams: {
+                accountID: accountId,
+                customerID: contactId,
+                fromDate: inputFilter.fromDate,
+                toDate: inputFilter.toDate,
+                limit: 10,
+                forward: 0,
+                cancel: 0,
+                fundaID: fundaId,
+              }
+            })
+
+          if(error) {
+              return toast.warn(data?.message);
+          }
+
+          data && createLinkAndClick(data, '_self')
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+          setStateExport({ isExporting: false })
+    }
+  }
+
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
@@ -184,7 +222,7 @@ export const AccountingDebtDetailPage2: FC = () => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          {/* <div className={"relative z-5 inline-block"}>
+          <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} 
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -201,13 +239,15 @@ export const AccountingDebtDetailPage2: FC = () => {
                     </div>
 
                     <div className={"mb-4"}>
-                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                          onClick={() => handleExportExcel({option: 5})}
+                        >
                             Tải excel
                         </button>
                     </div>
                 </div>
             }
-          </div> */}
+          </div>
           <div className="absolute right-0">
             <PaginateV2
                 ref={ref}

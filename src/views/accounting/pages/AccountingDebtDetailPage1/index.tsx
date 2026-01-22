@@ -31,8 +31,8 @@ export const AccountingDebtDetailPage1: FC = () => {
   const [fundaKeyword, setFundaKeyword] = useState("");
 
   const today = new Date();
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-  const currentMonth = new Date().getMonth()
+  // const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  // const currentMonth = new Date().getMonth()
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
