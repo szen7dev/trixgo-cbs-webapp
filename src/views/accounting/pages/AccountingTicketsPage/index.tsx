@@ -408,16 +408,18 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         {item?.journals?.map((journal: any, gIndex: number) => (
                           journal.goods && (
                             <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
-                              {journal.goods.name} | {journal.quantity} {journal.goods.unit}
+                              {journal.goods.name.slice(0, 210)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
                             </p>
                           )
                         ))}
-                        <hr className="text-gray-500"/>
-                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {item.customer?.name}
+                        <hr className="text-gray-500 mt-5"/>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
+                      </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">GT: {item.referrer?.name}</p>
                         <p className="">Sales: {item.sales?.name}</p>
@@ -426,7 +428,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className="">HĐ: {item.contract?.name}</p>
                         <p className="">KMP: {item.subtype?.name}</p>
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {item.note}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
@@ -456,16 +458,18 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         {item?.journals?.map((journal: any, gIndex: number) => (
                           journal.goods && (
                             <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
-                              {journal.goods.name} | {journal.quantity} {journal.goods.unit}
+                              {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
                             </p>
                           )
                         ))}
-                        <hr className="text-gray-500"/>
-                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {item.customer?.name}
+                        <hr className="text-gray-500 mt-5"/>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
+                      </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Sales/CSKH: {item.sales?.name}</p>
                         <p className="">Giới thiệu: {item.referrer?.name}</p>
@@ -474,7 +478,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className="">Khoản mục: {item.subtype?.name}</p>
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {item.note}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
@@ -511,25 +515,27 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       {item?.journals?.map((journal: any, gIndex: number) => (
                         journal.goods && (
                           <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
-                            {journal.goods.name} | {journal.quantity} {journal.goods.unit}
+                            {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
                           </p>
                         )
                       ))}
-                      <hr className="text-gray-500"/>
-                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                        <p className="">Sales/CSKH: {item.sales?.name}</p>
-                        <p className="">Giới thiệu: {item.referrer?.name}</p>
-                      </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                        <p className="">Khoản mục: {item.subtype?.name}</p>
-                        <p className="">Hợp đồng: {item.contract?.name}</p>
-                      </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                      {item.customer?.name}
+                      <hr className="text-gray-500 mt-5"/>
+                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                      <p className="">Sales/CSKH: {item.sales?.name}</p>
+                      <p className="">Giới thiệu: {item.referrer?.name}</p>
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                      <p className="">Khoản mục: {item.subtype?.name}</p>
+                      <p className="">Hợp đồng: {item.contract?.name}</p>
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {item.note}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
