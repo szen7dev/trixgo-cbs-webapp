@@ -68,9 +68,9 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 		limit: LIMIT_DROPDOWN,
 		keyword: searchContractValue,
 	});
-	const [searchContractIPCValue, setSearchContractIPCValue] = useState(
-		initialValues?.ipc || ""
-	);
+	// const [searchContractIPCValue, setSearchContractIPCValue] = useState(
+	// 	initialValues?.ipc || ""
+	// );
 	// const { listContractIPC } = useQueryListContractIPC({
 	// 	limit: LIMIT_DROPDOWN,
 	// 	keyword: searchContractIPCValue,
@@ -361,10 +361,16 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							className="font-normal leading-7 text-sm text-negative"
 						/>
 					</div>
-					<div className={"w-1/3 flex items-center"}>
+					<div className={"w-1/4 flex items-center"}>
 						<div className={"w-1/4 flex items-center"}>
 							<Field type="checkbox" id="ticket-type-5" name="gift" className={"form-check-input mt-0"} />
 							<label htmlFor="ticket-type-5" className={"text-left ml-3"}>Hàng tặng</label>
+						</div>
+					</div>
+					<div className={"w-1/4 flex items-center"}>
+						<div className={"w-1/4 flex items-center"}>
+							<Field type="checkbox" id="ticket-type-6" name="isDocumented" className={"form-check-input mt-0"} />
+							<label htmlFor="ticket-type-6" className={"text-left ml-3"}>Có chứng từ hợp lệ</label>
 						</div>
 					</div>
 				</div>
