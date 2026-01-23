@@ -11,6 +11,7 @@ type UseDataCustom = {
 };
 
 export const useDocumentCustom = ({
+    params = {}
 }: any) : UseDataCustom => {
 
     // Tải mẫu import excel
