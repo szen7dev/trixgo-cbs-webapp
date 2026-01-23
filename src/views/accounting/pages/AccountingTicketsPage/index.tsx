@@ -102,7 +102,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   })
 
   const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
-  const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
+  // const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
 
   const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
   const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
@@ -194,6 +194,17 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
       setInputFilter((value) => ({ ...value, fromDate: date }))
     }
   }, [])
+
+const getStatusColor = (deadline: any) => {
+    if (!deadline) return "text-green-600";
+    const now = moment();
+    const end = moment(deadline);
+    const diffDays = end.diff(now, 'days');
+
+    if (diffDays < 0) return "text-red-600 font-bold"; // Quá hạn
+    if (diffDays <= 3) return "text-cbs-schedule-nextweek"
+    return "text-green-600";                          // Còn hạn
+};
 
   return (
     <main className="h-full">
@@ -423,7 +434,13 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
-                        <p className="">Hạn thanh toán: {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}</p>
+                        {/* <p className="">
+                          Hạn thanh toán: <span className={`${
+                            moment(item.paymentDeadline).isSameOrBefore(moment(), 'day') ? 'text-red-500' : ''
+                          }`}>
+                            {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}
+                          </span>
+                        </p> */}
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
@@ -475,7 +492,11 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
-                        <p className="">Hạn thanh toán: {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}</p>
+                        <p className="">
+                          Hạn thanh toán: <span className={`${getStatusColor(item.paymentDeadline)}`}>
+                            {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}
+                          </span>
+                        </p>
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
@@ -531,7 +552,11 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
-                        <p className="">Hạn thanh toán: {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}</p>
+                        <p className="">
+                          Hạn thanh toán: <span className={`${getStatusColor(item.paymentDeadline)}`}>
+                            {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}
+                          </span>
+                        </p>
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
