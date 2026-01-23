@@ -1,12 +1,9 @@
 import React, { FC, useCallback, useState } from "react";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
-// import DotsVerticalIcon from "assets/icons/DotsVertical";
-// import Close from "assets/icons/Close";
 import moment from "moment";
 import { useModal } from "services/hooks/useModal";
 import { formatNumberMoney } from "utils/cmcs";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-// import TriangleDown from "assets/icons/TriangleDown";
 import { Popover } from "shareComponents/common";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import debounce from "lodash/debounce";
@@ -415,7 +412,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px' }}>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px'}}>
                         {item.customer?.name}
                         <hr className="text-gray-500 mt-3"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
@@ -437,6 +434,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                          <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
                         </p>
+                        {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Not</p>}
                       </td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
@@ -487,6 +485,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                          <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
                         </p>
+                        {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Not</p>}
                       </td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
@@ -497,9 +496,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
               }else{
                 return (
                   <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "red" }}>
-                    <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
-                      <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-                    </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                       {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
                       <p><i>Phiếu hủy</i></p>
@@ -544,6 +540,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                          <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
                         </p>
+                        {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Not</p>}
                       </td>
                     <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                       <ActionAccountingGroup data={item} handleAction={handleAction} />
