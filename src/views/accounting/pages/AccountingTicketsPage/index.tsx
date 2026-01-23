@@ -31,6 +31,8 @@ import {
 } from "services/hooks/accounting/useAccVoucher";
 import { useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
+import 'moment/locale/vi'; // Import file ngôn ngữ tiếng Việt
+moment.locale('vi'); // Kích hoạt sử dụng tiếng Việt
 
 interface AccountingTicketsPageProps {
   type?: number
@@ -484,8 +486,8 @@ const getStatusColor = (deadline: any) => {
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
                         <p className="">
-                          Hạn thanh toán: <span className={`${getStatusColor(item.paymentDeadline)}`}>
-                            {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}
+                          Hạn TT: <span className={`${getStatusColor(item.paymentDeadline)}`}>
+                            {moment(item.paymentDeadline).isValid() && `${moment(item.paymentDeadline).format('DD/MM/YYYY')} - ${moment(item.paymentDeadline).fromNow()}`}
                           </span>
                         </p>
                         <p className="">Hợp đồng: {item.contract?.name}</p>
@@ -545,8 +547,8 @@ const getStatusColor = (deadline: any) => {
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
                         <p className="">
-                          Hạn thanh toán: <span className={`${getStatusColor(item.paymentDeadline)}`}>
-                            {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}
+                          Hạn TT: <span className={`${getStatusColor(item.paymentDeadline)}`}>
+                            {moment(item.paymentDeadline).isValid() && `${moment(item.paymentDeadline).format('DD/MM/YYYY')} - ${moment(item.paymentDeadline).fromNow()}`}
                           </span>
                         </p>
                         <p className="">Hợp đồng: {item.contract?.name}</p>
