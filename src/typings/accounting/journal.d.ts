@@ -15,6 +15,7 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
     cancel: number;
     quantity: number;
     unitprice: number;
+    paymentDeadline: string;
     createAt: string;
     modifyAt: string;
     journals?: [{

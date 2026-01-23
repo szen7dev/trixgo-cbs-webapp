@@ -422,8 +422,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className="">Sales: {item.sales?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                        <p className="">HĐ: {item.contract?.name}</p>
-                        <p className="">KMP: {item.subtype?.name}</p>
+                        <p className="">Khoản mục: {item.subtype?.name}</p>
+                        <p className="">Hạn thanh toán: {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}</p>
+                        <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
@@ -474,6 +475,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
+                        <p className="">Hạn thanh toán: {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}</p>
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
@@ -528,8 +530,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <p className="">Giới thiệu: {item.referrer?.name}</p>
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                      <p className="">Khoản mục: {item.subtype?.name}</p>
-                      <p className="">Hợp đồng: {item.contract?.name}</p>
+                        <p className="">Khoản mục: {item.subtype?.name}</p>
+                        <p className="">Hạn thanh toán: {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}</p>
+                        <p className="">Hợp đồng: {item.contract?.name}</p>
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
