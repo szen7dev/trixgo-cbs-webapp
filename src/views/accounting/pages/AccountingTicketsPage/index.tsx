@@ -348,7 +348,7 @@ const getStatusColor = (deadline: any) => {
         <thead className="">
           <tr className="text-primary-gray whitespace-nowrap align-middle text-left relative z-1">
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-              <span className="pl-2 border-l border-cbs-border">
+              <span className="pl-2 border-cbs-border">
                 Loại phiếu
               </span>
             </th>
