@@ -11,6 +11,7 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
     revenue: string;
     tax: string;
     isDocumented: number;
+    isPaid: number;
     forward: number;
     cancel: number;
     quantity: number;

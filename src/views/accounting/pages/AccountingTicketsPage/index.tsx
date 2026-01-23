@@ -352,12 +352,7 @@ const getStatusColor = (deadline: any) => {
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
-                Số hiệu
-              </span>
-            </th>
-            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-              <span className="pl-2 border-l border-cbs-border">
-                Ngày hạch toán
+                Ngày
               </span>
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
@@ -403,9 +398,9 @@ const getStatusColor = (deadline: any) => {
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "orange" }}>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
-                        <p><i>Kết chuyển cuối kỳ</i></p>
+                        <p>{item.sign}</p>
+                        <p>Kết chuyển cuối kỳ</p>
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                         <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
@@ -434,13 +429,6 @@ const getStatusColor = (deadline: any) => {
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
-                        {/* <p className="">
-                          Hạn thanh toán: <span className={`${
-                            moment(item.paymentDeadline).isSameOrBefore(moment(), 'day') ? 'text-red-500' : ''
-                          }`}>
-                            {moment(item.paymentDeadline).isValid() && moment(item.paymentDeadline).format('DD/MM/YYYY')}
-                          </span>
-                        </p> */}
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
@@ -452,7 +440,8 @@ const getStatusColor = (deadline: any) => {
                          <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
                         </p>
-                        {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Not</p>}
+                        {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Không chứng từ</p>}
+                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
                       </td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
@@ -462,8 +451,10 @@ const getStatusColor = (deadline: any) => {
                 }else{
                   return (
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment">
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
+                        <p>{item.sign}</p>
+                      </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                         <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
@@ -508,7 +499,8 @@ const getStatusColor = (deadline: any) => {
                          <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
                         </p>
-                        {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Not</p>}
+                        {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Không chứng từ</p>}
+                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
                       </td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
@@ -521,9 +513,9 @@ const getStatusColor = (deadline: any) => {
                   <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "red" }}>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                       {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
-                      <p><i>Phiếu hủy</i></p>
+                      <p>{item.sign}</p>
+                      <p>Phiếu hủy</p>
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                       <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
@@ -568,7 +560,8 @@ const getStatusColor = (deadline: any) => {
                          <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
                           {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
                         </p>
-                        {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Not</p>}
+                        {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Không chứng từ</p>}
+                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
                       </td>
                     <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                       <ActionAccountingGroup data={item} handleAction={handleAction} />

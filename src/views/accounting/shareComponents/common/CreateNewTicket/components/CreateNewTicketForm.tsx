@@ -368,9 +368,13 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 						</div>
 					</div>
 					<div className={"w-1/4 flex items-center"}>
-						<div className={"w-1/4 flex items-center"}>
+						<div className={"flex items-center mr-5"}>
 							<Field type="checkbox" id="ticket-type-6" name="isDocumented" className={"form-check-input mt-0"} />
 							<label htmlFor="ticket-type-6" className={"text-left ml-3"}>Có chứng từ hợp lệ</label>
+						</div>
+						<div className={"flex items-center ml-5"}>
+							<Field type="checkbox" id="ticket-type-7" name="isPaid" className={"form-check-input mt-0"} />
+							<label htmlFor="ticket-type-7" className={"text-left ml-3"}>Đã thanh toán</label>
 						</div>
 					</div>
 				</div>
