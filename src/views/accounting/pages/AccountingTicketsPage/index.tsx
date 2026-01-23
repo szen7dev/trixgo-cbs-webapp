@@ -399,7 +399,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                         <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                           <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
                             <p className="text-2-line-clamp">{`${item.name}`}</p>
@@ -415,9 +415,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px' }}>
                         {item.customer?.name}
-                        <hr className="text-gray-500 mt-5"/>
+                        <hr className="text-gray-500 mt-3"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
@@ -449,7 +449,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                         <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                           <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
                             <p className="text-2-line-clamp text-cbs-highlight-color font-bold">{`${item.name}`}</p>
@@ -465,9 +465,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px' }}>
                         {item.customer?.name}
-                        <hr className="text-gray-500 mt-5"/>
+                        <hr className="text-gray-500 mt-3"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
@@ -506,7 +506,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                       <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                         <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
@@ -522,9 +522,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px' }}>
                       {item.customer?.name}
-                      <hr className="text-gray-500 mt-5"/>
+                      <hr className="text-gray-500 mt-3"/>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
