@@ -9,6 +9,7 @@ export interface Customer {
     };
     type: string;
     name: string;
+    sign: string;
     fullname: string;
     address: string;
     note: string;
@@ -64,6 +65,7 @@ interface ModalProps {
         parent: string,
         type: string,
         name: string,
+        sign: string,
         address: string,
         taxid: string,
         phone: string,

@@ -27,6 +27,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     contactID: '',
     type: 2,
     name: '',
+    sign: '',
     address: '',
     taxid: '',
     phone: '',
@@ -126,7 +127,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 
   return (
     <main className="relative"  style={{
-        height: "720px",
+        height: "820px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -196,6 +197,20 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           name="name"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.name}
+          onChange={onChange}
+        />
+      </section>
+      
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
+          Mã hiệu (nếu có)
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập mã hiệu"
+          name="sign"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.sign}
           onChange={onChange}
         />
       </section>
