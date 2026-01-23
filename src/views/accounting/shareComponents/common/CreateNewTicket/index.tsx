@@ -28,6 +28,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     cancel: data.cancel ? true : false,
     gift: data.gift ? true : false,
     isDocumented: data.isDocumented ? true : false,
+    isPaid: data.isPaid ? true : false,
 
     funda: isDataPayLoad ? data?.funda?.value : convertInitialValueDropdown(data?.funda || ''),
     fundaID: data?.funda?.value,
