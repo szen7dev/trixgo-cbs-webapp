@@ -414,12 +414,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         ))}
                         <hr className="text-gray-500"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
-                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
-                        </p>
-                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
-                        </p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
@@ -433,7 +427,15 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className="">KMP: {item.subtype?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {item.note}
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
+                        </p>
+                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
+                        </p>
+                      </td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
                       </td>
@@ -460,12 +462,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         ))}
                         <hr className="text-gray-500"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
-                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
-                        </p>
-                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
-                        </p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
@@ -479,7 +475,15 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {item.note}
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
+                        </p>
+                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
+                        </p>
+                      </td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
                       </td>
@@ -513,12 +517,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       ))}
                       <hr className="text-gray-500"/>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
-                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                        {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
-                      </p>
-                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                        {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
-                      </p>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                     </td>
@@ -532,7 +530,15 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {item.note}
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
+                        </p>
+                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
+                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
+                        </p>
+                      </td>
                     <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                       <ActionAccountingGroup data={item} handleAction={handleAction} />
                     </td>
