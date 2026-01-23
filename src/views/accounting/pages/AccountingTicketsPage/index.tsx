@@ -64,8 +64,10 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
-    fromDate: new Date(new Date().getFullYear(), 0, 1),
-    toDate: new Date(new Date().getFullYear(), 11, 31)
+    fromDate: null,
+    toDate: null,
+    // fromDate: new Date(new Date().getFullYear(), 0, 1),
+    // toDate: new Date(new Date().getFullYear(), 11, 31)
   });
 
   const [fundaKeyword, setFundaKeyword] = useState("");
@@ -101,7 +103,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     },
     isFetchList: true
   })
-  console.log(listDataWithPager)
 
   const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
   const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
