@@ -39,8 +39,8 @@ export const AccountingDiaryPage: FC = () => {
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
-    fromDate: new Date(new Date().getFullYear(), 0, 1),
-    toDate: new Date(new Date().getFullYear(), 11, 31)
+    fromDate: null,
+    toDate: null,
   })
 
   const { list: listFunda } = useFunda({
