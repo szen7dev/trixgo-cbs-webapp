@@ -41,6 +41,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         contactID: '',
         type: '2',
         name: '',
+        sign: '',
         address: '',
         note: '',
         taxid: '',
@@ -79,6 +80,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             contactID: '',
             type: '',
             name: '',
+            sign: '',
             address: '',
             taxid: '',
             phone: '',
@@ -110,12 +112,13 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, address, taxid, phone, email, description, funda, sale, note, gender, birthday, nonResident } = newListIDChecked[0];
+            const { _id, type, name, sign, address, taxid, phone, email, description, funda, sale, note, gender, birthday, nonResident } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 contactID: _id,
                 type,
                 name,
+                sign,
                 address: address || '',
                 taxid: taxid || '',
                 phone: phone || '', 
@@ -189,6 +192,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 contactID: '',
                 type: '2',
                 name: '',
+                sign: '',
                 address: '',
                 taxid: '',
                 phone: '',
@@ -202,7 +206,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "720px",
+                    height: "820px",
                 }}
             >
                 <ModalCreateOrUpdateCustomer
@@ -516,6 +520,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/item/contact/${item._id}`}>
                                     {item?.childs.length > 0? <b>{item.name}({item?.childs.length})</b>: item.name }
                                 </Link>
+                                <p className="text-primary">{item?.sign}</p>
                                 <p className="text-primary">Sale: {item?.sale?.fullname || ''}</p>
                             </td>
                             <td className="py-1 px-2">{item.gender > 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}</td>
