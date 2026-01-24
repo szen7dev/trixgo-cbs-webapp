@@ -102,8 +102,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     },
     isFetchList: true
   })
+  // console.log(listDataWithPager)
 
-  const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
+  // const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
   // const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
 
   const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
@@ -411,7 +412,7 @@ const getStatusColor = (deadline: any) => {
                           </Popover>
                         </NavLink>
                         {item?.journals?.map((journal: any, gIndex: number) => (
-                          journal.goods && (
+                          journal.goods && (journal.debit.name.toString() != '632') && (
                             <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
                               {journal.goods.name.slice(0, 210)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
                             </p>
@@ -465,9 +466,9 @@ const getStatusColor = (deadline: any) => {
                           </Popover>
                         </NavLink>
                         {item?.journals?.map((journal: any, gIndex: number) => (
-                          journal.goods && (
+                          journal.goods && (journal.debit.name.toString() != '632') && (
                             <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
-                              {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
+                              {journal.goods.name.slice(0, 210)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
                             </p>
                           )
                         ))}
@@ -526,11 +527,11 @@ const getStatusColor = (deadline: any) => {
                         </Popover>
                       </NavLink>
                       {item?.journals?.map((journal: any, gIndex: number) => (
-                        journal.goods && (
-                          <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
-                            {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
-                          </p>
-                        )
+                          journal.goods && (journal.debit.name.toString() != '632') && (
+                            <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
+                              {journal.goods.name.slice(0, 210)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
+                            </p>
+                          )
                       ))}
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
