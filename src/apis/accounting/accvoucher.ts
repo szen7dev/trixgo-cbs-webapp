@@ -32,9 +32,9 @@ async function fetchListVoucher(params : any) {
                 "path": "userCreate userUpdate customer contract funda subtype linkFunda linkVoucher referrer sales journals",
                 "select": "name sign phone taxid address fullname goods quantity",
                 populate: {
-                    "path": "goods",
+                    "path": "goods debit",
                     "select": "name unit",
-                    "model": "goods",
+                    // "model": "goods",
                 }
             },
             
