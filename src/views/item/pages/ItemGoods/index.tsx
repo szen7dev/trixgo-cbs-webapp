@@ -90,6 +90,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         unitPrice4: 0,
         note: '',
         convert: '',
+        account: '',
         category: '',
         convertQuantity: 1,
         description: '',
@@ -149,7 +150,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, category, convertQuantity, status, usage, description, features, ingredients, benefits, instructions, sideEffects, warnings, storage, expired } = newListIDChecked[0];
+            const { _id, type, name, sign, unit, unitprice, listedUnitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, category, convertQuantity, status, usage, description, features, ingredients, benefits, instructions, sideEffects, warnings, storage, expired, account } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 type,
@@ -177,7 +178,8 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 sideEffects,
                 warnings,
                 storage,
-                expired
+                expired,
+                account
             });
         } else {
             clearData();
@@ -243,7 +245,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1700px",
+                    height: "1800px",
                 }}
             >
                 <ModalCreateOrUpdateGoods
@@ -439,7 +441,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Mã hiệu
+                                Mã hiệu/Tài khoản
                             </div>
                         </th>
                         <th className="py-1">
@@ -459,22 +461,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đơn giá bán M-Off
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đơn giá bán M-App
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đơn giá bán L-Off
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đơn giá bán L-App
+                                Đơn giá bán khác
                             </div>
                         </th>
                         <th className="py-1">
@@ -484,7 +471,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Định mức chuyển đổi
+                                Định mức
                             </div>
                         </th>
                         <th className="py-1">
@@ -565,7 +552,10 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 </div>
                                 <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
                             </td>
-                            <td className="py-1 px-2">{item?.sign}</td>
+                            <td className="py-1 px-2">
+                                <p>{item?.sign}</p>
+                                <p>{item?.account?.name} - {item?.account?.description}</p>
+                            </td>
                             <td className="py-1 px-2">{item?.unit}</td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.unitprice)}
@@ -576,17 +566,11 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 <p><i>{formatNumberMoney(item?.listedUnitprice)}</i></p>
                                 <p className="text-left"><i>Thời hạn ưu đãi: {item?.expired ? moment(item?.expired).format('DD/MM/YYYY HH:mm') : ''}</i></p>
                             </td>
-                            <td className="py-1 px-2 text-right">
-                                {formatNumberMoney(item?.unitPrice)}
-                            </td>
-                            <td className="py-1 px-2 text-right">
-                                {formatNumberMoney(item?.unitPrice2)}
-                            </td>
-                            <td className="py-1 px-2 text-right">
-                                {formatNumberMoney(item?.unitPrice3)}
-                            </td>
-                            <td className="py-1 px-2 text-right">
-                                {formatNumberMoney(item?.unitPrice4)}
+                            <td className="py-1 px-2">
+                                <p>Đơn giá bán M-Off: {formatNumberMoney(item?.unitPrice)}</p>
+                                <p>Đơn giá bán M-App: {formatNumberMoney(item?.unitPrice2)}</p>
+                                <p>Đơn giá bán L-Off: {formatNumberMoney(item?.unitPrice3)}</p>
+                                <p>Đơn giá bán L-App: {formatNumberMoney(item?.unitPrice4)}</p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.convert?.name} -  {item?.convert?.unit}

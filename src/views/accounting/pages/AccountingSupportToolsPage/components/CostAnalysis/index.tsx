@@ -213,9 +213,6 @@ const CostAnalysis: FC = () => {
           <h2 className="text-lg">
             Kiểm tra hàng hóa xuất âm kho khi chạy giá vốn
           </h2>
-          {/* <div className="h-10 w-10 rounded-full bg-cbs-table-header flex items-center justify-center">
-            <img src={ThreeDotsVertical} alt="Three Dots" />
-          </div> */}
         </div>
 
         <table className="table-fixed border-collapse w-full border-0.5 border-primary-border">
