@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { DropdownSearchable } from "shareComponents/common";
 import moment from 'moment';
 import API from "../../../../../../apis/repository";
+import { useQueryListAccount } from "services/hooks/cmcs/useContractIncome";
 
 export const ModalCreateOrUpdateGoods: FC<any> = ({
   modalType,
@@ -27,6 +28,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     unitPrice4: 0,
     note: '',
     convert: '',
+    account: '',
     category: '',
     convertQuantity: 1,
     description: '',
@@ -52,6 +54,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
 
   const [menus, setMenus] = useState([]);
   const [keyword, setKeyword] = useState('');
+  const [searchAccount, setSearchAccount] = useState();
 
   const {
       list: listGoods,
@@ -62,6 +65,12 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
   } = useGoods({
       params: { keyword },
       isFetchList: true
+  })
+
+  const { listAccount } = useQueryListAccount({
+    limit: 10,
+    keyword: searchAccount,
+    arrNames: ['152','156'],
   })
 
   useEffect(() => {
@@ -333,6 +342,50 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
           className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData?.usage}
           onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Tài khoản hạch toán</p>
+        <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    accountID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    accountID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setSearchAccount(value), 600)}
+            onScroll={handleScroll}
+            className="w-full mt-2 rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Tìm kiếm tài khoản"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listAccount.map((item: any) => ({
+                label: `${item.name} - ${item.description}`,
+                value: item._id,
+            }))}
+            initialValue={{
+              label: `${initialValues?.account?.name} - ${initialValues?.account?.description}`,
+              value: initialValues?.account?._id
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
         />
       </section>
 
