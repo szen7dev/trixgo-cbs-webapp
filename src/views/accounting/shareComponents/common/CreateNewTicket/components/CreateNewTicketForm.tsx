@@ -15,7 +15,6 @@ import {
 	useQueryListWarehouse,
 	useQueryListContact,
 	useQueryListContract,
-	// useQueryListContractIPC
 } from "services/hooks/cmcs/useContractIncome";
 
 import {
@@ -68,14 +67,6 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 		limit: LIMIT_DROPDOWN,
 		keyword: searchContractValue,
 	});
-	// const [searchContractIPCValue, setSearchContractIPCValue] = useState(
-	// 	initialValues?.ipc || ""
-	// );
-	// const { listContractIPC } = useQueryListContractIPC({
-	// 	limit: LIMIT_DROPDOWN,
-	// 	keyword: searchContractIPCValue,
-	// 	contractID: values.contract.value || values.contractId
-	// });
 
 	const [searchSubTypeValue, setSearchSubTypeValue] = useState(
 		initialValues?.subType || ""
@@ -85,7 +76,6 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 			limit: LIMIT_DROPDOWN,
 			type: 23,
 			keyword: searchSubTypeValue,
-			// isShowParentAndChild: 1
 		 },
 		isFetchList: true
 	});
@@ -558,42 +548,6 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 							inlineSearch={true}
 						/>
 					</div>
-					{/* <div className={"w-1/8 flex items-center"}>
-						<div className={"text-left text-gray-500 flex items-center mr-2"}>Kỳ</div>
-						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("ipc", value)}
-							className={"flex-1"}
-							placeholder="Kỳ thanh toán"
-							isMultiple={false}
-							allowClearValueSingleInput={true}
-							onClearData={() => setFieldValue("ipc", '')}
-							showTriangle={false}
-							maxWidthInput="max-w-none"
-							renderSelectedItem={(item) => {
-								return (
-									<div className="flex">
-										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
-											<p className="text-1-line-clamp">{`${item.text}`}</p>
-										</Popover>
-									</div>
-								)
-							}}
-							onSearchInputChange={debounce(
-								(value) => setSearchContractIPCValue(value),
-								500
-							)}
-							initialValue={initialValues?.ipc}
-							data={values.contract.value ? listContractIPC.map((item: any) => ({
-								label: item.name,
-								value: item._id,
-							})) : []}
-							formatItem={{
-								id: "value",
-								text: "label",
-							}}
-							inlineSearch={true}
-						/>
-					</div> */}
 				</div>
 				<div className={"flex py-1 border-b"}>
 					<div className={"w-1/4 flex items-center"}>
