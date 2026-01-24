@@ -244,7 +244,7 @@ const CostAnalysis: FC = () => {
               vouchers.map((voucher: any) => (
                 <tr
                   key={voucher._id}
-                  className="border-b border-primary-border h-11 text-center"
+                  className="border-b border-primary-border h-11"
                 >
                   <td className="py-2 border-b-0.5 border-primary-border align-middle">
                     {voucher.name}
