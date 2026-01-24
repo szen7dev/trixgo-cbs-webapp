@@ -77,6 +77,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
         job: '',
         note: '',
         updown: '',
+        isPaid: '',
       }
     ],
     deletedJournals: data?.deletedJournals && data.deletedJournals.map((item: any) => {
@@ -105,6 +106,7 @@ const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
       job: item.job || '',
       note: item.note || '',
       updown: item.updown || 1,
+      isPaid: item.isPaid || 0,
     }
   })
 }

@@ -8,7 +8,6 @@ import {
 	useQueryListWarehouse,
 	useQueryListContact,
 	useQueryListContract,
-	useQueryListBudgetWork,
 	useQueryListAccount,
 	useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
@@ -39,13 +38,6 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 	const { listContact: listCustomerDebit } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCustomerDebitValue,
-	});
-	const [searchBudgetWorkValue, setSearchBudgetWorkValue] = useState(
-		initialValues?.budgetWork || ""
-	);
-	const { listBudgetWork } = useQueryListBudgetWork({
-		limit: LIMIT_DROPDOWN,
-		keyword: searchBudgetWorkValue,
 	});
 	const [searchDebitValue, setSearchDebitValue] = useState(
 		initialValues?.debit || ""
@@ -79,7 +71,6 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 			limit: LIMIT_DROPDOWN,
 			type: 23,
 			keyword: searchSubTypeValue,
-			// isShowParentAndChild: 1
 		 },
 		isFetchList: true
 	});
@@ -128,12 +119,9 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Khoản mục phí
 								</div>
-								{/* <div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
-									Ngân sách
-								</div>
 								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
-									#
-								</div> */}
+									Hàng tặng
+								</div>
 								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Ghi chú
 								</div>
@@ -422,38 +410,9 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 												inlineSearch={true}
 											/>
 										</div>
-										{/* <div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
-											<DropdownSearchable
-												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[125px]"}
-												id="ticket-type" placeholder="Ngân sách"
-												showTriangle={false}
-												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.budgetWork`, value)}
-												onClearData={() => setFieldValue(`selectedJournals.${index}.budgetWork`, '')}
-												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
-													<p className="text-2-line-clamp">{`${item.text}`}</p>
-												</Popover>}
-												onSearchInputChange={debounce(
-													(value) => setSearchBudgetWorkValue(value),
-													500
-												)}
-												initialValue={item.budgetWork}
-												data={listBudgetWork.map((item: any) => ({
-													label: `${item.sign}-${item.name}`,
-													value: item._id,
-												}))}
-												formatItem={{
-													id: "value",
-													text: "label",
-												}}
-												inlineSearch={true}
-											/>
-										</div> */}
-										{/* <div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
-											<Field name={`selectedJournals.${index}.updown`} className={"focus:outline-none w-100 border-b w-[40px] border-gray-300"} placeholder={"1, -1"} />
-											<Field name={`selectedJournals.${index}.journalID`} hidden className={"focus:outline-none w-100 border-b w-[80px] border-gray-300"} placeholder={"#"} />
-										</div> */}
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
+											<Field name={`selectedJournals.${index}.isPaid`} className={"focus:outline-none w-100 border-b w-[40px] border-gray-300"} placeholder={"0, 1"} />
+										</div>
 
 										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field name={`selectedJournals.${index}.note`} rows={1} className={"focus:outline-none border-b border-gray-300"} placeholder={"Ghi chú"} />
@@ -502,6 +461,7 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 								job: '',
 								note: '',
 								updown: '',
+								isPaid: '',
 
 							})}>
 								+ Thêm bút toán
