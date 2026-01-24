@@ -50,8 +50,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   const searchParams = new URLSearchParams(location.search)
   const fundaIDParams = searchParams.get("fundaID")
 
-  const [pageParam, setPageParam] = useState('');
-
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -65,8 +63,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     keyword: '',
     fromDate: null,
     toDate: null,
-    // fromDate: new Date(new Date().getFullYear(), 0, 1),
-    // toDate: new Date(new Date().getFullYear(), 11, 31)
   });
 
   const [fundaKeyword, setFundaKeyword] = useState("");
@@ -104,20 +100,15 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   })
   // console.log(listDataWithPager)
 
-  // const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
-  // const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
-
   const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
   const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
   const { deleteAccountingVoucherMutateAsync } = useDeleteAccountingVoucherMutation();
 
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
-    // console.log(values)
     let res: any
     if (isEdit) {
       res = await updateAccountingVoucherMutateAsync(values);
     } else {
-      // res = await createAccountingVoucherMutateAsync({ ...values, fundaID }); // truyền fundaID từ URL
       res = await createAccountingVoucherMutateAsync({ ...values });
     }
 
@@ -198,14 +189,14 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     }
   }, [])
 
-const getStatusColor = (deadline: any) => {
+const getStatusColor = (deadline: any, isPaid: any ) => {
     if (!deadline) return "text-green-600";
     const now = moment();
     const end = moment(deadline);
     const diffDays = end.diff(now, 'days');
 
-    if (diffDays < 0) return "text-red-600 font-bold"; // Quá hạn
-    if (diffDays <= 3) return "text-cbs-schedule-nextweek"
+    if (diffDays < 0 && isPaid == 0) return "text-red-600"; // Quá hạn
+    if (diffDays <= 3 && isPaid == 0) return "text-cbs-schedule-nextweek"
     return "text-green-600";                          // Còn hạn
 };
 
@@ -438,13 +429,12 @@ const getStatusColor = (deadline: any) => {
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {item.note}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
+                          {item?.userCreate?.fullname.split(' ').pop()} {moment(item.createAt).isValid() && moment(item.createAt).format('DD/MM/YY HH:mm')}
                         </p>
                          <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
+                          {item?.userUpdate?.fullname.split(' ').pop()} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format('DD/MM/YY HH:mm')}
                         </p>
                         {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Không chứng từ</p>}
-                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
                       </td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
@@ -487,23 +477,23 @@ const getStatusColor = (deadline: any) => {
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
                         <p className="">
-                          Hạn TT: <span className={`${getStatusColor(item.paymentDeadline)}`}>
+                          Hạn TT: <span className={`${getStatusColor(item.paymentDeadline, item.isPaid)}`}>
                             {moment(item.paymentDeadline).isValid() && `${moment(item.paymentDeadline).format('DD/MM/YYYY')} - ${moment(item.paymentDeadline).fromNow()}`}
                           </span>
                         </p>
+                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {item.note}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
+                          {item?.userCreate?.fullname.split(' ').pop()} {moment(item.createAt).isValid() && moment(item.createAt).format('DD/MM/YY HH:mm')}
                         </p>
                          <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
+                          {item?.userUpdate?.fullname.split(' ').pop()} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format('DD/MM/YY HH:mm')}
                         </p>
                         {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Không chứng từ</p>}
-                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
                       </td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
@@ -548,23 +538,23 @@ const getStatusColor = (deadline: any) => {
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
                         <p className="">
-                          Hạn TT: <span className={`${getStatusColor(item.paymentDeadline)}`}>
+                          Hạn TT: <span className={`${getStatusColor(item.paymentDeadline, item.isPaid)}`}>
                             {moment(item.paymentDeadline).isValid() && `${moment(item.paymentDeadline).format('DD/MM/YYYY')} - ${moment(item.paymentDeadline).fromNow()}`}
                           </span>
                         </p>
+                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
                         <p className="">Hợp đồng: {item.contract?.name}</p>
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {item.note}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}
+                          {item?.userCreate?.fullname.split(' ').pop()} {moment(item.createAt).isValid() && moment(item.createAt).format('DD/MM/YY HH:mm')}
                         </p>
                          <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>
-                          {item?.userUpdate?.fullname} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format(DATE_FORMAT_TIME)}
+                          {item?.userUpdate?.fullname.split(' ').pop()} {moment(item.modifyAt).isValid() && moment(item.modifyAt).format('DD/MM/YY HH:mm')}
                         </p>
                         {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Không chứng từ</p>}
-                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
                       </td>
                     <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                       <ActionAccountingGroup data={item} handleAction={handleAction} />
