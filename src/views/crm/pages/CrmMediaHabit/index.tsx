@@ -82,7 +82,7 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
             parentID,
             keyword, 
             populates: {
-                path: 'parent userUpdate userCreate images contact',
+                path: 'parent userUpdate userCreate images contact habitCate',
                 select: 'name phone fullname parent createAt path',
                 populate: {
                     path: 'parent',
@@ -291,7 +291,7 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                         </th> */}
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Danh mục cha
+                                Loại Habit
                             </div>
                         </th> 
                         <th className="py-1 w-1/6">
@@ -358,17 +358,16 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
-                            {/* <td className="py-1 px-2">
-                                {item.type >= 1 ? MEDIA_TAG_TYPES[Number(item.type)-1].text : ""}
-                            </td> */}
                             <td className="py-1 px-2">
-                                {item?.parent?.name}
+                                
+                                {item?.habitCate?.name}
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 <Link to={`/crm/habit/${item._id}`}>
                                     {item.name}
                                 </Link>
-                                <p><i>{item._id}</i></p>
+                                <p className="text-primary-gray text-[12px]"><i>Danh mục cha: {item?.parent?.name}</i></p>
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.contact?.name} - {item?.contact?.phone}
