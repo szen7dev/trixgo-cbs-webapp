@@ -63,6 +63,7 @@ export type UserSystemProps = {
         name: string,
         sign: string
     },
+    contacts?: any,
     email?: string,
     phone?: string,
     note?: string,

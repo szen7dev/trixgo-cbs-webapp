@@ -2,9 +2,9 @@ import API from "../repository";
 import type { QueryParam, UserSystemPayload, ListUserInProjectPayload, DataResponse } from 'typings/users/userSystem';
 import { USER_URL } from '.';
 
-const selectUserProperties = "_id bizfullname fullname email image company department position level status lastLog numLog phone note storageUse startingTime createAt modifyAt";
+const selectUserProperties = "_id bizfullname fullname email image company department position level status lastLog numLog phone note storageUse startingTime createAt modifyAt contacts";
 const populateUserProperties = JSON.stringify({
-    path: "company department position",
+    path: "company department position contacts",
     select: "_id name sign"
 })
 

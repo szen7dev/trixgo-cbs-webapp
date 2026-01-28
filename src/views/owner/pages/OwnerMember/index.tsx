@@ -361,6 +361,11 @@ export const OwnerMemberPage: FC = () => {
               </td>
               <td className="py-1 px-2">
                 {item.fullname}
+                {item?.contacts?.map((contact: any, index: any) => (
+                    <p key={index} className="text-primary-gray text-[12px]">
+                        <i>Link Danh bạ {index + 1}: {contact?.name}</i>
+                    </p>
+                ))}
                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                 <p className="text-primary-gray text-[12px]"><i>Tạo: {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}</i></p>
               </td>
