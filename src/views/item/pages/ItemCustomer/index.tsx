@@ -65,8 +65,8 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     } = useCustomer({
         params: { 
             populates: {
-                path: 'parent userUpdate funda sale',
-                select: 'name bizfullname fullname'
+                path: 'parent userUpdate funda sale linkUser',
+                select: 'name fullname'
             },
             keyword, isListParentOrListChilds: "1", parentID 
         }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
@@ -521,6 +521,8 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                     {item?.childs.length > 0? <b>{item.name}({item?.childs.length})</b>: item.name }
                                 </Link>
                                 <p className="text-primary">{item?.sign}</p>
+                                <p className="text-primary">Danh mục cha: {item?.parent?.name || ''}</p>
+                                <p className="text-primary">Link user: {item?.linkUser?.fullname || ''}</p>
                                 <p className="text-primary">Sale: {item?.sale?.fullname || ''}</p>
                             </td>
                             <td className="py-1 px-2">{item.gender > 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}</td>

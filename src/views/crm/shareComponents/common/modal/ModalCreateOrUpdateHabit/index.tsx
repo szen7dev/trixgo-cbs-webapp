@@ -14,6 +14,7 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
     habitID: '',
     contactID: '',
     parentID: '',
+    habitCateID: '',
     type: 1,
     status: 1,
     challenge: 0,
@@ -185,13 +186,13 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
             onchangeValue={(value: any) => {
                 setFormData((previous: any) => ({
                     ...previous,
-                    parentID: value?.id
+                    habitCateID: value?.id
                 }))
             }}
             onClearData={() => {
                 setFormData((previous: any) => ({
                     ...previous,
-                    parentID: ""
+                    habitCateID: ""
                 }))
             }}
             onSearchInputChange={debounce((value: any) => setKeywordHabit(value), 600)}
@@ -212,8 +213,8 @@ export const ModalCreateOrUpdateHabit: FC<any> = ({
                 value: item._id,
             }))}
             initialValue={{
-              value: formData?.parent?._id || "",
-              label: formData?.parent?.name || "Chọn Habit"
+              value: formData?.habitCate?._id || "",
+              label: formData?.habitCate?.name || "Chọn Habit"
             }}
             formatItem={{
                 id: "value",
