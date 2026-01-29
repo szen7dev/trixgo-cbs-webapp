@@ -70,6 +70,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         note: '',
         phone: '',
         birthday: '',
+        pubertyOnsetDate: '',
         facebook: '',
         tiktok: '',
         gender: 1,
@@ -88,7 +89,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             parentID,
             keyword, 
             populates: {
-                path: 'parent userUpdate userCreate images',
+                path: 'parent userUpdate userCreate images contact',
                 select: 'name fullname parent createAt path',
                 populate: {
                     path: 'parent',
@@ -112,6 +113,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             note: '',
             phone: '',
             birthday: '',
+            pubertyOnsetDate: '',
             facebook: '',
             tiktok: '',
             gender: 1,
@@ -142,7 +144,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, status, name, expired, slug, note, phone, facebook, tiktok, birthday, gender, height, weight } = newListIDChecked[0];
+            const { _id, type, status, name, expired, slug, note, phone, facebook, tiktok, birthday, gender, height, weight, pubertyOnsetDate } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 trackID: _id,
@@ -154,6 +156,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 note,
                 phone,
                 birthday,
+                pubertyOnsetDate,
                 facebook,
                 tiktok,
                 gender,
@@ -205,6 +208,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 facebook: '',
                 tiktok: '',
                 birthday: '',
+                pubertyOnsetDate: '',
                 gender: 1,
                 height: 0,
                 weight: 0,
@@ -215,7 +219,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "700px",
+                    height: "750px",
                 }}
             >
                 <ModalCreateOrUpdateMeasurement
@@ -398,7 +402,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1 w-1/6">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Tên
+                                Nội dung đo cao
                             </div>
                         </th> 
                         <th className="py-1">
@@ -423,7 +427,12 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Liên hệ
+                                Đường tăng trưởng
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Ba mẹ (tên, điện thoại)
                             </div>
                         </th>
                         <th className="py-1">
@@ -434,11 +443,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Hình ảnh
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Trạng thái
                             </div>
                         </th>
                         <th className="py-1 font-normal">
@@ -464,18 +468,22 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                 {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
-                                <a href={`https://lamin.com.vn/do-cao-cdc/ket-qua/${item._id}`}>{item?.name}</a>
+                                <a target="blank" href={`https://lamin.com.vn/tai-khoan/lich-su-do-cao/${item._id}`}>{item?.name}</a>
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                <p className="text-primary-gray text-[12px]"><i>Danh bạ: {item?.contact?.name}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item.gender >= 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}
                             </td>
                             <td className="py-1 px-2">
                                 {moment(item?.birthday).format('DD/MM/YYYY')}
+                                <p className="text-primary-gray text-[12px]"><i>Dậy thì: {item?.pubertyOnsetDate != null && moment(item?.pubertyOnsetDate).format('DD/MM/YYYY')}</i></p>
                             </td>
                             <td className="py-1 px-2">{item.height}</td>
                             <td className="py-1 px-2">{item.weight}</td>
+                            <td className="py-1 px-2">{item.percentile} | {item.predictedAdultHeight} cm</td>
                             <td className="py-1 px-2">
-                                {item.phone}
+                                {item.parentName} - {item.phone}
                                 {item?.facebook ? <p className="text-cbs-highlight-color"><i>FB: {item?.facebook}</i></p> : ''}
                                 {item?.tiktok ? <p className="text-cbs-highlight-color"><i>TT: {item?.tiktok}</i></p> : ''}
                             </td>
@@ -518,9 +526,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                         </div>
                                     </label>
                                 </div>
-                            </td>
-                            <td className="py-1 px-2">
-                                {item?.status == 1 ? <span className="bg-green-400">Active</span> : <span className="bg-red-400">Inactive</span>}
                             </td>
                             <td className="py-1 px-2">
                                 {item.userUpdate ? `${item?.userUpdate?.fullname} ${moment(item.modifyAt).format('DD/MM/YYYY HH:mm')}` : `${item?.userCreate?.fullname} ${moment(item.createAt).format('DD/MM/YYYY HH:mm')}`}
