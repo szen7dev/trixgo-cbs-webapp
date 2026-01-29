@@ -69,6 +69,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         slug: '',
         note: '',
         phone: '',
+        parentName: '',
         birthday: '',
         pubertyOnsetDate: '',
         facebook: '',
@@ -112,6 +113,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             slug: '',
             note: '',
             phone: '',
+            parentName: '',
             birthday: '',
             pubertyOnsetDate: '',
             facebook: '',
@@ -144,7 +146,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, status, name, expired, slug, note, phone, facebook, tiktok, birthday, gender, height, weight, pubertyOnsetDate } = newListIDChecked[0];
+            const { _id, type, status, name, expired, slug, note, phone, parentName, facebook, tiktok, birthday, gender, height, weight, pubertyOnsetDate } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 trackID: _id,
@@ -162,6 +164,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 gender,
                 height,
                 weight,
+                parentName,
             });
         } else {
             clearData();
@@ -205,6 +208,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 slug: '',
                 note: '',
                 phone: '',
+                parentName: '',
                 facebook: '',
                 tiktok: '',
                 birthday: '',

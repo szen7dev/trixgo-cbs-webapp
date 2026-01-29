@@ -37,7 +37,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
                 ID Hệ thống/Mã hiệu/Ngày tham gia
               </td>
               <td className="border w-2/6 pl-4">
-                {info?._id} | {info?.sign} | {moment(info?.joinedDate).isValid() && moment(info?.joinedDate).format(DATE_FORMAT)}
+                {info?._id} | {info?.sign} | CCCD: {info?.identity} | {moment(info?.joinedDate).isValid() && moment(info?.joinedDate).format(DATE_FORMAT)} 
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("phone")}
