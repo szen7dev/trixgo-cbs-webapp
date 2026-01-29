@@ -465,7 +465,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+                                {moment(item?.date).format('DD/MM/YYYY')}
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 <a target="blank" href={`https://lamin.com.vn/tai-khoan/lich-su-do-cao/${item._id}`}>{item?.name}</a>
