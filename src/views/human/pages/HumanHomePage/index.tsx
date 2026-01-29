@@ -473,7 +473,7 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
                                         {document?.contractType?.name}
                                         <p><i>
                                             {moment(document.contractDate).isValid() && moment(document.contractDate).format("DD/MM/YYYY")}
-                                            </i></p>
+                                        </i></p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.workingStatus?.name}
