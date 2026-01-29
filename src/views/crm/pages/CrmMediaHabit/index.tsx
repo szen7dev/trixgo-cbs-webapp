@@ -368,34 +368,19 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                         </th> 
                         <th className="py-1 w-1/6">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Nội dung
+                                Tên Habit
                             </div>
                         </th> 
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Khách hàng
+                                Mã khách/Liên hệ
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Ngày bắt đầu
                             </div>
-                        </th>
-                        <th className="py-1 w-1/6">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Số ngày thực hiện (Ngày)
-                            </div>
                         </th> 
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Kế hoạch mỗi ngày (Phút)
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Số ngày đã thực hiện liên tục
-                            </div>
-                        </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Ghi chú
@@ -438,18 +423,17 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/crm/habit/${item._id}`}>
                                     {item.name}
                                 </Link>
-                                <p className="text-primary-gray text-[12px]"><i>Danh mục cha: {item?.parent?.name}</i></p>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                <hr className="text-primary-gray"/>
+                                <p className="text-primary-gray text-[12px]"><i>Danh mục cha: {item?.parent?.name}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.contact?.name} - {item?.contact?.phone}
+                                <p className="text-primary-gray text-[12px]"><i>{item?.contact?._id}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {moment(item?.date).format('DD/MM/YYYY')}
                             </td>
-                            <td className="py-1 px-2">{item?.challenge}</td>
-                            <td className="py-1 px-2">{item?.duration}</td>
-                            <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">{item?.streakDays}</td>
                             <td className="py-1 px-2">{item.note}</td>
                             <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>
