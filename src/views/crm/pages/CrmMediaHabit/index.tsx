@@ -78,10 +78,11 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
         totalRecord
     } = useCrmHabit({
         params: { 
+            optionSupport: 1,
             parentID,
             keyword, 
             populates: {
-                path: 'parent userUpdate userCreate images contact habitCate',
+                path: 'parent userUpdate userCreate images contact habitCate support parentContact',
                 select: 'name phone fullname parent createAt path',
                 populate: {
                     path: 'parent',
@@ -368,12 +369,17 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                         </th> 
                         <th className="py-1 w-1/6">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Tên Habit
+                                Habit
                             </div>
                         </th> 
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Mã khách/Liên hệ
+                                Ba mẹ
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Người hỗ trợ đồng hành
                             </div>
                         </th>
                         <th className="py-1">
@@ -423,13 +429,13 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/crm/habit/${item._id}`}>
                                     {item.name}
                                 </Link>
-                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
-                                <hr className="text-primary-gray"/>
-                                <p className="text-primary-gray text-[12px]"><i>Danh mục cha: {item?.parent?.name}</i></p>
+                                <p>Danh bạ: {item?.contact?.name}</p>
                             </td>
                             <td className="py-1 px-2">
-                                {item?.contact?.name} - {item?.contact?.phone}
-                                <p className="text-primary-gray text-[12px]"><i>{item?.contact?._id}</i></p>
+                                {item?.parentContact?.name} - {item?.parentContact?.phone}
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.support?.name} - {item?.support?.phone}
                             </td>
                             <td className="py-1 px-2">
                                 {moment(item?.date).format('DD/MM/YYYY')}
