@@ -27,6 +27,7 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
     insuranceDate?: any;
     position?: any;
     contractDate?: any;
+    linkUser?: any;
     note: string;
     // storage: {
     //     _id: string;

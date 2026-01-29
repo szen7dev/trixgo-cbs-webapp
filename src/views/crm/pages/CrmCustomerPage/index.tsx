@@ -420,9 +420,6 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                 Tuyến trên
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Nguồn dữ liệu
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Ghi chú
                             </th>
                         </tr>
@@ -474,8 +471,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                                 {`${item.name}`}
                                                 - {(item?.gender && item?.gender >= 1) && GENDER_TYPES[item?.gender -1].text}
                                             </p>
-                                            <p className="mt-1">Support: { item?.support != null && item?.support?.name}</p>
-                                            <p className="text-primary-gray mt-1">{item?.identity != null && item?.identity }</p>
+                                            <p className="text-primary-gray mt-1">CCCD: {item?.identity != null && item?.identity }</p>
                                             <p className="text-primary-gray mt-1">Ngày sinh: { item?.birthday != null && moment(item?.birthday).format("DD/MM/YYYY")}</p>
                                         </Link>
                                         <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
@@ -484,6 +480,8 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                         {moment(item?.joinedDate).format('DD/MM/YYYY HH:mm')}
                                         <div><button className={str}>Affiliate</button></div>
                                         {item.status == 2 ? <div><button className="text-[10px] text-white rounded px-1 bg-red-400">Tạm dừng</button></div> : <></>}
+                                        <p className="mt-1">Support: { item?.support != null && item?.support?.name}</p>
+                                        <p className="mt-1">LinkUser: { item?.linkUser != null && item?.linkUser?.fullname}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {item?.phone}
@@ -496,9 +494,6 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2 w-24">
                                         <p>{item?.parent?.name}</p>
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24">
-                                        <p>{item?.dataSource?.name}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {item.note}

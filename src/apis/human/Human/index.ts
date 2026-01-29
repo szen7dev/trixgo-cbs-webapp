@@ -36,9 +36,9 @@ export const humanRepository: HumanRepository = {
 async function fetchListHuman(params : any) {
     const { data } = await API.get(`${CONTACT_URL}`, {
         params: {
-            select: 'name phone email sign author createAt note status area department gender birthday identity address taxid insuranceSign insuranceDate contractDate joinedDate image support referrer parent contractType workingStatus dataSource',
+            select: 'name phone email sign author createAt note status area department gender birthday identity address taxid insuranceSign insuranceDate contractDate joinedDate image support referrer parent contractType workingStatus dataSource linkUser',
             populates: {
-                "path": "author area department support referrer parent contractType workingStatus dataSource",
+                "path": "author area department support referrer parent contractType workingStatus dataSource linkUser",
                 "select": "fullname sign image name parent",
                 populate: {
                     "path": "parent",
@@ -60,9 +60,9 @@ async function fetchListHuman(params : any) {
 async function fetchFilterListHuman(params : any) {
     const { data } = await API.get(`${CONTACT_URL}/filter-human`, {
         params: {
-            select: 'name phone email sign author createAt note status area area1 area2 department position gender birthday contractType workingStatus identity address taxid insuranceSign insuranceDate contractDate parent dataSource joinedDate',
+            select: 'name phone email sign author createAt note status area area1 area2 department position gender birthday contractType workingStatus identity address taxid insuranceSign insuranceDate contractDate parent dataSource joinedDate linkUser',
             populates: {
-                "path": "author area area1 area2 department position contractType workingStatus parent dataSource",
+                "path": "author area area1 area2 department position contractType workingStatus parent dataSource linkUser",
                 "select": "fullname sign image name parent",
                 populate: {
                     "path": "parent",

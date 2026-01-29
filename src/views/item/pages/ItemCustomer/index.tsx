@@ -520,10 +520,10 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/item/contact/${item._id}`}>
                                     {item?.childs.length > 0? <b>{item.name}({item?.childs.length})</b>: item.name }
                                 </Link>
-                                <p className="text-primary">{item?.sign}</p>
-                                <p className="text-primary">Danh mục cha: {item?.parent?.name || ''}</p>
-                                <p className="text-primary">Link user: {item?.linkUser?.fullname || ''}</p>
-                                <p className="text-primary">Sale: {item?.sale?.fullname || ''}</p>
+                                <p className="text-primary-gray text-[12px]">{item?.sign}</p>
+                                <p className="text-primary-gray text-[12px]">Tuyến trên: {item?.parent?.name || ''}</p>
+                                <p className="text-primary-gray text-[12px]">Link user: {item?.linkUser?.fullname || ''}</p>
+                                <p className="text-primary-gray text-[12px]">Sale: {item?.sale?.fullname || ''}</p>
                             </td>
                             <td className="py-1 px-2">{item.gender > 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}</td>
                             <td className="py-1 px-2">{item.address}</td>

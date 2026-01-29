@@ -182,10 +182,10 @@ export const ACCESS_SALARY_TEMP = ['6046bcf1b55525368b11ab79','658cdaab5c952c001
 export const CONTACT_TYPES = [
     { value: 1, text: 'Nhân viên' },
     { value: 2, text: 'Khách hàng' },
-    { value: 3, text: 'Đối tác' },
-    { value: 4, text: 'Thầu phụ' },
-    { value: 5, text: 'Chuyên gia' },
-    { value: 6, text: 'Khách mời' },
+    { value: 3, text: 'Chuyên gia, cộng tác' },
+    { value: 4, text: 'Đơn vị cơ sở' },
+    { value: 5, text: 'Ba mẹ' },
+    { value: 6, text: 'Các bé' },
     { value: 7, text: 'Khác' },
 ]
 

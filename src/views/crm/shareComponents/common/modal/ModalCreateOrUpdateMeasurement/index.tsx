@@ -148,7 +148,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
             onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
             onScroll={handleScroll}
             className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Chọn khách hàng"
+            placeholder="Chọn bé"
             isMultiple={false}
             allowClearValueSingleInput={true}
             showTriangle={false}
