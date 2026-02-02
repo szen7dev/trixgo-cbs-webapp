@@ -39,7 +39,7 @@ async function fetchListHuman(params : any) {
             select: 'name phone email sign author createAt note status area department position gender birthday identity address taxid joinedDate image support parent linkUser workingStatus',
             populates: {
                 "path": "department position author area support parent linkUser workingStatus",
-                "select": "fullname sign image name parent",
+                "select": "fullname sign image name phone parent",
                 populate: {
                     "path": "parent",
                     "select": "name parent",
@@ -63,7 +63,7 @@ async function fetchFilterListHuman(params : any) {
             select: 'name phone email sign author createAt note status area department position gender birthday identity address taxid joinedDate image support parent linkUser workingStatus',
             populates: {
                 "path": "department position author area support parent linkUser workingStatus",
-                "select": "fullname sign image name parent",
+                "select": "fullname sign image name phone parent",
                 populate: {
                     "path": "parent",
                     "select": "name parent",

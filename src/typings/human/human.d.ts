@@ -42,6 +42,7 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
         _id: string;
         name: string;
         sign: string;
+        phone: string;
     },
     amountHumanChild?:number;
     place: any;
