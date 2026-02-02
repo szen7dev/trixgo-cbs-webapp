@@ -493,7 +493,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                         <p>{item?.taxid}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2 w-24">
-                                        <p>{item?.parent?.name}</p>
+                                        <p>{item?.parent?.name}-{item?.parent?.phone}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {item.note}
