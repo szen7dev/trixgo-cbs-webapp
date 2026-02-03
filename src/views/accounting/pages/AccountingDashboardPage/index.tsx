@@ -33,14 +33,14 @@ export const AccountingDashboardPage: FC = () => {
   const [fundaKeyword, setFundaKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
 
-  const today = new Date();
+  // const today = new Date();
   // const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
   // const currentMonth = new Date().getMonth()
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
-    fromDate: null,
-    toDate: null,
+    fromDate: new Date(new Date().getFullYear(), 0, 1),
+    toDate: new Date(new Date().getFullYear(), 11, 31)
   })
 
   const { list: listFunda } = useFunda({
@@ -52,19 +52,6 @@ export const AccountingDashboardPage: FC = () => {
 		params: { keyword: contactKeyword },
     isFetchList: true
 	})
-
-  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
-    params: {
-        fromDate: inputFilter.fromDate,
-        toDate: inputFilter.toDate,
-        limit: 500,
-        forward: 0,
-        cancel: 0,
-        fundaID: fundaId,
-        contactID: customerID,
-    },
-    isFetchList: true
-  })
 
   const handleOnChangeDate = useCallback((date, input) => {
     if (input) {
