@@ -137,7 +137,7 @@ export const AccountingDashboardPage: FC = () => {
             <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
               <div className={"text-cbs-highlight-color"}>
                   <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                    onClick={() => handleExportExcel({option: 1})}
+                    onClick={() => handleExportExcel({option: 6})}
                   >
                       Tải Báo Cáo Quản Trị Excel
                   </button>
