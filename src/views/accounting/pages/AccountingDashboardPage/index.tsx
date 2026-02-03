@@ -1,25 +1,15 @@
 import React, { FC, useCallback, useState } from "react";
-import { NavLink } from "react-router-dom"
-import cn from "classnames";
-import styles from 'views/accounting/styles/styles.module.css';
-import DotsVerticalIcon from "assets/icons/DotsVertical";
-import Close from "assets/icons/Close";
 import {debounce} from "lodash";
-import moment from "moment";
-import { formatNumberMoney } from "utils/cmcs";
 import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-import { VOUCHER_TYPES } from "apis/localdb/index";
-import { useJournalList, useJournal } from "services/hooks/accounting/useGeneralJournal";
+import { useJournal } from "services/hooks/accounting/useGeneralJournal";
 import { useFunda } from "services/hooks/items/useFunda";
 import { useContact } from "services/hooks/items/useContact";
 import { toast } from "react-toastify";
-import { read, utils } from 'xlsx';
 import { createLinkAndClick } from "utils";
 
 export const AccountingDashboardPage: FC = () => {
-  const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -32,10 +22,6 @@ export const AccountingDashboardPage: FC = () => {
 
   const [fundaKeyword, setFundaKeyword] = useState("");
   const [contactKeyword, setContactKeyword] = useState("");
-
-  // const today = new Date();
-  // const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-  // const currentMonth = new Date().getMonth()
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
@@ -74,10 +60,8 @@ export const AccountingDashboardPage: FC = () => {
               filterParams: {
                 fromDate: inputFilter.fromDate,
                 toDate: inputFilter.toDate,
-                limit: 10,
-                forward: 0,
-                cancel: 0,
                 fundaID: fundaId,
+                contactID: customerID,
               }
            })
 
