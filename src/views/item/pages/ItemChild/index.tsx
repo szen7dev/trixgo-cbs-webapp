@@ -5,7 +5,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { useParams, Link } from 'react-router-dom';
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateDoctype, ModalConfirm } from '../../shareComponents/common';
+import { ModalCreateOrUpdateDoctype } from '../../shareComponents/common';
 import styles from "views/support/styles/support.module.css";
 import pencilIcon from 'assets/images/icons8-pencil-96 1.png';
 import { useModal } from "services/hooks/useModal";
@@ -147,7 +147,7 @@ export const ItemChildPage: FC = () => {
         openModal(
             <div
                 className={"inline-block w-[521px] h-[340px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
-                style={{height: "700px"}}
+                style={{height: "800px"}}
             >
                 <ModalCreateOrUpdateDoctype
                     modalType={modalType}
