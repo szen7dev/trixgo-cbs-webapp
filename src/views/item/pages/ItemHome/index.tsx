@@ -145,7 +145,7 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
         openModal(
             <div
                 className={"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
-                style={{height: "750px"}}>
+                style={{height: "800px"}}>
                 <ModalCreateOrUpdateDoctype
                     modalType={modalType}
                     initialValues={initValues}
