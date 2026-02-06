@@ -9,13 +9,11 @@ import { TIMESHEET_SUBTYPES, CHECK_SALLARY } from "apis/localdb/index";
 import API from "apis/repository";
 import iconRefresh from "assets/images/icons8-refresh.png";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-
 import { createLinkAndClick } from "utils";
 import { APP_ID } from "apis/localdb";
-
 import { DetailMainRow, ModalShare } from "./components";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
-import { InputWidthAdjust, DialogSalaryAddUser } from "views/timesheet/shareComponents/common";
+import { DialogSalaryAddUser } from "views/timesheet/shareComponents/common";
 import { setFilterDropdown } from "redux/reducer/DocumentProjectSlice";
 import { usePcmFile } from "services/hooks/pcm/usePcm";
 import { Loader, ModalConfirm, DropdownSearchableV2 } from "shareComponents/common";
@@ -741,7 +739,7 @@ const SubSalaryDetailPage: FC = () => {
                 <p className={"min-w-[300px]"}>{item.text}</p>
             )}
             selectOneByOne={true}
-        />
+          />
 
           {!!salaryIds.length && (
             <div className="w-9 h-9 mb-2 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray" onClick={openDeleteModal}>

@@ -8,6 +8,8 @@ import { useFunda } from "services/hooks/items/useFunda";
 import { useContact } from "services/hooks/items/useContact";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from "utils";
+import { usePcmFile } from "services/hooks/pcm/usePcm";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 export const AccountingDashboardPage: FC = () => {
   const [pageIndex, setPageIndex] = useState(0)
@@ -16,6 +18,9 @@ export const AccountingDashboardPage: FC = () => {
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
   const accountRef = React.useRef<DropdownHandle>(null);
+
+  const [templateKeyword, setpTemplateKeyword] = useState("");
+  const [templateID, setTemplateID] = useState<string | null>();
 
   const [fundaId, setFundaId] = useState<string | null>();
   const [customerID, setCustomerID] = useState<string | null>();
@@ -38,6 +43,24 @@ export const AccountingDashboardPage: FC = () => {
 		params: { keyword: contactKeyword },
     isFetchList: true
 	})
+
+  const { user } = useAuth();
+
+  const { 
+      listFilesPcm, 
+    // isLoading, 
+    // totalRecord, 
+    // totalPage, 
+    // nextCursor 
+  } = usePcmFile({
+    params: {
+      isTemplateFile: true,
+      isXlsxFile: true,
+      companyID: user?.company?._id,
+      keyword: templateKeyword
+    },
+    isFetch: true
+  })
 
   const handleOnChangeDate = useCallback((date, input) => {
     if (input) {
@@ -62,6 +85,7 @@ export const AccountingDashboardPage: FC = () => {
                 toDate: inputFilter.toDate,
                 fundaID: fundaId,
                 contactID: customerID,
+                templateID
               }
            })
 
@@ -135,15 +159,46 @@ export const AccountingDashboardPage: FC = () => {
           />
           <div className="flex items-center">
             <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-              <div className={"text-cbs-highlight-color"}>
-                  <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                    onClick={() => handleExportExcel({option: 6})}
-                  >
-                      Tải Báo Cáo Quản Trị Excel
-                  </button>
-              </div>
           </div>
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-1 border border-primary-border rounded-lg"}
+              placeholder={"Mẫu báo cáo"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={listFilesPcm.map((item) => ({
+                  _id: item._id,
+                  name: `${item?.name} | ${item?.comment?.content}`,
+              }))}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setpTemplateKeyword(valueSearch),
+                  500
+              )}
+              onClearData={() => {
+                setTemplateID("");
+              }}
+              onchangeValue={item => {
+                setTemplateID(item._id);
+                  setPageIndex(0);
+                  ref.current&&ref.current.resetPaginate();
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
         </header>
+          <div className={"text-cbs-highlight-color"}>
+              <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                onClick={() => handleExportExcel({option: 6})}
+              >
+                  Tải Báo Cáo Quản Trị Excel
+              </button>
+          </div>
     </main>
   )
 }
