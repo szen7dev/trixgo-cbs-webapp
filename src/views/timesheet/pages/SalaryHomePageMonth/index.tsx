@@ -138,7 +138,7 @@ const SalaryHomePageMonth: FC = () => {
       )
       
       if (status !== 200 || data.error) {
-          return toast.warn('Đồng bộ thất bại')
+          return toast.warn(data?.data?.message)
       }
       return toast.success('Đồng bộ thành công')
   }, [])
