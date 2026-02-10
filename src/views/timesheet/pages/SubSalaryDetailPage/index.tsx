@@ -419,10 +419,10 @@ const SubSalaryDetailPage: FC = () => {
                 Xem Bảng lương chính
               </NavLink>
               <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px]"}>
-                {/* {Number(salaryInfo?.type) == 1 ? <span className="flex"><img src={iconRefresh} title={'Đồng bộ Tổng hợp'} className={"w-[24px] h-[24px] mr-3"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: salaryParentID, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công, KPI sẽ được đồng bộ sang bảng lương này'})} />
-                <span className="text-sm text-cbs-highlight-color mr-3">Đồng bộ Tổng hợp</span> |</span> :<></>} */}
-                <span className="flex"><img src={iconRefresh} title={'Đồng bộ Tổng hợp'} className={"w-[24px] h-[24px] mr-3"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: salaryParentID, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công, KPI sẽ được đồng bộ sang bảng lương này'})} />
-                <span className="text-sm text-cbs-highlight-color mr-3">Đồng bộ Tổng hợp</span> |</span>
+                {Number(salaryInfo?.type) == 1 ? <span className="flex"><img src={iconRefresh} title={'Đồng bộ Tổng hợp'} className={"w-[24px] h-[24px] mr-3"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: salaryParentID, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công, KPI sẽ được đồng bộ sang bảng lương này'})} />
+                <span className="text-sm text-cbs-highlight-color mr-3">Đồng bộ Tổng hợp</span> |</span> :<></>}
+                {/* <span className="flex"><img src={iconRefresh} title={'Đồng bộ Tổng hợp'} className={"w-[24px] h-[24px] mr-3"} onClick={() => toggleModalOpenSign({ option: 7, salaryID: salaryParentID, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công, KPI sẽ được đồng bộ sang bảng lương này'})} />
+                <span className="text-sm text-cbs-highlight-color mr-3">Đồng bộ Tổng hợp</span> |</span> */}
 
                 {Number(salaryInfo?.type) == 2 ? <span className="flex"><img src={iconRefresh} title={'Đồng bộ Cơ sở'} className={"w-[24px] h-[24px] mr-3 ml-3"} onClick={() => toggleModalOpenSign({ option: 8, salaryID: salaryParentID, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu Chấm công, KPI sẽ được đồng bộ sang bảng lương này'})} />
                 <span className="text-sm text-cbs-highlight-color mr-1">Đồng bộ Cơ sở</span> |</span> :<></>}
