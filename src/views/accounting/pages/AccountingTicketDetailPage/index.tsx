@@ -200,7 +200,7 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
                   />
                 </svg>
               </button>
-              <p className="text-lg mr-5">{voucherDetail?.name}</p> {moment(voucherDetail?.date).format('DD/MM/YYYY HH:mm')}
+              <p className="text-lg mr-5">{voucherDetail?.sign}-{voucherDetail?.name}</p> {moment(voucherDetail?.date).format('DD/MM/YYYY HH:mm')}
               <span className={"text-sm rounded-full bg-primary text-white h-5 leading-5 ml-2 px-2"}>
                 {VOUCHER_TYPES.find(item => item.value === voucherDetail?.type)?.text}
               </span>
