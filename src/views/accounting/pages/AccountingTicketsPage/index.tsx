@@ -393,6 +393,8 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
                         <p>{item.sign}</p>
+                        <p className="text-cbs-highlight-color mt-3" title="Số hóa đơn"><b>{item?.signInvoice}</b></p>
+                        <p className="text-gray-500 text-[12px]">{moment(item.dateInvoice).isValid() && moment(item.dateInvoice).format(DATE_FORMAT)}</p>
                         <p>Kết chuyển cuối kỳ</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
@@ -447,6 +449,8 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
                         <p>{item.sign}</p>
+                        <p className="text-cbs-highlight-color mt-3" title="Số hóa đơn"><b>{item?.signInvoice}</b></p>
+                        <p className="text-gray-500 text-[12px]">{moment(item.dateInvoice).isValid() && moment(item.dateInvoice).format(DATE_FORMAT)}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
@@ -507,6 +511,8 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                       {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
                       <p>{item.sign}</p>
+                        <p className="text-cbs-highlight-color mt-3" title="Số hóa đơn"><b>{item?.signInvoice}</b></p>
+                        <p className="text-gray-500 text-[12px]">{moment(item.dateInvoice).isValid() && moment(item.dateInvoice).format(DATE_FORMAT)}</p>
                       <p>Phiếu hủy</p>
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
