@@ -50,13 +50,17 @@ export const AccountingDetailPage: FC = () => {
   const [contactKeyword, setContactKeyword] = useState("");
 
   const today = new Date();
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-  const currentMonth = new Date().getMonth()
+  // const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  // const currentMonth = new Date().getMonth()
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
     fromDate: new Date(new Date().getFullYear(), 0, 1), 
-    toDate: new Date(new Date().getFullYear(), 11, 31) 
+    toDate: new Date(new Date().getFullYear(), 11, 31),
+    // fromDate: new Date(new Date().getFullYear(), 0, 1), 
+    // toDate: new Date(new Date().getFullYear(), 11, 31),
+    // fromDate: null,
+    // toDate: null,
   });
 
   const [infoAccount, setInfoAccount] = useState({} as any);
@@ -135,12 +139,12 @@ export const AccountingDetailPage: FC = () => {
   let balance = soDuDauKy
   soDuCuoiKy = Number(soDuDauKy) + Number(phatSinhNo) - Number(phatSinhCo)
 
-  const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
-    if (input) {
-      setInputFilter(() => ({ ...inputFilter, toDate: date }))
-    } else {
-      setInputFilter(() => ({ ...inputFilter, fromDate: date }))
-    }
+  const handleOnChangeDate = useCallback((date, input) => {
+  if (input) {
+    setInputFilter((value) => ({ ...value, toDate: date }))
+  } else {
+    setInputFilter((value) => ({ ...value, fromDate: date }))
+  }
   }, [])
 
   useEffect(() => {
