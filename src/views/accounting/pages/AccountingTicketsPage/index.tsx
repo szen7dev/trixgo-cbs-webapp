@@ -404,13 +404,13 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                             <p className="text-2-line-clamp">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
-                        {item?.journals?.map((journal: any, gIndex: number) => (
+                        {/* {item?.journals?.map((journal: any, gIndex: number) => (
                           journal.goods && (journal.debit.name.toString() != '632') && (
                             <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
                               {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
                             </p>
                           )
-                        ))}
+                        ))} */}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
@@ -425,7 +425,7 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         <p className="">Khoản mục: {item.subtype?.name}</p>
-                        <p className="">Hợp đồng: {item.contract?.name}</p>
+                        {/* <p className="">Hợp đồng: {item.contract?.name}</p> */}
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
@@ -459,13 +459,13 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                             <p className="text-2-line-clamp text-cbs-highlight-color font-bold">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
-                        {item?.journals?.map((journal: any, gIndex: number) => (
+                        {/* {item?.journals?.map((journal: any, gIndex: number) => (
                           journal.goods && (journal.debit.name.toString() != '632') && (
                             <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
                               {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
                             </p>
                           )
-                        ))}
+                        ))} */}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
@@ -485,8 +485,8 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                             {moment(item.paymentDeadline).isValid() && `${moment(item.paymentDeadline).format('DD/MM/YYYY')} - ${moment(item.paymentDeadline).fromNow()}`}
                           </span>
                         </p>
-                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
-                        <p className="">Hợp đồng: {item.contract?.name}</p>
+                        {(item?.isPaid == 0 && item?.paymentDeadline) ? <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p> : <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p>}
+                        {/* <p className="">Hợp đồng: {item.contract?.name}</p> */}
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
@@ -522,13 +522,13 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
                         </Popover>
                       </NavLink>
-                      {item?.journals?.map((journal: any, gIndex: number) => (
+                      {/* {item?.journals?.map((journal: any, gIndex: number) => (
                           journal.goods && (journal.debit.name.toString() != '632') && (
                             <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
                               {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
                             </p>
                           )
-                      ))}
+                      ))} */}
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                     </td>
@@ -548,8 +548,8 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                             {moment(item.paymentDeadline).isValid() && `${moment(item.paymentDeadline).format('DD/MM/YYYY')} - ${moment(item.paymentDeadline).fromNow()}`}
                           </span>
                         </p>
-                        {item?.isPaid == 1 ? <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p> : <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p>}
-                        <p className="">Hợp đồng: {item.contract?.name}</p>
+                        {(item?.isPaid == 0 && item?.paymentDeadline) ? <p className="mt-1" style={{ color: 'red'}}>Chưa thanh toán</p> : <p className="mt-1" style={{ color: 'green'}}>Đã thanh toán</p>}
+                        {/* <p className="">Hợp đồng: {item.contract?.name}</p> */}
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right text-cbs-highlight-color font-bold">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
