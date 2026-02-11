@@ -311,7 +311,7 @@ export const SupportGrantPage: FC = () => {
       </table>
 
       <ModalContainer isModalOpen={modalCreateOrUpdateAppCompany} toggle={toggleModalCreateOrUpdateAppCompany}>
-        <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+        <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl"  style={{height: "750px"}}>
           <ModalCreateOrUpdateAppCompany
             modalType={initialValues.appCompanyID ? 'update' : 'create'}
             show={modalCreateOrUpdateAppCompany}
