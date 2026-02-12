@@ -411,7 +411,7 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px'}}>
-                        {item.customer?.name}
+                        {item.customer?.name} - {item.customer?.phone} - {item.customer?.taxid}
                         <hr className="text-gray-500 mt-3"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                       </td>
@@ -464,7 +464,7 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px' }}>
-                        {item.customer?.name}
+                        {item.customer?.name} - {item.customer?.phone} - {item.customer?.taxid}
                         <hr className="text-gray-500 mt-3"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                       </td>
@@ -525,7 +525,7 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px' }}>
-                      {item.customer?.name}
+                      {item.customer?.name} - {item.customer?.phone} - {item.customer?.taxid}
                       <hr className="text-gray-500 mt-3"/>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
                     </td>
