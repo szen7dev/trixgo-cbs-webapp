@@ -5,7 +5,6 @@ import { useModal } from "services/hooks/useModal";
 import { formatNumberMoney } from "utils/cmcs";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { Popover } from "shareComponents/common";
-import useCheckedList from "services/hooks/ppt/useCheckedList";
 import debounce from "lodash/debounce";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { SearchInput } from "shareComponents/common";
@@ -20,12 +19,11 @@ import {
 } from "views/accounting/shareComponents/common";
 import { useAuth } from "services/hooks/auth/useAuth";
 import {
-  UseAccountingVoucherList,
   useCreateAccountingVoucherMutation,
   useUpdateAccountingVoucherMutation,
   useDeleteAccountingVoucherMutation,
 } from "services/hooks/accounting/useAccountingVoucher";
-import { DATE_FORMAT, DATE_FORMAT_TIME, VOUCHER_TYPES } from "apis/localdb/index";
+import { DATE_FORMAT, VOUCHER_TYPES } from "apis/localdb/index";
 import {
   useVoucherList
 } from "services/hooks/accounting/useAccVoucher";
@@ -404,13 +402,11 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                             <p className="text-2-line-clamp">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
-                        {/* {item?.journals?.map((journal: any, gIndex: number) => (
-                          journal.goods && (journal.debit.name.toString() != '632') && (
-                            <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
-                              {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
-                            </p>
-                          )
-                        ))} */}
+                        {item?.files?.map((file: any, fileIndex: number) => (
+                           <p key={fileIndex} className="mt-1 text-gray-500 text-[12px]">
+                              <a className="text-primary mt-3" href={`${process.env.REACT_APP_URL_S3}${file?.path}`} target="_blank" rel="noreferrer"> {file?.nameOrg || "-"} </a>
+                          </p>
+                        ))}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
@@ -459,13 +455,11 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                             <p className="text-2-line-clamp text-cbs-highlight-color font-bold">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
-                        {/* {item?.journals?.map((journal: any, gIndex: number) => (
-                          journal.goods && (journal.debit.name.toString() != '632') && (
-                            <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
-                              {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
-                            </p>
-                          )
-                        ))} */}
+                        {item?.files?.map((file: any, fileIndex: number) => (
+                           <p key={fileIndex} className="mt-1 text-gray-500 text-[12px]">
+                              <a className="text-primary mt-3" href={`${process.env.REACT_APP_URL_S3}${file?.path}`} target="_blank" rel="noreferrer"> {file?.nameOrg || "-"} </a>
+                          </p>
+                        ))}
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
@@ -522,13 +516,11 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
                         </Popover>
                       </NavLink>
-                      {/* {item?.journals?.map((journal: any, gIndex: number) => (
-                          journal.goods && (journal.debit.name.toString() != '632') && (
-                            <p key={gIndex} className="mt-1 text-gray-500 text-[12px]">
-                              {journal.goods.name.slice(0, 20)}...{journal.goods.name.slice(-10)} | {journal.quantity} {journal.goods.unit}
-                            </p>
-                          )
-                      ))} */}
+                        {item?.files?.map((file: any, fileIndex: number) => (
+                           <p key={fileIndex} className="mt-1 text-gray-500 text-[12px]">
+                              <a className="text-primary mt-3" href={`${process.env.REACT_APP_URL_S3}${file?.path}`} target="_blank" rel="noreferrer"> {file?.nameOrg || "-"} </a>
+                          </p>
+                        ))}
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                     </td>
