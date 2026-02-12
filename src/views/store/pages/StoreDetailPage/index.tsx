@@ -438,7 +438,7 @@ export const StoreDetailPage: FC<Props> = () => {
 
         <div className="flex flex-wrap mt-3">
           <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
-            Tài liệu đính kèm phiếu kho
+            Tài liệu đính kèm
           </h3>
           <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
             <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file

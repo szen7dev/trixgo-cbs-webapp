@@ -30,8 +30,8 @@ async function fetchListVoucher(params : any) {
         params: {
             populates: {
                 // "path": "userCreate userUpdate customer contract funda subtype linkFunda linkVoucher referrer sales journals",
-                "path": "userCreate userUpdate customer funda subtype linkFunda linkVoucher referrer sales",
-                "select": "name sign phone taxid address fullname",
+                "path": "userCreate userUpdate customer funda subtype linkFunda linkVoucher referrer sales files",
+                "select": "name sign phone taxid address fullname path nameOrg",
                 // "select": "name sign phone taxid address fullname goods quantity",
                 // populate: {
                 //     "path": "goods debit",
@@ -50,8 +50,8 @@ async function fetchFilterListData(params : any) {
     const { data } = await API.get(`${ACCOUNTING_VOUCHER}/filter-voucher`, {
         params: {
             populates: {
-                "path": "userCreate userUpdate customer funda subtype linkFunda linkVoucher referrer sales",
-                "select": "name sign phone taxid address fullname",
+                "path": "userCreate userUpdate customer funda subtype linkFunda linkVoucher referrer sales files",
+                "select": "name sign phone taxid address fullname path nameOrg",
             },
             ...params,
         }
