@@ -26,12 +26,6 @@ export const ActionAccountingGroup: FC<Props> = ({ data, handleAction, icon }) =
         {icon ?? <img alt={"Icon"} src={ThreeDotsHorizontal} />}
       </button>
       {showOptions ? <div className={"absolute acc-action-row border rounded-md overflow-hidden bg-white z-100"}>
-        {/* <button className={"flex w-full p-3 hover:bg-gray-100"}>
-          <div className={"w-2/12 ml-3"}>
-            <img alt={"Icon"} src={Printer} />
-          </div>
-          <div className={"w-10/12 text-left"}>In ấn</div>
-        </button> */}
         {
           (hasPermission && permission && Number(permission?.create) >= 1) ? 
             <button onClick={() => { setShowOptions(false); handleAction && handleAction(data, 2) }} className={"flex w-full p-3 hover:bg-gray-100"}>

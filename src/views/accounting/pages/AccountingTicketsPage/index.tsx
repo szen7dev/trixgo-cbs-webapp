@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useState, useRef, ReactNode } from "react";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import moment from "moment";
 import { useModal } from "services/hooks/useModal";
@@ -14,7 +14,7 @@ import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import {
   CreateNewTicket,
-  ActionAccountingGroup,
+  // ActionAccountingGroup,
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -30,7 +30,23 @@ import {
 import { useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import 'moment/locale/vi'; // Import file ngôn ngữ tiếng Việt
+// import ThreeDotsHorizontal from "assets/images/three-dots-horizontal.svg";
+// import Printer from "assets/images/icons8-print-96.png";
+import Copy from "assets/images/icons8-copy-96.png";
+import Pen from "assets/images/icons8-pencil.svg";
+import iconUpload from "assets/images/icons8-upload-file-100 1.png";
+import { useUpload } from 'services/hooks/useUpload';
+import { APP_KEY } from 'utils/constants';
+import { toast } from "react-toastify";
+import { validateFiles } from 'validation/file';
+
 moment.locale('vi'); // Kích hoạt sử dụng tiếng Việt
+
+type Props = {
+  data?: any;
+  handleAction?: (data: any, action: number) => void; // 1. In, 2. Copy 3. Cập nhật 4. Xóa
+  icon?: ReactNode;
+}
 
 interface AccountingTicketsPageProps {
   type?: number
@@ -187,16 +203,61 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     }
   }, [])
 
-const getStatusColor = (deadline: any, isPaid: any ) => {
-    if (!deadline) return "text-green-600";
-    const now = moment();
-    const end = moment(deadline);
-    const diffDays = end.diff(now, 'days');
+  const getStatusColor = (deadline: any, isPaid: any ) => {
+      if (!deadline) return "text-green-600";
+      const now = moment();
+      const end = moment(deadline);
+      const diffDays = end.diff(now, 'days');
 
-    if (diffDays < 0 && isPaid == 0) return "text-red-600"; // Quá hạn
-    if (diffDays <= 3 && isPaid == 0) return "text-cbs-schedule-nextweek"
-    return "text-green-600";                          // Còn hạn
-};
+      if (diffDays < 0 && isPaid == 0) return "text-red-600"; // Quá hạn
+      if (diffDays <= 3 && isPaid == 0) return "text-cbs-schedule-nextweek"
+      return "text-green-600";                          // Còn hạn
+  }
+
+  // Upload file  
+  const { addFileToUpload } = useUpload({
+    appID: APP_KEY.ACCOUNTING,
+    companyID: user?.company._id,
+  })
+
+  const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>, voucherID: string) => {
+    try {
+      // Đọc file từ Client
+      if (!event.target.files || !event.target.files.length) return;
+
+      const validation = await validateFiles(event.target.files);
+      if(validation.error) return toast.warn(validation.message);
+
+      const arrFileID: any = []
+
+      // Upload files to S3 và lưu DB file-core
+      for (const [, file] of Object.entries(event.target.files)) {
+        const { _id } = await addFileToUpload({
+          files: file as any,
+          fileType: 2,
+          useCompress: true
+        })
+        arrFileID.push(_id)
+      }
+
+      const { error, data } = await updateAccountingVoucherMutateAsync({
+        voucherID: voucherID,
+        filesID: arrFileID,
+      });
+
+      if (error) {
+        return toast.warning(data?.message);
+      }
+
+      toast.success('Thêm file thành công');
+      refetch();
+    } catch (error) {
+      console.log({ error })
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  }
 
   return (
     <main className="h-full">
@@ -434,8 +495,47 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                         </p>
                         {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Không chứng từ</p>}
                       </td>
-                      <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
-                        <ActionAccountingGroup data={item} handleAction={handleAction} />
+                      <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border" style={{width: "50px"}}>
+                        {/* <ActionAccountingGroup data={item} handleAction={handleAction} /> */}
+                          {
+                          (hasPermission && permission && Number(permission?.create) >= 1) ? 
+                              <button onClick={() => {handleAction && handleAction(item, 2) }} className={"flex p-1 hover:bg-gray-100"}>
+                                <div className={""}>
+                                  <img alt={"Icon"} src={Copy} style={{width: "20px"}}/>
+                                </div>
+                              </button>
+                              :
+                              <></>
+                          }
+                          {
+                            (hasPermission && permission && Number(permission?.update) >= 1) ? 
+                              <button onClick={() => { handleAction && handleAction(item, 3) }} className={"flex p-1 hover:bg-gray-100"}>
+                                <div className={""}>
+                                  <img alt={"Icon"} src={Pen} style={{width: "20px"}} />
+                                </div>
+                              </button>
+                              :
+                              <></>
+                          }
+                          {
+                            (hasPermission && permission && Number(permission?.update) >= 1) ? 
+                              <button className="flex p-1 hover:bg-gray-100">
+                                <label className="cursor-pointer" style={{width: "20px"}}>
+                                  <img src={iconUpload} alt=""/>
+                                  <input
+                                    type="file"
+                                    name="files"
+                                    id="file"
+                                    className="hidden"
+                                    accept="*"
+                                    multiple
+                                    onChange={(e) => handleSetFiles(e, item._id)}
+                                  />
+                                </label>
+                              </button>
+                              :
+                              <></>
+                          }
                       </td>
                     </tr>
                   )
@@ -493,8 +593,47 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                         </p>
                         {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Không chứng từ</p>}
                       </td>
-                      <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
-                        <ActionAccountingGroup data={item} handleAction={handleAction} />
+                      <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border" style={{width: "50px"}}>
+                        {/* <ActionAccountingGroup data={item} handleAction={handleAction} /> */}
+                          {
+                          (hasPermission && permission && Number(permission?.create) >= 1) ? 
+                              <button onClick={() => {handleAction && handleAction(item, 2) }} className={"flex p-1 hover:bg-gray-100"}>
+                                <div className={""}>
+                                  <img alt={"Icon"} src={Copy} style={{width: "20px"}}/>
+                                </div>
+                              </button>
+                              :
+                              <></>
+                          }
+                          {
+                            (hasPermission && permission && Number(permission?.update) >= 1) ? 
+                              <button onClick={() => { handleAction && handleAction(item, 3) }} className={"flex p-1 hover:bg-gray-100"}>
+                                <div className={""}>
+                                  <img alt={"Icon"} src={Pen} style={{width: "20px"}} />
+                                </div>
+                              </button>
+                              :
+                              <></>
+                          }
+                          {
+                            (hasPermission && permission && Number(permission?.update) >= 1) ? 
+                              <button className="flex p-1 hover:bg-gray-100">
+                                <label className="cursor-pointer" style={{width: "20px"}}>
+                                  <img src={iconUpload} alt=""/>
+                                  <input
+                                    type="file"
+                                    name="files"
+                                    id="file"
+                                    className="hidden"
+                                    accept="*"
+                                    multiple
+                                    onChange={(e) => handleSetFiles(e, item._id)}
+                                  />
+                                </label>
+                              </button>
+                              :
+                              <></>
+                          }
                       </td>
                     </tr>
                   )
@@ -554,8 +693,47 @@ const getStatusColor = (deadline: any, isPaid: any ) => {
                         </p>
                         {item?.isDocumented == 1 ? <p className="mt-1" style={{ color: 'green'}}>Có chứng từ</p> : <p className="mt-1" style={{ color: 'red'}}>Không chứng từ</p>}
                       </td>
-                    <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
-                      <ActionAccountingGroup data={item} handleAction={handleAction} />
+                    <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border" style={{width: "50px"}}>
+                      {/* <ActionAccountingGroup data={item} handleAction={handleAction} /> */}
+                          {
+                          (hasPermission && permission && Number(permission?.create) >= 1) ? 
+                              <button onClick={() => {handleAction && handleAction(item, 2) }} className={"flex p-1 hover:bg-gray-100"}>
+                                <div className={""}>
+                                  <img alt={"Icon"} src={Copy} style={{width: "20px"}}/>
+                                </div>
+                              </button>
+                              :
+                              <></>
+                          }
+                          {
+                            (hasPermission && permission && Number(permission?.update) >= 1) ? 
+                              <button onClick={() => { handleAction && handleAction(item, 3) }} className={"flex p-1 hover:bg-gray-100"}>
+                                <div className={""}>
+                                  <img alt={"Icon"} src={Pen} style={{width: "20px"}} />
+                                </div>
+                              </button>
+                              :
+                              <></>
+                          }
+                          {
+                            (hasPermission && permission && Number(permission?.update) >= 1) ? 
+                              <button className="flex p-1 hover:bg-gray-100">
+                                <label className="cursor-pointer" style={{width: "20px"}}>
+                                  <img src={iconUpload} alt=""/>
+                                  <input
+                                    type="file"
+                                    name="files"
+                                    id="file"
+                                    className="hidden"
+                                    accept="*"
+                                    multiple
+                                    onChange={(e) => handleSetFiles(e, item._id)}
+                                  />
+                                </label>
+                              </button>
+                              :
+                              <></>
+                          }
                     </td>
                   </tr>
                 )
