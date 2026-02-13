@@ -19,6 +19,7 @@ export interface CashFlowPlan {
     toDate: string;
     type: number;
     name: string;
+    funda: any;
     status: number;
     value: number;
     actualRevenue: number;
@@ -40,6 +41,7 @@ export interface CashFlowPlan {
     admins: User[];
     members: User[];
     userCreate: User;
+    userUpdate: User;
 }
 
 export type CashFlowPlanInfoPayload = {
