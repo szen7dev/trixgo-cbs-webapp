@@ -105,28 +105,30 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 <div>
                   <p className="text-primary-gray text-[13px] mb-1">Từ ngày</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
-                    <Field
-                      type="text"
-                      name="fromDate"
-                      placeholder="YYYY-MM-DD"
+                    <DatePicker
                       className="w-full h-6 outline-none"
-                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                        handleBlur(e);
+                      selected={values.fromDate ? new Date(values.fromDate) : null}
+                      placeholderText="Ngày/tháng/năm"
+                      name="fromDate"
+                      onChange={(fromDate: Date | null) => {
+                        setFieldValue("fromDate", fromDate);
                       }}
+                      dateFormat="dd/MM/yyyy"
                     />
                   </div>
                 </div>
                 <div>
                   <p className="text-primary-gray text-[13px] mb-1">Đến ngày</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
-                    <Field
-                      type="text"
-                      name="toDate"
-                      placeholder="YYYY-MM-DD"
+                    <DatePicker
                       className="w-full h-6 outline-none"
-                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                        handleBlur(e);
+                      selected={values.toDate ? new Date(values.toDate) : null}
+                      placeholderText="Ngày/tháng/năm"
+                      name="toDate"
+                      onChange={(toDate: Date | null) => {
+                        setFieldValue("toDate", toDate);
                       }}
+                      dateFormat="dd/MM/yyyy"
                     />
                   </div>
                 </div>

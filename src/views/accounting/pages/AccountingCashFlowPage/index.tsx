@@ -104,28 +104,26 @@ export const AccountingCashFlowPage: FC = () => {
         <table className="text-black text-medium border-separate space-x-0 space-y-0 w-full border-spacing-0">
           <thead className="">
             <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-              <th className="px-4 py-2.5 font-normal sticky top-0 border-b border-cbs-border w-1">
+              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+                TT
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
                 Nội dung
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
-                Phân loại
+                Doanh thu kế hoạch
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
-                Dự án/phòng ban
+                Chi phí kế hoạch
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
-                Kế hoạch giải ngân
+                Doanh thu thực tế
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
-                Thực tế giải ngân
+                Chi phí thực tế
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
                 Ghi chú
-              </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
-                Trạng thái/Phê duyệt
               </th>
             </tr>
           </thead>
@@ -151,43 +149,23 @@ export const AccountingCashFlowPage: FC = () => {
                   >
                     <NavLink to={`/accounting/cashflow/${item._id}`}>{item.name}</NavLink>
                     <p className={"mt-1 text-gray-500"}>
-                      {item.userCreate?.bizfullname}
+                      {item.userCreate?.fullname}
                       {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
                     </p>
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {item.type && FINANCIAL_PLANNING_TYPES[item.type - 1].text}
+                    {convertCurrency(item.revenue)}
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {item.project?.name}
+                    {convertCurrency(item.expense)}
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {convertCurrency(item.value)}
+                    {convertCurrency(item.actualRevenue)}
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {convertCurrency(item.realValue)}
+                    {convertCurrency(item.actualExpense)}
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    <div className="flex">
-                      {item.approver && item.status === 2 ? (
-                        <>
-                          <div className={"flex items-center text-primary"}>
-                            <span className={"mr-3"}>Đã phê duyệt</span>
-                            <img src={VerifyIcon} alt={"icon"} />
-                          </div>
-                          <p className={"mt-1 text-gray-500"}>
-                            {item.approver?.bizfullname}
-                            {moment(item.timeApproved).format("DD/MM/YYYY HH:mm")}
-                          </p>
-                        </>
-                      ) : (
-                        <div className={"flex items-center"}>
-                          <span className={"mr-3"}>Chưa phê duyệt</span>
-                        </div>
-                      )}
-                    </div>
-                  </td>
                 </tr>
               )) : <></>}
           </tbody>

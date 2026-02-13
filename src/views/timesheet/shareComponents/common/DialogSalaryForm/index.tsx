@@ -148,15 +148,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       }}
                       dateFormat="dd/MM/yyyy"
                     />
-                    {/* <Field
-                      type="text"
-                      name="date"
-                      placeholder="Nhập định dạng YYYY-MM-DD"
-                      className="w-full h-6 outline-none"
-                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                        handleBlur(e);
-                      }}
-                    /> */}
                   </div>
                 </div>
 
