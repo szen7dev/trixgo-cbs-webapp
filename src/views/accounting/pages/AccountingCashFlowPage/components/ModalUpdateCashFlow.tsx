@@ -57,8 +57,8 @@ const ModalUpdateCashFlow: FC<ModalProps> = ({ cashFlowId, toggle, onConfirm, in
 
 			if(error) return;
 
-			const { name, fundaID, fromDate, toDate, note } = data;
-			setInitValues({ name, fundaID, fromDate, toDate, note });
+			const { name, fundaID, fromDate, toDate, note, status } = data;
+			setInitValues({ name, fundaID, fromDate, toDate, note, status });
 		})();
 	}, [cashFlowId])
 
@@ -108,7 +108,7 @@ const ModalUpdateCashFlow: FC<ModalProps> = ({ cashFlowId, toggle, onConfirm, in
 					const { handleBlur, setFieldValue, values } = formik;
 
 					return (
-						<Form autoComplete="off"  className='relative' style={{height:"530px"}}>
+						<Form autoComplete="off"  className='relative' style={{height:"575px"}}>
 							<div className="flex items-center px-6 py-2.5 justify-between bg-cbs-table-header">
 								<Dialog.Title
 									as="h3"
@@ -215,6 +215,22 @@ const ModalUpdateCashFlow: FC<ModalProps> = ({ cashFlowId, toggle, onConfirm, in
 									/>
 									<ErrorMessage
 										name="note"
+										component="span"
+										className="font-normal text-negative italic"
+									/>
+								</label>
+								<label className='mt-4 block'>
+									<div className='mb-1.5'>
+										Trạng thái
+									</div>
+									<textarea
+										rows={1}
+										placeholder="1-Chưa duyệt | 2-Đã duyệt"
+										className="py-1.5 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
+										{...formik.getFieldProps('status')}
+									/>
+									<ErrorMessage
+										name="status"
 										component="span"
 										className="font-normal text-negative italic"
 									/>

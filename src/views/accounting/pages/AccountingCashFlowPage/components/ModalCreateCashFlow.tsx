@@ -83,7 +83,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm, initialValues 
 					const { handleBlur, setFieldValue, values } = formik;
 
 					return (
-						<Form autoComplete="off"  className='relative' style={{height:"530px"}}>
+						<Form autoComplete="off"  className='relative' style={{height:"575px"}}>
 							<div className="flex items-center px-6 py-2.5 justify-between bg-cbs-table-header">
 								<Dialog.Title
 									as="h3"
@@ -185,13 +185,29 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm, initialValues 
 										Ghi chú
 									</div>
 									<textarea
-										rows={3}
+										rows={1}
 										placeholder="Nhập ghi chú"
 										className="py-1.5 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
 										{...formik.getFieldProps('note')}
 									/>
 									<ErrorMessage
 										name="note"
+										component="span"
+										className="font-normal text-negative italic"
+									/>
+								</label>
+								<label className='mt-4 block'>
+									<div className='mb-1.5'>
+										Trạng thái
+									</div>
+									<textarea
+										rows={2}
+										placeholder="1-Chưa duyệt | 2-Đã duyệt"
+										className="py-1.5 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
+										{...formik.getFieldProps('status')}
+									/>
+									<ErrorMessage
+										name="status"
 										component="span"
 										className="font-normal text-negative italic"
 									/>
