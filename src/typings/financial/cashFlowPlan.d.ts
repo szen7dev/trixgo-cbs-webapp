@@ -19,6 +19,10 @@ export interface CashFlowPlan {
     name: string;
     status: number;
     value: number;
+    actualRevenue: number;
+    revenue: number;
+    expense: number;
+    actualExpense: number;
     planValue: number;
     property: number;
     date: string;
