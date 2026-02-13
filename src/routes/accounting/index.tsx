@@ -32,6 +32,8 @@ import {
   AccountingSupportToolsPage,
   AccountingReportDetailPage,
   AccountingReportDetailPage2,
+  AccountingCashFlowPage,
+  AccountingCashFlowDetailPage,
 } from "views/accounting/pages";
 
 import {
@@ -257,6 +259,16 @@ const AccountingRouter: FC = () => {
         exact
         path="/accounting/financial-report/funda/:reportID/:accountID"
         component={() => <AccountingReportDetailPage2 option={3}/>}
+      />
+      <ProtectedRoute
+        exact
+        path="/accounting/cashflow"
+        component={AccountingCashFlowPage}
+      />
+      <ProtectedRoute
+        exact
+        path="/accounting/cashflow/:cashFlowId"
+        component={AccountingCashFlowDetailPage}
       />
       <Route path="/accounting/*" component={ErrorPage} />
     </Switch>
