@@ -74,7 +74,6 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm, initialValues 
 
 	return (
 		<Formik
-			// initialValues={{ name: '', date: new Date() }}
 			initialValues={{ name: '', date: new Date(), fromDate: new Date(), toDate: new Date() }}
 			validationSchema={financialSchema}
 			onSubmit={handleSubmit}
