@@ -15,6 +15,8 @@ export interface CashFlowPlan {
     contract: Contract;
     project: Project;
     sign: string;
+    fromDate: string;
+    toDate: string;
     type: number;
     name: string;
     status: number;

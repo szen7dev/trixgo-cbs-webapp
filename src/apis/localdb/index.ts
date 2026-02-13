@@ -902,6 +902,11 @@ export const FNB_NORESIDENT_TYPES = [
  * TÀI CHÍNH DOANH NGHIỆP
  */
 // PHÂN LOẠI KẾ HOẠCH TÀI CHÍNH
+export const FINANCIAL_PLANNING_STATUS = [
+    { value: 1, text: 'Chưa duyệt' },
+    { value: 2, text: 'Đã duyệt' },
+]
+
 export const FINANCIAL_PLANNING_TYPES = [
     { value: 1, text: 'Kế hoạch Năm' },
     { value: 2, text: 'Kế hoạch Bán hàng' },

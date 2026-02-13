@@ -1,34 +1,29 @@
 import { ChangeEvent, FC, useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
 import moment from "moment";
 import debounce from "lodash/debounce";
 
 /**
  * Components
  */
-import { SearchInput, GroupActions, ModalContainer, ModalConfirm } from "shareComponents/common";
+import { SearchInput, GroupActions, ModalContainer } from "shareComponents/common";
 import ModalCreateCashFlow from "./components/ModalCreateCashFlow";
 import ModalUpdateCashFlow from "./components/ModalUpdateCashFlow";
-import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
 
 /**
  * Utils
  */
-import { FINANCIAL_PLANNING_TYPES } from "apis/localdb";
-import { TOAST_DEFAULT_OPTIONS } from "utils/constants";
+import { FINANCIAL_PLANNING_STATUS } from "apis/localdb";
 
 /**
  * Hooks
  */
-import { useModal } from "services/hooks/useModal";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import { convertCurrency } from "utils/converter";
 
 export const AccountingCashFlowPage: FC = () => {
   const location = useLocation();
-  const { closeModal, openModal } = useModal();
   const [cashFlowIdSelected, setCashFlowIdSelected] = useState("");
   const [modalShow, setModalShow] = useState({
     create: false,
@@ -45,7 +40,7 @@ export const AccountingCashFlowPage: FC = () => {
   } = useCashFlowPlan({
     params: {
       keyword,
-      isCompanyOther: location.pathname === '/financial/cashflow-other'
+      isCompanyOther: location.pathname === '/accounting/cashflow-other'
     },
     isFetchList: true,
   });
@@ -108,7 +103,13 @@ export const AccountingCashFlowPage: FC = () => {
                 TT
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
-                Nội dung
+                Ngân sách
+              </th>
+              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+                Từ ngày
+              </th>
+              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+                Đến ngày
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
                 Doanh thu kế hoạch
@@ -124,6 +125,9 @@ export const AccountingCashFlowPage: FC = () => {
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
                 Ghi chú
+              </th>
+              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+                Trạng thái
               </th>
             </tr>
           </thead>
@@ -153,6 +157,8 @@ export const AccountingCashFlowPage: FC = () => {
                       {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
                     </p>
                   </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.toDate).format('DD/MM/YYYY HH:mm')}</td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                     {convertCurrency(item.revenue)}
                   </td>
@@ -166,6 +172,7 @@ export const AccountingCashFlowPage: FC = () => {
                     {convertCurrency(item.actualExpense)}
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{FINANCIAL_PLANNING_STATUS[Number(item.status) - 1].text}</td>
                 </tr>
               )) : <></>}
           </tbody>
