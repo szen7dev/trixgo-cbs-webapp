@@ -399,11 +399,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         <thead className="">
           <tr className="text-primary-gray whitespace-nowrap align-middle text-left relative z-1">
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-              <span className="pl-2 border-cbs-border">
-                Loại phiếu
-              </span>
-            </th>
-            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
                 Ngày
               </span>
@@ -413,27 +408,27 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 Nội dung
               </span>
             </th>
-            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
                 Mã khách
               </span>
             </th>
-            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
                 Người giới thiệu/Sales/CSKH
               </span>
             </th>
-            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
                 Hợp đồng/Khoản mục phí
               </span>
             </th>
-            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
                 Giá trị/Thành tiền
               </span>
             </th>
-            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
                 Ghi chú
               </span>
@@ -450,13 +445,12 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                   return (
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "orange" }}>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                        {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
+                        {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}
                         <p>{item.sign}</p>
                         <p className="text-cbs-highlight-color mt-3" title="Số hóa đơn"><b>{item?.signInvoice}</b></p>
                         <p className="text-gray-500 text-[12px]">{moment(item.dateInvoice).isValid() && moment(item.dateInvoice).format(DATE_FORMAT)}</p>
                         <p>Kết chuyển cuối kỳ</p>
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                         <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                           <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
@@ -471,7 +465,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px'}}>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {item.customer?.name} - {item.customer?.phone} - {item.customer?.taxid}
                         <hr className="text-gray-500 mt-3"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
@@ -543,12 +537,11 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                   return (
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment">
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                        {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
+                        {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}
                         <p>{item.sign}</p>
                         <p className="text-cbs-highlight-color mt-3" title="Số hóa đơn"><b>{item?.signInvoice}</b></p>
                         <p className="text-gray-500 text-[12px]">{moment(item.dateInvoice).isValid() && moment(item.dateInvoice).format(DATE_FORMAT)}</p>
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                         <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                           <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
@@ -563,7 +556,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px' }}>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {item.customer?.name} - {item.customer?.phone} - {item.customer?.taxid}
                         <hr className="text-gray-500 mt-3"/>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
@@ -642,13 +635,12 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 return (
                   <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "red" }}>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                      {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
-                      <p>{item.sign}</p>
+                      {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}
+                        <p>{item.sign}</p>
                         <p className="text-cbs-highlight-color mt-3" title="Số hóa đơn"><b>{item?.signInvoice}</b></p>
                         <p className="text-gray-500 text-[12px]">{moment(item.dateInvoice).isValid() && moment(item.dateInvoice).format(DATE_FORMAT)}</p>
-                      <p>Phiếu hủy</p>
+                        <p>Phiếu hủy</p>
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                       <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                         <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
@@ -663,7 +655,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
                         {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '225px' }}>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                       {item.customer?.name} - {item.customer?.phone} - {item.customer?.taxid}
                       <hr className="text-gray-500 mt-3"/>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>Cơ sở: {item?.funda?.name}</p>
