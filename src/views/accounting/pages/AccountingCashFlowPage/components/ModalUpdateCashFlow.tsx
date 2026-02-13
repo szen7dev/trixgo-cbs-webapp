@@ -108,7 +108,7 @@ const ModalUpdateCashFlow: FC<ModalProps> = ({ cashFlowId, toggle, onConfirm, in
 					const { handleBlur, setFieldValue, values } = formik;
 
 					return (
-						<Form autoComplete="off"  className='relative' style={{height:"575px"}}>
+						<Form autoComplete="off"  className='relative' style={{height:"600px"}}>
 							<div className="flex items-center px-6 py-2.5 justify-between bg-cbs-table-header">
 								<Dialog.Title
 									as="h3"

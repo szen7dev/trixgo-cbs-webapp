@@ -83,7 +83,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm, initialValues 
 					const { handleBlur, setFieldValue, values } = formik;
 
 					return (
-						<Form autoComplete="off"  className='relative' style={{height:"575px"}}>
+						<Form autoComplete="off"  className='relative' style={{height:"600px"}}>
 							<div className="flex items-center px-6 py-2.5 justify-between bg-cbs-table-header">
 								<Dialog.Title
 									as="h3"
@@ -185,7 +185,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm, initialValues 
 										Ghi chú
 									</div>
 									<textarea
-										rows={1}
+										rows={3}
 										placeholder="Nhập ghi chú"
 										className="py-1.5 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
 										{...formik.getFieldProps('note')}
@@ -201,7 +201,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm, initialValues 
 										Trạng thái
 									</div>
 									<textarea
-										rows={2}
+										rows={1}
 										placeholder="1-Chưa duyệt | 2-Đã duyệt"
 										className="py-1.5 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
 										{...formik.getFieldProps('status')}
