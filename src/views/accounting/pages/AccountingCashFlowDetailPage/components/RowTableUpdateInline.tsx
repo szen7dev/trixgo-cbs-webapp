@@ -103,10 +103,10 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, onUpdate,
         />
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {convertCurrency(cashFlow.actualRevenue)}
+        {convertCurrency(cashFlow.actualRevenue)} <span className="mt-1 text-gray-500 text-gray-500 text-[12px]">({Number(100*cashFlow.actualRevenue/cashFlow.revenue).toFixed(0)}%)</span>
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {convertCurrency(cashFlow.actualExpense)}
+        {convertCurrency(cashFlow.actualExpense)} <span className="mt-1 text-gray-500 text-gray-500 text-[12px]">({Number(100*cashFlow.actualExpense/cashFlow.expense).toFixed(0)}%)</span>
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
         <input

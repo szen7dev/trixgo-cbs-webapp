@@ -212,10 +212,10 @@ export const AccountingCashFlowPage: FC = () => {
                     {convertCurrency(item.expense)}
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {convertCurrency(item.actualRevenue)} ({Number(100*item.actualRevenue/item.revenue).toFixed(0)}%)
+                    {convertCurrency(item.actualRevenue)} <span className="mt-1 text-gray-500 text-gray-500 text-[12px]">({Number(100*item.actualRevenue/item.revenue).toFixed(0)}%)</span>
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {convertCurrency(item.actualExpense)} ({Number(100*item.actualExpense/item.expense).toFixed(0)}%)
+                    {convertCurrency(item.actualExpense)} <span className="mt-1 text-gray-500 text-gray-500 text-[12px]">({Number(100*item.actualExpense/item.expense).toFixed(0)}%)</span>
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                     {item.note}
