@@ -315,29 +315,39 @@ export const AccountingCashFlowDetailPage: FC = () => {
             <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
-                        <th className="py-1">
+                        <th className="py-1" style={{width: '50px'}}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Nội dung ngân sách
+                                TT
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Khoản mục phí
+                                Nội dung
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Kế hoạch
+                                Khoản mục
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                               Thực hiện
+                                Doanh thu kế hoạch
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Chênh lệch
+                               Chi phí kế hoạch
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Doanh thu thực tế
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                               Chi phí thực tế
                             </div>
                         </th>
                         <th className="py-1">
@@ -349,7 +359,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
                 </thead>
 
                 <tbody>
-                    {(dataCashFlow && dataCashFlow.length) ? dataCashFlow.map(item => {
+                    {(dataCashFlow && dataCashFlow.length) ? dataCashFlow.map((item, index) => {
                         if(permissions.onlyView) {
                             return <RowTableView key={item._id} cashFlow={item} />
                         }
@@ -364,6 +374,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
                                 onScrollContract={handleScroll}
                                 onChangeCheckbox={handleChangeCheckbox}
                                 onSearchContract={onChangeSearchContract}
+                                index={Number(index + 1)}
                             />
                         )
                     }) : <></>}

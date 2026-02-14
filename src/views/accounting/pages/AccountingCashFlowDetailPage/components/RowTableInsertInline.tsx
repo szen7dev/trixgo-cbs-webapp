@@ -13,7 +13,6 @@ const RowTableInsertInline: FC<Props> = ({ onInsert }) => {
     <tr className="border-b border-primary-border h-10">
       <td className="px-2 table-cell box-border border border-gray-300 align-middle"></td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {/* Nội dung */}
         <input
           className={
             "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
@@ -27,8 +26,6 @@ const RowTableInsertInline: FC<Props> = ({ onInsert }) => {
           }, 700)}
         />
       </td>
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle"></td>
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle"></td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle"></td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle"></td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle"></td>

@@ -20,6 +20,8 @@ export interface CashFlowPlan {
     type: number;
     name: string;
     funda: any;
+    subtype: any;
+    parentSubtype: any;
     status: number;
     value: number;
     actualRevenue: number;
