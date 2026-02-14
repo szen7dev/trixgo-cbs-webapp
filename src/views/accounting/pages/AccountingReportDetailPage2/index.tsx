@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useState } from "react";
-import { NavLink, useHistory, useLocation, useParams } from "react-router-dom";
+import { FC } from "react";
+import { NavLink, useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import { formatNumberMoney } from "utils/cmcs";
 import {
-  useReportList, useReportByProperty
+  useReportByProperty
 } from "services/hooks/accounting/useReport";
 import { VOUCHER_TYPES } from "apis/localdb/index";
 import cn from "classnames";

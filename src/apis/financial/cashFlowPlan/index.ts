@@ -13,6 +13,7 @@ interface CashFlowPlanRepository {
     fetchListCashFlowPlan: (params: CashFlowPlan.CashFlowPlanQueryPayload) => Promise<CashFlowPlan.CashFlowPlanQueryResponse>;
     fetchDetailCashFlowPlan: (params?: CashFlowPlan.CashFlowPlanQueryPayload) => Promise<CashFlowPlan.CashFlowPlanQueryDetailResponse>;
     fetchAmountByProperty: (params?: CashFlowPlan.CashFlowAmountByPropertyParams) => Promise<any>;
+    exportExcel: (params: any) => Promise<any>;
 }
 
 export const cashFlowPlanRepository: CashFlowPlanRepository = {
@@ -22,6 +23,7 @@ export const cashFlowPlanRepository: CashFlowPlanRepository = {
     fetchListCashFlowPlan: async (params) => fetchListCashFlowPlan(params),
     fetchDetailCashFlowPlan: async (params) => fetchListCashFlowPlan(params),
     fetchAmountByProperty: async (params) => getAmountByProperty(params),
+    exportExcel: async (params) => exportExcel(params),
 }
 
 /*=====APIS=====*/
@@ -80,4 +82,12 @@ async function getAmountByProperty(params: any) {
         });
 
     return data;
+}
+
+
+async function exportExcel(params: any) {
+    // const { data: result } = await API.post(`${ACCOUNTING_REPORT}/export-excel`, data);
+     const { data } = await API.post(
+        `${FIN_URL}/cash_flow_plans/export-excel`, params);
+    return data
 }
