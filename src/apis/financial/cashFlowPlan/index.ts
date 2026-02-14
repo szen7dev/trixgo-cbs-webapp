@@ -84,7 +84,6 @@ async function getAmountByProperty(params: any) {
     return data;
 }
 
-
 async function exportExcel(params: any) {
     // const { data: result } = await API.post(`${ACCOUNTING_REPORT}/export-excel`, data);
      const { data } = await API.post(
