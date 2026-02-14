@@ -1,15 +1,12 @@
 /*=====1.LIBRARY=====*/
 import { UIEvent, FC, useState, useCallback, ChangeEvent, useEffect } from "react";
-import cn from "classnames";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 import { useParams, Link, useHistory } from 'react-router-dom';
 
 /*=====2.CSS=====*/
-import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
-import DeleteIcon from "assets/images/icons8-remove.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalConfirm, Loader } from "shareComponents/common";
@@ -30,11 +27,14 @@ import { useContract } from "services/hooks/items/useContract";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
 import { User } from "typings/user";
+import { LIMIT_DROPDOWN } from "apis/localdb/index";
+import {
+	useDoctype,
+} from "services/hooks/items/useDoctype";
 
 export const AccountingCashFlowDetailPage: FC = () => {
     const history = useHistory();
     const { cashFlowId } = useParams<{ cashFlowId: string }>();
-    const { closeModal, openModal } = useModal();
 
     const [showRowInsert, setShowRowInsert] = useState(true);
     const [keywordContract, setKeywordContract] = useState('');
@@ -78,7 +78,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
     const {
         insertAsync,
         updateAsync,
-        deleteManyAsync,
         list: listCashFlowPlans,
         isLoading: isLoadingCashFlowPlans,
         hasNextPage,
@@ -102,6 +101,16 @@ export const AccountingCashFlowDetailPage: FC = () => {
         params: { keyword: keywordContract },
         isFetch: true
     })
+
+    const [keywordSubtype, setKeywordSubtype] = useState('');
+    const { list } = useDoctype({
+        params: {
+            limit: LIMIT_DROPDOWN,
+            type: 23,
+            keyword: keywordSubtype,
+            },
+        isFetchList: true
+    });
 
     useEffect(() => {
         if(!listCashFlowPlans || isLoadingCashFlowPlans) return;
@@ -156,22 +165,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
     // Handle for checkbox each table row
 	const handleChangeCheckbox = (ids: string[]) => {
         setItemsChecked(ids)
-	};
-
-	// Handle for checkbox all
-	const getStateCheckboxAll = useCallback(() => {
-		return itemsChecked.length === listCashFlowPlans.length;
-	}, [itemsChecked, listCashFlowPlans]);
-
-	const handleChangeCheckboxAll = (event: ChangeEvent<HTMLInputElement>) => {
-		const isChecked = event.target.checked;
-
-		if(isChecked) {
-            const ids = listCashFlowPlans.map(item => item._id);
-			setItemsChecked(ids);
-		} else{
-			setItemsChecked([]);
-		}
 	}
 
     const handleScroll = (e: UIEvent<HTMLDivElement>) => {
@@ -183,34 +176,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
         }
     }
 
-    const onChangeSearchContract = (keyword: string) => setKeywordContract(keyword);
-
-    const handleDelete = async () => {
-        try {
-            const { error, data } = await deleteManyAsync({
-                cashFlowsID: itemsChecked
-            });
-
-            if(error) {
-                return toast.warn(data?.message);
-            }
-
-            if(data.length) {
-                return data.map((item: any) => toast.warn(item.message));
-            }
-
-            toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
-            closeModal();
-            refetch();
-            setItemsChecked([]);
-        } catch (error) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    }
+    const onChangeSearchContract = (keyword: string) => setKeywordSubtype(keyword);
 
     const handleInsert = async (values: any) => {
         if(!permissions.hasPermissionCreateUpdate) {
@@ -251,7 +217,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
         }
     }
 
-    const handleUpdate = async (values: any, callback: (response: any) => void) => {
+    const handleUpdate = async (values: any) => {
         if(!permissions.hasPermissionCreateUpdate) {
             return toast.warn('Bạn không có quyền cập nhật nội dung này');
         }
@@ -266,8 +232,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
             if(data.length) {
                 return data.map((item: any) => toast.warn(item.message));
             }
-
-            callback(data);
         } catch (error) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -290,7 +254,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
                         <Link to={`/accounting/cashflow`}>
 							<img src="/images/common/button_back.png" alt="Button Back" />
 						</Link>
-                        <p className="text-lg ml-2">Danh sách</p>
+                        <p className="text-lg ml-2">{cashFlowInfo.name}</p>
 
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
@@ -315,29 +279,39 @@ export const AccountingCashFlowDetailPage: FC = () => {
             <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
-                        <th className="py-1">
+                        <th className="py-1" style={{width: '40px'}}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Nội dung ngân sách
+                                TT
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Khoản mục phí
+                                Nội dung
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Kế hoạch
+                                Khoản mục
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                               Thực hiện
+                                Doanh thu kế hoạch
                             </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Chênh lệch
+                               Chi phí kế hoạch
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Doanh thu thực tế
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                               Chi phí thực tế
                             </div>
                         </th>
                         <th className="py-1">
@@ -349,7 +323,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
                 </thead>
 
                 <tbody>
-                    {(dataCashFlow && dataCashFlow.length) ? dataCashFlow.map(item => {
+                    {(dataCashFlow && dataCashFlow.length) ? dataCashFlow.map((item, index) => {
                         if(permissions.onlyView) {
                             return <RowTableView key={item._id} cashFlow={item} />
                         }
@@ -357,13 +331,14 @@ export const AccountingCashFlowDetailPage: FC = () => {
                         return (
                             <RowTableUpdateInline
                                 key={item._id}
-                                contracts={listContracts}
+                                contracts={list}
                                 cashFlow={item}
                                 itemsChecked={itemsChecked}
                                 onUpdate={handleUpdate}
                                 onScrollContract={handleScroll}
                                 onChangeCheckbox={handleChangeCheckbox}
                                 onSearchContract={onChangeSearchContract}
+                                index={Number(index + 1)}
                             />
                         )
                     }) : <></>}

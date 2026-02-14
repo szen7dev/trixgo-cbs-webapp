@@ -5,18 +5,9 @@ import { useModal } from "services/hooks/useModal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import type { InsertStoreParentPayload } from "typings/store";
 interface CreateOrEditDialogProps {
-//   outin: any,
-//   type: any,
   title: string;
   defaultValues?: any;
-//   fundaName: string;
-//   projectName: string;
-//   assigneeName: string;
-//   warehouseName?: string;
-//   customerName?: string;
-//   contractName?: string;
   onSubmit?: (values: string) => void;
   reportID?: string;
 }
@@ -32,16 +23,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 
   const initialValues = {
     name: "",
-    // date: null,
-    // assignee: {},
-    // outin: Number(outin),
-    // type: Number(type),
-    // funda: {},
-    // project: {},
-    // warehouse: {},
-    // customer: {},
-    // note: "",
-    // status: "",
     ...defaultValues,
   };
 

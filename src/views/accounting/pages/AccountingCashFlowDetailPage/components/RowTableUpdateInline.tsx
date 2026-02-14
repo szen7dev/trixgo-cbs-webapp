@@ -1,39 +1,33 @@
-import { UIEvent, FocusEvent, ChangeEvent, FC, useState, useCallback } from "react";
+import { UIEvent, FocusEvent, ChangeEvent, FC, useState } from "react";
 import debounce from "lodash/debounce";
-import moment from "moment";
 import { convertCurrency, convertCurrencyToNumber } from "utils/converter";
 
 import { DropdownSearchable } from "shareComponents/common";
-import { Contract } from "typings/cmcs";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 type Props = {
+  index: number,
   cashFlow: CashFlowPlan.CashFlowPlan,
-  contracts: Contract[],
-  onUpdate: (values: any, callback: (response: any) => void) => Promise<any>;
+  contracts: any,
+  onUpdate: (values: any) => Promise<any>;
   onScrollContract: (e: UIEvent<HTMLDivElement>) => void;
   onSearchContract?: (keyword: string) => void;
   onChangeCheckbox: (ids: string[]) => void;
   itemsChecked: string[]
 };
 
-const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, onUpdate, onScrollContract, onSearchContract, onChangeCheckbox }) => {
-  const [sellerName, setSellerName] = useState(cashFlow.contract?.sellerInfo?.name);
+const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, onUpdate, onScrollContract, onSearchContract }) => {
   const [values, setValues] = useState({
-    value: `${cashFlow.value}`,
-    realValue: `${cashFlow.realValue}`,
+    revenue: `${cashFlow.revenue}`,
+    expense: `${cashFlow.expense}`,
   })
-
-  const callbackUpdate = (response: any) => {
-    if(response.contract?.sellerInfo?.name) {
-      setSellerName(response.contract?.sellerInfo?.name)
-    }
-  }
   
   return (
     <tr className="border-b border-primary-border h-10">
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {/* Nội dung */}
+        {index}
+      </td>
+      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
         <input
           className={
             "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
@@ -43,31 +37,30 @@ const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, on
             const value = e.target.value;
             if(!value) return;
 
-            onUpdate({ cashFlowID: cashFlow._id, name: value }, callbackUpdate)
+            onUpdate({ cashFlowID: cashFlow._id, name: value })
           }, 700)}
         />
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {/* Gói thầu/Hợp đồng */}
         <DropdownSearchable
           onchangeValue={debounce((value: any) => {
             if(!value) return;
-            onUpdate({ cashFlowID: cashFlow._id, contractID: value?.id }, callbackUpdate)
+            onUpdate({ cashFlowID: cashFlow._id, subtypeID: value?.id })
           }, 700)}
-          placeholder="Hợp đồng"
+          placeholder="Chọn"
           isMultiple={false}
           allowClearValueSingleInput={false}
           showTriangle={true}
           maxWidthInput="max-w-none"
           onScroll={onScrollContract}
           onSearchInputChange={onSearchContract}
-          data={contracts.map(contract => ({
-            value: contract._id,
-            label: contract.name
+          data={contracts.map((item: any) => ({
+            value: item._id,
+            label: item.name
           }))}
           initialValue={{
-            value: cashFlow.contract?._id,
-            label: cashFlow.contract?.name
+            value: cashFlow.subtype?._id,
+            label: cashFlow.subtype?.name
           }}
           formatItem={{
             id: "value",
@@ -76,78 +69,46 @@ const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, on
         />
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {sellerName}
-      </td>
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {/* Giá trị kế hoạch */}
-        <input
-          type="text"
-          className={
-            "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
-          }
-          value={convertCurrency(values.value)}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const value = convertCurrency(e.target.value);
-            setValues(previous => ({ ...previous, value }))
-          }}
-          onBlur={debounce((e: FocusEvent<HTMLInputElement>) => {
-            const value = convertCurrencyToNumber(e.target.value);
-            if(!value) return;
-
-            onUpdate({ cashFlowID: cashFlow._id, value }, callbackUpdate)
-          }, 700)}
-        />
-      </td>
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {/* Ngày kế hoạch */}
-        <input
-          type="date"
-          autoComplete="off"
-          defaultValue={moment(cashFlow.date).format('YYYY-MM-DD')}
-          className="w-full h-[32px] outline-none"
-          onChange={debounce((e: ChangeEvent<HTMLInputElement>) => {
-            const date = e.target.value;
-            if(!date) return;
-
-            onUpdate({ cashFlowID: cashFlow._id, date }, callbackUpdate)
-          }, 700)}
-        />
-      </td>
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {/* Giá trị thực tế */}
         <input
           type="text"
           className="w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
-          value={convertCurrency(values.realValue)}
+          value={convertCurrency(values.revenue)}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const realValue = convertCurrency(e.target.value);
-            setValues(previous => ({ ...previous, realValue }))
+            const revenue = convertCurrency(e.target.value);
+            setValues(previous => ({ ...previous, revenue }))
           }}
           onBlur={debounce((e: FocusEvent<HTMLInputElement>) => {
-            const realValue = convertCurrencyToNumber(e.target.value);
-            if(!realValue) return;
+            const revenue = convertCurrencyToNumber(e.target.value);
+            if(!revenue) return;
 
-            onUpdate({ cashFlowID: cashFlow._id, realValue }, callbackUpdate)
+            onUpdate({ cashFlowID: cashFlow._id, revenue })
           }, 700)}
         />
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {/* Ngày thực tế */}
         <input
-          type="date"
-          autoComplete="off"
-          defaultValue={cashFlow.realDate ? moment(cashFlow.realDate).format('YYYY-MM-DD') : ''}
-          className="w-full h-[32px] outline-none"
-          onChange={debounce((e: ChangeEvent<HTMLInputElement>) => {
-            const realDate = e.target.value;
-            if(!realDate) return;
+          type="text"
+          className="w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
+          value={convertCurrency(values.expense)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            const expense = convertCurrency(e.target.value);
+            setValues(previous => ({ ...previous, expense }))
+          }}
+          onBlur={debounce((e: FocusEvent<HTMLInputElement>) => {
+            const expense = convertCurrencyToNumber(e.target.value);
+            if(!expense) return;
 
-            onUpdate({ cashFlowID: cashFlow._id, realDate }, callbackUpdate)
+            onUpdate({ cashFlowID: cashFlow._id, expense })
           }, 700)}
         />
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {/* Ghi chú */}
+        {convertCurrency(cashFlow.actualRevenue)}
+      </td>
+      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
+        {convertCurrency(cashFlow.actualExpense)}
+      </td>
+      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
         <input
           className={
             "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
@@ -157,31 +118,8 @@ const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, on
             const note = e.target.value;
             if(!note) return;
 
-            onUpdate({ cashFlowID: cashFlow._id, note }, callbackUpdate)
+            onUpdate({ cashFlowID: cashFlow._id, note })
           }, 700)}
-        />
-      </td>
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        <DropdownSearchable
-          onchangeValue={debounce((value: any) => {
-            if(!value) return;
-            onUpdate({ cashFlowID: cashFlow._id, priority: +value?.id }, callbackUpdate)
-          }, 700)}
-          placeholder="Độ ưu tiên"
-          maxWidthInput="max-w-none"
-          data={[
-            { value: 1, label: 'Bình thường' },
-            { value: 2, label: 'Ưu tiên' },
-          ]}
-          formatItem={{
-            id: "value",
-            text: "label",
-          }}
-          initialValue={{
-            value: cashFlow.priority,
-            label: cashFlow.priority === 1 ? 'Bình thường' : 'Ưu tiên'
-          }}
-          inlineSearch={true}
         />
       </td>
     </tr>

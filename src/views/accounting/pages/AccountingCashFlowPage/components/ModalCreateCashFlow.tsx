@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { toast } from "react-toastify";
+import debounce from "lodash/debounce";
 
 /**
  * Libraries
@@ -13,19 +14,34 @@ import { string, object } from 'yup';
  */
 import { DropdownSearchable } from "shareComponents/common";
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
-import { FINANCIAL_PLANNING_TYPES } from 'apis/localdb';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 /**
  * Hooks
  */
 import { useCashFlowPlan } from 'services/hooks/financial/useCashFlow';
+import { useFunda } from "services/hooks/items/useFunda";
 
 interface ModalProps {
 	toggle: () => void;
 	onConfirm?: () => void;
+	initialValues?: any; // Thêm dòng này
 }
 
-const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
+const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm, initialValues }) => {
+	const [fundaKeyword, setFundaKeyword] = useState(
+		initialValues?.fundaID || ""
+	);
+
+	const { list: listFunda } = useFunda({
+		params: {
+			keyword: fundaKeyword,
+			limit: 50
+		},
+		isFetchList: true
+	})
+
 	const { insertAsync } = useCashFlowPlan({});
 
 	const financialSchema = object().shape({
@@ -58,14 +74,16 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 
 	return (
 		<Formik
-			initialValues={{ name: '', date: new Date() }}
+			initialValues={{ name: '', date: new Date(), fromDate: new Date(), toDate: new Date() }}
 			validationSchema={financialSchema}
 			onSubmit={handleSubmit}
 		>
 			{
 				formik => {
+					const { handleBlur, setFieldValue, values } = formik;
+
 					return (
-						<Form autoComplete="off"  className='h-[700px] relative'>
+						<Form autoComplete="off"  className='relative' style={{height:"600px"}}>
 							<div className="flex items-center px-6 py-2.5 justify-between bg-cbs-table-header">
 								<Dialog.Title
 									as="h3"
@@ -79,7 +97,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 									</svg>
 								</button>
 							</div>
-							<div className="px-6 mt-2 pt-3.5 flex-1 overflow-y-auto text-x-small"  style={{height:"530px"}}>
+							<div className="px-6 mt-2 pt-3.5 flex-1 overflow-y-auto text-x-small">
 								<label className='block'>
 									<div className='mb-1.5'>
 										Nội dung (*)
@@ -100,36 +118,25 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 								</label>
 								<label className='mt-4 block'>
 									<div className='mb-1.5'>
-										Mã hiệu
-									</div>
-									<input
-										type="text"
-										placeholder="Nhập mã hiệu"
-										className="py-1.5 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
-										{...formik.getFieldProps('sign')}
-									/>
-									<ErrorMessage
-										name="sign"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Phân loại
+										Đơn vị cơ sở
 									</div>
 									<DropdownSearchable
-										onchangeValue={(value: any) => formik.setFieldValue('type', value.id)}
-										onClearData={() => formik.setFieldValue('type', '')}
+										onchangeValue={(value: any) => formik.setFieldValue('fundaID', value.id)}
+										onClearData={() => formik.setFieldValue('fundaID', '')}
 										className={"    bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
-										placeholder="Phân loại"
+										placeholder="Đơn vị cơ sở"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
 										showTriangle={true}
 										maxWidthInput="max-w-none"
-										data={FINANCIAL_PLANNING_TYPES.map(item => ({
-											value: item.value,
-											label: item.text
+										onSearchInputChange={debounce(
+											(value) => setFundaKeyword(value),
+											500
+										)}
+										initialValue={initialValues?.fundaID}
+										data={listFunda.map((item: any) => ({
+											label: item.name,
+											value: item._id,
 										}))}
 										formatItem={{
 											id: "value",
@@ -138,11 +145,41 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 										inlineSearch={true}
 									/>
 									<ErrorMessage
-										name="type"
+										name="fundaID"
 										component="span"
 										className="font-normal text-negative italic"
 									/>
 								</label>
+								<div className='mt-4'>
+									<p className="text-primary-gray text-[13px] mb-1">Từ ngày</p>
+									<div className="rounded border px-2 py-1 bg-cbs-table-header">
+									<DatePicker
+										className="w-full h-6 outline-none"
+										selected={values.fromDate ? new Date(values.fromDate) : null}
+										placeholderText="Ngày/tháng/năm"
+										name="fromDate"
+										onChange={(fromDate: Date | null) => {
+										setFieldValue("fromDate", fromDate);
+										}}
+										dateFormat="dd/MM/yyyy"
+									/>
+									</div>
+								</div>
+								<div className='mt-4'>
+									<p className="text-primary-gray text-[13px] mb-1">Đến ngày</p>
+									<div className="rounded border px-2 py-1 bg-cbs-table-header">
+									<DatePicker
+										className="w-full h-6 outline-none"
+										selected={values.toDate ? new Date(values.toDate) : null}
+										placeholderText="Ngày/tháng/năm"
+										name="toDate"
+										onChange={(toDate: Date | null) => {
+										setFieldValue("toDate", toDate);
+										}}
+										dateFormat="dd/MM/yyyy"
+									/>
+									</div>
+								</div>
 								<label className='mt-4 block'>
 									<div className='mb-1.5'>
 										Ghi chú
@@ -161,85 +198,13 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 								</label>
 								<label className='mt-4 block'>
 									<div className='mb-1.5'>
-										Mua vào, bán ra
-									</div>
-									<DropdownSearchable
-										onchangeValue={(value: any) => formik.setFieldValue('outin', value.id)}
-										onClearData={() => formik.setFieldValue('outin', '')}
-										className={"    bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
-										placeholder="Mua vào, bán ra"
-										isMultiple={false}
-										allowClearValueSingleInput={true}
-										showTriangle={true}
-										maxWidthInput="max-w-none"
-										data={[
-											{ value: 1, label: 'Bán ra' },
-											{ value: 2, label: 'Mua vào' },
-										]}
-										formatItem={{
-											id: "value",
-											text: "label",
-										}}
-										inlineSearch={true}
-									/>
-									<ErrorMessage
-										name="outin"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Tính chất
-									</div>
-									<DropdownSearchable
-										onchangeValue={(value: any) => formik.setFieldValue('property', value.id)}
-										onClearData={() => formik.setFieldValue('property', '')}
-										className={"    bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
-										placeholder="Tính chất"
-										isMultiple={false}
-										allowClearValueSingleInput={true}
-										showTriangle={true}
-										maxWidthInput="max-w-none"
-										data={[
-											{ value: 1, label: 'Sản lượng' },
-											{ value: 2, label: 'Doanh thu' },
-											{ value: 3, label: 'Dòng tiền' },
-										]}
-										formatItem={{
-											id: "value",
-											text: "label",
-										}}
-										inlineSearch={true}
-									/>
-									<ErrorMessage
-										name="property"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
 										Trạng thái
 									</div>
-									<DropdownSearchable
-										onchangeValue={(value: any) => formik.setFieldValue('status', value.id)}
-										onClearData={() => formik.setFieldValue('status', '')}
-										className={"    bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
-										placeholder="Trạng thái"
-										isMultiple={false}
-										allowClearValueSingleInput={true}
-										showTriangle={true}
-										maxWidthInput="max-w-none"
-										data={[
-											{ value: 1, label: 'Chưa phê duyệt' },
-											{ value: 2, label: 'Đã phê duyệt' },
-										]}
-										formatItem={{
-											id: "value",
-											text: "label",
-										}}
-										inlineSearch={true}
+									<textarea
+										rows={1}
+										placeholder="1-Chưa duyệt | 2-Đã duyệt"
+										className="py-1.5 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
+										{...formik.getFieldProps('status')}
 									/>
 									<ErrorMessage
 										name="status"

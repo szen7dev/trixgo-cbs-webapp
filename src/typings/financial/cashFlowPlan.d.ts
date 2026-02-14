@@ -15,8 +15,13 @@ export interface CashFlowPlan {
     contract: Contract;
     project: Project;
     sign: string;
+    fromDate: string;
+    toDate: string;
     type: number;
     name: string;
+    funda: any;
+    subtype: any;
+    parentSubtype: any;
     status: number;
     value: number;
     actualRevenue: number;
@@ -38,6 +43,7 @@ export interface CashFlowPlan {
     admins: User[];
     members: User[];
     userCreate: User;
+    userUpdate: User;
 }
 
 export type CashFlowPlanInfoPayload = {
