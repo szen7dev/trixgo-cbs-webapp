@@ -148,9 +148,8 @@ export const AccountingCashFlowPage: FC = () => {
       <div className={"flex items-center border-b py-2 px-6"}>
 
         <div className={"filter-bar flex flex-wrap px-2 py-1"}>
-          <div className={"text-lg"}>Kế hoạch</div>
           <SearchInput
-            classNameWrapper={"ml-4"}
+            classNameWrapper={""}
             onChange={debounce(
               (e: ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value),
               500
