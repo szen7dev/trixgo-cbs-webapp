@@ -100,7 +100,7 @@ export const AccountingCashFlowPage: FC = () => {
     )
    
     if (status !== 200 || data.error) {
-      return toast.error(data?.data?.message)
+      return toast.error(data?.message)
     }
 
     refetch();
