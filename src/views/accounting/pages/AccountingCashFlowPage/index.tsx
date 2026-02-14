@@ -1,8 +1,9 @@
-import { ChangeEvent, FC, useState, useEffect, useCallback } from "react";
+import React, { ChangeEvent, FC, useState, useEffect, useCallback } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import iconRefresh from "assets/images/icons8-refresh.png";
+import iconCopy from "assets/images/icons8-copy-96.png";
 /**
  * Components
  */
@@ -10,6 +11,8 @@ import { SearchInput, GroupActions, ModalContainer } from "shareComponents/commo
 import ModalCreateCashFlow from "./components/ModalCreateCashFlow";
 import ModalUpdateCashFlow from "./components/ModalUpdateCashFlow";
 import { toast } from "react-toastify";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+import { createLinkAndClick } from "utils";
 
 /**
  * Utils
@@ -27,6 +30,10 @@ import { ModalConfirm } from "shareComponents/common";
 import API from "apis/repository";
 
 export const AccountingCashFlowPage: FC = () => {
+  const [pageIndex, setPageIndex] = useState(0)
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  const ref = React.useRef<PaginateHandle>(null);
+
   const { openModal, closeModal } = useModal();
   const location = useLocation();
   const [cashFlowIdSelected, setCashFlowIdSelected] = useState("");
@@ -42,6 +49,8 @@ export const AccountingCashFlowPage: FC = () => {
     refetch,
     fetchNextPage,
     totalRecord,
+    isLoading,
+    totalPage
   } = useCashFlowPlan({
     params: {
       keyword,
@@ -50,7 +59,7 @@ export const AccountingCashFlowPage: FC = () => {
     isFetchList: true,
   });
 
-  const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } =
+  const { assigned, handleChangeCheckbox } =
     useCheckedList(listCashFlowPlan);
 
   useEffect(() => {
@@ -104,14 +113,42 @@ export const AccountingCashFlowPage: FC = () => {
     }
 
     refetch();
-    return toast.success('Đồng bộ thành công')
+    return toast.success(data?.message)
   }, [])
+
+  //_____Import, export excel
+  const [, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  });
+
+  const { exportExcelAsync } = useCashFlowPlan({});
+
+  const handleDownloadExcel = async (param: any) => {
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportExcelAsync({
+        // option: `${param.option}`,
+        parentID: param.parentID,
+      });
+      
+      if (error) {
+        return toast.warn(data?.message);
+      }
+
+      data && createLinkAndClick(data, "_self");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+  };
 
   return (
     <div className={"flex flex-col relative h-full"}>
       <div className={"flex items-center border-b py-2 px-6"}>
-        <div className={"flex items-center flex-1"}>
-          <div className={"text-lg"}>Ngân sách</div>
+
+        <div className={"filter-bar flex flex-wrap px-2 py-1"}>
+          <div className={"text-lg"}>Kế hoạch</div>
           <SearchInput
             classNameWrapper={"ml-4"}
             onChange={debounce(
@@ -120,21 +157,38 @@ export const AccountingCashFlowPage: FC = () => {
             )}
           />
           <div className={"w-4 border-gray-400 h-[16px]"} />
-          <GroupActions
-            className="flex items-center flex-1"
-            onClickPencil={toggleModalCreateOrUpdate.bind(null, "update")}
-            types={["edit"]}
-            disabled={{
-              pencil: Object.values(assigned).filter(Boolean).length !== 1,
-            }}
-          />
-        </div>
-        <button
-          className={"bg-green-success h-[32px] text-white rounded px-5"}
-          onClick={toggleModalCreateOrUpdate.bind(null, "create")}
-        >
-          Tạo mới
-        </button>
+            <GroupActions
+              className="flex items-center flex-1"
+              onClickPencil={toggleModalCreateOrUpdate.bind(null, "update")}
+              types={["edit"]}
+              disabled={{
+                pencil: Object.values(assigned).filter(Boolean).length !== 1,
+              }}
+            />
+          </div>
+          <button
+              className={"bg-green-success h-[32px] text-white rounded px-5"}
+              onClick={toggleModalCreateOrUpdate.bind(null, "create")}
+            >
+              Tạo mới
+          </button>
+          <div className="absolute right-0">
+              <PaginateV2
+                  ref={ref}
+                  totalRecord={totalRecord}
+                  totalPages={totalPage}
+                  limit={50}
+                  hasNextPage={hasNextPage}
+                  isFetching={isLoading}
+                  nextPageAction={() => {
+                    fetchNextPage();
+                      setPageIndex(oldState => oldState+1)
+                  }}
+                  prevPageAction={() => {
+                      setPageIndex(oldState => oldState-1)
+                  }}
+              />
+            </div>
       </div>
       <div className="flex-1 overflow-y-auto">
         <table className="text-black text-medium border-separate space-x-0 space-y-0 w-full border-spacing-0">
@@ -213,10 +267,27 @@ export const AccountingCashFlowPage: FC = () => {
                       {item.userUpdate?.fullname}
                       {item.modifyAt && moment(item.modifyAt).format("DD/MM/YYYY HH:mm")}
                     </p>
-                    <div className="mb-3"><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg h-[30px]"} onClick={() => toggleModalOpenSign({ option: 1, cashFlowID: item._id, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu thực tế sẽ được đồng bộ sang' })}><img src={iconRefresh} className={"w-[24px] h-[24px] mr-3"} /><span>Đồng bộ</span></button> </div>
+                    <div className="mb-3">
+                      <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg h-[30px]"} onClick={() => toggleModalOpenSign({ option: 1, cashFlowID: item._id, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu thực tế sẽ được đồng bộ sang' })}>
+                        <img src={iconRefresh} className={"w-[24px] h-[24px] mr-3"} />
+                        <span>Đồng bộ</span>
+                      </button> 
+                      <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg h-[30px]"} onClick={() => toggleModalOpenSign({ option: 2, cashFlowID: item._id, title: 'Bạn có muốn copy không?', description: 'Dữ liệu sẽ được copy mới' })}>
+                        <img src={iconCopy} className={"w-[24px] h-[24px] mr-3"} />
+                        <span>Copy</span>
+                      </button> 
+                    </div>
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                     {FINANCIAL_PLANNING_STATUS[Number(item.status) - 1].text}
+                    <div>
+                      <button
+                        className={"mt-3 text-primary"}
+                        onClick={() => handleDownloadExcel({ option: 1, parentID: item._id })}
+                      >
+                        Tải excel Báo cáo
+                      </button>
+                    </div>
                   </td>
                 </tr>
               )) : <></>}

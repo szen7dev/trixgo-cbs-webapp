@@ -3,7 +3,7 @@ import { NavLink, useHistory, useLocation, useParams } from "react-router-dom";
 import moment from "moment";
 import { useModal } from "services/hooks/useModal";
 import { formatNumberMoney } from "utils/cmcs";
-import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
 import { toast } from "react-toastify";
@@ -191,7 +191,6 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
             </>
           )}
         </div>
-
         <button
             className={"bg-green-success h-[32px] text-white rounded px-5"}
             onClick={() =>
@@ -333,7 +332,7 @@ export const AccountingReportFinancePage: FC<AccountingTicketsPageProps> = () =>
                         className={"mr-2 text-primary"}
                         onClick={() => handleDownloadExcel({ option: 1, parentID: item._id })}
                       >
-                        Tải excel Phiếu
+                        Tải excel Báo cáo
                       </button>
                     </div>
                     {item.note}

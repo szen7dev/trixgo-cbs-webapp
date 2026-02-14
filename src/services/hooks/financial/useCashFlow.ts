@@ -30,6 +30,7 @@ interface UseCashFlowPlan {
     insertAsync: (params: any) => Promise<any>;
     updateAsync: (params: any) => Promise<any>;
     deleteManyAsync: (params: any) => Promise<any>;
+    exportExcelAsync: (params: any) => Promise<any>;
 }
 
 type UseCashFlowPlanProps = {
@@ -98,6 +99,12 @@ export const useCashFlowPlan = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
+    // Export excel
+    const { mutateAsync: exportExcelAsync } =
+        useMutation((payload: any) =>
+            CashFlowPlanRepository.exportExcel(payload)
+    );
+
     return {
         isLoading,
         isLoadingInfo,
@@ -113,6 +120,7 @@ export const useCashFlowPlan = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        exportExcelAsync,
     }
 }
 

@@ -1,39 +1,43 @@
 /*=====1.LIBRARY=====*/
-import { UIEvent, FC, useState, useCallback, ChangeEvent, useEffect } from "react";
+import React, { UIEvent, FC, useState, ChangeEvent, useEffect, useCallback } from "react";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import iconRefresh from "assets/images/icons8-refresh.png";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+import { createLinkAndClick } from "utils";
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { SearchInput, ModalConfirm, Loader } from "shareComponents/common";
-import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
-import { AccessingUsers } from "views/financial/sharedComponents/common";
+import { SearchInput, Loader } from "shareComponents/common";
 
 import RowTableInsertInline from "./components/RowTableInsertInline";
 import RowTableUpdateInline from "./components/RowTableUpdateInline";
-import RowTableView from "./components/RowTableView";
-import ModalShare from "./components/ModalShare";
 
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useModal } from "services/hooks/useModal";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useContract } from "services/hooks/items/useContract";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
-import { User } from "typings/user";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import {
 	useDoctype,
 } from "services/hooks/items/useDoctype";
+import { useModal } from "services/hooks/useModal";
+import { ModalConfirm } from "shareComponents/common";
+import API from "apis/repository";
 
 export const AccountingCashFlowDetailPage: FC = () => {
-    const history = useHistory();
+    const [pageIndex, setPageIndex] = useState(0)
+    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    const ref = React.useRef<PaginateHandle>(null);
+
+    const { openModal, closeModal } = useModal();
     const { cashFlowId } = useParams<{ cashFlowId: string }>();
 
     const [showRowInsert, setShowRowInsert] = useState(true);
@@ -59,13 +63,15 @@ export const AccountingCashFlowDetailPage: FC = () => {
         insertAsync,
         updateAsync,
         list: listCashFlowPlans,
-        isLoading: isLoadingCashFlowPlans,
+        isLoading,
+        totalPage,
         hasNextPage,
         refetch,
         fetchNextPage,
         totalRecord
     } = useCashFlowPlan({
         params: {
+            limit: 100,
             parentID: cashFlowId,
             keyword,
             sortKey: JSON.stringify(['createAt__1', '_id__1'])
@@ -93,7 +99,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
     });
 
     useEffect(() => {
-        if(!listCashFlowPlans || isLoadingCashFlowPlans) return;
+        if(!listCashFlowPlans || isLoading) return;
 
         setDataCashFlow(listCashFlowPlans);
     }, [JSON.stringify(listCashFlowPlans)])
@@ -173,7 +179,70 @@ export const AccountingCashFlowDetailPage: FC = () => {
         }
     }
 
-    if(isLoadingCashFlowPlans || isLoadingInfo || !cashFlowInfo || !user) return <Loader className="border-primary" />
+    const toggleModalOpenSign = (param: any) => {
+    openModal(
+        <div
+        className={
+            "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+        >
+        <ModalConfirm
+            title= {param?.title}
+            description= {param?.description}
+            onConfirm={() => handleConfirmSync({ option: param.option, cashFlowID: param.cashFlowID })}
+            defaultText={false}
+            onCancel={closeModal}
+        />
+        </div>
+    )
+    }
+
+    const handleConfirmSync = useCallback(async (param: any) => {
+    closeModal();
+
+    const { data, status } = await API.post(
+        `/api/fin/cash_flow_plans/sync-data`, {
+        option: param.option,
+        cashFlowID: param.cashFlowID,
+        }
+    )
+    
+    if (status !== 200 || data.error) {
+        return toast.error(data?.message)
+    }
+
+    refetch();
+    return toast.success('Đồng bộ thành công')
+    }, [])
+
+    //_____Import, export excel
+    const [, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+    });
+
+    const { exportExcelAsync } = useCashFlowPlan({});
+
+    const handleDownloadExcel = async (param: any) => {
+    try {
+        setStateExport({ isExporting: true });
+        const { error, data } = await exportExcelAsync({
+        // option: `${param.option}`,
+        parentID: param.parentID,
+        });
+        
+        if (error) {
+        return toast.warn(data?.message);
+        }
+
+        data && createLinkAndClick(data, "_self");
+    } catch (error: any) {
+        toast.error(error.message);
+    } finally {
+        setStateExport({ isExporting: false });
+    }
+    };
+
+    if(isLoading || isLoadingInfo || !cashFlowInfo || !user) return <Loader className="border-primary" />
 
     return (
         <main className="relative h-full overflow-auto">
@@ -184,12 +253,42 @@ export const AccountingCashFlowDetailPage: FC = () => {
 							<img src="/images/common/button_back.png" alt="Button Back" />
 						</Link>
                         <p className="text-lg ml-2">{cashFlowInfo.name}</p>
-
+                        <div className="ml-3">
+                            <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg h-[30px]"} onClick={() => toggleModalOpenSign({ option: 1, cashFlowID: cashFlowInfo._id, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu thực tế sẽ được đồng bộ sang' })}>
+                                <img src={iconRefresh} className={"w-[24px] h-[24px] mr-3"} />
+                                <span>Đồng bộ</span>
+                            </button>
+                        </div>
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
                             classNameInput="outline-none w-[296px]"
                             onChange={onChangeSearch}
                         />
+                        <div>
+                            <button
+                                className={"mr-2 text-primary"}
+                                onClick={() => handleDownloadExcel({ option: 1, parentID: cashFlowInfo._id })}
+                            >
+                                Tải excel Báo cáo
+                            </button>
+                        </div>
+                    </div>
+                    <div className="absolute right-0">
+                    <PaginateV2
+                        ref={ref}
+                        totalRecord={totalRecord}
+                        totalPages={totalPage}
+                        limit={100}
+                        hasNextPage={hasNextPage}
+                        isFetching={isLoading}
+                        nextPageAction={() => {
+                            fetchNextPage();
+                            setPageIndex(oldState => oldState+1)
+                        }}
+                        prevPageAction={() => {
+                            setPageIndex(oldState => oldState-1)
+                        }}
+                    />
                     </div>
                 </div>
             </header>
@@ -260,16 +359,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
                     {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
                 </tbody>
             </table>
-
-            {hasNextPage && (
-                <div className="w-full flex justify-center my-5">
-                    <button onClick={fetchNextPage}>
-                        <span className="text-primary">
-                            {`Xem thêm (${totalRecord - listCashFlowPlans.length})`}
-                        </span>
-                    </button>
-                </div>
-            )}
         </main>
     );
 };

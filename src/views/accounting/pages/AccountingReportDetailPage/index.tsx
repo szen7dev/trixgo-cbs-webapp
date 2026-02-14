@@ -3,7 +3,7 @@ import { NavLink, useHistory, useLocation, useParams } from "react-router-dom";
 import moment from "moment";
 import { formatNumberMoney } from "utils/cmcs";
 import {
-  useReportList, useReportByProperty
+  useReportByProperty
 } from "services/hooks/accounting/useReport";
 import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
