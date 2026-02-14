@@ -42,26 +42,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
     const [itemsChecked, setItemsChecked] = useState<string[]>([]);
     const [dataCashFlow, setDataCashFlow] = useState<CashFlowPlan.CashFlowPlan[]>([]);
 
-    const [permissions, setPermissions] = useState<{
-        usersShared: User[];
-        onlyView: boolean;
-        hasPermissionCreateUpdate: boolean;
-        hasPermissionDelete: boolean;
-        hasPermissionShare: boolean;
-    }>({
-        usersShared: [],
-        onlyView: true,
-        hasPermissionCreateUpdate: false,
-        hasPermissionDelete: false,
-        hasPermissionShare: false,
-    });
-
-    const [modalShare, setModalShare] = useState<{ isShow: boolean, users: User[] | undefined, modalType: 'members' | 'admins' }>({
-        isShow: false,
-        users: [],
-        modalType: 'members'
-    });
-
     const { user } = useAuth();
 
     const { info: cashFlowInfo, isLoadingInfo, refetchInfo } = useCashFlowPlan({
@@ -118,46 +98,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
         setDataCashFlow(listCashFlowPlans);
     }, [JSON.stringify(listCashFlowPlans)])
 
-    useEffect(() => {
-        if(!cashFlowInfo || !user || isLoadingInfo) return;
-
-        const usersShared = [...cashFlowInfo?.admins, ...cashFlowInfo?.members];
-        const adminsID    = cashFlowInfo.admins.map(item => item._id);
-        const membersID   = cashFlowInfo.members.map(item => item._id);
-
-        const usersIDShared = [
-            ...adminsID,
-            ...membersID,
-        ];
-        let authorID = '';
-
-        if(typeof cashFlowInfo.userCreate === 'string') {
-            authorID = cashFlowInfo.userCreate;
-        } else{
-            authorID = cashFlowInfo.userCreate?._id;
-        }
-
-        usersIDShared.push(authorID);
-
-        if(!usersIDShared.includes(user._id)) {
-            toast.warn('Bạn đang không có quyền truy cập');
-            history.push('/accounting/cashflow');
-        }
-
-        const hasPermissionCreateUpdate = adminsID.includes(user._id) || authorID === user._id;
-        const hasPermissionShare = authorID === user._id;
-        const hasPermissionDelete = authorID === user._id;
-        const onlyView = membersID.includes(user._id) && !adminsID.includes(user._id) && authorID !== user._id;
-
-        setPermissions({
-            usersShared,
-            onlyView,
-            hasPermissionCreateUpdate,
-            hasPermissionDelete,
-            hasPermissionShare
-        })
-    }, [JSON.stringify(user), JSON.stringify(cashFlowInfo)])
-
     const onChangeSearch = debounce((event: ChangeEvent<HTMLInputElement>) => {
         setKeyword(event.target.value);
     }, 500);
@@ -179,10 +119,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
     const onChangeSearchContract = (keyword: string) => setKeywordSubtype(keyword);
 
     const handleInsert = async (values: any) => {
-        if(!permissions.hasPermissionCreateUpdate) {
-            return toast.warn('Bạn không có quyền tạo nội dung này');
-        }
-
         try {
             setShowRowInsert(false);
 
@@ -218,10 +154,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
     }
 
     const handleUpdate = async (values: any) => {
-        if(!permissions.hasPermissionCreateUpdate) {
-            return toast.warn('Bạn không có quyền cập nhật nội dung này');
-        }
-
         try {
             const { error, data } = await updateAsync(values);
 
@@ -241,9 +173,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
         }
     }
 
-    const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
-        setModalShare({ isShow: !modalShare.isShow, users, modalType });
-
     if(isLoadingCashFlowPlans || isLoadingInfo || !cashFlowInfo || !user) return <Loader className="border-primary" />
 
     return (
@@ -261,17 +190,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
                             classNameInput="outline-none w-[296px]"
                             onChange={onChangeSearch}
                         />
-                    </div>
-                    <div className={"flex-1 flex items-center justify-end"}>
-                        <button
-                            className="text-gray-400 mr-2"
-                            onClick={() => toggleModalShare('admins', cashFlowInfo.admins)}
-                        >Admin ({cashFlowInfo.admins?.length})</button> |
-                        <button
-                            className="text-gray-400 mr-2 ml-2"
-                            onClick={() => toggleModalShare('members', cashFlowInfo.members)}
-                        >Thành viên ({cashFlowInfo.members?.length})</button>
-                        <AccessingUsers users={permissions.usersShared} />
                     </div>
                 </div>
             </header>
@@ -324,10 +242,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
 
                 <tbody>
                     {(dataCashFlow && dataCashFlow.length) ? dataCashFlow.map((item, index) => {
-                        if(permissions.onlyView) {
-                            return <RowTableView key={item._id} cashFlow={item} />
-                        }
-
                         return (
                             <RowTableUpdateInline
                                 key={item._id}
@@ -343,7 +257,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
                         )
                     }) : <></>}
 
-                    {(showRowInsert && permissions.hasPermissionCreateUpdate) && <RowTableInsertInline onInsert={handleInsert} />}
+                    {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
                 </tbody>
             </table>
 
@@ -356,21 +270,6 @@ export const AccountingCashFlowDetailPage: FC = () => {
                     </button>
                 </div>
             )}
-
-            <ModalLarge
-                show={modalShare.isShow}
-                toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
-                className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
-            >
-                <ModalShare
-                    toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
-                    refetch={refetchInfo}
-                    cashFlowID={cashFlowId}
-                    users={modalShare.users}
-                    modalType={modalShare.modalType}
-                    hasPermission={permissions.hasPermissionShare}
-                />
-            </ModalLarge>
         </main>
     );
 };

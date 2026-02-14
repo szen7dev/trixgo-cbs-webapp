@@ -1,14 +1,15 @@
-import { ChangeEvent, FC, useState, useEffect } from "react";
+import { ChangeEvent, FC, useState, useEffect, useCallback } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
-
+import iconRefresh from "assets/images/icons8-refresh.png";
 /**
  * Components
  */
 import { SearchInput, GroupActions, ModalContainer } from "shareComponents/common";
 import ModalCreateCashFlow from "./components/ModalCreateCashFlow";
 import ModalUpdateCashFlow from "./components/ModalUpdateCashFlow";
+import { toast } from "react-toastify";
 
 /**
  * Utils
@@ -21,8 +22,12 @@ import { FINANCIAL_PLANNING_STATUS } from "apis/localdb";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import { convertCurrency } from "utils/converter";
+import { useModal } from "services/hooks/useModal";
+import { ModalConfirm } from "shareComponents/common";
+import API from "apis/repository";
 
 export const AccountingCashFlowPage: FC = () => {
+  const { openModal, closeModal } = useModal();
   const location = useLocation();
   const [cashFlowIdSelected, setCashFlowIdSelected] = useState("");
   const [modalShow, setModalShow] = useState({
@@ -65,6 +70,42 @@ export const AccountingCashFlowPage: FC = () => {
       [modalType]: !modalShow[modalType],
     }));
   }
+
+  const toggleModalOpenSign = (param: any) => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title= {param?.title}
+          description= {param?.description}
+          onConfirm={() => handleConfirmSync({ option: param.option, cashFlowID: param.cashFlowID })}
+          defaultText={false}
+          onCancel={closeModal}
+        />
+      </div>
+    )
+  }
+
+  const handleConfirmSync = useCallback(async (param: any) => {
+    closeModal();
+
+    const { data, status } = await API.post(
+      `/api/fin/cash_flow_plans/sync-data`, {
+        option: param.option,
+        cashFlowID: param.cashFlowID,
+      }
+    )
+   
+    if (status !== 200 || data.error) {
+      return toast.error(data?.message)
+    }
+
+    refetch();
+    return toast.success('Đồng bộ thành công')
+  }, [])
 
   return (
     <div className={"flex flex-col relative h-full"}>
@@ -176,8 +217,13 @@ export const AccountingCashFlowPage: FC = () => {
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                     {convertCurrency(item.actualExpense)} ({Number(100*item.actualExpense/item.expense).toFixed(0)}%)
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{FINANCIAL_PLANNING_STATUS[Number(item.status) - 1].text}</td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                    {item.note}
+                    <div className="mb-3"><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg h-[30px]"} onClick={() => toggleModalOpenSign({ option: 1, cashFlowID: item._id, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu thực tế sẽ được đồng bộ sang' })}><img src={iconRefresh} className={"w-[24px] h-[24px] mr-3"} /><span>Đồng bộ</span></button> </div>
+                  </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                    {FINANCIAL_PLANNING_STATUS[Number(item.status) - 1].text}
+                  </td>
                 </tr>
               )) : <></>}
           </tbody>
