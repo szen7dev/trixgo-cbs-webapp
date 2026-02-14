@@ -81,7 +81,7 @@ export const AccountingCashFlowPage: FC = () => {
         <ModalConfirm
           title= {param?.title}
           description= {param?.description}
-          onConfirm={() => handleConfirmSync({ option: param.option, salaryID: param.salaryID, fundaID: param.fundaID })}
+          onConfirm={() => handleConfirmSync({ option: param.option, cashFlowID: param.cashFlowID })}
           defaultText={false}
           onCancel={closeModal}
         />
