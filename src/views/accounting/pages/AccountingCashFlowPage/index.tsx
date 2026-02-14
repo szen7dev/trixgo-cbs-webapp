@@ -147,12 +147,6 @@ export const AccountingCashFlowPage: FC = () => {
                 Ngân sách
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
-                Từ
-              </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
-                Đến 
-              </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
                 Doanh thu kế hoạch
               </th>
               <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
@@ -194,6 +188,23 @@ export const AccountingCashFlowPage: FC = () => {
                   >
                     <NavLink className="text-2-line-clamp text-cbs-highlight-color font-bold" to={`/accounting/cashflow/${item._id}`}>{item.name}</NavLink>
                     <p className="mt-1">Cơ sở: {item?.funda?.name}</p>
+                    <p>Từ: {moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</p>
+                    <p>Đến: {moment(item.toDate).format('DD/MM/YYYY HH:mm')}</p>
+                  </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                    {convertCurrency(item.revenue)}
+                  </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                    {convertCurrency(item.expense)}
+                  </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                    {convertCurrency(item.actualRevenue)} <span className="mt-1 text-gray-500 text-gray-500 text-[12px]">({Number(100*item.actualRevenue/item.revenue).toFixed(0)}%)</span>
+                  </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                    {convertCurrency(item.actualExpense)} <span className="mt-1 text-gray-500 text-gray-500 text-[12px]">({Number(100*item.actualExpense/item.expense).toFixed(0)}%)</span>
+                  </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                    {item.note}
                     <p className={"mt-1 text-gray-500"}>
                       {item.userCreate?.fullname}
                       {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
@@ -202,23 +213,6 @@ export const AccountingCashFlowPage: FC = () => {
                       {item.userUpdate?.fullname}
                       {item.modifyAt && moment(item.modifyAt).format("DD/MM/YYYY HH:mm")}
                     </p>
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.fromDate).format('DD/MM/YYYY HH:mm')}</td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.toDate).format('DD/MM/YYYY HH:mm')}</td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {convertCurrency(item.revenue)}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {convertCurrency(item.expense)}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {convertCurrency(item.actualRevenue)} ({Number(100*item.actualRevenue/item.revenue).toFixed(0)}%)
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {convertCurrency(item.actualExpense)} ({Number(100*item.actualExpense/item.expense).toFixed(0)}%)
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
-                    {item.note}
                     <div className="mb-3"><button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg h-[30px]"} onClick={() => toggleModalOpenSign({ option: 1, cashFlowID: item._id, title: 'Bạn có muốn đồng bộ không?', description: 'Dữ liệu thực tế sẽ được đồng bộ sang' })}><img src={iconRefresh} className={"w-[24px] h-[24px] mr-3"} /><span>Đồng bộ</span></button> </div>
                   </td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
