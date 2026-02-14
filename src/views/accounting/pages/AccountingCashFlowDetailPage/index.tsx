@@ -257,7 +257,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
                         )
                     }) : <></>}
 
-                    <RowTableInsertInline onInsert={handleInsert} />
+                    {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
                 </tbody>
             </table>
 
