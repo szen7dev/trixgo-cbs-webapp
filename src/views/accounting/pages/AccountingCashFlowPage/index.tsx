@@ -93,7 +93,7 @@ export const AccountingCashFlowPage: FC = () => {
     closeModal();
 
     const { data, status } = await API.post(
-      `/api/accounting/cashflow/sync-data`, {
+      `/api/fin/cash_flow_plans/sync-data`, {
         option: param.option,
         cashFlowID: param.cashFlowID,
       }
