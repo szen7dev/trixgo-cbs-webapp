@@ -27,7 +27,7 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, onUpdate,
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
         {index}
       </td>
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
+      <td className="px-2 table-cell box-border border border-gray-300 align-middle" style={{minWidth: "250px"}}>
         <input
           className={
             "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"

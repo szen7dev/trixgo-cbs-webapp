@@ -302,7 +302,7 @@ export const AccountingCashFlowDetailPage: FC = () => {
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2" style={{minWidth: "250px"}}>
                                 Nội dung
                             </div>
                         </th>
