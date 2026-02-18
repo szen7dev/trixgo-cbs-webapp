@@ -243,17 +243,17 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
                         <th className={cn("py-1 text-center", styles.theadInput)}>
 
                         </th>
-                        <th className="py-1" style={{width: "20px"}}>
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>
                         </th>
-                        <th className="py-1" style={{width: "20px"}}>
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Danh mục cha/Phân loại
                             </div>
                         </th>
-                        <th className="py-1" style={{width: "20px"}}>
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Link danh mục
                             </div>
@@ -268,7 +268,7 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
                                 Đơn vị tính
                             </div>
                         </th>
-                        <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                        {/* <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Giá trị
                             </div>
@@ -277,7 +277,7 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Thời hạn (giờ)
                             </div>
-                        </th>
+                        </th> */}
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Mô tả, ghi chú
@@ -328,8 +328,8 @@ export const ItemHome: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">{item?.linkItem?.name}</td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.unit}</td>
-                            <td className="py-1 px-2 text-right">{item?.amount}</td>
-                            <td className="py-1 px-2 text-right">{item?.alert}</td>
+                            {/* <td className="py-1 px-2 text-right">{item?.amount}</td>
+                            <td className="py-1 px-2 text-right">{item?.alert}</td> */}
                             <td className="py-1 px-2">{item?.description}</td>
                         </tr>
                     )) : <></>}
