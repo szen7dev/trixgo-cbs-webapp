@@ -454,7 +454,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                         <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                           <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
-                            <p className="text-2-line-clamp">{`${item.name}`}</p>
+                            <p className="">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
                         {item?.files?.map((file: any, fileIndex: number) => (
@@ -545,7 +545,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                         <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                           <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
-                            <p className="text-2-line-clamp text-cbs-highlight-color font-bold">{`${item.name}`}</p>
+                            <p className="text-cbs-highlight-color font-bold">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
                         {item?.files?.map((file: any, fileIndex: number) => (
@@ -644,7 +644,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium">
                       <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                         <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
-                          <p className="text-2-line-clamp">{`${item.name}`}</p>
+                          <p className="">{`${item.name}`}</p>
                         </Popover>
                       </NavLink>
                         {item?.files?.map((file: any, fileIndex: number) => (
