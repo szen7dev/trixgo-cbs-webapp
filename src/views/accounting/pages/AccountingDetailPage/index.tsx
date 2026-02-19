@@ -352,22 +352,6 @@ export const AccountingDetailPage: FC = () => {
             <th
               className={cn(
                 "py-1 px-2 font-normal border-r border-primary-border",
-                styles.theadCode
-              )}
-            >
-              Phiếu
-            </th>
-            <th
-              className={cn(
-                "py-1 px-2 font-normal border-r border-primary-border",
-                styles.theadCode
-              )}
-            >
-              Số hiệu
-            </th>
-            <th
-              className={cn(
-                "py-1 px-2 font-normal border-r border-primary-border",
                 styles.theadContent
               )}
             >
@@ -409,7 +393,7 @@ export const AccountingDetailPage: FC = () => {
               Dư Nợ-Có
             </th>
             <th className="w-1/12 py-1 px-2 font-normal border-r border-primary-border">
-              Khoản mục phí/Hợp đồng/Ngân sách
+              Khoản mục phí/Hợp đồng
             </th>
             <th className="w-1/12 py-1 px-2 font-normal border-r border-primary-border">
               Sản phẩm
@@ -425,8 +409,6 @@ export const AccountingDetailPage: FC = () => {
               styles.bgBlueLight
             )}
           >
-            <td className="py-1 px-2 border-r border-primary-border">{""}</td>
-            <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 font-bold border-r border-primary-border">
               Đầu kỳ
             </td>
@@ -444,9 +426,6 @@ export const AccountingDetailPage: FC = () => {
           </tr>
             {
               (listDataWithPager[pageIndex] ?? []).map((item, index) => {
-                // console.log(item?.debit)
-                // console.log(infoAccount?.nestedChilds)
-                // console.log('==================')
 
                 if(item?.debit && (infoAccount?.nestedChilds?.includes(item?.debit?._id) || accountId.toString() === item?.debit?._id.toString())){
 
@@ -456,12 +435,8 @@ export const AccountingDetailPage: FC = () => {
                     <tr key={index} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border">
                         {moment(item?.voucher?.date).format('DD/MM/YYYY')}
-                      </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
-                        {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
-                      </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
-                        {item?.voucher?.sign}
+                        <p>{(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}</p>
+                        <p>{item?.voucher?.sign}</p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
@@ -505,12 +480,8 @@ export const AccountingDetailPage: FC = () => {
                     <tr key={index} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border">
                         {moment(item?.voucher?.date).format('DD/MM/YYYY')}
-                      </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
-                        {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
-                      </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
-                        {item?.voucher?.sign}
+                        <p>{(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}</p>
+                        <p>{item?.voucher?.sign}</p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
@@ -556,8 +527,6 @@ export const AccountingDetailPage: FC = () => {
               styles.bgFooterYellow
             )}
           >
-            <td className="py-1 px-2 border-r border-primary-border">{""}</td>
-            <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 font-bold border-r border-primary-border">
               Cuối kỳ
             </td>
