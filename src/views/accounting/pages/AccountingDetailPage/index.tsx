@@ -341,64 +341,34 @@ export const AccountingDetailPage: FC = () => {
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
-            <th
-              className={cn(
-                "py-1 px-2 font-normal border-r border-primary-border",
-                styles.theadDate
-              )}
-            >
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Ngày
             </th>
-            <th
-              className={cn(
-                "py-1 px-2 font-normal border-r border-primary-border",
-                styles.theadContent
-              )}
-            >
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Nội dung
             </th>
-            <th
-              className={cn(
-                "py-1 px-2 font-normal border-r border-primary-border",
-                styles.theadCusCode
-              )}
-            >
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Mã khách
             </th>
-            <th className="w-1/12 py-1 px-2 font-normal border-r border-primary-border">
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Tài khoản đối ứng
             </th>
-            <th
-              className={cn(
-                "py-1 px-2 font-normal border-r border-primary-border",
-                styles.theadCode
-              )}
-            >
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Phát sinh nợ
             </th>
-            <th
-              className={cn(
-                "py-1 px-2 font-normal border-r border-primary-border",
-                styles.theadCode
-              )}
-            >
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Phát sinh có
             </th>
-            <th
-              className={cn(
-                "py-1 px-2 font-normal border-r border-primary-border",
-                styles.theadCode
-              )}
-            >
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Dư Nợ-Có
             </th>
-            <th className="w-1/12 py-1 px-2 font-normal border-r border-primary-border">
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Khoản mục phí/Hợp đồng
             </th>
-            <th className="w-1/12 py-1 px-2 font-normal border-r border-primary-border">
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
               Sản phẩm
             </th>
-            <th className="w-1/12 py-1 px-2 font-normal">Ghi chú</th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border">Ghi chú</th>
           </tr>
         </thead>
 
