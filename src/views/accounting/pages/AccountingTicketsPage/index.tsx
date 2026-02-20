@@ -415,20 +415,20 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
-                Người giới thiệu/Sales/CSKH
+                Sales
               </span>
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
-                Hợp đồng/Khoản mục phí
+                Khoản mục phí
               </span>
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
-                Giá trị/Thành tiền
+                Giá trị
               </span>
             </th>
-            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{width:"14%"}}>
               <span className="pl-2 border-l border-cbs-border">
                 Ghi chú
               </span>
