@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import debounce from 'lodash/debounce';
-import { DateTimePicker } from 'shareComponents/common/DateTimePicker';
+// import { DateTimePicker } from 'shareComponents/common/DateTimePicker';
 import { EditableRow } from './components/EditableRow';
 import './styles.css';
 import API from 'apis/repository';
@@ -86,7 +86,7 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [pageSize] = useState(5);
+  const [pageSize] = useState(50);
 
   // Cursor history for backward navigation
   const cursorHistoryRef = useRef<(string | null)[]>([]);
@@ -225,8 +225,8 @@ export const CashDetailPageV2: React.FC<CashDetailPageProps> = ({ outin }) => {
         apiPayload.forward = updatedFields.forward;
       }
 
-      console.log('API Payload:', apiPayload);
-      console.log('updatedFields', updatedFields);
+      // console.log('API Payload:', apiPayload);
+      // console.log('updatedFields', updatedFields);
 
       // Make PUT request to update the record
       const { data } = await API.put('/api/store/order_products', apiPayload);
