@@ -21,9 +21,8 @@ export const OrderInfo: FC<Props> = memo((props) => {
 
   const { isLoading, isFetching, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({
     params: {
-      // type: +type,
       limit: 10,
-      // keyword,
+      option: 1,
       customerID: info._id,
       populates: JSON.stringify({
         path: 'funda shift customer files',
