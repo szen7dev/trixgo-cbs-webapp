@@ -16,6 +16,11 @@ import MemberIcon from "assets/images/member-icon.svg";
 import styles from "views/support/styles/support.module.css";
 
 export const OwnerDocsManagementPage: FC = () => {
+  const [keyword, setKeyword] = useState('');
+  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  }, 500);
+
   const LIMIT_PER_PAGE_USER_APP = 20;
 
   const { appID, companyID, appName } = useParams<{ appID: string, companyID: string, appName: string }>();
@@ -34,7 +39,7 @@ export const OwnerDocsManagementPage: FC = () => {
     appID, 
     companyID, 
     limit: LIMIT_PER_PAGE_USER_APP, 
-    keyword: ''
+    keyword
   });
 
   const onClickCheckButton = (id: string) => {
@@ -83,12 +88,6 @@ export const OwnerDocsManagementPage: FC = () => {
     }
   }
 
-  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-    toast.warn('Tính năng đang phát triển')
-    // const keyword = event.target.value;
-    // setParams(previousValue => ({ ...previousValue, keyword }));
-  }, 500);
-
   const handleConfirmDelete = async (ids: string[]) => {
     const result = await deleteMemberAppUserAsync(ids);
 
@@ -107,11 +106,11 @@ export const OwnerDocsManagementPage: FC = () => {
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
           <p className="text-lg">{appName}</p>
-          {/* <SearchInput
-            classNameWrapper="ml-4"
-            classNameInput="outline-none w-[296px]"
+          <SearchInput
+            classNameWrapper="mr-2 ml-3"
+            classNameInput="outline-none w-[100px]"
             onChange={onChangeSearch}
-          /> */}
+          />
           {idsChecked.length ? (
             <button
               onClick={() =>
