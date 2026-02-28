@@ -126,7 +126,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 
   return (
-    <div className="w-full overflow-scroll" style={{ height: "1300px" }}>
+    <div className="w-full overflow-scroll" style={{ height: "800px" }}>
       <div className="fixed top-0 w-full">
         <div
           className={"flex items-center border-b bg-cbs-table-header p-2"}
@@ -358,7 +358,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     }
                   />
                 </div>
-                <div>
+                {/* <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Người giới thiệu
                   </p>
@@ -389,8 +389,8 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       setFieldValue("referrerID", value.id)
                     }
                   />
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Trưởng nhóm sale công ty
                   </p>
@@ -421,8 +421,8 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       setFieldValue("salesLeaderID", value.id)
                     }
                   />
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Sale công ty
                   </p>
@@ -549,7 +549,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       setFieldValue("customerCareID", value.id)
                     }
                   />
-                </div>
+                </div> */}
                 <div>
                   <p className="text-primary-gray text-[13px] mb-1">Ghi chú</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
