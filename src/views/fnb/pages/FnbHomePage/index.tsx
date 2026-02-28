@@ -60,7 +60,6 @@ import { useInfiniteQuery } from "react-query";
 import { setQueryFnb } from "redux/reducer/FnbSlice";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 
-
 type Props = {
   type?: number;
 };
