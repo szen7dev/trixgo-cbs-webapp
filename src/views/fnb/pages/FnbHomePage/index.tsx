@@ -36,7 +36,6 @@ import { ModalUpdateSalesChannel } from "./components/ModalUpdateSalesChannel";
 import { ModalQRPayment } from "./components/ModalQRPayment";
 import { DropdownSearchableV2, Loader, ModalConfirm } from "shareComponents/common";
 import TriangleDown from "assets/icons/TriangleDown";
-import QRCodeIcon from "assets/images/document/qr-code.png";
 import { APP_ID } from "apis/localdb";
 import { validateFiles } from 'validation/file';
 import { ImageProps } from "typings/common";
@@ -60,7 +59,7 @@ import { FNB_CHANNEL, FNB_SERVICE, FNB_ORDER_STATUS, FNB_SHIFT, FNB_NORESIDENT_T
 import { useInfiniteQuery } from "react-query";
 import { setQueryFnb } from "redux/reducer/FnbSlice";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-import { options } from "views/financial/pages/CashBookDetailPage/components/ChartExpenseSumary";
+
 
 type Props = {
   type?: number;

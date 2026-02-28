@@ -16,6 +16,11 @@ import MemberIcon from "assets/images/member-icon.svg";
 import styles from "views/support/styles/support.module.css";
 
 export const SupportDocsManagementPage: FC = () => {
+  const [keyword, setKeyword] = useState('');
+  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  }, 500);
+  
   const LIMIT_PER_PAGE_USER_APP = 20;
 
   const { appID, companyID, appName } = useParams<{ appID: string, companyID: string, appName: string }>();
@@ -34,7 +39,7 @@ export const SupportDocsManagementPage: FC = () => {
     appID,
     companyID,
     limit: LIMIT_PER_PAGE_USER_APP,
-    keyword: ''
+    keyword
   });
 
   const onClickCheckButton = (id: string) => {
@@ -82,12 +87,6 @@ export const SupportDocsManagementPage: FC = () => {
         return toast.error(result?.message);
     }
   }
-
-  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-    toast.warn('Tính năng đang phát triển')
-    // const keyword = event.target.value;
-    // setParams(previousValue => ({ ...previousValue, keyword }));
-  }, 500);
 
   const handleConfirmDelete = async (ids: string[]) => {
     const result = await deleteMemberAppUserAsync(ids);
