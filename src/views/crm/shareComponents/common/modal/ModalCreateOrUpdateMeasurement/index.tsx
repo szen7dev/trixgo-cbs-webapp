@@ -21,6 +21,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
     slug: '',
     note: '',
     phone: '',
+    email: '',
     facebook: '',
     tiktok: '',
     birthday: '',
@@ -114,7 +115,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "750px",
+        height: "850px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -130,7 +131,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
       <section className="px-5 mt-2">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
-            Khách hàng (*)
+            Chọn bé-Nếu chọn mục này thì tên bé, giới tính, ngày sinh, ngày dậy thì...sẽ được lấy theo dữ liệu hệ thống
           </label>
           <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -164,7 +165,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
             }))}
             initialValue={{
               value: formData?.contact?._id || "",
-              label: formData?.contact?.name || "Chọn khách hàng"
+              label: formData?.contact?.name || "Chọn bé"
             }}
             formatItem={{
                 id: "value",
@@ -176,11 +177,11 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
-          Họ và tên của bé/trẻ em (*)
+          Họ và tên của bé (*)
         </label>
         <input
           type="text"
-          placeholder="Nội dung"
+          placeholder="Nhập tên bé"
           name="name"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.name}
@@ -290,11 +291,11 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
-          Tên ba mẹ (*)
+          Tên ba hoặc mẹ (*)
         </label>
         <input
           type="text"
-          placeholder="Nhập tên ba mẹ"
+          placeholder="Nhập tên ba hoặc mẹ"
           name="parentName"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.parentName}
@@ -304,14 +305,28 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
       <section className="px-5 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="">
-          Số điện thoại ba mẹ (*)
+          Số điện thoại ba hoặc mẹ (*)
         </label>
         <input
           type="text"
-          placeholder="Nhập ghi chú"
+          placeholder="Nhập điện thoại ba hoặc mẹ"
           name="phone"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.phone}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Email ba hoặc mẹ (*)
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập email ba hoặc mẹ"
+          name="email"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.email}
           onChange={onChange}
         />
       </section>
