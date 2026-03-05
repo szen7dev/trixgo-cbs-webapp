@@ -10,7 +10,7 @@ export const AppUserRepository = {
                 params: {
                     populates: JSON.stringify({
                         path: "company app user userCreate",
-                        select: "_id name bizfullname email image sign"
+                        select: "_id name bizfullname email image sign phone"
                     }),
                     ...payload,
                 }

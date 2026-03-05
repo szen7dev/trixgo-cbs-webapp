@@ -75,7 +75,7 @@ export const ModalCreateMember: FC<Props> = ({ appID, companyID, onlyUserCompany
   return (
     <main className="py-[18px]">
       <header className="flex item-center justify-between px-[30px]">
-        <p className="text-xl">Thêm thành viên</p>
+        <p className="text-xl">Thêm thành viên vào ứng dụng</p>
         <div
           className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center cursor-pointer"
           onClick={closeModal}
@@ -128,7 +128,7 @@ export const ModalCreateMember: FC<Props> = ({ appID, companyID, onlyUserCompany
                   alt="Member"
                   className="w-10 h-10 rounded-full"
                 />
-                <p className="px-4">{item.bizfullname}</p>
+                <p className="px-4">{item.fullname}- {item.phone} - {item.email}</p>
               </div>
             </div>
           ))
