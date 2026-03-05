@@ -179,17 +179,17 @@ export const OwnerDocsManagementPage: FC = () => {
                 Điện thoại
               </div>
             </th>
-            <th className="font-normal">
+            <th className="font-normal w-1/12">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Admin
               </div>
             </th>
-            <th className="py-1 font-normal">
+            <th className="py-1 font-normal w-1/12">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Member
               </div>
             </th>
-            <th className="py-1 font-normal">
+            <th className="py-1 font-normal w-1/12">
               <div className="font-normal pl-2">Xóa bỏ</div>
             </th>
           </tr>

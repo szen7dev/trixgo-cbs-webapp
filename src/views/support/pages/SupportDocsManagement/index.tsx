@@ -164,27 +164,32 @@ export const SupportDocsManagementPage: FC = () => {
                 />
               </div>
             </th>
-            <th className="w-1/5 py-1">
+            <th className="py-1">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Tài khoản
               </div>
             </th>
-            <th className="w-1/6 py-1 font-normal">
+            <th className="py-1 font-normal">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Email
               </div>
             </th>
-            <th className="w-1/6 py-1 font-normal">
+            <th className="py-1 font-normal">
+              <div className="border-r-2 border-gray-300 font-normal pl-2">
+                Điện thoại
+              </div>
+            </th>
+            <th className="w-1/12 py-1 font-normal">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Admin
               </div>
             </th>
-            <th className="w-1/6 py-1 font-normal">
+            <th className="w-1/12 py-1 font-normal">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Member
               </div>
             </th>
-            <th className="w-1/6 py-1 font-normal">
+            <th className="w-1/12 py-1 font-normal">
               <div className="font-normal pl-2">Xóa bỏ</div>
             </th>
           </tr>
@@ -210,6 +215,7 @@ export const SupportDocsManagementPage: FC = () => {
                 <p>{appUser.user?.bizfullname}</p>
               </td>
               <td className="p-2">{appUser.user?.email}</td>
+              <td className="p-2">{appUser.user?.phone}</td>
               <td className="p-2">
                 <input
                   type="radio"
