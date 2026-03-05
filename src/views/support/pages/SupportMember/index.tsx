@@ -247,13 +247,6 @@ export const SupportMemberPage: FC = () => {
                 <img src={DeleteIcon} alt="Delete" />
               </button>
             ) : ''}
-
-            {/* <FinancialCashFlowFilterButton />
-            {itemChecked && (
-              <div className="border-l-2 border-primary-border ml-5 pl-5">
-                <ActionGroupFinancial />
-              </div>
-            )} */}
           </div>
           <div className="flex items-center">
             {companySelected ? (
@@ -288,17 +281,22 @@ export const SupportMemberPage: FC = () => {
                 />
               </div>
             </th>
-            <th className="w-1/6 py-1">
+            <th className="py-1">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Họ và tên
               </div>
             </th>
-            <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+            <th className={cn("w-1/6 py-1 font-normal", styles.theadTwelvePercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Email
               </div>
             </th>
-            <th className="w-1/12 py-1 font-normal">
+            <th className={cn("w-1/6 py-1 font-normal", styles.theadTwelvePercent)}>
+              <div className="border-r-2 border-gray-300 font-normal pl-2">
+                Điện thoại
+              </div>
+            </th>
+            <th className="py-1 font-normal">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Phòng ban
               </div>
@@ -308,22 +306,17 @@ export const SupportMemberPage: FC = () => {
                 Chức danh
               </div>
             </th>
-            <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
-              <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Giờ bắt đầu làm việc
-              </div>
-            </th>
             <th className={cn("py-1 font-normal", styles.theadSignDate)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Quyền
               </div>
             </th>
-            <th className="w-1/12 py-1 font-normal">
+            <th className="py-1 font-normal">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Đăng nhập lần cuối
               </div>
             </th>
-            <th className="w-1/12 py-1 font-normal">
+            <th className="py-1 font-normal">
               <div className="font-normal pl-2">Tình trạng</div>
             </th>
           </tr>
@@ -341,12 +334,10 @@ export const SupportMemberPage: FC = () => {
                 />
               </td>
               <td className="py-1 px-2">{user.fullname}</td>
-              <td className="py-1 px-2">{user.email}</td>
+              <td className="py-1 px-2 w-1/6">{user.email}</td>
+              <td className="py-1 px-2">{user.phone}</td>
               <td className="py-1 px-2">{user.department?.name}</td>
               <td className="py-1 px-2">{user.position?.name}</td>
-              <td className="py-1 px-2">
-                {user.startingTime ? moment(user.startingTime).format('HH:mm') : ''}
-              </td>
               <td className={cn('py-1 px-2', user.level === 0 ? 'text-primary' : '')}>
                 {user.level === 0 ? 'Admin' : 'Member'}
               </td>
