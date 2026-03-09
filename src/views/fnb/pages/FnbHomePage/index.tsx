@@ -1017,7 +1017,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               />
             </div>
 
-            <div className="flex gap-7 items-center">
+            <div className="flex gap-3 items-center">
 
               {idsChecked.length === 1 && (
                 <>
@@ -1086,7 +1086,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               >
                 Gán thành tích/vi phạm
               </button>
-              <button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
+              <button className="mr-" onClick={handleExportExcel2} title="Tải dữ liệu Excel">
                 Tải đơn hàng
               </button>
               <button onClick={() => handleExportExcel3({ option: 1 })} title="Tải dữ liệu Excel">
@@ -1094,6 +1094,12 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               </button>
               <button onClick={() => handleExportExcel3({ option: 4 })} title="Tải dữ liệu Excel">
                 Tải sản phẩm (2)
+              </button>
+              <button onClick={() => handleExportExcel3({ option: 5 })} title="Tải mẫu phục vụ xuất VAT">
+                Tải xuất VAT
+              </button>
+              <button onClick={() => handleExportExcel3({ option: 6 })} title="Tải Báo cáo sản phẩm bán được">
+                Tải BCSP bán được
               </button>
               <button onClick={() => handleExportExcel3({ option: 2 })} title="Tải phân loại sản phẩm">
                 Tải DM1
