@@ -20,6 +20,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     sign: '',
     description: '',
     address: '',
+    location: '',
     phone: '',
     bankAccount: '',
     loyaltyPointsRate: '',
@@ -27,6 +28,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     campaign: 1,
     internal: 1,
     platform: 1,
+    distance: 0,
     trialStaffSalary: 0,
     officialStaffSalar: 0,
     nightShiftStaffSalary: 0,
@@ -130,22 +132,22 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     }))
   }
 
-  const onChangeCampain = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    const campainIDs = formData.activeCampaign || [];
-    const findIdx = campainIDs.indexOf(value);
+  // const onChangeCampain = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = event.target;
+  //   const campainIDs = formData.activeCampaign || [];
+  //   const findIdx = campainIDs.indexOf(value);
     
-    if (findIdx > -1) {
-      campainIDs.splice(findIdx, 1);
-    } else {
-      campainIDs.push(value);
-    }
+  //   if (findIdx > -1) {
+  //     campainIDs.splice(findIdx, 1);
+  //   } else {
+  //     campainIDs.push(value);
+  //   }
 
-    setFormData((previous: any) => ({
-      ...previous,
-      [name]: campainIDs
-    }))
-  }
+  //   setFormData((previous: any) => ({
+  //     ...previous,
+  //     [name]: campainIDs
+  //   }))
+  // }
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -233,6 +235,78 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
+            Khu vực
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    area: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    area: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeywordArea(value), 600)}
+            onScroll={handleScroll}
+            className="w-full rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Tìm kiếm khu vực"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listAreas.map((area:any) => ({
+                label: `${area?.name}, ${area?.parent?.name}, ${area?.parent?.parent?.name}`,
+                value: area._id,
+            }))}
+            initialValue={{
+              value: formData?.area3?._id, 
+              label: formData?.area3 && `${formData?.area3?.name}, ${formData?.area2?.name}, ${formData?.area1?.name}` || "Chọn khu vực"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
+      </section>
+
+      <section className="px-10">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtLocation">
+          Tọa độ Google Map
+        </label>
+        <input
+            placeholder={"Nhập tọa độ lấy từ Google Map"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={formData?.location}
+            onChange={onChange}
+            name = "location"
+        ></input>
+      </section>
+
+      <section className="px-10">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDistance">
+          Bán kính checkin tối đa (m)
+        </label>
+        <input
+            placeholder={"Bán kính checkin tối đa"}
+            className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={formData?.distance}
+            onChange={onChange}
+            name = "distance"
+        ></input>
+      </section>
+
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtPhone">
           Điện thoại
         </label>
@@ -300,7 +374,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
         ></input>
       </section>
 
-      <section className="px-10">
+      {/* <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="planExpense">
           Chi phí mặt bằng
         </label>
@@ -395,7 +469,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
             onChange={onChange}
             name = "loyaltyPointsRate"
         ></input>
-      </section>
+      </section> */}
 
       <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
@@ -484,52 +558,6 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
             formatItem={{
               id: "value",
               text: "label",
-            }}
-            inlineSearch={true}
-          />
-      </section>
-
-      <section className="px-10">
-          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
-            Khu vực
-          </label>
-          <DropdownSearchable
-            onchangeValue={(value: any) => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    area: value?.id
-                }))
-            }}
-            onClearData={() => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    area: ""
-                }))
-            }}
-            onSearchInputChange={debounce((value: any) => setKeywordArea(value), 600)}
-            onScroll={handleScroll}
-            className="w-full rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Tìm kiếm khu vực"
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            showTriangle={false}
-            maxWidthInput="max-w-full"
-            renderSelectedItem={(item: any) => (
-                <div className="max-w-full">
-                    <p className={"truncate"}>{item.text}</p>
-                </div>
-            )}
-            data={listAreas.map((area:any) => ({
-                label: `${area?.name}, ${area?.parent?.name}, ${area?.parent?.parent?.name}`,
-                value: area._id,
-            }))}
-            initialValue={{
-              value: formData?.area3?._id, 
-              label: formData?.area3 && `${formData?.area3?.name}, ${formData?.area2?.name}, ${formData?.area1?.name}` || "Chọn khu vực"
-            }}
-            formatItem={{
-                id: "value",
-                text: "label",
             }}
             inlineSearch={true}
           />

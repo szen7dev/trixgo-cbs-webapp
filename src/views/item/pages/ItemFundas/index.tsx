@@ -49,6 +49,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         name: "",
         sign: "",
         phone: "",
+        location: "",
         bankAccount: '',
         loyaltyPointsRate: '',
         address: '',
@@ -61,6 +62,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         campaign: 1,
         internal: 1,
         platform: 1,
+        distance: 0,
         activeCampaign: [],
         trialStaffSalary: 0,
         officialStaffSalar: 0,
@@ -130,7 +132,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, project, activeCampaign, trialStaffSalary, officialStaffSalar, nightShiftStaffSalary, manager, planExpense, utilityExpense, humanExpense, sellingExpenseRate, materialExpenseRate, otherExpenseRate } = newListIDChecked[0];
+            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, project, activeCampaign, trialStaffSalary, officialStaffSalar, nightShiftStaffSalary, manager, planExpense, utilityExpense, humanExpense, sellingExpenseRate, materialExpenseRate, otherExpenseRate, location, distance } = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
@@ -150,6 +152,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 project,
                 manager,
                 activeCampaign,
+                location,
+                distance: Number(distance),
                 trialStaffSalary: Number(trialStaffSalary),
                 officialStaffSalar: Number(officialStaffSalar),
                 nightShiftStaffSalary: Number(nightShiftStaffSalary),
@@ -201,10 +205,12 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 loyaltyPointsRate: '',
                 description: '',
                 address: '',
+                location: '',
                 initialDay: new Date(),
                 campaign: 1,
                 internal: 1,
                 platform: 1,
+                distance: 0,
                 activeCampaign: [],
                 trialStaffSalary: 0,
                 officialStaffSalar: 0,
@@ -221,7 +227,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[300px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1450px",
+                    height: "1150px",
                 }}
             >
                 <ModalCreateOrUpdateFunda
@@ -423,6 +429,9 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                 {item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}
                                 <p className="text-primary"><i>Dự án: {item?.project?.name}</i></p>
                                 <p className="text-primary"><i>Link cơ sở: {item?.project?.funda?.name}</i></p>
+                                <hr />
+                                <p className="text-primary"><i>Tọa độ GG Map: {item?.location}</i></p>
+                                <p className="text-primary"><i>Khoách cách tối đa checkin: {item?.distance} m</i></p>
                             </td>
                             <td className="py-1 px-2">{moment(item.initialDay).format('L')}</td>
                             <td className="py-1 px-2">{convertCurrency(Number(item?.trialStaffSalary).toFixed(0))}</td>
