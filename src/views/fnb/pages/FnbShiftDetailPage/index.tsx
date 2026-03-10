@@ -350,6 +350,7 @@ export const FnbShiftDetailPage: FC = () => {
 								<p>- Tồn đầu-Tồn cuối: {item?.numberOfOpeningSizeL}-{item?.numberOfEotSizeL}={Number(item?.numberOfOpeningSizeL-item?.numberOfEotSizeL)}</p>
 								- Thất thoát: <b style={{color:"red"}}>{Number(item?.numberOfOpeningSizeL || 0) - Number(item?.numberOfEotSizeL || 0) - Number(item?.numberOfSizeL || 0)}</b>
 								</i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Số sản phẩm khác: <b>{item?.numberOfOther}</b></i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Số lỗi mắc phải: <b>{item?.numberOfMistakes}</b></i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Tổng doanh số: <b>{formatNumberMoney(item?.total)}</b></i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>- Offline: {formatNumberMoney(item?.total1)}</i></p>

@@ -39,6 +39,11 @@ const TYPE_PRODUCT = [
 	{ value: 2, text: "Topping" },
 ]
 
+const IS_SZIE_PRODUCT = [
+	{ value: 1, text: "Có quản lý theo Size" },
+	{ value: 2, text: "Không quản lý theo Size" },
+]
+
 export const FnBProductPage: FC = () => {
 	useEffect(() => {
 		document.title = "Seller";
@@ -81,7 +86,7 @@ export const FnBProductPage: FC = () => {
 		},
 		isFetchList: true,
 		isFetchInfo: false,
-	});
+	})
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -402,6 +407,8 @@ export const FnBProductPage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{TYPE_PRODUCT[item.type-1]?.text}
+								<hr />
+								{IS_SZIE_PRODUCT[item.convertOption - 1]?.text}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.note}
