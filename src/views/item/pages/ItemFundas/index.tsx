@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { validateFiles } from 'validation/file';
 import { APP_ID } from "apis/localdb";
+import QRCode from "react-qr-code";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -31,11 +32,38 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import API from "apis/repository";
 
 /*=====7.OTHER=====*/
-const CAMPAIGN_CONSTANT = ["Tắt", "Bật"];
+// const CAMPAIGN_CONSTANT = ["Tắt", "Bật"];
 const INTERNAL_CONSTANT = ["Hệ thống", "Nhượng quyền"];
 const PLATFORM_CONSTANT = ["Bán tại điểm bán", "Bán qua sàn bán lẻ"];
 
 export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
+
+    const downloadQR = useCallback(({ value, name }) => {
+            const svg: any = document.getElementById(value);
+            if (!svg) {
+                console.error("Không tìm thấy thẻ SVG với ID này!");
+                return;
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const canvas = document.createElement("canvas");
+            const ctx: any = canvas.getContext("2d");
+            const img = new Image();
+            img.onload = function () {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            const pngFile = canvas.toDataURL("image/png");
+
+            const downloadLink = document.createElement("a");
+            downloadLink.download = `qrcode_${name}`;
+            downloadLink.href = `${pngFile}`;
+            downloadLink.click();
+        };
+
+        img.src = "data:image/svg+xml;base64," + btoa(svgData);
+    }, []);
+
     const { user } = useAuth();
 	const history = useHistory();
     const { closeModal, openModal } = useModal();
@@ -415,7 +443,23 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                 <p>TKNH: <b>{item?.bankAccount}</b></p>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
-                            <td className="py-1 px-2">{item?.sign}</td>
+                            <td className="py-1 px-2">
+                                {item?.sign}
+                                <div>
+                                    Mã QR checkin
+                                    <QRCode id={item._id} value={item._id} size={150} />
+                                    <div className="flex justify-end mt-5">
+                                        <div>
+                                        <button
+                                            onClick={() => downloadQR({value: item._id, name: item.name})}
+                                            className="bg-primary text-primary-light text-base w-24 h-8 rounded"
+                                        >
+                                            Tải xuống
+                                        </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                             <td className="py-1 px-2">
                                 {item?.description}
                                 <p className="text-right"><i>Mặt bằng: {convertCurrency(Number(item?.planExpense).toFixed(0))}</i></p>
