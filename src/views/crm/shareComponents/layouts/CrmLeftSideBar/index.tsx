@@ -4,7 +4,6 @@ import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "
 import { APP_ID } from "apis/localdb";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useModal } from "services/hooks/useModal";
-import { ModalAddNewOrder2 } from "views/fnb/shareComponents/layouts/FnbLayout/components/ModalAddNewOrder2";
 import iconFolder from "assets/images/bullet.svg";
 import iconPlusBlue from "assets/images/icons8-plus-math-96 1.svg";
 
@@ -18,23 +17,6 @@ export const CrmLeftSideBar: FC = () => {
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
             <div className="t-leftsidebar-navigation-container-v2  overflow-auto transition-all duration-500 ease-out p-3">
-                <div>
-                    <button
-                        className="flex gap-2 items-center justify-center text-primary-gray bg-cbs-blue-button  rounded-md font-bold px-6 py-2 mb-3"
-                        onClick={() =>
-                            openModal(
-                                <div
-                                    className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-6 align-top inline-block"
-                                    style={{ maxWidth: " calc(100vw - 50px)" }}
-                                >
-                                   <ModalAddNewOrder2 />
-                                </div>
-                            )
-                        }
-                    >
-                        <img src={iconPlusBlue} alt="" /> Tạo đơn hàng
-                    </button>
-                </div>
                 <div className="t-link-menu-container">
                     {hasPermission && dataUserAccess?.level == 0 ?
                         <NavLink

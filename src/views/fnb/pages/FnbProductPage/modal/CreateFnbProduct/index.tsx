@@ -15,6 +15,7 @@ import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 
 const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues = {
     type: 1,
+    convertOption: 1,
     name: "",
     sign: "",
     unit: "",
@@ -32,6 +33,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
             const query = {
                 ...values,
                 type: parseInt(values.type),
+                convertOption: parseInt(values.convertOption),
                 name: values.name,
                 sign: values.sign,
                 unit: values.unit,
@@ -57,6 +59,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                 ...values,
                 productID: values._id,
                 type: parseInt(values.type),
+                convertOption: parseInt(values.convertOption),
                 name: values.name,
                 sign: values.sign,
                 unit: values.unit,
@@ -149,6 +152,21 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtType">
+                                        Quản lý theo Size
+                                    </label>
+                                    <div className={" flex items-center"}>
+                                        <div className={"flex items-center"}>
+                                            <Field type="radio" name="convertOption" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('convertOption', 1)} />
+                                            <label htmlFor="convertOption" className={"text-left ml-3"}>Có</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="convertOption" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('convertOption', 2)} />
+                                            <label htmlFor="convertOption" className={"text-left ml-3"}>Không</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnitPrice">
