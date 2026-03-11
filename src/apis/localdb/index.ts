@@ -808,7 +808,7 @@ export const FNB_SHIFT = [
 ]
 
 export const FNB_CHANNEL = [
-    { value: 1, text: 'Offline', sign: "of" },
+    { value: 1, text: 'Offline', sign: "off" },
     { value: 2, text: 'Grab', sign: "gf"  },
     { value: 3, text: 'Shopee Food', sign: "spf"  },
     { value: 4, text: 'Gojek', sign: "go"  },
