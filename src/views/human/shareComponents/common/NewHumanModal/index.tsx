@@ -183,6 +183,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       workingStatus: "",
       realStatus: 1,
       status: 1,
+      boneAge: 1,
       insuranceStatus: 1,
       familyPolicy: 1,
       bankAccount: "",
@@ -289,6 +290,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         gender: values?.gender?.toString(),
         realStatus: values?.realStatus?.toString(),
         status: values?.status?.toString(),
+        boneAge: values?.boneAge?.toString(),
         insuranceStatus: values?.insuranceStatus?.toString() || "",
         familyPolicy: values?.familyPolicy?.toString() || "",
         area: values?.area?.value,
@@ -1870,6 +1872,20 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           text: "label",
                         }}
                         inlineSearch={true}
+                      />
+                    </div>
+                     <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Tuổi xương thực
+                      </span>
+                      <Field
+                        type="text"
+                        name="boneAge"
+                        placeholder="Tuổi xương thực"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
