@@ -525,7 +525,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 <p className="text-primary-gray text-[12px]">Link user: {item?.linkUser?.fullname || ''}</p>
                                 <p className="text-primary-gray text-[12px]">Sale: {item?.sale?.fullname || ''}</p>
                             </td>
-                            <td className="py-1 px-2">{item.gender > 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}</td>
+                            <td className="py-1 px-2">{item.gender >= 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}</td>
                             <td className="py-1 px-2">{item.address}</td>
                             <td className="py-1 px-2">{item.taxid}</td>
                             <td className="py-1 px-2">{item.phone}</td>
