@@ -330,6 +330,54 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
                 />
                 <label htmlFor="type" className={"text-left ml-3"}>Khách hàng</label>
             </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={3}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 3?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Cộng tác chuyên gia</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={4}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 4?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Đơn vị cơ sở</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={5}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 5?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Ba mẹ</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={6}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 6?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Các bé</label>
+            </div>
           </div>
       </section>
 
