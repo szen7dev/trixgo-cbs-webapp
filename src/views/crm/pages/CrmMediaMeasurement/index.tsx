@@ -7,7 +7,9 @@ import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { validateFiles } from 'validation/file';
 import { read, utils } from 'xlsx';
-import { formatNumberMoney } from "utils/cmcs";
+// import { formatNumberMoney } from "utils/cmcs";
+import iconCreate from "assets/images/icons8-create.png";
+import { ModalConfirm } from "shareComponents/common";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -340,6 +342,42 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         }
     }, [dataImport])
 
+    const toggleModalOpenSign = (param: any) => {
+        openModal(
+            <div
+            className={
+                "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+            }
+            >
+            <ModalConfirm
+                title= {param?.title}
+                description= {param?.description}
+                onConfirm={() => handleConfirmSync({ option: param.option, trackID: param.trackID })}
+                defaultText={false}
+                onCancel={closeModal}
+            />
+            </div>
+        )
+    }
+
+    const handleConfirmSync = useCallback(async (param: any) => {
+        closeModal();
+
+        const { data, status } = await API.post(
+            `/api/crm/grow_track/sync-data`, {
+                option: param.option,
+                trackID: param.trackID,
+            }
+        )
+    
+        if (status !== 200 || data.error) {
+        return toast.error(data?.data?.message)
+        }
+
+        refetch();
+        return toast.success('Đồng bộ thành công')
+    }, [])
+
     return (
         <main className="relative h-full">
             <header className="sticky top-0 bg-primary-light z-10">
@@ -495,7 +533,15 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                 {item?.facebook ? <p className="text-cbs-highlight-color"><i>FB: {item?.facebook}</i></p> : ''}
                                 {item?.tiktok ? <p className="text-cbs-highlight-color"><i>TT: {item?.tiktok}</i></p> : ''}
                             </td>
-                            <td className="py-1 px-2">{item.note}</td>
+                            <td className="py-1 px-2">
+                                {item.note}
+                                <div className="mb-3">
+                                    <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, trackID: item._id, title: 'Bạn có muốn tạo dữ liệu ba mẹ và bé không', description: 'Tài khoản ba mẹ, bé được cập nhật vào hệ thống' })}>
+                                    <img src={iconCreate} title={'Đồng bộ'} className={"w-[24px] h-[24px] mr-3"} />
+                                    <span>Đồng bộ</span>
+                                    </button>
+                                </div>
+                            </td>
                             <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>
                                     {item?.images?.map((image: any, i: number) => {
