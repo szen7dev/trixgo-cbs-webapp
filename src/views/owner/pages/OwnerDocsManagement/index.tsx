@@ -111,7 +111,7 @@ export const OwnerDocsManagementPage: FC = () => {
           <p className="text-lg">{appName}</p>
           <SearchInput
             classNameWrapper="mr-2 ml-3"
-            classNameInput="outline-none w-[100px]"
+            classNameInput="outline-none w-[300px]"
             onChange={onChangeSearch}
           />
           {idsChecked.length ? (
