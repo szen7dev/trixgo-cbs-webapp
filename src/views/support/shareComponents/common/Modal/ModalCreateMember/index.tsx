@@ -15,9 +15,10 @@ type Props = {
   appID: string,
   companyID: string,
   onlyUserCompany?: boolean;
+  onConfirm?(): void
 }
 
-export const ModalCreateMember: FC<Props> = ({ appID, companyID, onlyUserCompany }) => {
+export const ModalCreateMember: FC<Props> = ({ appID, companyID, onlyUserCompany, onConfirm }) => {
   const LIMIT_PER_USER_APP = 20;
   const { closeModal } = useModal();
   const [keyword, setKeyword] = useState("");
@@ -68,9 +69,11 @@ export const ModalCreateMember: FC<Props> = ({ appID, companyID, onlyUserCompany
 
     refetch();
     setIdsChecked([]);
-    closeModal();
     toast.success('Thêm thành viên thành công');
-  };
+
+    onConfirm && onConfirm()
+    closeModal()
+  }
 
   return (
     <main className="py-[18px]">
