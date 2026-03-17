@@ -101,6 +101,9 @@ export const OwnerDocsManagementPage: FC = () => {
     toast.success('Xoá dữ liệu thành công');
   }
 
+  // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
+  const handleConfirmCreateOrUpdate = () => refetch();
+
   return (
     <main className="relative h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -108,7 +111,7 @@ export const OwnerDocsManagementPage: FC = () => {
           <p className="text-lg">{appName}</p>
           <SearchInput
             classNameWrapper="mr-2 ml-3"
-            classNameInput="outline-none w-[100px]"
+            classNameInput="outline-none w-[300px]"
             onChange={onChangeSearch}
           />
           {idsChecked.length ? (
@@ -138,7 +141,7 @@ export const OwnerDocsManagementPage: FC = () => {
                     "inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
                   }
                 >
-                  <ModalCreateMember appID={appID} companyID={companyID} />
+                  <ModalCreateMember appID={appID} companyID={companyID} onConfirm={handleConfirmCreateOrUpdate} />
                 </div>
               )
             }

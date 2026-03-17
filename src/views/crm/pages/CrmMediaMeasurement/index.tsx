@@ -536,7 +536,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 {item.note}
                                 <div className="mb-3">
-                                    <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, trackID: item._id, title: 'Bạn có muốn tạo dữ liệu ba mẹ và bé không', description: 'Tài khoản ba mẹ, bé được cập nhật vào hệ thống' })}>
+                                    <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, trackID: item._id, title: 'Bạn có muốn tạo dữ liệu Ba mẹ và Bé không?', description: 'Tài khoản ba mẹ được tạo và cấp quyền truy cập Game Habit. Dữ liệu của bé được cập nhật vào hệ thống' })}>
                                     <img src={iconCreate} title={'Đồng bộ'} className={"w-[24px] h-[24px] mr-3"} />
                                     <span>Đồng bộ</span>
                                     </button>
