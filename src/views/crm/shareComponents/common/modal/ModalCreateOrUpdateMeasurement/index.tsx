@@ -13,6 +13,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
   initialValues = {
     trackID: '',
     contactID: '',
+    supportID: '',
     type: 1,
     status: 1,
     name: '',
@@ -115,7 +116,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "850px",
+        height: "920px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -128,6 +129,51 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
           onClick={closeModal}
         />
       </header>
+      <section className="px-5 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
+            Support
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    supportID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    supportID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onScroll={handleScroll}
+            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Chọn người support (dược sĩ...)"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listHuman.map((item:any) => ({
+                label: item.name,
+                value: item._id,
+            }))}
+            initialValue={{
+              value: formData?.support?._id || "",
+              label: formData?.support?.name || "Chọn người support"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
+      </section>
 
       <section className="px-5 mt-2">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
