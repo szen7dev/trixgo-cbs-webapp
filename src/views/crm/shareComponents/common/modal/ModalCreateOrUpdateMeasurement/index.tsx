@@ -116,7 +116,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "850px",
+        height: "920px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">

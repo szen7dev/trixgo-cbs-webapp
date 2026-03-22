@@ -229,7 +229,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "850px",
+                    height: "920px",
                 }}
             >
                 <ModalCreateOrUpdateMeasurement
