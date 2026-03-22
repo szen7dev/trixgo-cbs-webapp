@@ -93,7 +93,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             parentID,
             keyword, 
             populates: {
-                path: 'parent userUpdate userCreate images contact',
+                path: 'parent userUpdate userCreate images contact support',
                 select: 'name fullname parent createAt path',
                 populate: {
                     path: 'parent',
@@ -516,7 +516,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 <a target="blank" href={`https://lamin.com.vn/tai-khoan/lich-su-do-cao/${item._id}`}>{item?.name}</a>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
-                                <p className="text-primary-gray text-[12px]"><i>Danh bạ: {item?.contact?.name}</i></p>
+                                <p className="text-primary-gray text-[12px]"><i>Trẻ: {item?.contact?.name}</i></p>
+                                <p className="text-primary-gray text-[12px]"><i>Support: {item?.support?.name}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item.gender >= 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}
