@@ -118,6 +118,7 @@ export type TimeSheetChild = {
     modifyAt?: string | null
     userCreate?: any
     userUpdate?: any | null
+    funda?: any
 }
 
 export type QueryListTimeSheetChildPayload = QueryParams & {
