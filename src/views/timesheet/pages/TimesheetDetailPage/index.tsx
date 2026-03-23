@@ -153,6 +153,7 @@ const TimeSheetDetailPage: FC = () => {
       try {
         const isUpdated = await onUpdateTimeSheetAsync({
           ...values,
+          device: 1,
           expertTimesheetID: values._id,
           hours: `${values.hours}`,
           amount: `${values.amount}`,
@@ -166,6 +167,8 @@ const TimeSheetDetailPage: FC = () => {
         if (!isUpdated.error) {
           onRefreshTimeSheetChild();
           refetch(); // refetch time sheet parent
+        }else{
+          toast.warn(isUpdated?.data?.message);
         }
       } catch (err) {
         return null;

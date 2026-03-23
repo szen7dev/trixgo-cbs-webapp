@@ -148,6 +148,7 @@ export const DetailChildRow: FC<Props> = ({
         >
           {rowData.name}
         </p>
+        <p className="text-cbs-highlight-color ml-3"><i>Cơ sở: {rowData?.funda?.name}</i></p>
         <p className="text-cbs-highlight-color ml-3"><i>{rowData?.shiftType ? TIMESHEET_SHIFT_TYPES[rowData?.shiftType - 1].name : ''}</i></p>
       </div>
       <div
