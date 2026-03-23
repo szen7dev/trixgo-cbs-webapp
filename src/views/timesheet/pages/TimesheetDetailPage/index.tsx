@@ -181,6 +181,7 @@ const TimeSheetDetailPage: FC = () => {
           throw new Error("Name is required");
         }
         const isCreated = await onCreateTimeSheetAsync({
+          device: 1,
           name: values.name,
           parentID: timeSheetParentID,
         });
