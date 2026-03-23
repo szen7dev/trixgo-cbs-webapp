@@ -135,6 +135,7 @@ export type QueryTimeSheetChildResponse = APIResponse & {
 }
 
 export type InsertTimeSheetChildPayload = {
+    device: number;
     parentID: string;
     assigneeID?: string;
     name: string;
