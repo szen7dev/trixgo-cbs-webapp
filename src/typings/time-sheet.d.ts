@@ -153,6 +153,7 @@ export type InsertTimeSheetChildResponse = {
     data: TimeSheetChild & {
         assignee?: string;
         project: string;
+        message?: string;
     }
 }
 

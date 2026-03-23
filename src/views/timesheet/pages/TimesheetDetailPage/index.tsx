@@ -186,7 +186,9 @@ const TimeSheetDetailPage: FC = () => {
           parentID: timeSheetParentID,
         });
         if (isCreated.error) {
-          throw new Error("ERROR");
+          // throw new Error("ERROR");
+          // console.log(isCreated)
+          toast.warn(isCreated?.data?.message);
         }
 
         refetch();
