@@ -46,12 +46,12 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
   const [formData, setFormData] = useState(initialValues);
   const { refetch: refetchCustomer, insertAsync, updateAsync } = useMediaMenu({});
 
-  const [keywordGoods, setKeywordGoods] = useState('');
+  const [keywordContact, setKeywordContact] = useState('');
     
   const { listHuman } = useListHuman({
       params: {
           limit: 10,
-          keyword: keywordGoods,
+          keyword: keywordContact,
       },
       isFetchList: true
   })
@@ -63,9 +63,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
     keyword: searchSubTypeValue,
   });
 
-	const [searchGoodValue, setSearchGoodValue] = useState(
-		initialValues?.goods || ""
-	);
+	const [searchGoodValue, setSearchGoodValue] = useState("");
   const { listGood } = useQueryListGood({
     limit: LIMIT_DROPDOWN,
     keyword: searchGoodValue,
@@ -171,7 +169,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
                     supportID: ""
                 }))
             }}
-            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onSearchInputChange={debounce((value: any) => setKeywordContact(value), 600)}
             onScroll={handleScroll}
             className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
             placeholder="Support/Chủ Trạm Tăng Cao"
@@ -217,7 +215,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
                     secialistID: ""
                 }))
             }}
-            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onSearchInputChange={debounce((value: any) => setKeywordContact(value), 600)}
             onScroll={handleScroll}
             className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
             placeholder="Chuyên viên tư vấn"
@@ -263,7 +261,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
                     contactID: ""
                 }))
             }}
-            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onSearchInputChange={debounce((value: any) => setKeywordContact(value), 600)}
             onScroll={handleScroll}
             className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
             placeholder="Chọn bé"
@@ -323,7 +321,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
                     sourceID: ""
                 }))
             }}
-            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onSearchInputChange={debounce((value: any) => setSearchSubTypeValue(value), 600)}
             onScroll={handleScroll}
             className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
             placeholder="Nguồn đến từ đâu"
@@ -511,7 +509,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
                     productID: ""
                 }))
             }}
-            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onSearchInputChange={debounce((value: any) => setSearchGoodValue(value), 600)}
             onScroll={handleScroll}
             className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
             placeholder="Sản phẩm lựa chọn"
