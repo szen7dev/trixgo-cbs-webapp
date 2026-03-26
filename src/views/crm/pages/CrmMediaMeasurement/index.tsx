@@ -112,8 +112,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             parentID,
             keyword, 
             populates: {
-                path: 'parent userUpdate userCreate images contact support',
-                select: 'name fullname parent createAt path',
+                path: 'parent userUpdate userCreate images contact support source product secialist',
+                select: 'name fullname parent createAt path unit',
                 populate: {
                     path: 'parent',
                     select: 'name',
@@ -493,7 +493,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 <a target="blank" href={`https://lamin.com.vn/tai-khoan/lich-su-do-cao/${item._id}`}>{item?.name}</a>
-                                {/* <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p> */}
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                                 <p className="text-primary-gray text-[12px]"><i>Trẻ: {item?.contact?.name}</i></p>
                                 <p className="text-primary-gray text-[12px]"><i>Support: {item?.support?.name}</i></p>
                             </td>
@@ -506,11 +506,19 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">{item.height}</td>
                             <td className="py-1 px-2">{item.weight}</td>
-                            <td className="py-1 px-2">{item.percentile} | {item.predictedAdultHeight} cm</td>
+                            <td className="py-1 px-2">
+                                {item.percentile} | {item.predictedAdultHeight} cm
+                                <hr className="text-primary-gray"/>
+                                <p><i>{item?.product?.name}</i></p>
+                                <p><i>{item?.quantity} ({item?.product?.unit})</i></p>
+                            </td>
                             <td className="py-1 px-2">
                                 {item.parentName} - {item.phone}
-                                {item?.facebook ? <p className="text-cbs-highlight-color"><i>FB: {item?.facebook}</i></p> : ''}
-                                {item?.tiktok ? <p className="text-cbs-highlight-color"><i>TT: {item?.tiktok}</i></p> : ''}
+                                {/* {item?.facebook ? <p className="text-cbs-highlight-color"><i>FB: {item?.facebook}</i></p> : ''}
+                                {item?.tiktok ? <p className="text-cbs-highlight-color"><i>TT: {item?.tiktok}</i></p> : ''} */}
+                                <hr className="text-primary-gray"/>
+                                <p><i>Nguồn: {item?.source?.name}</i></p>
+                                <p><i>Chuyên viên: {item?.secialist?.name}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}
