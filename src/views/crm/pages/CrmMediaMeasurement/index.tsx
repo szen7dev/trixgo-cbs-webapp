@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, useRef, useState, useCallback, useEffect, ChangeEvent } from "react";
+import React, { FC, useRef, useState, useCallback, useEffect, ChangeEvent } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -10,6 +10,7 @@ import { read, utils } from 'xlsx';
 // import { formatNumberMoney } from "utils/cmcs";
 import iconCreate from "assets/images/icons8-create.png";
 import { ModalConfirm } from "shareComponents/common";
+import { DropdownSearchableV2, Loader } from "shareComponents/common";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -37,10 +38,21 @@ import { ModalZoomView } from "shareComponents/common";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
 import API from "apis/repository";
+import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import { useContact } from "services/hooks/items/useContact";
+
+type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
 
 export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
     const { user } = useAuth();
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+
+    const ref = useRef<PaginateHandle>(null);
+    const datahubRef = useRef<DropdownHandle>(null);
+    const typeRef = useRef<DropdownHandle>(null);
+
+    const [pageIndex, setPageIndex] = useState(0);
 
     const history = useHistory();
     const { closeModal, openModal } = useModal();
@@ -48,6 +60,11 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
     const [keyword, setKeyword] = useState('');
     const [title, setTitle] = useState("Danh sách");
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
+    const accountRef = React.useRef<DropdownHandle>(null);
+
+    const [supportID, setSupportID] = useState<string | null>();
+
+    const [contactKeyword, setContactKeyword] = useState("");
 
     const [defaultState, setDefaultState] = useState({
         mediaID: '',
@@ -59,6 +76,11 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
     const { addFileToUpload } = useUpload({
         appID: APP_ID.ITEM.id,
         companyID: user?.company?._id,
+    })
+
+    const { list: listContact } = useContact({
+        params: { keyword: contactKeyword, limit: 20 },
+        isFetchList: true
     })
 
     const [initialValues, setInitialValues] = useState({
@@ -83,23 +105,21 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
     })
 
     const {
-        list: listData,
-        hasNextPage,
-        refetch,
-        fetchNextPage,
-        totalRecord
+        listWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch
     } = useMediaMenu({
         params: { 
+            supportID,
             parentID,
             keyword, 
             populates: {
-                path: 'parent userUpdate userCreate images contact support',
-                select: 'name fullname parent createAt path',
+                path: 'parent userUpdate userCreate images contact support source product secialist',
+                select: 'name fullname parent createAt path unit',
                 populate: {
                     path: 'parent',
                     select: 'name',
                 }
             },
+            limit: 20,
         },
         isFetchList: true,
     })
@@ -182,18 +202,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         return user ? true : false;
     }, [itemsChecked]);
     
-    const getStateCheckedAll = useCallback(() => {
-        return itemsChecked.length == listData.length;
-    }, [itemsChecked]);
-
-    const onClickCheckAll = () => {
-        if (itemsChecked.length == listData.length) {
-            setItemsChecked([]);
-        } else {
-            setItemsChecked(listData);
-        }
-    }
-
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
 
         let initValues: any = {...initialValues};
@@ -229,7 +237,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "920px",
+                    height: "1250px",
                 }}
             >
                 <ModalCreateOrUpdateMeasurement
@@ -239,42 +247,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 />
             </div>
         )
-    }
-
-    const handleUploadAttach = async (filesSelected: FileList | null, trackID: string) => {
-        if (!filesSelected || !filesSelected.length) return;
-
-        const validation = await validateFiles(filesSelected);
-        if (validation.error) return toast.warn(validation.message);
-
-        // Clear input file
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-
-        const imagesID: any = [];
-
-        // Upload images
-        for (const [_, file] of Object.entries(filesSelected)) {
-            const { _id } = await addFileToUpload({
-                files: file as any,
-                fileType: 1,
-                progress: percentCompleted => {
-                    console.info(`${percentCompleted}%`)
-                }
-            })
-            _id && imagesID.push(_id);
-        }
-
-        // Update image to products
-        await API.put(
-            `/api/crm/grow_track`,
-            {
-                trackID,
-                imagesID,
-            }
-        );
-        refetch();
     }
 
     const { importExcelAsync, exportExcelAsync } = useMediaMenu({});
@@ -289,7 +261,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportExcelAsync({
-                filterParams: {  }
+                supportID,
+                keyword,
             });
 
             if(error) {
@@ -302,26 +275,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         } finally {
             setStateExport({ isExporting: false });
         }
-    }
-
-    //_____Import excel
-    const handleImport = ($event: any) => {
-        const files = $event.target.files;
-        if (files.length) {
-            const file = files[0];
-            const reader = new FileReader();
-            reader.onload = (event: any) => {
-                const wb = read(event.target.result);
-                const sheets = wb.SheetNames;
-
-                if (sheets.length) {
-                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=0 (Sheet 1 từ trái sang)
-                    setDataImport(rows) // Set data để Import
-                }
-            }
-            reader.readAsArrayBuffer(file)
-        }
-        $event.target.value = null; // Đọc xong xóa value trong Input đi
     }
 
     //_____Gọi tới API để đẩy data lên
@@ -380,51 +333,69 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
 
     return (
         <main className="relative h-full">
-            <header className="sticky top-0 bg-primary-light z-10">
-                <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
-                    <div className="flex items-center">
-                        <button onClick={history.goBack}>
-                            <img src="/images/common/button_back.png" alt="Button Back" />
-                        </button>
-                        <p className="text-lg ml-2">{title}</p>
+            <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
+                <SearchInput classNameWrapper={"mr-1"} onChange={onChangeSearch} />
 
-                        <SearchInput
-                            classNameWrapper="ml-4 mr-2"
-                            classNameInput="outline-none w-[296px]"
-                            onChange={onChangeSearch}
-                        />
+                <DropdownSearchableV2
+                    ref={accountRef}
+                    className={"mr-1 border border-primary-border rounded-lg"}
+                    placeholder={"Người support/Trạm"}
+                    isMultiple={false}
+                    allowClearValueSingleInput={true}
+                    data={listContact}
+                    formatItem={{
+                        id: "_id",
+                        text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                        (valueSearch) => setContactKeyword(valueSearch),
+                        500
+                    )}
+                    onClearData={() => {
+                        setSupportID("");
+                    }}
+                    onchangeValue={item => {
+                        setSupportID(item._id);
+                        setPageIndex(0);
+                        ref.current&&ref.current.resetPaginate();
+                    }}
+                    renderItem={(item) => (
+                        <p className={"min-w-[300px]"}>{item.text}</p>
+                    )}
+                    selectOneByOne={true}
+                />
 
-                        {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
-                        {itemsChecked.length === 1 ? (
-                            <button
-                                className="mr-3"
-                                onClick={() => handleOpenModalCreateOrUpdate('update')}
-                            >
-                                <img src={pencilIcon} alt="icon pencil" />
-                            </button>
-                        ) : ''}
-                    </div>
-                    
-                    <button className={"flex items-center justify-center mx-3 ml-3"}
-                            onClick={exportExcel}
+                <button className={"flex items-center justify-center mx-3 ml-3"}
+                        onClick={exportExcel}
+                    >
+                    Tải mẫu Import
+                </button>
+
+                <div className="flex items-center">
+                    <button
+                        className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
+                        onClick={() => handleOpenModalCreateOrUpdate('create')}
                         >
-                        Tải mẫu Import
+                        Tạo mới
                     </button>
+                </div>
 
-                    <button className={"flex items-center justify-center mx-3 ml-3"}>
-                        <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-                        accept=".xlsx, .xlsm, .xls, .csv"/>
-                        <label className="custom-file-label" htmlFor="inputGroupFile">Import excel Đo cao</label>
-                    </button>
-
-                    <div className="flex items-center">
-                        <button
-                            className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-                            onClick={() => handleOpenModalCreateOrUpdate('create')}
-                            >
-                            Tạo mới
-                        </button>
-                    </div>
+                <div className="absolute right-0">
+                    <PaginateV2
+                        ref={ref}
+                        totalRecord={totalRecord}
+                        totalPages={totalPage}
+                        limit={20}
+                        hasNextPage={hasNextPage}
+                        isFetching={isLoading}
+                        nextPageAction={() => {
+                        fetchNextPage();
+                            setPageIndex(oldState => oldState+1)
+                        }}
+                        prevPageAction={() => {
+                            setPageIndex(oldState => oldState-1)
+                        }}
+                    />
                 </div>
             </header>
 
@@ -432,14 +403,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
                         <th className={cn("py-1 text-center", styles.theadInput)}>
-                            <div className="border-r-2 border-gray-300 flex items-center justify-center">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    defaultChecked={getStateCheckedAll()}
-                                    onClick={onClickCheckAll}
-                                />
-                            </div>
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
@@ -486,11 +449,11 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                 Ghi chú
                             </div>
                         </th>
-                        <th className="py-1">
+                        {/* <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Hình ảnh
                             </div>
-                        </th>
+                        </th> */}
                         <th className="py-1 font-normal">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Cập nhật lần cuối
@@ -500,7 +463,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 </thead>
 
                 <tbody>
-                    {listData.length ? listData.map((item: any) => (
+                {
+                    (listWithPager[pageIndex] ?? []).map((item: any, index: any) => (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
@@ -509,9 +473,23 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                     checked={getStateChecked(item._id)}
                                     onChange={() => onClickCheckButton(item)}
                                 />
+                                {(itemsChecked.length === 1 && itemsChecked[0]?._id.toString() === item._id.toString()) ? (
+                                    <button
+                                        className="mr-3"
+                                        onClick={() => handleOpenModalCreateOrUpdate('update')}
+                                    >
+                                        <img src={pencilIcon} alt="icon pencil" />
+                                    </button>
+                                ) : ''}
                             </td>
                             <td className="py-1 px-2">
                                 {moment(item?.date).format('DD/MM/YYYY')}
+                                <div className="mb-3">
+                                    <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, trackID: item._id, title: 'Bạn có muốn tạo dữ liệu Ba mẹ và Bé không?', description: 'Tài khoản ba mẹ được tạo và cấp quyền truy cập Game Habit. Dữ liệu của bé được cập nhật vào hệ thống' })}>
+                                    <img src={iconCreate} title={'Đồng bộ'} className={"w-[24px] h-[24px] mr-3"} />
+                                    <span>Đồng bộ</span>
+                                    </button>
+                                </div>
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
                                 <a target="blank" href={`https://lamin.com.vn/tai-khoan/lich-su-do-cao/${item._id}`}>{item?.name}</a>
@@ -528,22 +506,24 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">{item.height}</td>
                             <td className="py-1 px-2">{item.weight}</td>
-                            <td className="py-1 px-2">{item.percentile} | {item.predictedAdultHeight} cm</td>
+                            <td className="py-1 px-2">
+                                {item.percentile} | {item.predictedAdultHeight} cm
+                                <hr className="text-primary-gray"/>
+                                <p><i>{item?.product?.name}</i></p>
+                                <p><i>{item?.quantity} ({item?.product?.unit})</i></p>
+                            </td>
                             <td className="py-1 px-2">
                                 {item.parentName} - {item.phone}
-                                {item?.facebook ? <p className="text-cbs-highlight-color"><i>FB: {item?.facebook}</i></p> : ''}
-                                {item?.tiktok ? <p className="text-cbs-highlight-color"><i>TT: {item?.tiktok}</i></p> : ''}
+                                {/* {item?.facebook ? <p className="text-cbs-highlight-color"><i>FB: {item?.facebook}</i></p> : ''}
+                                {item?.tiktok ? <p className="text-cbs-highlight-color"><i>TT: {item?.tiktok}</i></p> : ''} */}
+                                <hr className="text-primary-gray"/>
+                                <p><i>Nguồn: {item?.source?.name}</i></p>
+                                <p><i>Chuyên viên: {item?.secialist?.name}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}
-                                <div className="mb-3">
-                                    <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({ option: 1, trackID: item._id, title: 'Bạn có muốn tạo dữ liệu Ba mẹ và Bé không?', description: 'Tài khoản ba mẹ được tạo và cấp quyền truy cập Game Habit. Dữ liệu của bé được cập nhật vào hệ thống' })}>
-                                    <img src={iconCreate} title={'Đồng bộ'} className={"w-[24px] h-[24px] mr-3"} />
-                                    <span>Đồng bộ</span>
-                                    </button>
-                                </div>
                             </td>
-                            <td className="py-1 px-2">
+                            {/* <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>
                                     {item?.images?.map((image: any, i: number) => {
                                         return (
@@ -581,30 +561,22 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                         </div>
                                     </label>
                                 </div>
-                            </td>
-                            <td className="py-1 px-2">
-                                {item.userUpdate ? `${item?.userUpdate?.fullname} ${moment(item.modifyAt).format('DD/MM/YYYY HH:mm')}` : `${item?.userCreate?.fullname} ${moment(item.createAt).format('DD/MM/YYYY HH:mm')}`}
+                            </td> */}
+                            <td className="py-1 px-2 text-primary-gray text-[12px]">
+                                <p><i>Cre: {item?.userCreate?.fullname} {moment(item.createAt).format('DD/MM/YY HH:mm')}</i></p>
+                                <p><i>Modify: {item.userUpdate ? `${item?.userUpdate?.fullname} ${moment(item.modifyAt).format('DD/MM/YY HH:mm')}` : ``}</i></p>
                             </td>
                         </tr>
-                    )) : <></>}
+                    ))
+                }
                 </tbody>
             </table>
 
-            <ModalZoomView
+            {/* <ModalZoomView
                 isShow={isShowImageFullScreen}
                 toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
                 initialData={defaultState}
-            />
-
-            {hasNextPage && (
-                <div className="w-full flex justify-center my-5">
-                    <button onClick={fetchNextPage}>
-                        <span className="text-primary">
-                            {`Xem thêm (${totalRecord - listData.length})`}
-                        </span>
-                    </button>
-                </div>
-            )}
+            /> */}
         </main>
     )
 }

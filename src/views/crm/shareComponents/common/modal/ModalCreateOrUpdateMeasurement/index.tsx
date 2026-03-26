@@ -5,7 +5,12 @@ import { useModal } from "services/hooks/useModal";
 import { useMediaMenu } from "services/hooks/crm/useMediaMeasurement";
 import { DropdownSearchable } from "shareComponents/common";
 import debounce from 'lodash/debounce';
+import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import { useListHuman } from "services/hooks/human/useHuman";
+import { useQueryListDoctype } from "services/hooks/useHuman";
+import {
+    useQueryListGood
+} from "services/hooks/cmcs/useContractIncome";
 
 export const ModalCreateOrUpdateMeasurement: FC<any> = ({
   modalType,
@@ -14,6 +19,9 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
     trackID: '',
     contactID: '',
     supportID: '',
+    secialistID: '',
+    sourceID: '',
+    productID: '',
     type: 1,
     status: 1,
     name: '',
@@ -30,6 +38,8 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
     gender: 1,
     height: 0,
     weight: 0,
+    quantity: 0,
+    unitPrice: 0,
   }
 }) => {
   const { closeModal } = useModal();
@@ -45,6 +55,21 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
       },
       isFetchList: true
   })
+
+  const [searchSubTypeValue, setSearchSubTypeValue] = useState("");
+  const { listDoctypes: listSubType } = useQueryListDoctype({
+    limit: LIMIT_DROPDOWN,
+    type: 25,
+    keyword: searchSubTypeValue,
+  });
+
+	const [searchGoodValue, setSearchGoodValue] = useState(
+		initialValues?.goods || ""
+	);
+  const { listGood } = useQueryListGood({
+    limit: LIMIT_DROPDOWN,
+    keyword: searchGoodValue,
+  });
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -116,7 +141,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "920px",
+        height: "1250px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -131,7 +156,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
       </header>
       <section className="px-5 mt-2">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
-            Support
+            Support/Chủ Trạm Tăng Cao
           </label>
           <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -149,7 +174,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
             onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
             onScroll={handleScroll}
             className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Chọn người support (dược sĩ...)"
+            placeholder="Support/Chủ Trạm Tăng Cao"
             isMultiple={false}
             allowClearValueSingleInput={true}
             showTriangle={false}
@@ -165,7 +190,53 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
             }))}
             initialValue={{
               value: formData?.support?._id || "",
-              label: formData?.support?.name || "Chọn người support"
+              label: formData?.support?.name || "Support/Chủ Trạm Tăng Cao"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
+      </section>
+
+      <section className="px-5 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
+            Chuyên viên tư vấn
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    secialistID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    secialistID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onScroll={handleScroll}
+            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Chuyên viên tư vấn"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listHuman.map((item:any) => ({
+                label: item.name,
+                value: item._id,
+            }))}
+            initialValue={{
+              value: formData?.secialist?._id || "",
+              label: formData?.secialist?.name || "Chuyên viên tư vấn"
             }}
             formatItem={{
                 id: "value",
@@ -233,6 +304,52 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
           defaultValue={formData.name}
           onChange={onChange}
         />
+      </section>
+
+      <section className="px-5 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
+            Nguồn đến từ đâu
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    sourceID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    sourceID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onScroll={handleScroll}
+            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Nguồn đến từ đâu"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listSubType.map((item:any) => ({
+                label: item.name,
+                value: item._id,
+            }))}
+            initialValue={{
+              value: formData?.source?._id || "",
+              label: formData?.source?.name || "Nguồn đến từ đâu"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
       </section>
 
       <section className="px-5 mt-2">
@@ -373,6 +490,80 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
           name="email"
           className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.email}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
+            Sản phẩm lựa chọn
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    productID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    productID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeywordGoods(value), 600)}
+            onScroll={handleScroll}
+            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Sản phẩm lựa chọn"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listGood.map((item:any) => ({
+                label: item.name,
+                value: item._id,
+            }))}
+            initialValue={{
+              value: formData?.product?._id || "",
+              label: formData?.product?.name || "Sản phẩm lựa chọn"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
+      </section>
+
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Số lượng
+        </label>
+        <input
+          type="number"
+          placeholder="Nhập nội dung"
+          name="quantity"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.quantity}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="">
+          Đơn giá
+        </label>
+        <input
+          type="number"
+          placeholder="Nhập nội dung"
+          name="unitPrice"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.unitPrice}
           onChange={onChange}
         />
       </section>
