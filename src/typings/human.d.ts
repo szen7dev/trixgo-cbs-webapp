@@ -359,7 +359,7 @@ export type DoctypePayload = QueryParam & {
     // 18 - Chung - Nguyên nhân thất bại
     // 20 - Chung các lỗi hay gặp
     // 21 - Công việc, Đánh giá chất lượng
-    type: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23;
+    type: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25;
 }
 
 export type DoctypeResponse = APIResponse & {

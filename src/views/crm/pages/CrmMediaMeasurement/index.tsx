@@ -78,7 +78,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         companyID: user?.company?._id,
     })
 
-    const { list: listCustomer } = useContact({
+    const { list: listContact } = useContact({
         params: { keyword: contactKeyword, limit: 20 },
         isFetchList: true
     })
@@ -108,6 +108,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         listWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch
     } = useMediaMenu({
         params: { 
+            supportID,
             parentID,
             keyword, 
             populates: {
@@ -122,7 +123,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         },
         isFetchList: true,
     })
-    // console.log(listWithPager)
 
     // Reset form
     const clearData = () => {
@@ -202,18 +202,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         return user ? true : false;
     }, [itemsChecked]);
     
-    const getStateCheckedAll = useCallback(() => {
-        return itemsChecked.length == listWithPager?.length;
-    }, [itemsChecked]);
-
-    const onClickCheckAll = () => {
-        if (itemsChecked.length == listWithPager?.length) {
-            setItemsChecked([]);
-        } else {
-            setItemsChecked(listWithPager);
-        }
-    }
-
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
 
         let initValues: any = {...initialValues};
@@ -249,7 +237,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "920px",
+                    height: "1250px",
                 }}
             >
                 <ModalCreateOrUpdateMeasurement
@@ -259,42 +247,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 />
             </div>
         )
-    }
-
-    const handleUploadAttach = async (filesSelected: FileList | null, trackID: string) => {
-        if (!filesSelected || !filesSelected.length) return;
-
-        const validation = await validateFiles(filesSelected);
-        if (validation.error) return toast.warn(validation.message);
-
-        // Clear input file
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-
-        const imagesID: any = [];
-
-        // Upload images
-        for (const [_, file] of Object.entries(filesSelected)) {
-            const { _id } = await addFileToUpload({
-                files: file as any,
-                fileType: 1,
-                progress: percentCompleted => {
-                    console.info(`${percentCompleted}%`)
-                }
-            })
-            _id && imagesID.push(_id);
-        }
-
-        // Update image to products
-        await API.put(
-            `/api/crm/grow_track`,
-            {
-                trackID,
-                imagesID,
-            }
-        );
-        refetch();
     }
 
     const { importExcelAsync, exportExcelAsync } = useMediaMenu({});
@@ -309,7 +261,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportExcelAsync({
-                filterParams: {  }
+                supportID,
+                keyword,
             });
 
             if(error) {
@@ -322,26 +275,6 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         } finally {
             setStateExport({ isExporting: false });
         }
-    }
-
-    //_____Import excel
-    const handleImport = ($event: any) => {
-        const files = $event.target.files;
-        if (files.length) {
-            const file = files[0];
-            const reader = new FileReader();
-            reader.onload = (event: any) => {
-                const wb = read(event.target.result);
-                const sheets = wb.SheetNames;
-
-                if (sheets.length) {
-                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=0 (Sheet 1 từ trái sang)
-                    setDataImport(rows) // Set data để Import
-                }
-            }
-            reader.readAsArrayBuffer(file)
-        }
-        $event.target.value = null; // Đọc xong xóa value trong Input đi
     }
 
     //_____Gọi tới API để đẩy data lên
@@ -406,10 +339,10 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 <DropdownSearchableV2
                     ref={accountRef}
                     className={"mr-1 border border-primary-border rounded-lg"}
-                    placeholder={"Mã khách"}
+                    placeholder={"Người support/Trạm"}
                     isMultiple={false}
                     allowClearValueSingleInput={true}
-                    data={listCustomer}
+                    data={listContact}
                     formatItem={{
                         id: "_id",
                         text: "name",
