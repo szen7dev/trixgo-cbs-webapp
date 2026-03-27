@@ -368,7 +368,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 <button className={"flex items-center justify-center mx-3 ml-3"}
                         onClick={exportExcel}
                     >
-                    Tải mẫu Import
+                    Tải Báo cáo
                 </button>
 
                 <div className="flex items-center">
