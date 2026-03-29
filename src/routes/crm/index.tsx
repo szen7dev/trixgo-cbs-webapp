@@ -41,7 +41,8 @@ import {
   CrmConfigPage,
   CrmStorePage,
   CrmStoreDetailPage,
-  CrmGoodsPage
+  CrmGoodsPage,
+  CrmMediaEvent
 } from "views/crm/pages";
 import { CrmGoodsDetail } from "views/crm/pages/CrmGoodsDetail";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
@@ -118,6 +119,7 @@ const CrmRouter: FC = () => {
             component={() => CrmJourneyPage({})}
           />
           <Route exact path="/crm/booking" component={CrmBookingPage} />
+          <Route exact path="/crm/event" component={CrmMediaEvent} />
           <Route exact path="/crm/affiliate" component={CrmAffiliatePage} />
 
           <Route exact path="/crm/risk-report" component={CrmHomePage} />
