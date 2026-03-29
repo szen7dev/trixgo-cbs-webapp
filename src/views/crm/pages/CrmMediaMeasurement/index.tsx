@@ -567,6 +567,9 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}
+                                <div>
+                                    {item?.status == 1 ? <span className="bg-green-400">Active</span> : <span className="bg-red-400">Inactive</span>}
+                                </div>
                             </td>
                             {/* <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>
