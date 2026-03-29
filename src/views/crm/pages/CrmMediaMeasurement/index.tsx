@@ -275,6 +275,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportExcelAsync({
+                eventID,
                 supportID,
                 keyword,
             });
