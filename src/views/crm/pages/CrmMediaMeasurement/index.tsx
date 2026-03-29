@@ -40,6 +40,7 @@ import { APP_ID } from "apis/localdb";
 import API from "apis/repository";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { useContact } from "services/hooks/items/useContact";
+import { useMediaEvent } from "services/hooks/crm/useMediaEvent";
 
 type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
@@ -62,9 +63,11 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
     const accountRef = React.useRef<DropdownHandle>(null);
 
+    const [eventID, setEventID] = useState<string | null>();
     const [supportID, setSupportID] = useState<string | null>();
 
     const [contactKeyword, setContactKeyword] = useState("");
+    const [eventKeyword, setEventKeyword] = useState("");
 
     const [defaultState, setDefaultState] = useState({
         mediaID: '',
@@ -81,6 +84,16 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
     const { list: listContact } = useContact({
         params: { keyword: contactKeyword, limit: 20 },
         isFetchList: true
+    })
+
+    const {
+        list: listEvent,
+    } = useMediaEvent({
+        params: { 
+            limit: 20,
+            keyword: eventKeyword,
+        },
+        isFetchList: true,
     })
 
     const [initialValues, setInitialValues] = useState({
@@ -108,11 +121,12 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         listWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch
     } = useMediaMenu({
         params: { 
+            eventID,
             supportID,
             parentID,
             keyword, 
             populates: {
-                path: 'parent userUpdate userCreate images contact support source product secialist',
+                path: 'parent userUpdate userCreate images contact support source product secialist event',
                 select: 'name fullname parent createAt path unit',
                 populate: {
                     path: 'parent',
@@ -237,7 +251,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "1250px",
+                    height: "1350px",
                 }}
             >
                 <ModalCreateOrUpdateMeasurement
@@ -339,7 +353,36 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 <DropdownSearchableV2
                     ref={accountRef}
                     className={"mr-1 border border-primary-border rounded-lg"}
-                    placeholder={"Người support/Trạm"}
+                    placeholder={"Thuộc sự kiện"}
+                    isMultiple={false}
+                    allowClearValueSingleInput={true}
+                    data={listEvent}
+                    formatItem={{
+                        id: "_id",
+                        text: "name",
+                    }}
+                    onSearchInputChange={debounce(
+                        (valueSearch) => setEventKeyword(valueSearch),
+                        500
+                    )}
+                    onClearData={() => {
+                        setEventID("");
+                    }}
+                    onchangeValue={item => {
+                        setEventID(item._id);
+                        setPageIndex(0);
+                        ref.current&&ref.current.resetPaginate();
+                    }}
+                    renderItem={(item) => (
+                        <p className={"min-w-[300px]"}>{item.text}</p>
+                    )}
+                    selectOneByOne={true}
+                />
+
+                <DropdownSearchableV2
+                    ref={accountRef}
+                    className={"mr-1 border border-primary-border rounded-lg"}
+                    placeholder={"Chủ Trạm Tăng Cao"}
                     isMultiple={false}
                     allowClearValueSingleInput={true}
                     data={listContact}
@@ -495,7 +538,8 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                 <a target="blank" href={`https://lamin.com.vn/tai-khoan/lich-su-do-cao/${item._id}`}>{item?.name}</a>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                                 <p className="text-primary-gray text-[12px]"><i>Trẻ: {item?.contact?.name}</i></p>
-                                <p className="text-primary-gray text-[12px]"><i>Support: {item?.support?.name}</i></p>
+                                <p className="text-primary-gray text-[12px]"><i>Chủ trạm: {item?.support?.name}</i></p>
+                                <p className="text-primary-gray text-[12px]"><i>Sự kiện: {item?.event?.name}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item.gender >= 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}

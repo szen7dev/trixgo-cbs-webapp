@@ -8,9 +8,8 @@ import debounce from 'lodash/debounce';
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import { useListHuman } from "services/hooks/human/useHuman";
 import { useQueryListDoctype } from "services/hooks/useHuman";
-import {
-    useQueryListGood
-} from "services/hooks/cmcs/useContractIncome";
+import { useQueryListGood } from "services/hooks/cmcs/useContractIncome";
+import { useMediaEvent } from "services/hooks/crm/useMediaEvent";
 
 export const ModalCreateOrUpdateMeasurement: FC<any> = ({
   modalType,
@@ -18,6 +17,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
   initialValues = {
     trackID: '',
     contactID: '',
+    eventID: '',
     supportID: '',
     secialistID: '',
     sourceID: '',
@@ -68,6 +68,17 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
     limit: LIMIT_DROPDOWN,
     keyword: searchGoodValue,
   });
+
+  const [searchEventValue, setSearchEventValue] = useState("");
+  const {
+        list: listEvent,
+    } = useMediaEvent({
+        params: { 
+            limit: LIMIT_DROPDOWN,
+            keyword: searchEventValue,
+        },
+        isFetchList: true,
+    })
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -139,7 +150,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
 
   return (
     <main className="relative"  style={{
-        height: "1250px",
+        height: "1350px",
     }}>
       <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
@@ -152,9 +163,54 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
           onClick={closeModal}
         />
       </header>
+       <section className="px-5 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
+            Thuộc sự kiện
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    eventID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    eventID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setSearchEventValue(value), 600)}
+            onScroll={handleScroll}
+            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Thuộc sự kiện"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listEvent.map((item:any) => ({
+                label: item.name,
+                value: item._id,
+            }))}
+            initialValue={{
+              value: formData?.event?._id || "",
+              label: formData?.event?.name || "Thuộc sự kiện"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
+      </section>
       <section className="px-5 mt-2">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="" title="Bắt buộc nhập thông tin">
-            Support/Chủ Trạm Tăng Cao
+            Chủ Trạm Tăng Cao
           </label>
           <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -172,7 +228,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
             onSearchInputChange={debounce((value: any) => setKeywordContact(value), 600)}
             onScroll={handleScroll}
             className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Support/Chủ Trạm Tăng Cao"
+            placeholder="Chủ Trạm Tăng Cao"
             isMultiple={false}
             allowClearValueSingleInput={true}
             showTriangle={false}
@@ -188,7 +244,7 @@ export const ModalCreateOrUpdateMeasurement: FC<any> = ({
             }))}
             initialValue={{
               value: formData?.support?._id || "",
-              label: formData?.support?.name || "Support/Chủ Trạm Tăng Cao"
+              label: formData?.support?.name || "Chủ Trạm Tăng Cao"
             }}
             formatItem={{
                 id: "value",
