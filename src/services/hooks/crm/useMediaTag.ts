@@ -4,7 +4,7 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 /*=====2.TYPING/APIS=====*/
 import crmMenuRepository from 'apis/crm/tag';
 
-export const useMediaMenu = ({
+export const useMediaTag = ({
     params = {},
     isFetchList = false,
     isFetchInfo = false

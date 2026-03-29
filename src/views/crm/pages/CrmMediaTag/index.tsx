@@ -25,7 +25,7 @@ import { ModalCreateOrUpdateMenu, ModalCreateOrUpdateBanner, ModalCreateOrUpdate
 /*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useModal } from "services/hooks/useModal";
-import { useMediaMenu } from "services/hooks/crm/useMediaTag";
+import { useMediaTag } from "services/hooks/crm/useMediaTag";
 
 /*=====7.OTHER=====*/
 import { MEDIA_MENU_TYPES, MEDIA_TAG_TYPES, MEDIA_COMBO_TYPES, MEDIA_BANNER_TYPES } from "apis/localdb";
@@ -76,7 +76,7 @@ export const CrmMediaTag: FC<{ type: number }> = ({ type }) => {
         refetch,
         fetchNextPage,
         totalRecord
-    } = useMediaMenu({
+    } = useMediaTag({
         params: { 
             parentID,
             keyword, 
@@ -240,26 +240,11 @@ export const CrmMediaTag: FC<{ type: number }> = ({ type }) => {
             <header className="sticky top-0 bg-primary-light z-10">
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
-                        <button onClick={history.goBack}>
-                            <img src="/images/common/button_back.png" alt="Button Back" />
-                        </button>
-                        <p className="text-lg ml-2">{title}</p>
-
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
                             classNameInput="outline-none w-[296px]"
                             onChange={onChangeSearch}
                         />
-
-                        {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
-                        {itemsChecked.length === 1 ? (
-                            <button
-                                className="mr-3"
-                                onClick={() => handleOpenModalCreateOrUpdate('update')}
-                            >
-                                <img src={pencilIcon} alt="icon pencil" />
-                            </button>
-                        ) : ''}
                     </div>
                     <div className="flex items-center">
                         <button
@@ -338,6 +323,14 @@ export const CrmMediaTag: FC<{ type: number }> = ({ type }) => {
                                     checked={getStateChecked(item._id)}
                                     onChange={() => onClickCheckButton(item)}
                                 />
+                                {(itemsChecked.length === 1 && itemsChecked[0]?._id.toString() === item._id.toString()) ? (
+                                    <button
+                                        className="mr-3"
+                                        onClick={() => handleOpenModalCreateOrUpdate('update')}
+                                    >
+                                        <img src={pencilIcon} alt="icon pencil" />
+                                    </button>
+                                ) : ''}
                             </td>
                             <td className="py-1 px-2">
                                 {item.type >= 1 ? MEDIA_TAG_TYPES[Number(item.type)-1].text : ""}

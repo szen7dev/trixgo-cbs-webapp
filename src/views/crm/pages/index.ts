@@ -24,3 +24,4 @@ export { CrmStorePage } from './CrmStorePage';
 export { CrmStoreDetailPage } from './CrmStoreDetailPage';
 export { CrmGoodsPage } from './CrmGoodsPage';
 export { CrmGoodsDetail } from './CrmGoodsDetail';
+export { CrmMediaEvent } from './CrmMediaEvent';

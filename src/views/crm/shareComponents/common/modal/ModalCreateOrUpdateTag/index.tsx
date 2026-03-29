@@ -2,7 +2,7 @@ import React, { UIEvent, FC, useState } from "react";
 import { toast } from "react-toastify";
 import moment from 'moment';
 import { useModal } from "services/hooks/useModal";
-import { useMediaMenu } from "services/hooks/crm/useMediaTag";
+import { useMediaTag } from "services/hooks/crm/useMediaTag";
 
 export const ModalCreateOrUpdateTag: FC<any> = ({
   modalType,
@@ -19,7 +19,7 @@ export const ModalCreateOrUpdateTag: FC<any> = ({
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { refetch: refetchCustomer, insertAsync, updateAsync } = useMediaMenu({});
+  const { refetch: refetchCustomer, insertAsync, updateAsync } = useMediaTag({});
 
   const handleSubmit = async () => {
     if(!formData.name) {
