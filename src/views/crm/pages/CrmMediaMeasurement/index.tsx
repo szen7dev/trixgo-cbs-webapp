@@ -50,16 +50,12 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
 
     const ref = useRef<PaginateHandle>(null);
-    const datahubRef = useRef<DropdownHandle>(null);
-    const typeRef = useRef<DropdownHandle>(null);
 
     const [pageIndex, setPageIndex] = useState(0);
 
-    const history = useHistory();
     const { closeModal, openModal } = useModal();
     const { parentID } = useParams<{ parentID: string }>();
     const [keyword, setKeyword] = useState('');
-    const [title, setTitle] = useState("Danh sách");
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
     const accountRef = React.useRef<DropdownHandle>(null);
 
@@ -263,6 +259,42 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
         )
     }
 
+    const handleUploadAttach = async (filesSelected: FileList | null, trackID: string) => {
+        if (!filesSelected || !filesSelected.length) return;
+
+        const validation = await validateFiles(filesSelected);
+        if (validation.error) return toast.warn(validation.message);
+
+        // Clear input file
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+
+        const imagesID: any = [];
+
+        // Upload images
+        for (const [_, file] of Object.entries(filesSelected)) {
+            const { _id } = await addFileToUpload({
+                files: file as any,
+                fileType: 1,
+                progress: percentCompleted => {
+                    console.info(`${percentCompleted}%`)
+                }
+            })
+            _id && imagesID.push(_id);
+        }
+
+        // Update image to products
+        await API.put(
+            `/api/crm/grow_track`,
+            {
+                trackID,
+                imagesID,
+            }
+        );
+        refetch();
+    }
+
     const { importExcelAsync, exportExcelAsync } = useMediaMenu({});
 
     //_____Import, export excel
@@ -354,7 +386,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                 <DropdownSearchableV2
                     ref={accountRef}
                     className={"mr-1 border border-primary-border rounded-lg"}
-                    placeholder={"Thuộc sự kiện"}
+                    placeholder={"Sự kiện"}
                     isMultiple={false}
                     allowClearValueSingleInput={true}
                     data={listEvent}

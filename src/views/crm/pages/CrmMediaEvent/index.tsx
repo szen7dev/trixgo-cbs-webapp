@@ -35,14 +35,21 @@ import { ModalZoomView } from "shareComponents/common";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
 import API from "apis/repository";
+import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import { DropdownSearchableV2, Loader } from "shareComponents/common";
+
+type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
 
 export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
     const { user } = useAuth();
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
 
-    const history = useHistory();
+    const ref = useRef<PaginateHandle>(null);
+    const datahubRef = useRef<DropdownHandle>(null);
+    const typeRef = useRef<DropdownHandle>(null);
+    const [pageIndex, setPageIndex] = useState(0);
     const { closeModal, openModal } = useModal();
-    const { parentID } = useParams<{ parentID: string }>();
     const [keyword, setKeyword] = useState('');
     const [title, setTitle] = useState("Danh sách");
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
@@ -60,7 +67,6 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
     })
 
     const [initialValues, setInitialValues] = useState({
-        parent: parentID,
         eventID: '',
         type: '1',
         status: '1',
@@ -71,6 +77,9 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
     })
 
     const {
+        listWithPager,
+        isLoading,
+        totalPage,
         list: listData,
         hasNextPage,
         refetch,
@@ -78,7 +87,7 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
         totalRecord
     } = useMediaEvent({
         params: { 
-            parentID,
+            limit: 20,
             keyword, 
             populates: {
                 path: 'parent userUpdate userCreate images',
@@ -130,7 +139,6 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
         if (newListIDChecked.length === 1) {
             const { _id, type, status, name, date, slug, note } = newListIDChecked[0];
             setInitialValues({
-                parent: parentID,
                 eventID: _id,
                 type,
                 status,
@@ -172,7 +180,6 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
         if(modalType === 'create') {
             clearData();
             initValues = {
-                parentID,
                 eventID: '',
                 type: '1',
                 status: '1',
@@ -226,7 +233,7 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
 
         // Update image to products
         await API.put(
-            `/api/medias/tag`,
+            `/api/crm/vng_event`,
             {
                 eventID,
                 imagesID,
@@ -237,23 +244,32 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
 
     return (
         <main className="relative h-full">
-            <header className="sticky top-0 bg-primary-light z-10">
-                <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
-                    <div className="flex items-center">
-                        <SearchInput
-                            classNameWrapper="ml-4 mr-2"
-                            classNameInput="outline-none w-[296px]"
-                            onChange={onChangeSearch}
-                        />
-                    </div>
-                    <div className="flex items-center">
-                        <button
-                            className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-                            onClick={() => handleOpenModalCreateOrUpdate('create')}
-                            >
-                            Tạo mới
-                        </button>
-                    </div>
+            <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
+                <SearchInput classNameWrapper={"mr-1"} onChange={onChangeSearch} />
+                <div className="flex items-center">
+                    <button
+                        className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
+                        onClick={() => handleOpenModalCreateOrUpdate('create')}
+                        >
+                        Tạo mới
+                    </button>
+                </div>
+                <div className="absolute right-0">
+                    <PaginateV2
+                        ref={ref}
+                        totalRecord={totalRecord}
+                        totalPages={totalPage}
+                        limit={20}
+                        hasNextPage={hasNextPage}
+                        isFetching={isLoading}
+                        nextPageAction={() => {
+                        fetchNextPage();
+                            setPageIndex(oldState => oldState+1)
+                        }}
+                        prevPageAction={() => {
+                            setPageIndex(oldState => oldState-1)
+                        }}
+                    />
                 </div>
             </header>
 
@@ -304,7 +320,8 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
                 </thead>
 
                 <tbody>
-                    {listData.length ? listData.map((item: any) => (
+                {
+                    (listWithPager[pageIndex] ?? []).map((item: any, index: any) => (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
@@ -375,7 +392,8 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
                                 {item.userUpdate ? `${item?.userUpdate?.fullname} ${moment(item.modifyAt).format('DD/MM/YYYY HH:mm')}` : `${item?.userCreate?.fullname} ${moment(item.createAt).format('DD/MM/YYYY HH:mm')}`}
                             </td>
                         </tr>
-                    )) : <></>}
+                    ))
+                }
                 </tbody>
             </table>
 
@@ -384,16 +402,6 @@ export const CrmMediaEvent: FC<{ type: number }> = ({ type }) => {
                 toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
                 initialData={defaultState}
             />
-
-            {hasNextPage && (
-                <div className="w-full flex justify-center my-5">
-                    <button onClick={fetchNextPage}>
-                        <span className="text-primary">
-                            {`Xem thêm (${totalRecord - listData.length})`}
-                        </span>
-                    </button>
-                </div>
-            )}
         </main>
     )
 }

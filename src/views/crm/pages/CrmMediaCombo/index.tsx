@@ -240,11 +240,6 @@ export const CrmMediaCombo: FC<{ type: number }> = ({ type }) => {
             <header className="sticky top-0 bg-primary-light z-10">
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
-                        <button onClick={history.goBack}>
-                            <img src="/images/common/button_back.png" alt="Button Back" />
-                        </button>
-                        <p className="text-lg ml-2">{title}</p>
-
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
                             classNameInput="outline-none w-[296px]"
