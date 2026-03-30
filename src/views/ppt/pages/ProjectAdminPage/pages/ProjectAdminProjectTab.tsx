@@ -12,11 +12,37 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { APP_ID, DEPARTMENT_STATUS } from "apis/localdb";
 import { CreateProject } from "../modal";
+import QRCode from "react-qr-code";
 
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 const ProjectAdminProjectTab: FC = () => {
+	const downloadQR = useCallback(({ value, name }) => {
+            const svg: any = document.getElementById(value);
+            if (!svg) {
+                console.error("Không tìm thấy thẻ SVG với ID này!");
+                return;
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const canvas = document.createElement("canvas");
+            const ctx: any = canvas.getContext("2d");
+            const img = new Image();
+            img.onload = function () {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            const pngFile = canvas.toDataURL("image/png");
+
+            const downloadLink = document.createElement("a");
+            downloadLink.download = `qrcode_${name}`;
+            downloadLink.href = `${pngFile}`;
+            downloadLink.click();
+        };
+
+        img.src = "data:image/svg+xml;base64," + btoa(svgData);
+    }, []);
 	const history = useHistory();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
@@ -198,12 +224,28 @@ const ProjectAdminProjectTab: FC = () => {
 										</div>
 									</Link>
 									<p className="text-primary-gray"><i>{item._id}</i></p>
+									<p className="text-primary"><i>Tọa độ GG Map: {item?.location}</i></p>
+                                	<p className="text-primary"><i>Khoách cách tối đa checkin: {item?.distance} m</i></p>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item.type}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item.sign}
+									<div>
+                                    Mã QR checkin
+                                    <QRCode id={item._id} value={item._id} size={150} />
+                                    <div className="flex justify-end mt-5">
+                                        <div>
+                                        <button
+                                            onClick={() => downloadQR({value: item._id, name: item.name})}
+                                            className="bg-primary text-primary-light text-base w-24 h-8 rounded"
+                                        >
+                                            Tải xuống
+                                        </button>
+                                        </div>
+                                    </div>
+                                </div>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item.startTime ? moment(item.startTime).format('DD/MM/YYYY') : ''}
