@@ -28,7 +28,8 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
     contractPlus: "",
     contractVatPlus: "",
     contractAdvancePaymentPaid: "",
-    contractAmountPaid: ""
+    contractAmountPaid: "",
+    distance: "",
 } }) => {
     // console.log({ initialValues })
     const { createProjectMutateAsync, refetchPcmProject, updateProjectMutateAsync } = usePcmProject({ keyword: "" });
@@ -37,11 +38,11 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
         type: number().required("Bạn cần nhập loại cho dự án"),
         name: string().required("Bạn cần nhập tên cho dự án"),
         sign: string().required("Bạn cần nhập mã hiệu cho dự án"),
-        startTime: string().required("Bạn cần nhập ngày bắt đầu cho dự án"),
-        expiredTime: string().required("Bạn cần nhập ngày kết thúc cho dự án"),
-        milestones: string().required("Bạn cần nhập tổng số mốc cho dự án"),
-        completedMilestones: string().required("Bạn cần nhập số mốc hoàn thành cho dự án"),
-        budget: string().required("Bạn cần nhập ngân sách dự án"),
+        // startTime: string().required("Bạn cần nhập ngày bắt đầu cho dự án"),
+        // expiredTime: string().required("Bạn cần nhập ngày kết thúc cho dự án"),
+        // milestones: string().required("Bạn cần nhập tổng số mốc cho dự án"),
+        // completedMilestones: string().required("Bạn cần nhập số mốc hoàn thành cho dự án"),
+        // budget: string().required("Bạn cần nhập ngân sách dự án"),
     });
 
     const handleSubmit = async (values: any) => {
@@ -63,6 +64,7 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
                 contractVatPlus: parseInt(values.contractVatPlus),
                 contractAdvancePaymentPaid: parseInt(values.contractAdvancePaymentPaid),
                 contractAmountPaid: parseInt(values.contractAmountPaid),
+                distance: parseInt(values.distance),
             };
            
             const result = await createProjectMutateAsync(query);
@@ -94,6 +96,7 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
                 contractVatPlus: parseInt(values.contractVatPlus),
                 contractAdvancePaymentPaid: parseInt(values.contractAdvancePaymentPaid),
                 contractAmountPaid: parseInt(values.contractAmountPaid),
+                distance: parseInt(values.distance),
             };
             const result = await updateProjectMutateAsync(query);
             if (!result.error) {
@@ -166,11 +169,22 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtLocation">
-                                        Location
+                                        Tọa độ Google Map
                                     </label>
                                     <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtLocation" placeholder="Địa chỉ theo google map" {...getFieldProps('location')} />
                                     <ErrorMessage
                                         name="location"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Bán kính checkin tối đa (m)
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('distance')} />
+                                    <ErrorMessage
+                                        name="distance"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
