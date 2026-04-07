@@ -23,14 +23,11 @@ import classNames from 'classnames';
 import Close from "assets/icons/Close";
 import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
-
-import "react-day-picker/lib/style.css";
 import { FileProps, FilePropsUpload } from "typings/common";
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { DropdownSearchable } from "shareComponents/common";
 import API from "apis/repository";
-
 import { useUpload } from 'services/hooks/useUpload';
 import { PostImage } from 'shareComponents/common';
 import { IconImage } from 'views/media/shareComponents/common';

@@ -1,6 +1,3 @@
-/**
- * Libraries
- */
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import { useHistory } from 'react-router-dom';
@@ -11,31 +8,19 @@ import { formatNumberMoney } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
 import { useQueryClient } from 'react-query';
-import DatePicker from "react-datepicker";
-import moment from "moment";
-
-/**
- * Hooks, Typings
- */
-
-/**
- * Components, Assets
- */
 import Close from "assets/icons/Close";
 import { useModal } from "services/hooks/useModal";
 import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import IconSearch from "assets/images/icons8-search-96 1.svg";
 import beverageIcon from "assets/images/icons8-beverage.png";
-import "react-day-picker/lib/style.css";
 import { DropdownSearchable, Loader } from "shareComponents/common";
-import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
 import { convertObToUrl } from "utils";
 import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
 import { ItemInCartMenu } from "./itemInCartDetail";
-// import SearchIcon from "assets/icons/Search";
+
 interface InitialValues {
   fundaID: string,
   shiftID: string,
@@ -56,8 +41,6 @@ interface InitialValues {
 type Props = {
   defaultValues?: any;
 }
-
-type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
 type DropdownSearchableHandle = React.ElementRef<typeof DropdownSearchable>;
 
 export const ModalAddNewOrder: FC<Props> = () => {
@@ -68,11 +51,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const { closeModal } = useModal();
   const { current: socket }: any = useSocket(); // Cấu trúc khai báo Socket
   const { user } = useAuth();
-  // const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
 
   const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
   const [searchContact, setSearchContact] = useState('');
   const [searchFunda, setSearchFunda] = useState('');
+  const [searchShift, setSearchShift] = useState('');
   const [discountAndSales, setDiscountAndSales] = useState({
     discount: 0,
     discountPercent: 0,
@@ -141,6 +124,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         `/api/fnb/shifts?fundaID=${fundaID}`,
         {
           params: {
+            keyword: searchShift,
             populates: {
               "path": "funda",
               "select": "sign",
@@ -819,6 +803,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   setShiftID("")
                                   setFieldValue("shiftID", "");
                                 }}
+                                onSearchInputChange={
+                                  debounce(
+                                    (value) => setSearchShift(value),
+                                    200)
+                                }
                                 className={"max-w-full h-full flex-1"}
                                 placeholder="Chọn ca làm"
                                 isMultiple={false}
