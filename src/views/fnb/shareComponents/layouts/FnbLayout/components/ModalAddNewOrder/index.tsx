@@ -116,7 +116,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
   }, [searchFunda]);
 
   useEffect(() => {
-    if (!fundaID) return;
+    if (!fundaID) {
+      setShifts([]);
+      return;
+    }
 
     // Tìm kiếm ca làm việc của Cơ sở/Điểm bán
     const fetchShifts = async () => {
@@ -136,16 +139,21 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
       if (status !== 200) return;
       const shiftsList = data.listRecords || [];
-      if (shiftsList && shiftsList.length) {
+      
+      if (!searchShift && shiftsList.length > 0) {
         dropdownShiftsRef?.current?.setValueRef({
           label: shiftsList[0].name,
           value: shiftsList[0]._id,
         });
         setShiftID(shiftsList[0]._id);
-      } else {
-        dropdownShiftsRef?.current?.setValueRef(null);
-        setShiftID("");
       }
+
+      // Nếu tìm kiếm không thấy hoặc danh sách trống
+      if (shiftsList.length === 0) {
+        // Tuỳ chọn: Có muốn xóa trắng shiftID hiện tại không?
+        // dropdownShiftsRef?.current?.setValueRef(null);
+      }
+
       setShifts(shiftsList);
     }
     fetchShifts();
@@ -167,7 +175,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }
     fetchCateProduct();
 
-  }, [fundaID])
+  }, [fundaID, searchShift])
 
   useEffect(() => {
     if(!customerID) return;
