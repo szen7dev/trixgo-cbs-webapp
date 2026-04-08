@@ -31,7 +31,6 @@ import fakeThumbnail from "assets/images/avatar.jpg";
 
 import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { Task } from "typings/task";
-import "react-day-picker/lib/style.css";
 
 interface InitialValues {
   taskID: string,

@@ -1,20 +1,15 @@
-import "react-day-picker/lib/style.css";
 import { FC, FormEvent, useCallback, useEffect, useState } from "react";
-
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { string, object } from 'yup';
 import DayPickerInput from "react-day-picker/DayPickerInput";
-
 import styles from 'views/cmcs/styles/styles.module.css';
-
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
 import { DropdownSearchable, Popover } from "shareComponents/common";
-
 import {
   convertDateToString,
   convertInitialValueDropdown,

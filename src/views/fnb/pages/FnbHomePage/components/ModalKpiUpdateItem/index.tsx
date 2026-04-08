@@ -5,7 +5,6 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 import { toast } from "react-toastify";
 import { useModal } from "services/hooks/useModal";
 import Close from "assets/icons/Close";
-import "react-day-picker/lib/style.css";
 import API from "apis/repository";
 
 type Props = {

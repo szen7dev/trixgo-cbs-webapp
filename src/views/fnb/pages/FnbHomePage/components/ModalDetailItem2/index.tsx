@@ -22,8 +22,6 @@ import { formatNumberMoney } from 'utils/converter';
 import Close from "assets/icons/Close";
 import beverageIcon from "assets/images/icons8-beverage.png";
 import IconGreenDot from "assets/images/Frame 4330.svg";
-
-import "react-day-picker/lib/style.css";
 import { ModalErrorDetailItem } from "../ModalErrorDetailItem";
 import { DropdownSearchable } from "shareComponents/common";
 import { useQueryContact, useContact } from 'services/hooks/items/useContact';

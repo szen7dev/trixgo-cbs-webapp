@@ -40,8 +40,6 @@ import AvaSatffSample from "assets/images/image 437.png";
 import ImgDemoUpload from "assets/images/image 434.jpg";
 import DemoUploadBtn from "assets/images/Frame 4389.svg";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
-
-import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";

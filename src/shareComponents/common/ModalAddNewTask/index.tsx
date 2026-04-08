@@ -40,7 +40,6 @@ import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import fakeThumbnail from "assets/images/avatar.jpg";
 
-import "react-day-picker/lib/style.css";
 // import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
