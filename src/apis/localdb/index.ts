@@ -85,6 +85,7 @@ export const MEDIA_CONFIG_TYPES = [
     { value: 2, text: 'Facebook' },
     { value: 3, text: 'Contact công ty' },
     { value: 4, text: 'Email phân quyền' },
+    { value: 5, text: 'Chấm công mobile' },
 ]
 
 // NHÓM CHỨC NĂNG ỨNG DỤNG MẶC ĐỊNH (PHỤC VỤ CẤU HÌNH BAN ĐẦU)

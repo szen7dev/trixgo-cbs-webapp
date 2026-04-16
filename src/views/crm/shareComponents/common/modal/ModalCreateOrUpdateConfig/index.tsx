@@ -186,6 +186,18 @@ export const ModalCreateOrUpdateConfig: FC<any> = ({
                 />
                 <label htmlFor="type" className={"text-left ml-3"}>Email phân quyền</label>
             </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={5}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 5 ? true : false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Chấm công mobile</label>
+            </div>
           </div>
       </section>
       <section className="px-5 mt-2">
