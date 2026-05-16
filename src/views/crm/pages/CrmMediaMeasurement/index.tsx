@@ -552,6 +552,7 @@ export const CrmMediaMeasurement: FC<{ type: number }> = ({ type }) => {
                                 {(itemsChecked.length === 1 && itemsChecked[0]?._id.toString() === item._id.toString()) ? (
                                     <button
                                         className="mr-3"
+                                        style={{width:"24px"}}
                                         onClick={() => handleOpenModalCreateOrUpdate('update')}
                                     >
                                         <img src={pencilIcon} alt="icon pencil" />

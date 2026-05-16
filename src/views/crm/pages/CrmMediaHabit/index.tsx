@@ -314,16 +314,6 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                             classNameInput="outline-none w-[296px]"
                             onChange={onChangeSearch}
                         />
-
-                        {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
-                        {itemsChecked.length === 1 ? (
-                            <button
-                                className="mr-3"
-                                onClick={() => handleOpenModalCreateOrUpdate('update')}
-                            >
-                                <img src={pencilIcon} alt="icon pencil" />
-                            </button>
-                        ) : ''}
                     </div>
 
                     <button className={"flex items-center justify-center mx-3 ml-3"}
@@ -420,9 +410,17 @@ export const CrmMediaHabit: FC<{ type: number }> = ({ type }) => {
                                     checked={getStateChecked(item._id)}
                                     onChange={() => onClickCheckButton(item)}
                                 />
+                                {(itemsChecked.length === 1 && itemsChecked[0]?._id.toString() === item._id.toString()) ? (
+                                    <button
+                                        className="mr-3"
+                                        style={{width:"24px"}}
+                                        onClick={() => handleOpenModalCreateOrUpdate('update')}
+                                    >
+                                        <img src={pencilIcon} alt="icon pencil" />
+                                    </button>
+                                ) : ''}
                             </td>
                             <td className="py-1 px-2">
-                                
                                 {item?.habitCate?.name}
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color text-[14px]">
