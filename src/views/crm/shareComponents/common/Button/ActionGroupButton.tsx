@@ -52,6 +52,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
                 lot: record.lot,
                 link: record.link,
                 name: record.name,
+                recipientAddress: record.recipientAddress,
                 note: record.note,
                 sign: record.sign,
                 outin: record.outin,
