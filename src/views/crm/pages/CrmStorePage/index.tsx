@@ -581,25 +581,28 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                     )}
                   </NavLink>
                     <p className={"mt-1 text-gray-500"}>
-                      {item?.userCreate?.fullname}{" "}
-                      {moment(item.createAt).format(DATE_FORMAT)}
-                    </p>
-                    <p className={"mt-1 text-gray-500"}>
-                      {item?.userUpdate?.fullname}{" "}
-                      {moment(item.modifyAt).format(DATE_FORMAT)}
+                      Địa chỉ người nhận: {item?.recipientAddress}
                     </p>
                     {/* <p>Trạng thái: {STORE_STATUS[Number(item.status - 1)].text}</p> */}
                     <p>{renderStatusBadge(item.status)}</p>
-                    <p>{item?.project?.name}</p>
+                    {/* <p>{item?.project?.name}</p> */}
                     <p>{item?.warehouse?.name}</p>
-                    <p>Phiếu: {STORE_OUTIN[Number(item.outin - 1)].text}</p>
-                    <p>Phân loại: {STORE_TYPES[Number(item.type - 1)].text}</p>
+                    {/* <p>Phân loại: {STORE_TYPES[Number(item.type - 1)].text}</p> */}
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
                   {item?.customer?.name}
+                   <p className={"mt-1 text-gray-500"}>
+                      Tạo: {item?.userCreate?.fullname}{" "}
+                      {moment(item.createAt).format(DATE_FORMAT)}
+                    </p>
+                    <p className={"mt-1 text-gray-500"}>
+                      Cập nhật: {item?.userUpdate?.fullname}{" "}
+                      {moment(item.modifyAt).format(DATE_FORMAT)}
+                    </p>
                 </div>
                 <div className={"px-2 py-2 table-cell box-border border-b"}>
                   {item.sign}
+                  <p>Phiếu: {STORE_OUTIN[Number(item.outin - 1)].text}</p>
                   {item?.lot ? (
                     <p className="text-cbs-highlight-color">
                       <i>
