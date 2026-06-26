@@ -581,7 +581,7 @@ export const CrmStorePage: FC<StoreHomePageProps> = ({ outin, type }) => {
                     )}
                   </NavLink>
                     <p className={"mt-1 text-gray-500"}>
-                      Địa chỉ người nhận: {item?.recipientAddress}
+                      Địa chỉ người nhận: {item?.recipientAddress}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}
                     </p>
                     {/* <p>Trạng thái: {STORE_STATUS[Number(item.status - 1)].text}</p> */}
                     <p>{renderStatusBadge(item.status)}</p>
