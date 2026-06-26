@@ -35,6 +35,7 @@ export type StoreParent = {
   warehouse: Warehouse;
   customer: Contact;
   contract: Contract;
+  recipientAddress: string;
   note: string;
   sign: string;
   link: Contract;
