@@ -90,19 +90,12 @@ export const FnbBillOrder2: FC = () => {
                             <div className="font-bold text-[12px]" title="Bấm vào đây để in Tem">HÓA ĐƠN THANH TOÁN <i className="text-cbs-primary">(in Tem)</i></div>
                         </Link>
                         <div className="text-[12px]">Số: <b>{info?.sign}</b> | Mã đơn app: <b>{FNB_CHANNEL[Number(info?.salesChannel)-1]?.sign}{info?.appOrderSign}</b></div>
-                        <div className="text-[12px]">
-                            <p><i>Nếu có điều chưa hài lòng về sản phẩm dịch vụ của Winggo, xin bạn vui lòng liên hệ tới Hotline <b>0985692022</b> hoặc fanpage https://facebook.com/TraSuaWinggo để được hỗ trợ, trước khi đánh giá số Sao (*) trên <b>Food App</b></i></p>
-                        </div>
                     </div>
 
                     <div className="border-t-0.5 border-b-0.5 border-cbs-border mx-2 py-1 text-[13px]">
                         <div className="flex justify-between">
                             <div className="font-bold">{info?.name}</div>
                             <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
-                        </div>
-                        <div className="flex justify-between">
-                            <div>Tích điểm còn lại của khách (chỉ áp dụng khi mua đơn Off):</div>
-                            <div className="font-bold">{formatNumberMoney(info?.customer?.remainLoyaltyPoints)} VND</div>
                         </div>
                         <div>
                             <span>Thu ngân: <span>{info?.userCreate?.fullname}</span></span>
@@ -225,11 +218,6 @@ export const FnbBillOrder2: FC = () => {
                     <hr className="border-cbs-border" />
                     <div className="text-[12px] text-center mt-3">
                         <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG VÀ LỰA CHỌN WINGGO</b></p>
-                        <p className="">Quét mã QR (trên cùng, bên tay phải), bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>20.000đ</b></p>
-
-                        <hr className="border-cbs-border"/>
-                        <p className="text-center mt-3"><i>Nếu Quý khách yêu quý Winggo vui lòng giới thiệu Winggo tới bạn bè để nhận 02 Vocuher <b>20.000đ và 35%/</b> 01 bạn bè mới</i></p>
-                        <p><i>Thông tin ưu đãi: https://winggo.vn/uu-dai</i></p>
                     </div>
                 </div>
                 <div className="w-full h-[100px]"></div>
