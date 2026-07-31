@@ -316,7 +316,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         }
       })
 
-      const realCredit = isEditCredit ? creditInput : (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+      // Đã tắt tính năng trừ tích điểm/gói trả trước -> luôn gửi credit = 0
+      const realCredit = 0;
 
       const dataAddNewOrder: any = {
         ...values,
@@ -1323,7 +1324,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                         }
 
-                        {values.customerID && service === "1" ?
+                        {/* Đã ẩn mục "Trừ từ tích điểm, gói trả trước" - không trừ tích điểm khi lên đơn */}
+                        {false && values.customerID && service === "1" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
                             <div>
                               <div>Trừ từ tích điểm, gói trả trước-chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
