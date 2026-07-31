@@ -87,6 +87,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [credit, setCredit] = useState(0);
   const [creditTemp, setCreditTemp] = useState(0);
   const [creditInput, setCreditInput] = useState(0);
+  // Cờ tắt tính năng trừ tích điểm/gói trả trước (đặt true để bật lại)
+  const showCreditSection = false;
   const [customerID, setCustomerID] = useState("");
   const [affiliateID, setAffiliateID] = useState("");
 
@@ -1325,7 +1327,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         }
 
                         {/* Đã ẩn mục "Trừ từ tích điểm, gói trả trước" - không trừ tích điểm khi lên đơn */}
-                        {false && values.customerID && service === "1" ?
+                        {showCreditSection && values.customerID && service === "1" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
                             <div>
                               <div>Trừ từ tích điểm, gói trả trước-chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
