@@ -87,7 +87,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [credit, setCredit] = useState(0);
   const [creditTemp, setCreditTemp] = useState(0);
   const [creditInput, setCreditInput] = useState(0);
-  // Cờ tắt tính năng trừ tích điểm/gói trả trước (đặt true để bật lại)
+  // Cờ tắt tính năng trừ tích điểm/gói trả trước (đặt true để bật lại) - OK đó
   const showCreditSection = false;
   const [customerID, setCustomerID] = useState("");
   const [affiliateID, setAffiliateID] = useState("");
