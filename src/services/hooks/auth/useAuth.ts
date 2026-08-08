@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import AuthContext from "services/contexts/Auth";
 import API from "apis/repository";
 import AuthenticationRepository from "apis/authentication";
+import FileRepository from "apis/upload";
 import { logout } from "redux/reducer/UserInfo"
 import { SignInPayload, UseAuth } from "typings/auth";
 import { useDispatch } from "react-redux";
@@ -28,6 +29,9 @@ export const useAuth = (): UseAuth => {
       API.defaults.headers.Authorization = `Bearer ${JSON.parse(
         localStorage.getItem("token") as string
       )}`;
+
+      // Cookie đọc file có thể đã hết hạn trong khi token vẫn còn -> làm mới mỗi lần mở app
+      FileRepository.createFileSession().catch(error => console.error(error));
 
       dispatch({
         type: "SIGN_IN_SUCCESS",
@@ -137,6 +141,9 @@ export const useAuth = (): UseAuth => {
 
         API.defaults.headers.Authorization = `Bearer ${data.token}`;
 
+        // Mở phiên đọc file ngay, nếu không ảnh/file trên trang đầu tiên sẽ trả 401
+        await FileRepository.createFileSession().catch(error => console.error(error));
+
         // updateDevice(data.user._id);
 
         toast.success("Đăng nhập thành công")
@@ -160,6 +167,7 @@ export const useAuth = (): UseAuth => {
     const _id = user._id;
     queryClient.clear();
     dispatchRedux(logout());
+    FileRepository.destroyFileSession().catch(error => console.error(error));
     localStorage.removeItem(`oneSignalId_${_id}`);
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");

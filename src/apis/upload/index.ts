@@ -13,6 +13,15 @@ const axiosS3 = Axios.create({
   },
 });
 
+/**
+ * Instance riêng cho phiên đọc file: cần withCredentials để trình duyệt nhận cookie,
+ * và cố tình không dùng interceptor chung để lỗi phiên không bắn toast cho người dùng.
+ */
+const axiosFileSession = Axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
+});
+
 const fileURL = "/api/files";
 
 const FileRepository = {
@@ -23,9 +32,27 @@ const FileRepository = {
         );
         return data;
     },
+    /**
+     * Đổi token đăng nhập lấy cookie đọc file (HttpOnly, domain .trixgo.com).
+     * Thẻ <img>/<a download> không gắn được header Authorization nên phải đi bằng cookie.
+     */
+    async createFileSession(): Promise<void> {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        await axiosFileSession.post(
+            `${fileURL}/session`,
+            null,
+            { headers: { Authorization: `Bearer ${JSON.parse(token)}` } }
+        );
+    },
+    async destroyFileSession(): Promise<void> {
+        await axiosFileSession.delete(`${fileURL}/session`);
+    },
     async uploadFileToS3(payload: UploadPayload): Promise<{ id: string }> {
         axiosS3.defaults.headers['Content-Type'] = payload.file.type;
-        axiosS3.defaults.headers['x-amz-acl'] = "public-read";
+        // Không gửi x-amz-acl: link ký từ BE không còn kèm ACL, gửi thừa header sẽ lệch chữ ký (403)
+        delete axiosS3.defaults.headers['x-amz-acl'];
 
         const { data } = await axiosS3.put<{ id: string }>(
             payload.signedUrl,
