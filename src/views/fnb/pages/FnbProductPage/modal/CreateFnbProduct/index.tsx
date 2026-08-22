@@ -6,12 +6,20 @@ import { Dialog } from '@headlessui/react';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { object, number } from 'yup';
 
 /**
  * Types, Services
  */
 import "react-datepicker/dist/react-datepicker.css";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
+
+const fnbProductSchema = object().shape({
+    unitPrice: number().moreThan(0, 'Đơn giá phải lớn hơn 0').required('Vui lòng nhập đơn giá'),
+    unitPrice2: number().moreThan(0, 'Đơn giá phải lớn hơn 0').required('Vui lòng nhập đơn giá'),
+    unitPrice3: number().moreThan(0, 'Đơn giá phải lớn hơn 0').required('Vui lòng nhập đơn giá'),
+    unitPrice4: number().moreThan(0, 'Đơn giá phải lớn hơn 0').required('Vui lòng nhập đơn giá'),
+});
 
 const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues = {
     type: 1,
@@ -83,7 +91,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
     return (
         <Formik
             initialValues={initialValues}
-            // validationSchema={companySchema}
+            validationSchema={fnbProductSchema}
             onSubmit={handleSubmit}
         >
             {
