@@ -37,6 +37,25 @@ export const OwnerLeftSideBar: FC = () => {
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
                         </NavLink> : <></>
                     }
+                    {/*
+                      * ⭐ Sao lưu CSDL — HARD-CODE theo `level == 0`, CỐ Ý không đi qua bảng menu.
+                      *
+                      * Mọi mục dưới đây lấy từ `app_menu` trong CSDL và hiện theo `app_role_menu.read`.
+                      * Cơ chế đó đúng cho menu nghiệp vụ, nhưng SAI cho màn này: quyền vào kho sao lưu
+                      * sẽ trở thành thứ cấp được bằng vài cú bấm trong màn phân quyền, cho một tài khoản
+                      * bất kỳ, mà không ai duyệt lại. Một dòng dữ liệu trong CSDL không nên là thứ quyết
+                      * định ai tải được TOÀN BỘ CSDL đó.
+                      * Bám đúng khuôn mục "Quản trị ứng dụng" ngay trên.
+                      */}
+                    {hasPermission && dataUserAccess?.level == 0 ?
+                        <NavLink
+                        to={`/owner/backup`}
+                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+                        >
+                        <span className={"w-[20px] text-center"}>💾</span>
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Sao lưu CSDL</span>
+                        </NavLink> : <></>
+                    }
                     {listAppMenu && listAppMenu.length ?
                         <>
                         {listAppMenu.map((item: any, index: number) => {

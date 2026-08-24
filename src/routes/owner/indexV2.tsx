@@ -22,6 +22,7 @@ import { OwnerConfigPage } from "views/owner/pages/OwnerConfigPage";
 import { OwnerPaymentPage } from "views/owner/pages/OwnerPaymentPage";
 import { OwnerTrafficPage } from "views/owner/pages/OwnerTrafficPage";
 import { OwnerStoragePage } from "views/owner/pages/OwnerStoragePage";
+import { OwnerBackupPage } from "views/owner/pages/OwnerBackupPage";
 import { OwnerWorkflowPage } from "views/owner/pages/OwnerWorkflowPage";
 import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary';
 import AdminFunctionalTab from "views/owner/pages/OwnerAdminPage/pages/AdminFunctionalTab";
@@ -57,6 +58,7 @@ const OwnerRouterV2: FC = () => {
                 <ProtectedRoute exact path="/owner/config" component={OwnerConfigPage}/>
                 <ProtectedRoute exact path="/owner/traffic" component={OwnerTrafficPage}/>
                 <ProtectedRoute exact path="/owner/storage" component={OwnerStoragePage}/>
+                <ProtectedRoute exact path="/owner/backup" component={OwnerBackupPage}/>
                 <ProtectedRoute exact path="/owner/workflow" component={OwnerWorkflowPage}/>
                 <ProtectedRoute path="/owner/*" component={ErrorPage}/>
             </Switch>
