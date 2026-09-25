@@ -59,7 +59,7 @@ export const FnbHeaderContent: FC = () => {
       keyword: keywordSearchForResponse,
       ...queryFnb,
       populates: JSON.stringify({
-        path: 'funda shift customer userCreate',
+        path: 'funda shift customer userCreate userUpdate',
         select: "name sign address bizfullname fullname phone numberOfOrders",
       })
     }, isFetchList: keyword ? true : false, isFetchInfo: false

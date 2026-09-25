@@ -143,7 +143,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       keyword,
       ...queryFnb,
       populates: JSON.stringify({
-        path: 'funda shift customer userCreate files assignee',
+        path: 'funda shift customer userCreate userUpdate files assignee',
         select: "name path nameOrg author sign address fullname phone numberOfOrders",
         populate: {
           path: 'author',

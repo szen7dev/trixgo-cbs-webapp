@@ -307,6 +307,21 @@ export const ModalDetailItem2: FC<Props> = ({ order, onUpdate }) => {
                         <div className={"flex py-2"}>
                           <div className={"w-full flex items-center"}>
                             <img src={IconGreenDot} alt="" />
+                            <div>
+                              <div className={"h-full text-left flex items-center px-1"}>
+                                <span className="text-gray-500 pr-1">Người cập nhật: </span>
+                                {order.userUpdate ? (
+                                  <span>{order.userUpdate?.fullname} | <span className="text-cbs-primary">{moment(order.modifyAt).format('HH:mm DD/MM/YYYY')} ({moment(order.modifyAt).fromNow()})</span></span>
+                                ) : (
+                                  <span className="text-gray-400">Chưa có cập nhật</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className={"flex py-2"}>
+                          <div className={"w-full flex items-center"}>
+                            <img src={IconGreenDot} alt="" />
                             <div className={"h-full text-left flex items-center px-1 "}>
                               <span className="text-gray-500 pr-1">Nhân sự ca làm: </span>
                               <span>
