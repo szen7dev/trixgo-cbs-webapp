@@ -29,6 +29,15 @@ API.interceptors.response.use(
     return response;
   },
   function (error) {
+    // Không có phản hồi (504 từ ingress bị chặn CORS, mất mạng, quá thời gian): trả về khung
+    // `{ data: { error, message } }` thay vì `undefined` — trước đây mọi nơi `const { data } = await API...`
+    // nổ "Cannot read properties of undefined (reading 'data')", che mất lý do thật (2026-10-19, xuất Excel doanh số).
+    if (!error?.response) {
+      const message = 'Máy chủ không phản hồi kịp (quá thời gian hoặc mất kết nối). Vui lòng thử lại hoặc chọn khoảng ngày ngắn hơn.';
+      toast.error(message);
+      return { status: 0, data: { error: true, message } };
+    }
+
     const errorMessage = ['jwt expired', 'user_blocked'];
 
     if(errorMessage.includes(error?.response?.data?.message)) {
