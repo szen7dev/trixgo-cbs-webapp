@@ -35,12 +35,14 @@ export const FnbReportRevenue: FC = () => {
 		toDate: lastDayOfMonth
 	})
 
-	const [, setStateExport] = useState<{ isExporting: boolean }>({
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	})
 	const { exportOrderAsync2 } = useFnbOrder({})
 
 	const handleExportExcel = async () => {
+		// Xuất 1 tháng mất hơn 1 phút — chặn bấm lặp, mỗi lần bấm là một lượt xuất nặng trên máy chủ.
+		if (stateExport.isExporting) return;
 		try {
 			setStateExport({ isExporting: true });
 			const { error, data } = await exportOrderAsync2({
@@ -50,7 +52,8 @@ export const FnbReportRevenue: FC = () => {
 			});
 
 			if (error) {
-				return toast.warn(data?.message);
+				// Không có phản hồi thì interceptor đã báo lỗi rồi, `data` rỗng — đừng hiện thêm thông báo trống.
+				return data?.message && toast.warn(data.message);
 			}
 
 			data && createLinkAndClick(data, '_self');
@@ -79,8 +82,8 @@ export const FnbReportRevenue: FC = () => {
 					<p className="text-lg mr-10">Báo cáo doanh số</p>
 				</div>
 				<FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-				<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
-					Tải dữ liệu Excel
+				<button onClick={handleExportExcel} title="Tải dữ liệu Excel" disabled={stateExport.isExporting}>
+					{stateExport.isExporting ? 'Đang xuất dữ liệu…' : 'Tải dữ liệu Excel'}
 				</button>
 			</header>
 		</main>
